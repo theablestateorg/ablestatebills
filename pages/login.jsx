@@ -138,7 +138,7 @@ export default function Home() {
         </svg>}
                   {loading ? "Loading" : "Login"}
                 </button>
-                <p className="cursor-point">Don't have an account? <Link href="/register" className="underline">Sign Up</Link></p>
+                <p className="cursor-point">Don&apos;t have an account? <Link href="/register" className="underline">Sign Up</Link></p>
               </Form>
             );
           }}
@@ -146,4 +146,19 @@ export default function Home() {
       </div>
     </>
   );
+}
+
+export const getServerSideProps = async ({ req }) => {
+
+  const { user } = await supabase.auth.api.getUserByCookie(req)
+
+  if(user){
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/"
+      },
+      props: {},
+    }
+  }
 }

@@ -1,0 +1,33 @@
+
+.mobileMenu{
+  display: block;
+}
+
+.navMenu{
+  gap: 10px;
+  font-weight: medium;
+  display: none;
+}
+
+.profileMenu{
+  display: none;
+}
+
+
+@media screen and (min-width:800px) {
+  .mobileMenu{
+    display: none;
+    background-color: #000;
+  }
+
+  .navMenu{
+    display: flex;
+  }
+
+  .profileMenu{
+    display: block;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+}

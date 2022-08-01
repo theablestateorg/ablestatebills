@@ -2,16 +2,12 @@ import Head from 'next/head'
 import Navbar from '../components/nav'
 import { useRouter } from 'next/router'
 import {MdAdd, MdSearch} from 'react-icons/md'
-import { IoEllipsisVerticalSharp } from 'react-icons/io5'
 import { supabase } from '../utils/supabase'
-import { useAuth } from '../utils/auth'
 
 export default function Home({ websites }) {
   const router = useRouter()
 
-  const { user } = useAuth()
-
-  console.log(user)
+  console.log(websites)
 
   return (
     <div>
@@ -50,122 +46,25 @@ export default function Home({ websites }) {
             <th className="py-4 text-left pl-2 capitalize">CONTACT PERSON</th>
             <th className="py-4 text-left pl-2">TELEPHONE</th>
             <th className="py-4 text-left pl-2">STATUS</th>
-            <th className="py-4 text-left pl-2">ACTION</th>
           </tr>
         </thead>
         <tbody>
-          <tr className='border-b border-l-2 border-l-transparent hover:border-l-2 hover:border-l-[#ca3011]'>
+          {websites.map((site, index) => (
+            <tr className='border-b border-l-2 border-l-transparent hover:border-l-2 hover:border-l-[#ca3011] cursor-pointer' key={index}
+            onClick={() => router.push(`/sites/${site.id}`)}
+            >
             <td className="py-2 text-left pl-2">
-              <h1 className='font-semibold'>The Uganda Trips</h1>
+              <h1 className='font-semibold'>{site.name}</h1>
               <span className='text-sm text-[#bcbfc2]'>last 11mo and 6days</span>
             </td>
-            <td className="py-2 text-left pl-2">John Doe</td>
-            <td className="py-2 text-left pl-2">0771234567</td>
+            <td className="py-2 text-left pl-2">{site.contact_person}</td>
+            <td className="py-2 text-left pl-2">{`+256` + site.telephone_number}</td>
             <td className="py-2 text-left pl-2">
-              <span className=""><span className='w-5 h-5 bg-green-500'></span>active</span>
+              <span className=""><span className='w-5 h-5 bg-green-500'></span>{site.status}</span>
             </td>
-            <td className="py-2 text-left pl-2">
-            <IoEllipsisVerticalSharp />
-            </td>
-          </tr>
-          <tr className='border-b border-l-2 border-l-transparent hover:border-l-2 hover:border-l-[#ca3011]'>
-            <td className="py-2 text-left pl-2">
-              <h1 className='font-semibold'>Bakumpe</h1>
-              <span className='text-sm text-[#bcbfc2]'>last 11mo</span>
-            </td>
-            <td className="py-2 text-left pl-2">John Doe</td>
-            <td className="py-2 text-left pl-2">0771234567</td>
-            <td className="py-2 text-left pl-2">
-              <span className=""><span className='w-5 h-5 bg-green-500'></span>expired</span>
-            </td>
-            <td className="py-2 text-left pl-2">
-              <IoEllipsisVerticalSharp />
-            </td>
-          </tr>
-          <tr className='border-b border-l-2 border-l-transparent hover:border-l-2 hover:border-l-[#ca3011]'>
-            <td className="py-2 text-left pl-2">
-              <h1 className='font-semibold'>The Elephant Home </h1>
-              <span className='text-sm text-[#bcbfc2]'>last 11mo and 6days</span>
-            </td>
-            <td className="py-2 text-left pl-2">John Doe</td>
-            <td className="py-2 text-left pl-2">0771234567</td>
-            <td className="py-2 text-left pl-2">
-              <span className=""><span className='w-5 h-5 bg-green-500'></span>active</span>
-            </td>
-            <td className="py-2 text-left pl-2">
-            <IoEllipsisVerticalSharp />
-            </td>
-          </tr>
-          <tr className='border-b border-l-2 border-l-transparent hover:border-l-2 hover:border-l-[#ca3011]'>
-            <td className="py-2 text-left pl-2">
-              <h1 className='font-semibold'>Ruboni camp</h1>
-              <span className='text-sm text-[#bcbfc2]'>last 11mo</span>
-            </td>
-            <td className="py-2 text-left pl-2">John Doe</td>
-            <td className="py-2 text-left pl-2">0771234567</td>
-            <td className="py-2 text-left pl-2">
-              <span className=""><span className='w-5 h-5 bg-green-500'></span>expired</span>
-            </td>
-            <td className="py-2 text-left pl-2">
-              <IoEllipsisVerticalSharp />
-            </td>
-          </tr>
-          <tr className='border-b border-l-2 border-l-transparent hover:border-l-2 hover:border-l-[#ca3011]'>
-            <td className="py-2 text-left pl-2">
-              <h1 className='font-semibold'>Agrimax valleys </h1>
-              <span className='text-sm text-[#bcbfc2]'>last 11mo</span>
-            </td>
-            <td className="py-2 text-left pl-2">John Doe</td>
-            <td className="py-2 text-left pl-2">0771234567</td>
-            <td className="py-2 text-left pl-2">
-              <span className=""><span className='w-5 h-5 bg-green-500'></span>expired</span>
-            </td>
-            <td className="py-2 text-left pl-2">
-              <IoEllipsisVerticalSharp />
-            </td>
-          </tr>
-          <tr className='border-b border-l-2 border-l-transparent hover:border-l-2 hover:border-l-[#ca3011]'>
-            <td className="py-2 text-left pl-2">
-              <h1 className='font-semibold'>The Uganda Trips</h1>
-              <span className='text-sm text-[#bcbfc2]'>last 11mo and 6days</span>
-            </td>
-            <td className="py-2 text-left pl-2">John Doe</td>
-            <td className="py-2 text-left pl-2">0771234567</td>
-            <td className="py-2 text-left pl-2">
-              <span className=""><span className='w-5 h-5 bg-green-500'></span>active</span>
-            </td>
-            <td className="py-2 text-left pl-2">
-            <IoEllipsisVerticalSharp />
-            </td>
-          </tr>
-          <tr className='border-b border-l-2 border-l-transparent hover:border-l-2 hover:border-l-[#ca3011]'>
-            <td className="py-2 text-left pl-2">
-              <h1 className='font-semibold'>Bakumpe</h1>
-              <span className='text-sm text-[#bcbfc2]'>last 11mo</span>
-            </td>
-            <td className="py-2 text-left pl-2">John Doe</td>
-            <td className="py-2 text-left pl-2">0771234567</td>
-            <td className="py-2 text-left pl-2">
-              <span className=""><span className='w-5 h-5 bg-green-500'></span>expired</span>
-            </td>
-            <td className="py-2 text-left pl-2">
-              <IoEllipsisVerticalSharp />
-            </td>
-          </tr>
-          <tr className='border-b border-l-2 border-l-transparent hover:border-l-2 hover:border-l-[#ca3011]'>
-            <td className="py-2 text-left pl-2">
-              <h1 className='font-semibold'>Bakumpe</h1>
-              <span className='text-sm text-[#bcbfc2]'>last 11mo</span>
-            </td>
-            <td className="py-2 text-left pl-2">John Doe</td>
-            <td className="py-2 text-left pl-2">0771234567</td>
-            <td className="py-2 text-left pl-2">
-              <span className=""><span className='w-5 h-5 bg-green-500'></span>expired</span>
-            </td>
-            <td className="py-2 text-left pl-2">
-              <IoEllipsisVerticalSharp />
-            </td>
-          </tr>
+            </tr>
+          ))}
+          
         </tbody>
       </table>
         

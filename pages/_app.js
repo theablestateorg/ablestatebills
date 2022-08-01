@@ -1,6 +1,6 @@
 import "../styles/globals.css";
+import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from "../utils/auth";
-import { supabase } from "../utils/supabase";
 
 function MyApp({ Component, pageProps }) {
   return (

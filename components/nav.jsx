@@ -12,7 +12,7 @@ export default function Navbar() {
   const [showMenu, setShowMenu] = useState(false)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
   const router = useRouter()
-  const {signOut} = useAuth()
+  const {signOut, user} = useAuth()
 
   if (showMenu || showMobileMenu) {
     window.onclick = (event) => {
@@ -44,7 +44,7 @@ export default function Navbar() {
         <i>
           <IoMdNotificationsOutline size={25} />
         </i>
-        <p>John Doe</p>
+        <p>Hi, {user && user?.user_metadata.first_name}</p>
         <div className="w-10 h-10 bg-gray-400 rounded-full items-cente relative dialog cursor-pointer"
         onClick={(event) => {
           setShowMenu(!showMenu)
@@ -94,4 +94,26 @@ export default function Navbar() {
       </div>
     </nav>
   )
+}
+
+
+export const getServerSideProps = async ({ req }) => {
+
+  const { user } = await supabase.auth.api.getUserByCookie(req)
+
+  if(!user){
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/login"
+      },
+      props: {},
+    }
+  }
+
+  return {
+    props: {
+      user,
+    }
+  }
 }

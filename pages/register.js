@@ -3,7 +3,6 @@ import { supabase } from "../utils/supabase";
 import { registerValidationSchema } from "../utils/validation";
 import { Formik, Form } from "formik";
 import { toast, ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css';
 import { useState } from "react";
 import Router from "next/router";
 import Link from "next/link";
@@ -16,15 +15,23 @@ export default function Home() {
     event.preventDefault();
     try{
       setLoading(true)
-      const {user, session, error} = await supabase.auth.signUp({ email, password })
+      const {user, session, error} = await supabase.auth.signUp({ email, password },
+        {
+          data: { 
+            first_name, 
+            last_name,
+          }
+        }
+        )
       if(user){
+        // const { data, error } = await supabase
+        // .from('profiles')
+        // .update({ 
+        //   first_name, last_name, role 
+        // })
+        // .match({ id: user.id })
+        // console.log(data)
         Router.push('/')
-        const { error } = await supabase
-        .from('profiles')
-        .insert([
-          { first_name, last_name, role }
-        ])
-        .eq({'id': user.id})
       }
       if(error){
         toast.error(`${error?.message}`, {position: "top-center"})
@@ -60,7 +67,6 @@ export default function Home() {
             handleBlur,
             resetForm
           }) => {
-            console.log(values)
             return (
               <Form
                 onSubmit={(event) => handleSubmit(event, values, resetForm)}

@@ -20,7 +20,7 @@ export default function AddSite() {
       ])
 
       if(data){
-        toast.success(`Add successfully`, {position: "top-center"})
+        toast.success(`Added successfully`, {position: "top-center"})
       }
       if(error){
         toast.error(`${error?.message}`, {position: "top-center"})

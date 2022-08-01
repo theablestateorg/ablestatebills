@@ -41,17 +41,17 @@ export default function Navbar() {
         </ul>
       </div>
       <div className={navStyles.profileMenu}>
-        <i>
+        <i className='cursor-pointer'>
           <IoMdNotificationsOutline size={25} />
         </i>
-        <p>Hi, {user && user?.user_metadata.first_name}</p>
-        <div className="w-10 h-10 bg-gray-400 rounded-full items-cente relative dialog cursor-pointer"
+        <p className='cursor-pointer'>Hi, {user && user?.user_metadata.first_name}</p>
+        <div className="w-10 h-10 bg-[#CA3011] rounded-full flex items-center justify-center relative dialog cursor-pointer"
         onClick={(event) => {
           setShowMenu(!showMenu)
           event.stopPropagation();
         }}
         >
-
+          <span className='text-white font-bold'>C</span>
           {showMenu && <ul className='bg-white absolute z-10 outline outline-1 outline-[#E4E6E5] top-[60px] right-0 py-2'>
               <Link href="/profile">
                 <li className='w-full p-2 px-12 mb-1 hover:bg-[#ececec]'>Profile</li>

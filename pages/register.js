@@ -170,38 +170,7 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-                <div className="flex flex-col gap-2  my-2">
-                  <label htmlFor="">Role</label>
-                  <div className="w-full">
-                    <input
-                      type="text"
-                      name="role"
-                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2]"
-                      placeholder="enter role"
-                      onChange={handleChange("role")}
-                      onBlur={handleBlur("role")}
-                    />
-                    <div
-                      className={`${
-                        errors?.role && touched?.role
-                          ? "block"
-                          : "hidden"
-                      }`}
-                    >
-                      <label
-                        className={`${
-                          errors?.role && touched?.role
-                            ? "text-red-500 text-xs"
-                            : "text-transparent text-xs"
-                        }`}
-                      >{`${
-                        errors?.role && touched?.role
-                          ? errors.role
-                          : "hide"
-                      }`}</label>
-                    </div>
-                  </div>
-                </div>
+                
                 <div className="flex flex-col gap-2  my-2">
                   <label htmlFor="">Password</label>
                   <div className="w-full">

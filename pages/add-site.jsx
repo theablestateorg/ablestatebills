@@ -9,8 +9,8 @@ import { useState } from "react";
 export default function AddSite() {
   const [loading, setLoading] = useState(false)
 
-  const handleSubmit = async (event, values) => {
-    event.preventDefault()
+  const handleSubmit = async (values) => {
+    // event.preventDefault()
     setLoading(true)
     try{
       const { data, error } = await supabase
@@ -41,7 +41,11 @@ export default function AddSite() {
         </section>
 
         <Formik
-          initialValues={{ name: "", website_link: "", contact_person: "", telephone_number: "", last_paid: ""  }}
+          initialValues={{ name: "", website_link: "", contact_person: "", telephone_number: "", last_paid: "", status: "active"  }}
+          onSubmit={(values, { resetForm }) => {
+              handleSubmit(values)
+              resetForm({ name: "", website_link: "", contact_person: "", telephone_number: "", last_paid: "", status: "active"})
+          }}
           
         >
           {({
@@ -52,16 +56,16 @@ export default function AddSite() {
             dirty,
             handleChange,
             handleBlur,
-            resetForm
+            
           }) => {
             return (
-              <Form className="my-5" 
-                onSubmit={(event) => handleSubmit(event, values)}>
+              <Form className="my-5" >
           <div className="flex items-center gap-10 my-2">
             <label htmlFor="name" className="text-xl w-4/12 md:w-2/12">Add Site Name</label>
             <input type="text" name="name" placeholder="name" className=" py-2 px-2 bg-transparent  outline outline-2 outline-[#c1c7d6] rounded w-8/12 md:w-8/12" 
               onChange={handleChange("name")}
               onBlur={handleBlur("name")}
+              value={values.name}
             />
           </div>
           <div className="flex items-center gap-10 my-5">
@@ -69,25 +73,29 @@ export default function AddSite() {
             <input type="text" name="contact_person" placeholder="person's name" className=" py-2 px-2 bg-transparent  outline outline-2 outline-[#c1c7d6] rounded w-8/12 md:w-8/12"
               onChange={handleChange("contact_person")}
               onBlur={handleBlur("contact_person")}
+              value={values.contact_person}
             />
           </div>
           <div className="flex items-center gap-10 my-5">
             <label htmlFor="telephone_number" className="text-xl w-4/12 md:w-2/12">Telephone</label>
             <input type="tel" name="telephone_number" placeholder="telephone number" className=" py-2 px-2 bg-transparent  outline outline-2 outline-[#c1c7d6] rounded w-8/12 md:w-8/12"
             onChange={handleChange("telephone_number")}
-            onBlur={handleBlur("telephone_number")} />
+            onBlur={handleBlur("telephone_number")} 
+            value={values.telephone_number}/>
           </div>
           <div className="flex items-center gap-10 my-5">
             <label htmlFor="website_link" className="text-xl w-4/12 md:w-2/12">Website</label>
             <input type="text" name="website_link" placeholder="website" className=" py-2 px-2 bg-transparent  outline outline-2 outline-[#c1c7d6] rounded w-8/12 md:w-8/12"
             onChange={handleChange("website_link")}
-            onBlur={handleBlur("website_link")} />
+            onBlur={handleBlur("website_link")}
+            value={values.website_link} />
           </div>
           <div className="flex items-center gap-10 my-5">
             <label htmlFor="last_paid" className="text-xl w-4/12 md:w-2/12">Upload time</label>
             <input type="date" name="date" className=" py-2 px-2 bg-transparent  outline outline-2 outline-[#c1c7d6] rounded w-8/12 md:w-8/12"
             onChange={handleChange("last_paid")}
-            onBlur={handleBlur("last_paid")} />
+            onBlur={handleBlur("last_paid")} 
+            value={values.last_paid} />
           </div>
           <div className="flex justify-end mt-10">
             <button className="bg-[#1D1F20] text-white py-2 px-4 my-2 mt-4 hover:bg-[#292C2D] flex items-center gap-2">

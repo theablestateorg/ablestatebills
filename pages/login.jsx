@@ -14,7 +14,6 @@ export default function Home() {
   const handleSubmit = async (event, {email, password}, resetForm) => {
     event.preventDefault();
     setLoading(true)
-    console.log("been here")
     try{
       const {user,session, error} = await supabase.auth.signIn({ email: email, password })
       if(user){
@@ -65,7 +64,7 @@ export default function Home() {
               >
                 <h1 className="text-3xl font-bold text-center">Login</h1>
                 <div className="flex flex-col gap-2  my-2">
-                  <label htmlFor="">Email</label>
+                  <label htmlFor="email">Email</label>
                   <div className="w-full">
                     <input
                       type="email"
@@ -74,6 +73,7 @@ export default function Home() {
                       placeholder="enter email"
                       onChange={handleChange("email")}
                       onBlur={handleBlur("email")}
+                      value={values.email}
                     />
                     <div
                       className={`${
@@ -97,7 +97,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="flex flex-col gap-2  my-2">
-                  <label htmlFor="">Password</label>
+                  <label htmlFor="password">Password</label>
                   <div className="w-full">
                     <input
                       type="password"
@@ -106,6 +106,7 @@ export default function Home() {
                       placeholder="enter password"
                       onChange={handleChange("password")}
                       onBlur={handleBlur("password")}
+                      value={values.password}
                     />
                     <div
                       className={`${

@@ -7,8 +7,6 @@ import { supabase } from '../utils/supabase'
 export default function Home({ websites }) {
   const router = useRouter()
 
-  console.log(websites)
-
   return (
     <div>
       <Head>

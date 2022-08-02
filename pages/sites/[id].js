@@ -148,7 +148,7 @@ export default function Site() {
                   </div>
                   <div className="flex flex-col gap-1 my-2">
                     <label htmlFor="contact_person">Contact Person</label>
-                    <input type="text" name="contact_person" placeholder="person's name" className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
+                    <input type="text" name="contact_person" placeholder="person&apos;s name" className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
                       onChange={handleChange("contact_person")}
                       onBlur={handleBlur("contact_person")}
                       defaultValue={site.contact_person}
@@ -221,7 +221,7 @@ export default function Site() {
           <p>Are you sure you want to delete <b>{site.name}</b>?</p>
           <p className="bg-[#ffe9d9] p-2 border-l-2 text-[#bc4c2e] border-[#fa703f] flex flex-col text-sm my-1">
             <span className="text-[#771505] font-bold flex items-center gap-1"><IoWarning /> Warning</span>
-            By deleting this website, you won't be able to access it or it's info
+            By deleting this website, you won&apos;t be able to access it or it&apos;s info
           </p>
           <div className="flex justify-between mt-5">
           <button className="outline outline-1 outline-[#1D1F20] bg-[#1D1F20] text-white py-2 px-4 hover:bg-[#1D1F20] hover:text-white flex items-center gap-2"

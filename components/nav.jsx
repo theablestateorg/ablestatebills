@@ -2,7 +2,7 @@ import { IoMdNotificationsOutline } from 'react-icons/io'
 import { CgMenu } from 'react-icons/cg'
 import navStyles from '../styles/Nav.module.css'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '../utils/supabase'
 import Router from 'next/router'
 import { useRouter } from 'next/router'
@@ -14,14 +14,14 @@ export default function Navbar() {
   const router = useRouter()
   const {signOut, user} = useAuth()
 
-  if (showMenu || showMobileMenu) {
-    window.onclick = (event) => {
-      if (!event.target.matches(".dialog")) {
-        setShowMenu(false);
-        setShowMobileMenu(false);
-      }
-    };
-  }
+    // if (showMenu || showMobileMenu) {
+    //   window.onclick = (event) => {
+    //     if (!event.target.matches(".dialog")) {
+    //       setShowMenu(false);
+    //       setShowMobileMenu(false);
+    //     }
+    //   };
+    // }
 
   return (
     <nav className="w-screen h-[70px] z-10 fixed top-0 bg-white py-2 px-[50px] flex justify-between items-center border-b-2 border-[#E4E6E5]">

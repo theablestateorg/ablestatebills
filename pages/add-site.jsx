@@ -5,6 +5,7 @@ import { addSiteValidationSchema } from "../utils/validation";
 import { Formik, Form } from "formik";
 import { toast, ToastContainer } from 'react-toastify'
 import { useState } from "react";
+import moment from "moment";
 
 export default function AddSite() {
   const [loading, setLoading] = useState(false)
@@ -16,7 +17,7 @@ export default function AddSite() {
       const { data, error } = await supabase
       .from('websites')
       .insert([
-        values
+        {...values, expiry_date: moment(values.last_paid).add(1, 'Y').format('YYYY-MM-DD')}
       ])
 
       if(data){
@@ -58,6 +59,8 @@ export default function AddSite() {
             handleBlur,
             
           }) => {
+            // setExpiredDate(values.last_paid)
+            // console.log(values)
             return (
               <Form className="my-5" >
           <div className="flex items-center gap-10 my-2">

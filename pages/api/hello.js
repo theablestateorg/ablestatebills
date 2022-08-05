@@ -4,6 +4,6 @@ export default function handler(req, res) {
   console.log(res)
   // const { day } = res.body
   res.status(200).json({
-    body: "bingo"
+    body: res.body
   });
 }

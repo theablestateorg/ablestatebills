@@ -1,8 +1,9 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
 export default function handler(req, res) {
-  console.log(req.body)
+  // console.log(req.body)
+  const { day } = req.body
   res.status(200).json({
-    body: JSON.parse(req.body)
+    body: day
   });
 }

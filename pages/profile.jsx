@@ -7,14 +7,10 @@ import { useState } from "react"
 import { MdEdit } from 'react-icons/md'
 
 export default function Dashboard({ user }) {
-  console.log(user)
-
   const [ loading, setLoading ] = useState(false)
 
   const handleSubmit = async(event, values) => {
     event.preventDefault()
-
-    console.log(values)
   }
 
   return (

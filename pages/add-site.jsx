@@ -42,10 +42,10 @@ export default function AddSite() {
         </section>
 
         <Formik
-          initialValues={{ name: "", website_link: "", contact_person: "", telephone_number: "", last_paid: "", status: "active"  }}
+          initialValues={{ name: "", website_link: "", contact_person: "", telephone_number: "", email: "", last_paid: "", status: "active"  }}
           onSubmit={(values, { resetForm }) => {
               handleSubmit(values)
-              resetForm({ name: "", website_link: "", contact_person: "", telephone_number: "", last_paid: "", status: "active"})
+              resetForm({ name: "", website_link: "", contact_person: "", telephone_number: "", email: "", last_paid: "", status: "active"})
           }}
           
         >
@@ -85,6 +85,13 @@ export default function AddSite() {
             onChange={handleChange("telephone_number")}
             onBlur={handleBlur("telephone_number")} 
             value={values.telephone_number}/>
+          </div>
+          <div className="flex items-center gap-10 my-5">
+            <label htmlFor="telephone_number" className="text-xl w-4/12 md:w-2/12">Email</label>
+            <input type="email" name="email" placeholder="email" className=" py-2 px-2 bg-transparent  outline outline-2 outline-[#c1c7d6] rounded w-8/12 md:w-8/12"
+            onChange={handleChange("email")}
+            onBlur={handleBlur("email")} 
+            value={values.email}/>
           </div>
           <div className="flex items-center gap-10 my-5">
             <label htmlFor="website_link" className="text-xl w-4/12 md:w-2/12">Website</label>

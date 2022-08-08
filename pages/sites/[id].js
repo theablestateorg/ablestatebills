@@ -28,8 +28,6 @@ export default function Site() {
     setSite(data)
   }
 
-  console.log(site)
-
   const handleDelete = async () => {
     
     const { data, error } = await supabase

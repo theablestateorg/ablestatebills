@@ -2,11 +2,11 @@
 const  africastalking = require('africastalking')
 require('dotenv').config()
 
-const { AFRICASTALKING_USERNAME, AFRICASTALKING_APIKEY } = process.env
+const {  AFRICASTALKING_APIKEY, AFRICASTALKING_USERNAME } = process.env
 
 const client = africastalking({
-    username: AFRICASTALKING_USERNAME,
-    apiKey: AFRICASTALKING_APIKEY
+    username: 'sandbox',
+    apiKey: '0c763cf7c1264ab7069a598d9c5815c71e4606ae1511121168ce9f8080a9ce81'
 });
 
 export default function handler(req, res) {

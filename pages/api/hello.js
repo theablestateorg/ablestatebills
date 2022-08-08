@@ -2,11 +2,10 @@
 const  africastalking = require('africastalking')
 require('dotenv').config()
 
-const {  AFRICASTALKING_APIKEY, AFRICASTALKING_USERNAME } = process.env
 
 const client = africastalking({
-    username: 'sandbox',
-    apiKey: '0c763cf7c1264ab7069a598d9c5815c71e4606ae1511121168ce9f8080a9ce81'
+    username: process.env.AFRICASTALKING_USERNAME,
+    apiKey: process.env.AFRICASTALKING_APIKEY
 });
 
 export default function handler(req, res) {
@@ -17,7 +16,6 @@ export default function handler(req, res) {
 
   req.body?.day && req.body?.day.forEach((website, index) => {
     console.log('Phone number: ', `+256${website.telephone_number}\n`,'Email: ', `${website.email}`)
-    console.log(`Your website ${website.name.toUpperCase()} (${website.website_link}) will expiry in a day. Please make payment to reupdate it.`)
 
     client.SMS.send({
       to: `+256${website.telephone_number}`,

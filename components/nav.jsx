@@ -14,14 +14,14 @@ export default function Navbar() {
   const router = useRouter()
   const {signOut, user} = useAuth()
 
-    // if (showMenu || showMobileMenu) {
-    //   window.onclick = (event) => {
-    //     if (!event.target.matches(".dialog")) {
-    //       setShowMenu(false);
-    //       setShowMobileMenu(false);
-    //     }
-    //   };
-    // }
+    if (showMenu || showMobileMenu) {
+      window.onclick = (event) => {
+        if (!event.target.matches(".dialog")) {
+          setShowMenu(false);
+          setShowMobileMenu(false);
+        }
+      };
+    }
 
   return (
     <nav className="w-screen h-[70px] z-10 fixed top-0 bg-white py-2 px-[50px] flex justify-between items-center border-b-2 border-[#E4E6E5]">
@@ -51,7 +51,7 @@ export default function Navbar() {
           event.stopPropagation();
         }}
         >
-          <span className='text-white font-bold'>C</span>
+          <span className='text-white font-bold'>{user?.user_metadata.first_name[0].toUpperCase()}</span>
           {showMenu && <ul className='bg-white absolute z-10 outline outline-1 outline-[#E4E6E5] top-[60px] right-0 py-2'>
               <Link href="/profile">
                 <li className='w-full p-2 px-12 mb-1 hover:bg-[#ececec]'>Profile</li>
@@ -78,7 +78,7 @@ export default function Navbar() {
               <Link href="/">Home</Link>
             </li>
             <li className='w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7]'>
-              <Link href="/add-site">AddSite</Link>
+              <Link href="/add-site" className=''>AddSite</Link>
             </li>
             <li className='w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7]'>
               <Link href="/profile">Profile</Link>
@@ -87,7 +87,7 @@ export default function Navbar() {
               <button onClick={() => {
                 signOut()
                 Router.push('/login')
-              }}>signOut</button>
+              }}>Logout</button>
             </li>
           </ul>}
         </i>

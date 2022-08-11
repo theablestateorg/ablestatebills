@@ -11,8 +11,6 @@ export default function Home({ websites }) {
   const [searchText, setSearchText] = useState("")
   const [status, setStatus] = useState("");
 
-  console.log(searchText)
-
   websites = websites.filter(
     (website) =>
       !website?.name ||
@@ -48,12 +46,12 @@ export default function Home({ websites }) {
                     <input
                       type="text"
                       placeholder="search"
-                      className="px-2 py-2 bg-transparent placeholder:text-[#bcbfc2] w-full focus:outline-none border-b border-b-transparent focus:border-b  focus:border-b-black"
+                      className="px-3 py-2 bg-[#f7f7f7] rounded-lg placeholder:text-[#bcbfc2] w-full focus:outline-none border-b border-b-transparent focus:border-b  focus:border-b-black"
                       onChange={(event) => setSearchText(event.target.value)}
                     />
                     <MdSearch
                       size={25}
-                      color={"#bcbfc2"}
+                      color={"#121212"}
                       className="absolute pointer-events-none right-2"
                     />
                   </div>
@@ -94,9 +92,9 @@ export default function Home({ websites }) {
                   <td className="py-2 text-left pl-3">
                     {`+256` + site.telephone_number}
                   </td>
-                  <td className="py-2 text-left pl-3">
-                    <span className="">
-                      <span className="w-5 h-5 bg-green-500"></span>
+                  <td className="py-2 text-left text-sm pl-3 font-light">
+                    <span className="outline outline-1 outline-[#e5e3e3] px-2 gap-1 py-1 rounded-lg flex items-center justify-between w-[66px] font-light">
+                      <span className={`w-2 h-2 rounded-full ${site.status === 'active' ? "bg-green-500" : site.status === 'warning' ? "bg-yellow-200" : "bg-red-600"}`}></span>
                       {site.status}
                     </span>
                   </td>

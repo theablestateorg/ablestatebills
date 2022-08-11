@@ -1,8 +1,6 @@
 const africastalking = require("africastalking");
 require("dotenv").config();
-const nodemailer = require("nodemailer");
 
-// import { SendMailClient } from "zeptomail";
 const { SendMailClient } = require("zeptomail");
 
 const url = "api.zeptomail.com/";

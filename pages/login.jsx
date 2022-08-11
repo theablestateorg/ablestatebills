@@ -58,7 +58,7 @@ export default function Home() {
             return (
               <Form
                 onSubmit={(event) => handleSubmit(event, values, resetForm)}
-                className="bg-white p-10"
+                className="bg-white p-10 shadow"
                 name="loginForm"
               >
                 <h1 className="text-3xl font-bold text-center">Login</h1>

@@ -195,7 +195,7 @@ export default function Site() {
           <section className="my-5">
             <h1>Extension</h1>
             <div className="flex gap-5 items-center my-1">
-              <input type="date" id="extension" className="py-2 px-2 bg-transparent  outline outline-2 outline-[#c1c7d6] rounded w-8/12 md:w-8/12" />
+              <input type="date" id="extension" className="py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12" />
               <button className="bg-[#1D1F20] text-white py-2 px-4 hover:bg-[#292C2D] flex items-center gap-2"
                 onClick={handleExtension}
               >Extend</button>

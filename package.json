@@ -21,7 +21,8 @@
     "react-dom": "18.2.0",
     "react-icons": "^4.4.0",
     "react-toastify": "^9.0.7",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "zeptomail": "^3.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.7",

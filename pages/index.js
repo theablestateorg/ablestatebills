@@ -48,7 +48,7 @@ export default function Home({ websites }) {
         </thead>
         <tbody>
           {websites.map((site, index) => (
-            <tr className='border-b border-l-2 border-l-transparent hover:border-l-2 hover:border-l-[#ca3011] cursor-pointer' key={index}
+            <tr className='border-b border-l-2 border-l-transparent hover:border-l-2 hover:border-l-[#ca3011] cursor-pointer mb-10' key={index}
             onClick={() => router.push(`/sites/${site.id}`)}
             >
             <td className="py-2 text-left pl-2">

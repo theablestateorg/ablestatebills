@@ -36,7 +36,7 @@ export default function Home({ websites }) {
           </button>
         </section>
 
-        <div className="outline outline-1 outline-[#e5e7eb]">
+        <div className="outline outline-1 outline-[#e5e7eb] mb-5">
           <table className="bg-white w-full table-auto p-10">
             <caption className=" bg-white py-3 outline outline-1 outline-[#e5e7eb] px-3">
               <section className="flex justify-between items-center">

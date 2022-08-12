@@ -5,10 +5,11 @@ import { addSiteValidationSchema } from "../utils/validation";
 import { Formik, Form } from "formik";
 import { toast, ToastContainer } from 'react-toastify'
 import { useState } from "react";
-import moment from "moment";
+import { useAuth } from "../utils/auth";
 
 export default function AddSite() {
   const [loading, setLoading] = useState(false)
+  const { user } = useAuth();
 
   const handleSubmit = async (values) => {
     // event.preventDefault()

@@ -10,11 +10,13 @@ export default function Home({ websites }) {
   const router = useRouter();
   const [searchText, setSearchText] = useState("")
   const [status, setStatus] = useState("");
+  const [searchBy, setSearchBy] = useState("name")
 
   websites = websites.filter(
     (website) =>
-      !website?.name ||
-      website?.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1
+      !website?.[searchBy] || searchBy !== "telephone_number" ?
+      website?.[searchBy].toLowerCase().indexOf(searchText.toLowerCase()) > -1
+      : website?.[searchBy].toString().toLowerCase().indexOf(searchText.toLowerCase()) > -1
   ).filter((website) => !status || website.status === status)
 
   return (
@@ -46,15 +48,24 @@ export default function Home({ websites }) {
                     <input
                       type="text"
                       placeholder="search"
-                      className="px-3 py-2 bg-[#f7f7f7] rounded-lg placeholder:text-[#bcbfc2] w-full focus:outline-none border-b border-b-transparent focus:border-b  focus:border-b-black"
+                      className="px-3 py-2 bg-[#f7f7f7] rounded-lg placeholder:text-[#bcbfc2] w-full outline outline-1 outline-[#f4f3f7]"
                       onChange={(event) => setSearchText(event.target.value)}
                     />
-                    <MdSearch
+                    {/* <MdSearch
                       size={25}
                       color={"#121212"}
                       className="absolute pointer-events-none right-2"
-                    />
+                    /> */}
+                    <select name="" id="" className="absolute right-1 px-1 py-2 ml-2 bg-white rounded-lg outline outline-1 outline-[#ededed] text-sm"
+                    onChange={(event) => setSearchBy(event.target.value)}>
+                      <option value="name">name</option>
+                      <option value="telephone_number">no.</option>
+                      <option value="contact_person">person</option>
+                    </select>
                   </div>
+                    {/* <select name="" id="" className="px-3 py-2 ml-2 bg-transparent rounded-lg outline outline-1 outline-[#ededed]">
+                      <option value="">name</option>
+                    </select> */}
                 </div>
               </section>
             </caption>
@@ -82,6 +93,7 @@ export default function Home({ websites }) {
                   key={index}
                   onClick={() => router.push(`/sites/${site.id}`)}
                 >
+                  {console.log(site.telephone_number)}
                   <td className="py-2 text-left pl-3">
                     <h1 className="font-medium">{site.name}</h1>
                     <span className="font-extralight text-sm text-[#bcbfc2]">

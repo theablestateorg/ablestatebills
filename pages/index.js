@@ -119,7 +119,7 @@ export default function Home({ websites }) {
 }
 
 export const getServerSideProps = async ({ req }) => {
-  const { data: websites } = await supabase.from("websites").select("*");
+  const { data: websites } = await supabase.from("websites").select("*").order('created_at', { ascending: false });
 
   const { user } = await supabase.auth.api.getUserByCookie(req);
 

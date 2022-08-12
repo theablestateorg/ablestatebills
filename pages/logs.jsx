@@ -10,11 +10,6 @@ import { useAuth } from "../utils/auth";
 
 export default function Home({ logs}) {
   const router = useRouter();
-  // const [searchText, setSearchText] = useState("")
-  // const [status, setStatus] = useState("");
-  // const [searchBy, setSearchBy] = useState("name")
-
-  console.log(logs)
 
 
   return (
@@ -67,7 +62,7 @@ export default function Home({ logs}) {
 }
 
 export const getServerSideProps = async ({ req }) => {
-  const { data: logs } = await supabase.from("logs").select("*");
+  const { data: logs } = await supabase.from("logs").select("*").order('created_at', { ascending: false });
 
   const { user } = await supabase.auth.api.getUserByCookie(req);
 

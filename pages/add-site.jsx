@@ -22,9 +22,29 @@ export default function AddSite() {
 
       if(data){
         toast.success(`${values.name} was added successfully`, {position: "top-center"})
+
+        await supabase
+        .from("logs")
+        .insert([
+          {
+            name: `[Added] ${values.name}`,
+            details: `added by ${user.first_name} ${user.last_name}`,
+            status: "success",
+          },
+        ]);
       }
       if(error){
         toast.error(`${error?.message}`, {position: "top-center"})
+
+        await supabase
+        .from("logs")
+        .insert([
+          {
+            name: `[Added] ${values.name}`,
+            details: `attempt by ${user.first_name} ${user.last_name}`,
+            status: "failed",
+          },
+        ]);
       }
     } catch(error){toast.error(`${error?.message}`, {position: "top-center"})}
     setLoading(false)

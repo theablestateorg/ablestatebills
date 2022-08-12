@@ -19,6 +19,7 @@ export default function Dashboard({ user }) {
       <title>Profile</title>
     </Head>
     <Navbar />
+    <ToastContainer />
     <main className='mt-[70px] mx-5 md:mx-20'>
       <section className="flex justify-between items-center">
           <h1 className="font-bold text-2xl my-5">Profile</h1>

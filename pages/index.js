@@ -20,13 +20,12 @@ export default function Home({ websites }) {
   ).filter((website) => !status || website.status === status)
 
   return (
-    <div>
+    <>
       <Head>
         <title>Shine Africa</title>
       </Head>
       <Navbar />
-
-      <main className="mt-[70px] mx-5 md:mx-20">
+      <main className="mt-[70px] mx-3 md:mx-16">
         <section className="flex justify-between items-center my-10">
           <h1 className="font-bold text-2xl"></h1>
           <button
@@ -38,7 +37,7 @@ export default function Home({ websites }) {
           </button>
         </section>
 
-        <div className="outline outline-1 outline-[#e5e7eb] mb-5">
+        <div className="outline outline-1 outline-[#e5e7eb] mb-5 overflow-x-scroll">
           <table className="bg-white w-full table-auto p-10">
             <caption className=" bg-white py-3 outline outline-1 outline-[#e5e7eb] px-3">
               <section className="flex justify-between items-center">
@@ -116,7 +115,7 @@ export default function Home({ websites }) {
           </table>
         </div>
       </main>
-    </div>
+    </>
   );
 }
 

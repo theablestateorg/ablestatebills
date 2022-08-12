@@ -24,7 +24,7 @@ export default function Navbar() {
     }
 
   return (
-    <nav className="w-screen h-[70px] z-10 fixed top-0 bg-white py-2 px-[50px] flex justify-between items-center border-b-2 border-[#E4E6E5]">
+    <nav className="w-screen h-[70px] z-10 fixed top-0 right-0 left-0 bg-white py-2 px-3 md:px-16 flex justify-between items-center border-b-2 border-[#E4E6E5]">
       <div className="flex gap-5 items-center">
         <h1 className="text-[#CA3011] font-Roboto text-3xl font-black cursor-pointer"
         onClick={() => router.push("/")}

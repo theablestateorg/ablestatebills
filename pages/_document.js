@@ -15,7 +15,7 @@ export default function Document() {
           rel="stylesheet"
         />
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet" />
-        {/* <meta name="description" content="Shine Africa" /> */}
+        <meta name="description" content="ShineAfrika" />
       </Head>
       <body>
         <Main />

@@ -1,5 +1,4 @@
 const africastalking = require("africastalking");
-require("dotenv").config();
 
 const { SendMailClient } = require("zeptomail");
 

@@ -38,6 +38,9 @@ export default function Navbar() {
           <li className={`h-[70px] flex items-center border-b-2 border-transparent hover:border-b-2 hover:border-black ${router.pathname === '/add-site' && "border-black "}`}>
           <Link href="/add-site">Add Site</Link>
           </li>
+          <li className={`h-[70px] flex items-center border-b-2 border-transparent hover:border-b-2 hover:border-black ${router.pathname === '/logs' && "border-black "}`}>
+          <Link href="/logs">Logs</Link>
+          </li>
         </ul>
       </div>
       <div className={navStyles.profileMenu}>

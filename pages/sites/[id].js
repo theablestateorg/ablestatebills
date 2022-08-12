@@ -9,6 +9,7 @@ import { toast, ToastContainer } from "react-toastify";
 import Router from "next/router";
 import { Formik, Form } from "formik";
 import { AiFillCloseCircle } from "react-icons/ai";
+import { useAuth } from "../../utils/auth";
 
 export default function Site() {
   const router = useRouter();
@@ -21,6 +22,8 @@ export default function Site() {
   useEffect(() => {
     getSite();
   }, [site]);
+
+  const { user } = useAuth();
 
   const getSite = async () => {
     const { data } = await supabase
@@ -44,6 +47,15 @@ export default function Site() {
 
     if (data) {
       toast.success(`Successfully deleted`, { position: "top-center" });
+      await supabase
+        .from("logs")
+        .insert([
+          {
+            name: `[Deleted] ${site.name}`,
+            details: `deleted by ${user.first_name} ${user.last_name}`,
+            status: "success",
+          },
+        ]);
     }
     if (error) {
       toast.error(`${error?.message}`, { position: "top-center" });

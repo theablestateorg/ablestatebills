@@ -48,8 +48,8 @@ export default function handler(req, res) {
           track_clicks: true,
           track_opens: true,
         })
-        .then((resp) => console.log("success"))
-        .catch((error) => console.log("error"));
+        .then()
+        .catch();
 
       client.SMS.send({
         to: `+256${website.telephone_number}`,
@@ -94,8 +94,8 @@ export default function handler(req, res) {
           track_clicks: true,
           track_opens: true,
         })
-        .then((resp) => console.log("success"))
-        .catch((error) => console.log("error"));
+        .then()
+        .catch();
 
       client.SMS.send({
         to: `+256${website.telephone_number}`,
@@ -140,8 +140,8 @@ export default function handler(req, res) {
           track_clicks: true,
           track_opens: true,
         })
-        .then((resp) => console.log("success"))
-        .catch((error) => console.log("error"));
+        .then()
+        .catch();
 
       client.SMS.send({
         to: `+256${website.telephone_number}`,
@@ -186,8 +186,8 @@ export default function handler(req, res) {
           track_clicks: true,
           track_opens: true,
         })
-        .then((resp) => console.log("success"))
-        .catch((error) => console.log("error"));
+        .then()
+        .catch();
 
       client.SMS.send({
         to: `+256${website.telephone_number}`,

@@ -102,7 +102,6 @@ export default function Home({ websites }) {
                   <td className="py-2 text-left pl-3">
                     {`+256` + site.telephone_number}
                   </td>
-                  {console.log(index === 0 && site.status.includes('active'))}
                   <td className="py-2 text-left text-xs pl-3 font-light flex">
                     <span className="outline outline-1 outline-[#e5e3e3] px-2 gap-1 py-1 rounded-lg flex items-center justify-between font-light">
                       <span className={`w-2 h-2 rounded-full ${site.status.includes('active') ? "bg-green-500" : site.status.includes('warning') ? "bg-yellow-200" : "bg-red-600"}`}></span>

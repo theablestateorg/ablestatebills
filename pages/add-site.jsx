@@ -17,11 +17,11 @@ export default function AddSite() {
       const { data, error } = await supabase
       .from('websites')
       .insert([
-        {...values, expiry_date: moment(values.last_paid).add(1, 'Y').format('YYYY-MM-DD')}
+        values
       ])
 
       if(data){
-        toast.success(`Added successfully`, {position: "top-center"})
+        toast.success(`${values.name} was added successfully`, {position: "top-center"})
       }
       if(error){
         toast.error(`${error?.message}`, {position: "top-center"})
@@ -42,10 +42,10 @@ export default function AddSite() {
         </section>
 
         <Formik
-          initialValues={{ name: "", website_link: "", contact_person: "", telephone_number: "", email: "", last_paid: "", status: "active"  }}
+          initialValues={{ name: "", website_link: "", contact_person: "", telephone_number: "", email: "", last_paid: "", expiry_date: "", status: "active"  }}
           onSubmit={(values, { resetForm }) => {
               handleSubmit(values)
-              resetForm({ name: "", website_link: "", contact_person: "", telephone_number: "", email: "", last_paid: "", status: "active"})
+              resetForm({ name: "", website_link: "", contact_person: "", telephone_number: "", email: "", last_paid: "", expiry_date: "", status: "active"})
           }}
           
         >
@@ -101,11 +101,18 @@ export default function AddSite() {
             value={values.website_link} />
           </div>
           <div className="flex items-center gap-10 my-5">
-            <label htmlFor="last_paid" className="text-xl w-4/12 md:w-2/12">Upload time</label>
+            <label htmlFor="last_paid" className="text-xl w-4/12 md:w-2/12">Upload Date</label>
             <input type="date" name="date" className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
             onChange={handleChange("last_paid")}
             onBlur={handleBlur("last_paid")} 
             value={values.last_paid} />
+          </div>
+          <div className="flex items-center gap-10 my-5">
+            <label htmlFor="expiry_date" className="text-xl w-4/12 md:w-2/12">Expiry Date</label>
+            <input type="date" name="date" className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
+            onChange={handleChange("expiry_date")}
+            onBlur={handleBlur("expiry_date")} 
+            value={values.expiry_date} />
           </div>
           <div className="flex justify-end mt-10">
             <button className="bg-[#1D1F20] text-white py-2 px-4 my-2 mt-4 hover:bg-transparent hover:text-black outline outline-1 outline-black flex items-center gap-2">

@@ -33,7 +33,7 @@ export default function Navbar() {
         </h1>
         <ul className={`${navStyles.navMenu} h-[70px] items-center`}>
           <li className={`h-[70px] flex items-center border-b-2 border-transparent hover:border-b-2 hover:border-black ${router.pathname === '/' && "border-black "}`}>
-          <Link href="/">Home</Link>
+          <Link href="/">Dashboard</Link>
           </li>
           <li className={`h-[70px] flex items-center border-b-2 border-transparent hover:border-b-2 hover:border-black ${router.pathname === '/add-site' && "border-black "}`}>
           <Link href="/add-site">Add Site</Link>

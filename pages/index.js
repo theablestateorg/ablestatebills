@@ -2,6 +2,7 @@ import Head from "next/head";
 import Navbar from "../components/nav";
 import { useRouter } from "next/router";
 import { MdAdd, MdSearch } from "react-icons/md";
+import { FaSort } from 'react-icons/fa'
 import { supabase } from "../utils/supabase";
 import { useState } from "react";
 import moment from "moment";
@@ -18,6 +19,10 @@ export default function Home({ websites }) {
       website?.[searchBy].toLowerCase().indexOf(searchText.toLowerCase()) > -1
       : website?.[searchBy].toString().toLowerCase().indexOf(searchText.toLowerCase()) > -1
   ).filter((website) => !status || website.status === status)
+
+  websites = websites.sort((a, b) => b.contact_person - a.contact_person)
+
+  console.log(websites)
 
   return (
     <>
@@ -71,8 +76,13 @@ export default function Home({ websites }) {
             <thead>
               <tr className="border-b bg-[#f7f7f7] text-[#555b6d]">
                 <th className="py-4 text-left pl-3 font-light">Website</th>
-                <th className="py-4 text-left pl-3 font-light">
+                <th className="py-4 text-left pl-3 font-light flex items-center">
                   Contact Person
+                  <i className="cursor-pointer"
+                    onClick={() => console.log("clicked")}
+                  >
+                    <FaSort size={13} />
+                  </i>
                 </th>
                 <th className="py-4 text-left pl-3 font-light">Telephone</th>
                 <th className="py-4 text-left pl-3 font-light">

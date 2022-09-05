@@ -201,6 +201,18 @@ export default function Site() {
                               defaultValue={"0" + site.telephone_number}
                             />
                           </div>
+                          <div className="flex flex-col gap-1 my-2">
+                            <label htmlFor="email">Email</label>
+                            <input
+                              type="email"
+                              name="email"
+                              placeholder="Email"
+                              className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
+                              onChange={handleChange("email")}
+                              onBlur={handleBlur("email")}
+                              defaultValue={site.email}
+                            />
+                          </div>
 
                           <div className="flex flex-col gap-1 my-2">
                             <label htmlFor="website_link">Website</label>

@@ -110,7 +110,7 @@ export default function Site() {
 
       <ToastContainer />
 
-      <main className="mt-[70px] mx-5 md:mx-20">
+      <main className="pt-[70px] mx-5 md:mx-20 relative pb-6 min-h-screen">
         {site && (
           <>
             <section className="flex justify-between items-center">
@@ -330,6 +330,12 @@ export default function Site() {
             </div>
           </div>
         )}
+        <footer className="text-center text-gray-500 absolute bottom-1 h-6 w-full">
+          <p>
+            Copyright &#169; {new Date().getFullYear()} A service of gagawala
+            limited
+          </p>
+        </footer>
       </main>
     </div>
   );

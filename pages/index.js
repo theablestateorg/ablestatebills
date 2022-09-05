@@ -13,7 +13,7 @@ export default function Home({ websites }) {
   const [status, setStatus] = useState("");
   const [searchBy, setSearchBy] = useState("name");
   const [sortNames, setSortNames] = useState(false);
-  const [sortBy, setSortBy] = useState("")
+  const [sortBy, setSortBy] = useState("");
 
   websites = websites
     .filter((website) =>
@@ -31,8 +31,7 @@ export default function Home({ websites }) {
     ? websites.sort((a, b) => a[sortBy] > b[sortBy])
     : websites.sort((a, b) => b[sortBy] > a[sortBy]);
 
-  
-  console.log(sortBy)
+  console.log(sortBy);
 
   return (
     <>
@@ -40,7 +39,7 @@ export default function Home({ websites }) {
         <title>Shine Africa</title>
       </Head>
       <Navbar />
-      <main className="mt-[70px] mx-3 md:mx-16">
+      <main className="pt-[70px] mx-3 md:mx-16 relative pb-6 min-h-screen">
         <section className="flex justify-between items-center my-10">
           <h1 className="font-bold text-2xl"></h1>
           <button
@@ -81,14 +80,17 @@ export default function Home({ websites }) {
             </caption>
             <thead>
               <tr className="border-b bg-[#f7f7f7] text-[#555b6d]">
+                <th className="py-4 text-center px-3 w-1">
+                  <input type="checkbox" name="" id="" />
+                </th>
                 <th className="py-4 text-left pl-3 font-light">
                   <div className="flex items-center">
                     Website
-                                    <i
+                    <i
                       className="cursor-pointer"
                       onClick={() => {
                         setSortNames(!sortNames);
-                        setSortBy("name")
+                        setSortBy("name");
                       }}
                     >
                       <FaSort size={13} />
@@ -101,20 +103,20 @@ export default function Home({ websites }) {
                     className="cursor-pointer"
                     onClick={() => {
                       setSortNames(!sortNames);
-                      setSortBy("contact_person")
+                      setSortBy("contact_person");
                     }}
                   >
                     <FaSort size={13} />
                   </i>
                 </th>
                 <th className="py-4 text-left pl-3 font-light">
-                <div className="flex items-center">
+                  <div className="flex items-center">
                     Telephone
-                                    <i
+                    <i
                       className="cursor-pointer"
                       onClick={() => {
                         setSortNames(!sortNames);
-                        setSortBy("telephone_number")
+                        setSortBy("telephone_number");
                       }}
                     >
                       <FaSort size={13} />
@@ -145,6 +147,9 @@ export default function Home({ websites }) {
                   key={index}
                   onClick={() => router.push(`/sites/${site.id}`)}
                 >
+                  <td className="py-4 text-center px-3">
+                    <input type="checkbox" name="" id="" />
+                  </td>
                   <td className="py-2 text-left pl-3">
                     <h1 className="font-medium">{site.name}</h1>
                     <span className="font-extralight text-sm text-[#bcbfc2]">
@@ -175,6 +180,13 @@ export default function Home({ websites }) {
             </tbody>
           </table>
         </div>
+
+        <footer className="text-center text-gray-500 absolute bottom-1 h-6 w-full">
+          <p>
+            Copyright &#169; {new Date().getFullYear()} A service of gagawala
+            limited
+          </p>
+        </footer>
       </main>
     </>
   );

@@ -18,7 +18,7 @@ export default function Home({ logs}) {
         <title>Logs - Shine Africa</title>
       </Head>
       <Navbar />
-      <main className="mt-[70px]">
+      <main className="pt-[70px] relative pb-6 min-h-screen">
 
         <div className="mb-5 overflow-x-scroll ">
           <table className=" w-full table-auto p-10">
@@ -56,6 +56,12 @@ export default function Home({ logs}) {
             </tbody>
           </table>
         </div>
+        <footer className="text-center text-gray-500 absolute bottom-1 h-6 w-full">
+          <p>
+            Copyright &#169; {new Date().getFullYear()} A service of gagawala
+            limited
+          </p>
+        </footer>
       </main>
     </>
   );

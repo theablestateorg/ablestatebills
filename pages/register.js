@@ -52,7 +52,7 @@ export default function Home() {
         <title>Shine Afrika</title>
       </Head>
       <ToastContainer />
-      <div className="w-screen h-screen flex justify-center items-center">
+      <div className="w-screen h-screen flex justify-center items-center relative pb-6 min-h-screen">
         <Formik
           initialValues={{ password: "", first_name: "", last_name: "", role: "", email: ""  }}
           validationSchema={registerValidationSchema}
@@ -218,6 +218,12 @@ export default function Home() {
             );
           }}
         </Formik>
+        <footer className="text-center text-gray-500 absolute bottom-1 h-6 w-full">
+          <p>
+            Copyright &#169; {new Date().getFullYear()} A service of gagawala
+            limited
+          </p>
+        </footer>
       </div>
     </>
   );

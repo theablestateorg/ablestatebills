@@ -11,7 +11,7 @@ export default function AddSite() {
   const [loading, setLoading] = useState(false)
   const { user } = useAuth();
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values, resetForm) => {
     // event.preventDefault()
     setLoading(true)
     try{
@@ -33,6 +33,8 @@ export default function AddSite() {
             status: "success",
           },
         ]);
+
+        resetForm({ name: "", website_link: "", contact_person: "", telephone_number: "", email: "", last_paid: "", expiry_date: "", status: "active"})
       }
       if(error){
         toast.error(`${error?.message}`, {position: "top-center"})
@@ -65,8 +67,7 @@ export default function AddSite() {
         <Formik
           initialValues={{ name: "", website_link: "", contact_person: "", telephone_number: "", email: "", last_paid: "", expiry_date: "", status: "active"  }}
           onSubmit={(values, { resetForm }) => {
-              handleSubmit(values)
-              resetForm({ name: "", website_link: "", contact_person: "", telephone_number: "", email: "", last_paid: "", expiry_date: "", status: "active"})
+              handleSubmit(values, resetForm)
           }}
           
         >
@@ -84,6 +85,13 @@ export default function AddSite() {
             // console.log(values)
             return (
               <Form className="my-5" >
+              <div className="flex items-center gap-10 my-5">
+            <label htmlFor="website_link" className="text-xl w-4/12 md:w-2/12">Website</label>
+            <input type="text" name="website_link" placeholder="Website" className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
+            onChange={handleChange("website_link")}
+            onBlur={handleBlur("website_link")}
+            value={values.website_link} />
+          </div>
           <div className="flex items-center gap-10 my-2">
             <label htmlFor="name" className="text-xl w-4/12 md:w-2/12">Add Site Name</label>
             <input type="text" name="name" placeholder="Name" className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12" 
@@ -113,13 +121,6 @@ export default function AddSite() {
             onChange={handleChange("email")}
             onBlur={handleBlur("email")} 
             value={values.email}/>
-          </div>
-          <div className="flex items-center gap-10 my-5">
-            <label htmlFor="website_link" className="text-xl w-4/12 md:w-2/12">Website</label>
-            <input type="text" name="website_link" placeholder="Website" className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
-            onChange={handleChange("website_link")}
-            onBlur={handleBlur("website_link")}
-            value={values.website_link} />
           </div>
           <div className="flex items-center gap-10 my-5">
             <label htmlFor="last_paid" className="text-xl w-4/12 md:w-2/12">Upload Date</label>

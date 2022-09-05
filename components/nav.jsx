@@ -25,7 +25,7 @@ export default function Navbar() {
 
   return (
     <nav className="w-screen h-[70px] z-10 fixed top-0 right-0 left-0 bg-white py-2 px-3 md:px-16 flex justify-between items-center border-b-2 border-[#E4E6E5]">
-      <div className="flex gap-5 items-center">
+      <div className="flex gap-5 items-center justify-between w-[100%]">
         <h1 className="text-[#CA3011] font-Roboto text-3xl font-black cursor-pointer"
         onClick={() => router.push("/")}
         >
@@ -36,13 +36,12 @@ export default function Navbar() {
           <Link href="/">Dashboard</Link>
           </li>
           <li className={`h-[70px] flex items-center border-b-2 border-transparent hover:border-b-2 hover:border-black ${router.pathname === '/add-site' && "border-black "}`}>
-          <Link href="/add-site">Add Site</Link>
+          <Link href="/add-site">Add Product</Link>
           </li>
           <li className={`h-[70px] flex items-center border-b-2 border-transparent hover:border-b-2 hover:border-black ${router.pathname === '/logs' && "border-black "}`}>
           <Link href="/logs">Logs</Link>
           </li>
         </ul>
-      </div>
       <div className={navStyles.profileMenu}>
         <i className='cursor-pointer'>
           <IoMdNotificationsOutline size={25} />
@@ -67,6 +66,7 @@ export default function Navbar() {
             </li>
           </ul>}
         </div>
+      </div>
       </div>
       <div className={navStyles.mobileMenu}>
         <i className='bg-red-500  cursor-pointer relative'

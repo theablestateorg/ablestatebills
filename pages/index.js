@@ -33,7 +33,7 @@ export default function Home({ websites }) {
             onClick={() => router.push("/add-site")}
           >
             <MdAdd />
-            New Site
+            New Product
           </button>
         </section>
 
@@ -41,7 +41,7 @@ export default function Home({ websites }) {
           <table className="bg-white w-full table-auto p-10">
             <caption className=" bg-white py-3 outline outline-1 outline-[#e5e7eb] px-3">
               <section className="flex justify-between items-center">
-                <h3 className="font-bold text-left">Sites</h3>
+                <h3 className="font-bold text-left">Products</h3>
                 <div className="flex justify-between items-center">
                   <div className="flex justify-between items-center relative focus-within:text-black ">
                     <input

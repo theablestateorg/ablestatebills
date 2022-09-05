@@ -86,7 +86,7 @@ export default function AddSite() {
               <Form className="my-5" >
           <div className="flex items-center gap-10 my-2">
             <label htmlFor="name" className="text-xl w-4/12 md:w-2/12">Add Site Name</label>
-            <input type="text" name="name" placeholder="name" className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12" 
+            <input type="text" name="name" placeholder="Name" className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12" 
               onChange={handleChange("name")}
               onBlur={handleBlur("name")}
               value={values.name}
@@ -94,7 +94,7 @@ export default function AddSite() {
           </div>
           <div className="flex items-center gap-10 my-5">
             <label htmlFor="contact_person" className="text-xl w-4/12 md:w-2/12">Contact Person</label>
-            <input type="text" name="contact_person" placeholder="person's name" className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
+            <input type="text" name="contact_person" placeholder="Person's name" className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
               onChange={handleChange("contact_person")}
               onBlur={handleBlur("contact_person")}
               value={values.contact_person}
@@ -102,21 +102,21 @@ export default function AddSite() {
           </div>
           <div className="flex items-center gap-10 my-5">
             <label htmlFor="telephone_number" className="text-xl w-4/12 md:w-2/12">Telephone</label>
-            <input type="tel" name="telephone_number" placeholder="telephone number" className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
+            <input type="tel" name="telephone_number" placeholder="Telephone number" className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
             onChange={handleChange("telephone_number")}
             onBlur={handleBlur("telephone_number")} 
             value={values.telephone_number}/>
           </div>
           <div className="flex items-center gap-10 my-5">
             <label htmlFor="telephone_number" className="text-xl w-4/12 md:w-2/12">Email</label>
-            <input type="email" name="email" placeholder="email" className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
+            <input type="email" name="email" placeholder="Email" className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
             onChange={handleChange("email")}
             onBlur={handleBlur("email")} 
             value={values.email}/>
           </div>
           <div className="flex items-center gap-10 my-5">
             <label htmlFor="website_link" className="text-xl w-4/12 md:w-2/12">Website</label>
-            <input type="text" name="website_link" placeholder="website" className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
+            <input type="text" name="website_link" placeholder="Website" className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
             onChange={handleChange("website_link")}
             onBlur={handleBlur("website_link")}
             value={values.website_link} />

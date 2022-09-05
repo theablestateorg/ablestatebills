@@ -2,27 +2,37 @@ import Head from "next/head";
 import Navbar from "../components/nav";
 import { useRouter } from "next/router";
 import { MdAdd, MdSearch } from "react-icons/md";
-import { FaSort } from 'react-icons/fa'
+import { FaSort } from "react-icons/fa";
 import { supabase } from "../utils/supabase";
 import { useState } from "react";
 import moment from "moment";
 
 export default function Home({ websites }) {
   const router = useRouter();
-  const [searchText, setSearchText] = useState("")
+  const [searchText, setSearchText] = useState("");
   const [status, setStatus] = useState("");
-  const [searchBy, setSearchBy] = useState("name")
+  const [searchBy, setSearchBy] = useState("name");
+  const [sortNames, setSortNames] = useState(false);
+  const [sortBy, setSortBy] = useState("")
 
-  websites = websites.filter(
-    (website) =>
-      !website?.[searchBy] || searchBy !== "telephone_number" ?
-      website?.[searchBy].toLowerCase().indexOf(searchText.toLowerCase()) > -1
-      : website?.[searchBy].toString().toLowerCase().indexOf(searchText.toLowerCase()) > -1
-  ).filter((website) => !status || website.status === status)
+  websites = websites
+    .filter((website) =>
+      !website?.[searchBy] || searchBy !== "telephone_number"
+        ? website?.[searchBy].toLowerCase().indexOf(searchText.toLowerCase()) >
+          -1
+        : website?.[searchBy]
+            .toString()
+            .toLowerCase()
+            .indexOf(searchText.toLowerCase()) > -1
+    )
+    .filter((website) => !status || website.status === status);
 
-  websites = websites.sort((a, b) => b.contact_person - a.contact_person)
+  websites = sortNames
+    ? websites.sort((a, b) => a[sortBy] > b[sortBy])
+    : websites.sort((a, b) => b[sortBy] > a[sortBy]);
 
-  console.log(websites)
+  
+  console.log(sortBy)
 
   return (
     <>
@@ -55,40 +65,73 @@ export default function Home({ websites }) {
                       className="px-3 py-2 bg-[#f7f7f7] rounded-lg placeholder:text-[#bcbfc2] w-full outline outline-1 outline-[#f4f3f7]"
                       onChange={(event) => setSearchText(event.target.value)}
                     />
-                    {/* <MdSearch
-                      size={25}
-                      color={"#121212"}
-                      className="absolute pointer-events-none right-2"
-                    /> */}
-                    <select name="" id="" className="absolute right-1 px-1 py-2 ml-2 bg-white rounded-lg outline outline-1 outline-[#ededed] text-sm"
-                    onChange={(event) => setSearchBy(event.target.value)}>
+                    <select
+                      name=""
+                      id=""
+                      className="absolute right-1 px-1 py-2 ml-2 bg-white rounded-lg outline outline-1 outline-[#ededed] text-sm"
+                      onChange={(event) => setSearchBy(event.target.value)}
+                    >
                       <option value="name">name</option>
                       <option value="telephone_number">no.</option>
                       <option value="contact_person">person</option>
                     </select>
                   </div>
-                    {/* <select name="" id="" className="px-3 py-2 ml-2 bg-transparent rounded-lg outline outline-1 outline-[#ededed]">
-                      <option value="">name</option>
-                    </select> */}
                 </div>
               </section>
             </caption>
             <thead>
               <tr className="border-b bg-[#f7f7f7] text-[#555b6d]">
-                <th className="py-4 text-left pl-3 font-light">Website</th>
+                <th className="py-4 text-left pl-3 font-light">
+                  <div className="flex items-center">
+                    Website
+                                    <i
+                      className="cursor-pointer"
+                      onClick={() => {
+                        setSortNames(!sortNames);
+                        setSortBy("name")
+                      }}
+                    >
+                      <FaSort size={13} />
+                    </i>
+                  </div>
+                </th>
                 <th className="py-4 text-left pl-3 font-light flex items-center">
                   Contact Person
-                  <i className="cursor-pointer"
-                    onClick={() => console.log("clicked")}
+                  <i
+                    className="cursor-pointer"
+                    onClick={() => {
+                      setSortNames(!sortNames);
+                      setSortBy("contact_person")
+                    }}
                   >
                     <FaSort size={13} />
                   </i>
                 </th>
-                <th className="py-4 text-left pl-3 font-light">Telephone</th>
                 <th className="py-4 text-left pl-3 font-light">
-                <select name="" className="font-light bg-transparent" id="" onChange={(event) => setStatus(event.target.value)}>
+                <div className="flex items-center">
+                    Telephone
+                                    <i
+                      className="cursor-pointer"
+                      onClick={() => {
+                        setSortNames(!sortNames);
+                        setSortBy("telephone_number")
+                      }}
+                    >
+                      <FaSort size={13} />
+                    </i>
+                  </div>
+                </th>
+                <th className="py-4 text-left pl-3 font-light">
+                  <select
+                    name=""
+                    className="font-light bg-transparent"
+                    id=""
+                    onChange={(event) => setStatus(event.target.value)}
+                  >
                     <option value="">Status</option>
-                    <option value="active" className="font-light">Active</option>
+                    <option value="active" className="font-light">
+                      Active
+                    </option>
                     <option value="expired">Expired</option>
                     <option value="warning">Warning</option>
                   </select>
@@ -105,7 +148,8 @@ export default function Home({ websites }) {
                   <td className="py-2 text-left pl-3">
                     <h1 className="font-medium">{site.name}</h1>
                     <span className="font-extralight text-sm text-[#bcbfc2]">
-                      last paid {moment(new Date(site.last_paid)).format("DD-MM-YYYY")}
+                      last paid{" "}
+                      {moment(new Date(site.last_paid)).format("DD-MM-YYYY")}
                     </span>
                   </td>
                   <td className="py-2 text-left pl-3">{site.contact_person}</td>
@@ -114,7 +158,15 @@ export default function Home({ websites }) {
                   </td>
                   <td className="py-2 text-left text-xs pl-3 font-light flex">
                     <span className="outline outline-1 outline-[#e5e3e3] px-2 gap-1 py-1 rounded-lg flex items-center justify-between font-light">
-                      <span className={`w-2 h-2 rounded-full ${site.status.includes('active') ? "bg-green-500" : site.status.includes('warning') ? "bg-yellow-200" : "bg-red-600"}`}></span>
+                      <span
+                        className={`w-2 h-2 rounded-full ${
+                          site.status.includes("active")
+                            ? "bg-green-500"
+                            : site.status.includes("warning")
+                            ? "bg-yellow-200"
+                            : "bg-red-600"
+                        }`}
+                      ></span>
                       {site.status}
                     </span>
                   </td>
@@ -129,7 +181,10 @@ export default function Home({ websites }) {
 }
 
 export const getServerSideProps = async ({ req }) => {
-  const { data: websites } = await supabase.from("websites").select("*").order('created_at', { ascending: false });
+  const { data: websites } = await supabase
+    .from("websites")
+    .select("*")
+    .order("created_at", { ascending: false });
 
   const { user } = await supabase.auth.api.getUserByCookie(req);
 

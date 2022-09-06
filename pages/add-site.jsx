@@ -4,12 +4,30 @@ import { supabase } from "../utils/supabase";
 import { addSiteValidationSchema } from "../utils/validation";
 import { Formik, Form } from "formik";
 import { toast, ToastContainer } from 'react-toastify'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../utils/auth";
+import { TbSend } from 'react-icons/tb'
+import { IconContext } from "react-icons";
+
 
 export default function AddSite() {
   const [loading, setLoading] = useState(false)
   const { user } = useAuth();
+
+  const [ customers, setCustomers ] = useState([])
+  
+  useEffect(() => {
+    getCustomers()
+  }, [])
+
+  const getCustomers = async () => {
+    const { data } = await supabase
+      .from("profiles")
+      .select("*")
+      // .eq("role", "customer")
+      // .single();
+    setCustomers(data);
+  };
 
   const handleSubmit = async (values, resetForm) => {
     // event.preventDefault()
@@ -102,11 +120,20 @@ export default function AddSite() {
           </div>
           <div className="flex items-center gap-10 my-5">
             <label htmlFor="contact_person" className="text-xl w-4/12 md:w-2/12">Contact Person</label>
-            <input type="text" name="contact_person" placeholder="Person's name" className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
-              onChange={handleChange("contact_person")}
-              onBlur={handleBlur("contact_person")}
-              value={values.contact_person}
-            />
+            {/*<div className="relative flex flex-col w-full">
+              <input type="text" name="contact_person" placeholder="Person's name" className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
+                onChange={handleChange("contact_person")}
+                onBlur={handleBlur("contact_person")}
+                value={values.contact_person}
+              />
+            </div> */}
+            <select name="" id="" className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12">
+              <input type="text" name="" id="" />
+              <option value="">Select Customer</option>
+              {customers && customers.map(customer => (
+                <option value="">{customer.first_name + " " + customer.last_name}</option>
+              ))}
+            </select>
           </div>
           <div className="flex items-center gap-10 my-5">
             <label htmlFor="telephone_number" className="text-xl w-4/12 md:w-2/12">Telephone</label>
@@ -145,6 +172,9 @@ export default function AddSite() {
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
                     </path>
                 </svg>}
+                {!loading && <i>
+                  <TbSend />
+                  </i>}
                   {loading ? "Loading" : "Submit"}
             </button>
           </div>

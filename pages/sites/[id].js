@@ -10,6 +10,7 @@ import Router from "next/router";
 import { Formik, Form } from "formik";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { useAuth } from "../../utils/auth";
+import { TbEdit } from 'react-icons/tb'
 
 export default function Site() {
   const router = useRouter();
@@ -119,6 +120,7 @@ export default function Site() {
                 className="bg-[#1D1F20] text-white py-2 px-4 my-2 mt-4 hover:bg-[#292C2D] flex items-center gap-2"
                 onClick={() => setPopUpdate(true)}
               >
+                <TbEdit />
                 Update
               </button>
             </section>
@@ -254,6 +256,7 @@ export default function Site() {
                                   ></path>
                                 </svg>
                               )}
+                              {!loading && <TbEdit />}
                               {loading ? "Loading" : "Update"}
                             </button>
                           </div>

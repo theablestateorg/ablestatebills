@@ -153,8 +153,7 @@ export default function AddSite() {
           </Formik>
           <footer className="text-center text-gray-500 absolute bottom-1 h-6 w-full">
           <p>
-            Copyright &#169; {new Date().getFullYear()} A service of gagawala
-            limited
+            Copyright &#169; {new Date().getFullYear()} A service of Gagawala Graphics Limited
           </p>
         </footer>
         

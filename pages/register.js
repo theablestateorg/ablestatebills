@@ -20,6 +20,7 @@ export default function Home() {
           data: { 
             first_name, 
             last_name,
+            role
           }
         }
         )
@@ -42,7 +43,7 @@ export default function Home() {
 
     // document.loginForm.reset()
     setLoading(false)
-    resetForm({ password: "", first_name: "", last_name: "", role: "", email: ""  })
+    resetForm({ password: "", first_name: "", last_name: "", role: "customer", email: ""  })
   };
 
   return (

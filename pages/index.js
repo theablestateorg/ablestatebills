@@ -202,14 +202,14 @@ export default function Home({ websites }) {
             <tbody>
               {websites.map((site, index) => (
                 <tr
-                  className="border-b border-l-2 border-l-transparent hover:border-l-[#ca3011] cursor-pointer mb-10"
+                  className={`border-b border-l-2 border-l-transparent hover:border-l-[#ca3011] cursor-pointer mb-10 ${deleteArrayIds.includes(site.id.toString()) && "bg-red-50 border-l-[#ca3011]"}`}
                   key={index}
                   onClick={() => router.push(`/sites/${site.id}`)}
                 >
                   <td className="py-4 text-center px-3"
                     onClick={(event) => event.stopPropagation()}
                   >
-                    <input type="checkbox" name="" id="" className="checkboxes"
+                    <input type="checkbox" name="" id="" className="checkboxes accent-[#ca3011]"
                       onChange={(event) => {
                         event.stopPropagation()
                         checkbox.current.checked = false

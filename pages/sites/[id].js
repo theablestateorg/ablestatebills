@@ -69,6 +69,7 @@ export default function Site() {
         .from("websites")
         .update({
           last_paid: new Date(document.getElementById("extension").value),
+          expiry_date: new Date(document.getElementById("extension").value),
         })
         .match({ id: id });
 

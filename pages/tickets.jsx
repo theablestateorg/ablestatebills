@@ -5,7 +5,7 @@ import TicketCard from "../components/TicketCard";
 import { supabase } from "../utils/supabase";
 import { useState, useEffect } from "react";
 
-function tickets() {
+function Tickets() {
 
   const [tickets, setTickets] = useState([])
 
@@ -41,4 +41,4 @@ function tickets() {
   )
 }
 
-export default tickets
+export default Tickets

@@ -1,21 +1,24 @@
 import Head from "next/head";
 import Navbar from "../components/nav";
 import { toast, ToastContainer } from "react-toastify";
+import TicketCard from "../components/TicketCard";
+
 
 function tickets() {
+  
   return (
     <>
       <Head>
         <title>Shine Africa</title>
       </Head>
       <Navbar />
-      {/* <Help /> */}
+      <ToastContainer />
 
       <main className="pt-[70px] mx-3 md:mx-16 relative pb-6 min-h-screen">
-        <h1>tickts</h1>
+        <TicketCard />
+        <TicketCard />
+        <TicketCard />
       </main>
-
-      <ToastContainer />
     </>
   )
 }

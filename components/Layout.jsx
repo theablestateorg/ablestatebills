@@ -4,8 +4,6 @@ import { useAuth } from "../utils/auth";
 import Help from "../components/Help";
 
 function Layout({ children, websites }) {
-  console.log(websites);
-  console.log("hello");
 
   const { user } = useAuth();
   return (

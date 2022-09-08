@@ -38,6 +38,12 @@ export default function Navbar() {
           <li className={`h-[70px] flex items-center border-b-2 border-transparent hover:border-b-2 hover:border-black ${router.pathname === '/add-site' && "border-black "}`}>
           <Link href="/add-site">Add Product</Link>
           </li>
+          {user && user.role === 'manager' &&
+
+          <li className={`h-[70px] flex items-center border-b-2 border-transparent hover:border-b-2 hover:border-black ${router.pathname === '/tickets' && "border-black "}`}>
+          <Link href="/tickets">Tickets</Link>
+          </li>
+          }
           <li className={`h-[70px] flex items-center border-b-2 border-transparent hover:border-b-2 hover:border-black ${router.pathname === '/logs' && "border-black "}`}>
           <Link href="/logs">Logs</Link>
           </li>

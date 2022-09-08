@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Navbar from "../components/nav";
+import Help from "../components/Help";
 import { useRouter } from "next/router";
 import { MdAdd, MdSearch } from "react-icons/md";
 import { FaSort } from "react-icons/fa";
@@ -9,6 +10,7 @@ import moment from "moment";
 import { toast, ToastContainer } from "react-toastify";
 import { useAuth } from "../utils/auth";
 import { IoWarning } from "react-icons/io5";
+import { Footer } from "../components";
 
 export default function Home({ websites }) {
   const router = useRouter();
@@ -70,6 +72,7 @@ export default function Home({ websites }) {
         <title>Shine Africa</title>
       </Head>
       <Navbar />
+      {/* <Help /> */}
 
       <ToastContainer />
 
@@ -288,11 +291,7 @@ export default function Home({ websites }) {
           </div>
         )}
 
-        <footer className="text-center text-gray-500 absolute bottom-1 h-6 w-full">
-          <p>
-            Copyright &#169; {new Date().getFullYear()} A service of Gagawala Graphics Limited
-          </p>
-        </footer>
+<Footer />
       </main>
     </>
   );

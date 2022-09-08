@@ -2,6 +2,7 @@ import "../styles/globals.css";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "../utils/auth";
 import Head from "next/head";
+import Layout from "../components/Layout";
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -12,7 +13,9 @@ function MyApp({ Component, pageProps }) {
       <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
       </Head>
       <AuthProvider>
+        <Layout>
         <Component {...pageProps} />
+        </Layout>
       </AuthProvider>
     </>
   );

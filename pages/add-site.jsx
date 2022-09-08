@@ -21,6 +21,7 @@ export default function AddSite() {
   const [customerModel, setCustomerModel] = useState(false);
   const [customerId, setCustomerId] = useState(null);
   const [contact, setContact] = useState({});
+  const [countryCode, setCountryCode] = useState("+256")
 
   useEffect(() => {
     getCustomers();
@@ -50,6 +51,7 @@ export default function AddSite() {
             ...values,
             added_by: user.first_name + " " + user.last_name,
             contact_id: customerId,
+            telephone_number: countryCode + values.telephone_number
           },
         ]);
 
@@ -137,6 +139,7 @@ export default function AddSite() {
             expiry_date: "",
             status: "active",
           }}
+          validationSchema={addSiteValidationSchema}
           onSubmit={(values, { resetForm }) => {
             handleSubmit(values, resetForm);
           }}
@@ -162,15 +165,36 @@ export default function AddSite() {
                   >
                     Website
                   </label>
-                  <input
-                    type="text"
-                    name="website_link"
-                    placeholder="Website"
-                    className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
-                    onChange={handleChange("website_link")}
-                    onBlur={handleBlur("website_link")}
-                    value={values.website_link}
-                  />
+                  <div className="w-8/12 md:w-8/12">
+                    <input
+                      type="text"
+                      name="website_link"
+                      placeholder="Website"
+                      className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-full"
+                      onChange={handleChange("website_link")}
+                      onBlur={handleBlur("website_link")}
+                      value={values.website_link}
+                    />
+                    <div
+                      className={`${
+                        errors?.website_link && touched?.website_link
+                          ? "block"
+                          : "block"
+                      }`}
+                    >
+                      <label
+                        className={`${
+                          errors?.website_link && touched?.website_link
+                            ? "text-red-500 text-xs"
+                            : "text-transparent text-xs"
+                        }`}
+                      >{`${
+                        errors?.website_link && touched?.website_link
+                          ? errors.website_link
+                          : "hide"
+                      }`}</label>
+                    </div>
+                  </div>
                 </div>
                 <div className="flex items-center gap-10 my-2">
                   <label htmlFor="name" className="text-xl w-4/12 md:w-2/12">
@@ -263,7 +287,7 @@ export default function AddSite() {
                                 >
                                   <div className="flex flex-col gap-2  my-2">
                                     <label htmlFor="">Email</label>
-                                    <div className="w-full">
+                                    <div className="w-8/12 md:w-8/12">
                                       <input
                                         type="email"
                                         name="email"
@@ -361,29 +385,55 @@ export default function AddSite() {
                   >
                     Telephone
                   </label>
-                  <input
-                    type="tel"
-                    name="telephone_number"
-                    placeholder="Telephone number"
-                    className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
-                    onChange={handleChange("telephone_number")}
-                    onBlur={handleBlur("telephone_number")}
-                    value={values.telephone_number}
-                  />
+                  <div className="w-8/12 md:w-8/12 relative outline outline-1 outline-[#121212] rounded flex">
+                    <input
+                      type="tel"
+                      name="telephone_number"
+                      placeholder="Telephone number"
+                      className=" py-2 px-2 ml-16 bg-transparent flex-grow focus:outline-none"
+                      onChange={handleChange("telephone_number")}
+                      onBlur={handleBlur("telephone_number")}
+                      value={values.telephone_number}
+                    />
+                    <select name="" id="" className="bg-transparent absolute left-0 h-full w-16 border-r-2" onChange={(e) => setCountryCode(e.target.value)}>
+                      <option value="+256">+256</option>
+                    </select>
+                  </div>
                 </div>
                 <div className="flex items-center gap-10 my-5">
                   <label htmlFor="email" className="text-xl w-4/12 md:w-2/12">
                     Email
                   </label>
+                  <div className="w-8/12 md:w-8/12">
                   <input
                     type="email"
                     name="email"
                     placeholder="Email"
-                    className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
+                    className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-full"
                     onChange={handleChange("email")}
                     onBlur={handleBlur("email")}
                     value={values.email}
                   />
+                  <div
+                      className={`${
+                        errors?.email && touched?.email
+                          ? "block"
+                          : "block"
+                      }`}
+                    >
+                      <label
+                        className={`${
+                          errors?.email && touched?.email
+                            ? "text-red-500 text-xs"
+                            : "text-transparent text-xs"
+                        }`}
+                      >{`${
+                        errors?.email && touched?.email
+                          ? errors.email
+                          : "hide"
+                      }`}</label>
+                    </div>
+                    </div>
                 </div>
                 <div className="flex items-center gap-10 my-5">
                   <label

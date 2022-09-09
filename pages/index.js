@@ -134,7 +134,7 @@ export default function Home({ websites }) {
             <thead>
               <tr className="border-b bg-[#f7f7f7] text-[#555b6d]">
                 <th className="py-4 text-center px-3 w-1">
-                  <input type="checkbox" name="" id="" ref={checkbox} onChange={() => {
+                  <input type="checkbox" className="accent-[#ca3011]" name="" id="" ref={checkbox} onChange={() => {
                     if(checkbox.current.checked === true){
                       Object.values(document.getElementsByClassName("checkboxes")).map(checkbox => checkbox.checked = true)
                       setDeleteArray(websites.map(site => [site.id, site.name]))

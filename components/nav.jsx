@@ -87,17 +87,20 @@ export default function Navbar() {
           }}
         >
           <CgMenu size={25} color={"#CA3011"} />
-          {showMobileMenu && <ul className='bg-white absolute z-10 outline outline-1 outline-[#E4E6E5] top-[60px] -right-5 p-2'>
-            <li className='w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7]'>
-              <Link href="/">Home</Link>
+          {showMobileMenu && <ul className='bg-white absolute z-20 outline outline-1 outline-[#E4E6E5] top-10 right-0 p-2 w-56'>
+            <li className='w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic'>
+              <Link href="/" className='nn'>Dashboard</Link>
             </li>
-            <li className='w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7]'>
-              <Link href="/add-site" className=''>AddSite</Link>
+            <li className='w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic'>
+              <Link href="/add-site" className=''>Add Product</Link>
             </li>
-            <li className='w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7]'>
+            <li className='w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic'>
+              <Link href="/logs">Logs</Link>
+            </li>
+            <li className='w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic'>
               <Link href="/profile">Profile</Link>
             </li>
-            <li className='w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7]'>
+            <li className='w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic'>
               <button onClick={() => {
                 signOut()
                 Router.push('/login')

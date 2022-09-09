@@ -32,7 +32,7 @@ export default function Navbar() {
           >
             ShineAfrika
           </h1>
-          <span className='text-xs bg-[#CA3011] text-white rounded px-1'>beta</span>
+          <span className='bg-[#CA3011] text-xs font-light text-white rounded px-1'>beta</span>
         </div>
         <ul className={`${navStyles.navMenu} h-[70px] items-center`}>
           <li className={`h-[70px] flex items-center border-b-2 border-transparent hover:border-b-2 hover:border-black ${router.pathname === '/' && "border-black "}`}>
@@ -55,7 +55,9 @@ export default function Navbar() {
         <i className='cursor-pointer'>
           <IoMdNotificationsOutline size={25} />
         </i>
-        <p className='cursor-pointer'>Hi, {user && user?.user_metadata.first_name}</p>
+        <p className='cursor-pointer'>
+          Hi, {user && user?.user_metadata.first_name}
+        </p>
         <div className="w-10 h-10 bg-[#CA3011] rounded-full flex items-center justify-center relative dialog cursor-pointer"
         onClick={(event) => {
           setShowMenu(!showMenu)

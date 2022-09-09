@@ -21,14 +21,17 @@ export default function AddSite() {
   const [customerModel, setCustomerModel] = useState(false);
   const [customerId, setCustomerId] = useState(null);
   const [contact, setContact] = useState({});
-  const [countryCode, setCountryCode] = useState("+256")
+  const [countryCode, setCountryCode] = useState("+256");
+  const [selected, setSelected] = useState(false);
 
   useEffect(() => {
     getCustomers();
     getContact(customerId);
-  }, [customers, customerId]);
+    console.log("hello world!");
+  }, [selected]);
 
-  // console.log(contact)
+  console.log(contact);
+  console.log(customers);
 
   const getCustomers = async () => {
     const { data } = await supabase.from("profiles").select("*");
@@ -44,16 +47,14 @@ export default function AddSite() {
   const handleSubmit = async (values, resetForm) => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from("websites")
-        .insert([
-          {
-            ...values,
-            added_by: user.first_name + " " + user.last_name,
-            contact_id: customerId,
-            telephone_number: countryCode + values.telephone_number
-          },
-        ]);
+      const { data, error } = await supabase.from("websites").insert([
+        {
+          ...values,
+          added_by: user.first_name + " " + user.last_name,
+          contact_id: customerId,
+          telephone_number: countryCode + values.telephone_number,
+        },
+      ]);
 
       if (data) {
         toast.success(`${values.name} was added successfully`, {
@@ -110,6 +111,7 @@ export default function AddSite() {
     setLoading(false);
     if (user) {
       setCustomerModel(false);
+      setSelected(!selected)
     }
     if (error) {
       toast.error(`${error?.message}`, { position: "top-center" });
@@ -225,11 +227,12 @@ export default function AddSite() {
                       onChange={(e) => {
                         setFieldValue("contact_person", e.target.value);
                         setCustomerId(e.target.value);
+                        setSelected(!selected)
                       }}
                       onBlur={handleBlur("contact_person")}
                       value={values.contact_person}
                     >
-                      <input type="text" name="" id="" />
+                      {/* <input type="text" name="" id="" /> */}
                       <option value="">Select Customer</option>
                       {customers &&
                         customers.map((customer, index) => (
@@ -395,7 +398,12 @@ export default function AddSite() {
                       onBlur={handleBlur("telephone_number")}
                       value={values.telephone_number}
                     />
-                    <select name="" id="" className="bg-transparent absolute left-0 h-full w-16 border-r-2" onChange={(e) => setCountryCode(e.target.value)}>
+                    <select
+                      name=""
+                      id=""
+                      className="bg-transparent absolute left-0 h-full w-16 border-r-2"
+                      onChange={(e) => setCountryCode(e.target.value)}
+                    >
                       <option value="+256">+256</option>
                     </select>
                   </div>
@@ -405,20 +413,18 @@ export default function AddSite() {
                     Email
                   </label>
                   <div className="w-8/12 md:w-8/12">
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-full"
-                    onChange={handleChange("email")}
-                    onBlur={handleBlur("email")}
-                    value={values.email}
-                  />
-                  <div
+                    <input
+                      type="email"
+                      name="email"
+                      placeholder="Email"
+                      className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-full"
+                      onChange={handleChange("email")}
+                      onBlur={handleBlur("email")}
+                      value={values.email}
+                    />
+                    <div
                       className={`${
-                        errors?.email && touched?.email
-                          ? "block"
-                          : "block"
+                        errors?.email && touched?.email ? "block" : "block"
                       }`}
                     >
                       <label
@@ -428,12 +434,10 @@ export default function AddSite() {
                             : "text-transparent text-xs"
                         }`}
                       >{`${
-                        errors?.email && touched?.email
-                          ? errors.email
-                          : "hide"
+                        errors?.email && touched?.email ? errors.email : "hide"
                       }`}</label>
                     </div>
-                    </div>
+                  </div>
                 </div>
                 <div className="flex items-center gap-10 my-5">
                   <label

@@ -2,6 +2,7 @@ import { TbMessageCircle2 } from "react-icons/tb";
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../utils/auth";
 import { supabase } from "../utils/supabase";
+import { MdOutlineClose } from 'react-icons/md'
 
 function Help() {
   const { user } = useAuth();
@@ -64,14 +65,16 @@ function Help() {
       <TbMessageCircle2 size={30} />
       {chatBox && (
         <div
-          className="absolute right-12 bottom-2 w-64 h-80 shadow-lg bg-white outline outline-1 outline-[#CA3011] rounded-t-md rounded-bl-md flex flex-col text-black items-center overflow-hidden"
+          className="absolute  bottom-2 w-64 h-80 shadow-lg bg-white outline outline-1 outline-[#CA3011] rounded-t-md rounded-bl-md flex flex-col text-black items-center overflow-hidden -right-0 md:right-12"
           onClick={(event) => {
             event.stopPropagation();
           }}
         >
-          <p className="bg-gray-100 w-full text-sm font-bold py-2 flex justify-between px-2">
+          <p className="bg-gray-100 w-full text-sm font-bold py-2 flex justify-between px-2 items-center">
             Send message
-            <span onClick={() => setChatBox(false)}>x</span>
+            <span onClick={() => setChatBox(false)}>
+              <MdOutlineClose />
+            </span>
           </p>
           <div
             className="w-full flex flex-col h-48 overflow-y-scroll pb-10"

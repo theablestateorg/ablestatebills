@@ -2,7 +2,7 @@ import { TbMessageCircle2 } from "react-icons/tb";
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../utils/auth";
 import { supabase } from "../utils/supabase";
-import { MdOutlineClose } from 'react-icons/md'
+import { MdOutlineClose } from "react-icons/md";
 
 function Help() {
   const { user } = useAuth();
@@ -22,7 +22,10 @@ function Help() {
   }, [reload, chatBox]);
 
   const getMessages = async () => {
-    const { data, error } = await supabase.from("tickets").select("*");
+    const { data, error } = await supabase
+      .from("tickets")
+      .select("*")
+      .eq("customer_id", user.id);
 
     if (data) {
       setMyMessages(data);

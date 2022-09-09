@@ -53,7 +53,7 @@ function Help() {
     // const element = document.getElementById("messages");
     // element.scrollTop = element.scrollHeight;
     if (msg.current) {
-      msg.current.scrollTop = 600;
+      msg.current.scrollTop = msg.current.scrollHeight;
     }
   }
 
@@ -77,7 +77,7 @@ function Help() {
             </span>
           </p>
           <div
-            className="w-full flex flex-col h-48 overflow-y-scroll pb-10"
+            className="w-full flex flex-col h-48 overflow-y-scroll pb-10 bg-white"
             id="messages"
             ref={msg}
           >
@@ -87,7 +87,7 @@ function Help() {
                   {sent.message}
                 </p>
                 {sent.response && (
-                  <p className="bg-gray-300 p-1 m-1 mr-5 text-sm rounded">
+                  <p className="bg-gray-200 p-1 m-1 mr-5 text-sm rounded">
                     {sent.response}
                   </p>
                 )}

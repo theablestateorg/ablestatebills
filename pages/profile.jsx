@@ -30,7 +30,7 @@ export default function Dashboard({ user }) {
     setProfiles(data);
   };
 
-  console.log(profiles)
+  // console.log(profiles)
 
   return (
     <>

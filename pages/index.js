@@ -101,8 +101,7 @@ export default function Home({ websites }) {
                     <select
                         name=""
                         id=""
-                        className="px-3 py-2 bg-[#f7f7f7] rounded-lg placeholder:text-[#bcbfc2] outline outline-1 outline-[#f4f3f7]"
-                        onChange={(event) => setSearchBy(event.target.value)} required
+                        className="px-3 py-2 bg-[#f7f7f7] rounded-lg placeholder:text-[#bcbfc2] outline outline-1 outline-[#f4f3f7]" required
                       >
                         <option value="">Bulk Actions</option>
                         <option value="telephone_number">Delete</option>

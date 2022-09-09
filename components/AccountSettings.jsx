@@ -5,7 +5,7 @@ import { useState } from "react";
 
 function AccountSettings({ user }) {
   const [loading, setLoading] = useState(false);
-  console.log(user)
+
   return (
     <section className="my-5 flex-grow flex flex-col">
             <h1 className="font-bold">Account Settings</h1>

@@ -39,7 +39,9 @@ export default function Home() {
       }else if (!user){
         toast.success(`A confirmation mail has been sent`, {position: "top-center"})
       }
-    }catch(error){console.log(error)}
+    }catch(error){
+      // console.log(error)
+    }
 
     // document.loginForm.reset()
     setLoading(false)

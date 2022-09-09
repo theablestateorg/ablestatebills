@@ -15,7 +15,7 @@ export default function AddSite() {
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
 
-  // console.log(user.first_name + " " + user.last_name)
+  // console.log(user. + " " + user.last_name)
 
   const [customers, setCustomers] = useState([]);
   const [customerModel, setCustomerModel] = useState(false);
@@ -27,11 +27,7 @@ export default function AddSite() {
   useEffect(() => {
     getCustomers();
     getContact(customerId);
-    console.log("hello world!");
   }, [selected]);
-
-  console.log(contact);
-  console.log(customers);
 
   const getCustomers = async () => {
     const { data } = await supabase.from("profiles").select("*");

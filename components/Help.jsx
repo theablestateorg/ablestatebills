@@ -27,7 +27,7 @@ function Help() {
       setMyMessages(data);
     }
     if (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
@@ -39,7 +39,7 @@ function Help() {
       updateScroll();
     }
     if (error) {
-      console.log(error);
+      // console.log(error);
     }
     setTicket({
       agency: false,
@@ -53,10 +53,7 @@ function Help() {
     // element.scrollTop = element.scrollHeight;
     if (msg.current) {
       msg.current.scrollTop = 600;
-      console.log(msg.current.scrollTop);
-      console.log(msg.current.scrollHeight);
     }
-    console.log("hello 1");
   }
 
   return (

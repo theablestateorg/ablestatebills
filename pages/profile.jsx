@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { MdEdit, MdOutlineMail } from "react-icons/md";
 import AccountSettings from "../components/AccountSettings";
 import Password from "../components/Password";
+import Footer from "../components/Footer";
 
 export default function Dashboard({ user }) {
   const [showInfo, setShowInfo] = useState(1)
@@ -66,12 +67,7 @@ export default function Dashboard({ user }) {
           {showInfo === 2 ? <Password user={user} /> : <AccountSettings user={user} />}
           
         </div>
-        <footer className="text-center text-gray-500 absolute bottom-1 h-6 w-full">
-          <p>
-            Copyright &#169; {new Date().getFullYear()} A service of Gagawala
-            Graphics Limited
-          </p>
-        </footer>
+        <Footer />
       </main>
     </>
   );

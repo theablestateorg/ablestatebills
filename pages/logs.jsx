@@ -7,6 +7,7 @@ import { useState } from "react";
 import moment from "moment";
 import { MdDeleteOutline } from 'react-icons/md'
 import { useAuth } from "../utils/auth";
+import Footer from "../components/Footer";
 
 export default function Home({ logs}) {
   const router = useRouter();
@@ -56,11 +57,7 @@ export default function Home({ logs}) {
             </tbody>
           </table>
         </div>
-        <footer className="text-center text-gray-500 absolute bottom-1 h-6 w-full">
-          <p>
-            Copyright &#169; {new Date().getFullYear()} A service of Gagawala Graphics Limited
-          </p>
-        </footer>
+        <Footer />
       </main>
     </>
   );

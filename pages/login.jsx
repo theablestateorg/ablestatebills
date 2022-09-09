@@ -7,6 +7,7 @@ import Router from 'next/router'
 import { useState } from "react";
 import 'react-toastify/dist/ReactToastify.css';
 import Link from "next/link";
+import Footer from "../components/Footer";
 
 export default function Home() {
   const [ loading, setLoading ] = useState(false)
@@ -40,7 +41,7 @@ export default function Home() {
         <title>Shine Afrika</title>
       </Head>
       <ToastContainer />
-      <div className="w-screen h-screen flex justify-center items-center relative pb-6 min-h-screen">
+      <main className="w-screen h-screen flex justify-center items-center relative pb-6 min-h-screen">
         <Formik
           initialValues={{ email: "", password: "" }}
           validationSchema={validationSchema}
@@ -58,7 +59,7 @@ export default function Home() {
             return (
               <Form
                 onSubmit={(event) => handleSubmit(event, values, resetForm)}
-                className="bg-white p-10 shadow"
+                className="bg-white mx-5 sm:mx-0 p-6 md:p-10 shadow"
                 name="loginForm"
               >
                 <h1 className="text-3xl font-bold text-center">Login</h1>
@@ -138,17 +139,16 @@ export default function Home() {
         </svg>}
                   {loading ? "Loading" : "Login"}
                 </button>
-                <p className="cursor-point">Don&apos;t have an account? <Link href="/register" className="underline">Sign Up</Link></p>
+                <p className="cursor-point">Don&apos;t have an account? <Link href="/register">
+                  <span className="underline cursor-pointer">Sign Up</span>
+                  
+                  </Link></p>
               </Form>
             );
           }}
         </Formik>
-        <footer className="text-center text-gray-500 absolute bottom-1 h-6 w-full">
-          <p>
-            Copyright &#169; {new Date().getFullYear()} A service of Gagawala Graphics Limited
-          </p>
-        </footer>
-      </div>
+        <Footer />
+      </main>
     </>
   );
 }

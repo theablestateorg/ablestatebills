@@ -7,6 +7,8 @@ import { supabase } from '../utils/supabase'
 import Router from 'next/router'
 import { useRouter } from 'next/router'
 import { useAuth } from '../utils/auth'
+import Notifications from './Notifications'
+import { AiOutlineConsoleSql } from 'react-icons/ai'
 
 export default function Navbar() {
   const [showMenu, setShowMenu] = useState(false)
@@ -14,6 +16,37 @@ export default function Navbar() {
   const [notify, setNotify] = useState(false)
   const router = useRouter()
   const {signOut, user} = useAuth()
+
+  const [notifications, setNotifications] = useState([]);
+  useEffect(() => {
+    getNotifications()
+    const navSubscription = supabase
+      .from("notifications")
+      .on("*", (payload) => {
+        setNotifications((current) => [...current, payload.new]);
+        getNotifications().catch((error) => console.log(error));
+      })
+      .subscribe();
+
+    return () => supabase.removeSubscription(navSubscription);
+  }, []);
+  console.log(notifications)
+
+
+  const getNotifications = async () => {
+    const { data, error } = await supabase
+      .from("notifications")
+      .select("*")
+      // .order("created_at", { ascending: false });
+
+    if (data) {
+      setNotifications(data);
+    }
+    if (error) {
+      console.log(error);
+    }
+  }
+
 
     if (showMenu || showMobileMenu) {
       window.onclick = (event) => {
@@ -54,13 +87,7 @@ export default function Navbar() {
         </ul>
       <div className={navStyles.profileMenu}>
         <span className='cursor-pointer relative' onClick={() => setNotify(!notify)}>
-          <span className='w-3 h-3 p-2 right-0 top-0  bg-[#CA3011] text-xs text-white rounded-full absolute flex justify-center items-center'>2</span>
-          <IoMdNotificationsOutline size={25} />
-          {notify && 
-            <div className='absolute top-[50px] right-0 w-72 shadow p-4 bg-white'>
-              Hello
-            </div>
-          }
+          <Notifications notify={notify} notifications={notifications} setNotifications={setNotifications} />
         </span>
         <p className='cursor-pointer'>
           Hi, {user && user?.user_metadata.first_name}

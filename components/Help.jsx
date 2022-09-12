@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../utils/auth";
 import { supabase } from "../utils/supabase";
 import { MdOutlineClose, MdOutlineArrowDownward } from "react-icons/md";
+import { AiOutlineConsoleSql } from "react-icons/ai";
 
 function Help() {
   const { user } = useAuth();
@@ -26,7 +27,7 @@ function Help() {
       .from("tickets")
       .select("*")
       .eq("customer_id", user.id)
-      // .order("timestamp", { ascending: false });
+      .order("created_at", { ascending: true });
 
     if (data) {
       setMyMessages(data);
@@ -40,7 +41,7 @@ function Help() {
     const mySubscription = supabase
     .from("tickets")
     .on("*", (payload) => {
-      setMyMessages((current) => [...current, payload.new])
+      setMyMessages((current) => [payload.new, ...current])
       getMessages().catch((error) => console.log(error));
       updateScroll();
     })
@@ -49,10 +50,23 @@ function Help() {
     return () => supabase.removeSubscription(mySubscription);
   }, [])
 
+
+
+
   const handleSubmit = async () => {
     const { data, error } = await supabase.from("tickets").insert([ticket]);
 
     if (data) {
+      const { error } = await supabase
+      .from("notifications")
+      .insert([{
+        notification: `sent a message`,
+        description: `${data[0].message}`,
+        from: `${user.first_name}`
+      }])
+      if(error){
+        console.log(error)
+      }
       setReload(!reload);
       updateScroll();
     }

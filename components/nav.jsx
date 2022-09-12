@@ -30,7 +30,6 @@ export default function Navbar() {
 
     return () => supabase.removeSubscription(navSubscription);
   }, []);
-  console.log(notifications)
 
 
   const getNotifications = async () => {

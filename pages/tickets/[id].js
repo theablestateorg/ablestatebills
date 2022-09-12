@@ -19,21 +19,7 @@ function Ticket() {
 
   useEffect( () => {
     getTicket();
-  }, [reload]);
-
-  // useEffect(() => {
-  //   const mySubscription = supabase
-  //   .from("tickets")
-  //   .on("*", (payload) => {
-  //     // handler(payload.new);
-  //     console.log(payload)
-  //     setTicket((current) => [...current, payload.new])
-  //     getMessages().catch((error) => console.log(error));
-  //   })
-  //   .subscribe();
-
-  //   return () => supabase.removeSubscription(mySubscription);
-  // }, [])
+  }, [reload, ticket]);
 
   const getTicket = async () => {
     const { data } = await supabase.from("tickets").select("*").eq("id", id).single();
@@ -83,6 +69,9 @@ function Ticket() {
     setReload(!reload)
   }
 
+  console.log(ticket)
+  console.log(id)
+
   return (
     <div>
       <Head>
@@ -95,9 +84,9 @@ function Ticket() {
       <main className="pt-[70px] mx-5 md:mx-20 relative pb-6 min-h-screen">
         <div className="w-ful my-10 p-10">
           <div className="flex justify-between mb-5">
-            <h1 className="font-bold">#TK{ticket.id}</h1>
+            <h1 className="font-bold">#TK{ticket && ticket.id}</h1>
             <div>
-              <span className={`${ticket.agency ? "bg-red-100 text-red-600" : "bg-yellow-100 text-yellow-600"} px-2 py-1 rounded-2xl text-xs font-bold mb-1`}>{ticket.agency ? "urgent" : "not urgent"}</span>
+              <span className={`${ticket && ticket.agency ? "bg-red-100 text-red-600" : "bg-yellow-100 text-yellow-600"} px-2 py-1 rounded-2xl text-xs font-bold mb-1`}>{ticket && ticket.agency ? "urgent" : "not urgent"}</span>
               <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded-2xl text-xs font-bold">
                 open
               </span>
@@ -111,7 +100,7 @@ function Ticket() {
                 </div>
                 <div>
                   <p className="bg-gray-200 px-2 py-3 rounded-lg m-2">
-                    {ticket.message}
+                    {ticket && ticket.message}
                   </p>
                   <p className="font-bold">
                     {customer && customer.first_name && customer.first_name + " " + customer.last_name}
@@ -119,7 +108,7 @@ function Ticket() {
                 </div>
               </div>
               <div className="flex flex-col items-end">
-              {ticket.response && <>
+              {ticket && ticket.response && <>
                 <p className="bg-gray-100 px-2 py-3 rounded-lg m-2">
                   {ticket.response}
                 </p>

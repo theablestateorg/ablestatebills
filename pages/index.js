@@ -88,8 +88,8 @@ export default function Home({ websites }) {
           </button>
         </section>
 
-        <div className="outline outline-1 outline-[#e5e7eb] mb-5 overflow-x-scroll">
-          <table className="bg-white w-full table-auto p-10">
+        <div className="outline outline-1 outline-[#e5e7eb] mb-5 overflow-x-scroll select-none">
+          <table className="bg-white w-full table-auto p-10 select-none">
             <caption className=" bg-white py-3 outline outline-1 outline-[#e5e7eb] px-3">
               <section className="flex justify-between items-center">
                 <h3 className="font-bold text-left">Products</h3>

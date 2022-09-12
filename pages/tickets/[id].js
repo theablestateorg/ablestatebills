@@ -21,6 +21,20 @@ function Ticket() {
     getTicket();
   }, [reload]);
 
+  // useEffect(() => {
+  //   const mySubscription = supabase
+  //   .from("tickets")
+  //   .on("*", (payload) => {
+  //     // handler(payload.new);
+  //     console.log(payload)
+  //     setTicket((current) => [...current, payload.new])
+  //     getMessages().catch((error) => console.log(error));
+  //   })
+  //   .subscribe();
+
+  //   return () => supabase.removeSubscription(mySubscription);
+  // }, [])
+
   const getTicket = async () => {
     const { data } = await supabase.from("tickets").select("*").eq("id", id).single();
 

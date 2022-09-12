@@ -11,6 +11,7 @@ import { useAuth } from '../utils/auth'
 export default function Navbar() {
   const [showMenu, setShowMenu] = useState(false)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
+  const [notify, setNotify] = useState(false)
   const router = useRouter()
   const {signOut, user} = useAuth()
 
@@ -24,7 +25,7 @@ export default function Navbar() {
     }
 
   return (
-    <nav className="w-screen h-[70px] z-10 fixed top-0 right-0 left-0 bg-white py-2 px-3 md:px-16 flex justify-between items-center border-b-2 border-[#E4E6E5]">
+    <nav className="w-screen h-[70px] z-10 fixed top-0 right-0 left-0 bg-white py-2 px-3 md:px-16 flex justify-between items-center border-b-2 border-[#E4E6E5] select-none">
       <div className="flex gap-5 items-center justify-between w-[100%]">
         <div className='flex justify-center items-start gap-1'>
           <h1 className="text-[#CA3011] font-Roboto text-3xl font-black cursor-pointer"
@@ -52,9 +53,15 @@ export default function Navbar() {
           </li>
         </ul>
       <div className={navStyles.profileMenu}>
-        <i className='cursor-pointer'>
+        <span className='cursor-pointer relative' onClick={() => setNotify(!notify)}>
+          <span className='w-3 h-3 p-2 right-0 top-0  bg-[#CA3011] text-xs text-white rounded-full absolute flex justify-center items-center'>2</span>
           <IoMdNotificationsOutline size={25} />
-        </i>
+          {notify && 
+            <div className='absolute top-[50px] right-0 w-72 shadow p-4 bg-white'>
+              Hello
+            </div>
+          }
+        </span>
         <p className='cursor-pointer'>
           Hi, {user && user?.user_metadata.first_name}
         </p>

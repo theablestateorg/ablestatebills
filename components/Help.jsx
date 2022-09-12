@@ -2,7 +2,7 @@ import { TbMessageCircle2 } from "react-icons/tb";
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../utils/auth";
 import { supabase } from "../utils/supabase";
-import { MdOutlineClose } from "react-icons/md";
+import { MdOutlineClose, MdOutlineArrowDownward } from "react-icons/md";
 
 function Help() {
   const { user } = useAuth();
@@ -25,7 +25,8 @@ function Help() {
     const { data, error } = await supabase
       .from("tickets")
       .select("*")
-      .eq("customer_id", user.id);
+      .eq("customer_id", user.id)
+      // .order("timestamp", { ascending: false });
 
     if (data) {
       setMyMessages(data);
@@ -34,6 +35,19 @@ function Help() {
       // console.log(error);
     }
   };
+
+  useEffect(() => {
+    const mySubscription = supabase
+    .from("tickets")
+    .on("*", (payload) => {
+      setMyMessages((current) => [...current, payload.new])
+      getMessages().catch((error) => console.log(error));
+      updateScroll();
+    })
+    .subscribe();
+
+    return () => supabase.removeSubscription(mySubscription);
+  }, [])
 
   const handleSubmit = async () => {
     const { data, error } = await supabase.from("tickets").insert([ticket]);
@@ -60,6 +74,14 @@ function Help() {
     }
   }
 
+  const scrollToBottom = () => {
+    if (!msg.current) return;
+    // console.log(msg.current.clientHeight + 1)
+    msg.current.scrollTop = msg.current.scrollHeight;
+  };
+
+  // msg.current.scrollHeight - msg.current.scrollTop <= msg.current.clientHeight + 1
+
   return (
     <div
       className="fixed bottom-5 right-5 bg-[#CA3011] p-2 text-white rounded shadow hover:shadow-lg cursor-pointer"
@@ -73,6 +95,14 @@ function Help() {
             event.stopPropagation();
           }}
         >
+          {
+            <div
+              className="bg-white w-10 h-10 absolute flex justify-center items-center shadow bottom-24 z-20 rounded-full text-gray-600 right-4"
+              onClick={() => scrollToBottom()}
+            >
+              <MdOutlineArrowDownward />
+            </div>
+          }
           <p className="bg-gray-100 w-full text-sm font-bold py-2 flex justify-between px-2 items-center">
             Send message
             <span onClick={() => setChatBox(false)}>

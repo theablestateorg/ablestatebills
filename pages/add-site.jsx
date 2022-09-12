@@ -10,6 +10,7 @@ import { TbSend } from "react-icons/tb";
 import { IconContext } from "react-icons";
 import { MdAdd } from "react-icons/md";
 import { AiFillCloseCircle } from "react-icons/ai";
+import PasswordGenerator from "../components/PasswordGenerator";
 
 export default function AddSite() {
   const [loading, setLoading] = useState(false);
@@ -23,6 +24,7 @@ export default function AddSite() {
   const [contact, setContact] = useState({});
   const [countryCode, setCountryCode] = useState("+256");
   const [selected, setSelected] = useState(false);
+  const [ password, setPassword ] = useState(null)
 
   useEffect(() => {
     getCustomers();
@@ -41,6 +43,7 @@ export default function AddSite() {
   };
 
   const handleSubmit = async (values, resetForm) => {
+    console.log("something")
     setLoading(true);
     try {
       const { data, error } = await supabase.from("websites").insert([
@@ -92,26 +95,31 @@ export default function AddSite() {
   };
 
   const addNewCustomer = async (values) => {
-    const { email, password, first_name, last_name, role } = values;
-    setLoading(true);
-    const { user, session, error } = await supabase.auth.signUp(
-      { email, password },
-      {
-        data: {
-          first_name,
-          last_name,
-          role,
-        },
+    if(password){
+      console.log(password)
+      const { email, first_name, last_name, role } = values;
+      setLoading(true);
+      const { user, session, error } = await supabase.auth.signUp(
+        { email, password },
+        {
+          data: {
+            first_name,
+            last_name,
+            role,
+          },
+        }
+      );
+      if (user) {
+        setCustomerModel(false);
+        setSelected(!selected)
       }
-    );
+      if (error) {
+        toast.error(`${error?.message}`, { position: "top-center" });
+      }
+    }else{
+      toast.error(`No password`, { position: "top-center" });
+    }
     setLoading(false);
-    if (user) {
-      setCustomerModel(false);
-      setSelected(!selected)
-    }
-    if (error) {
-      toast.error(`${error?.message}`, { position: "top-center" });
-    }
   };
 
   return (
@@ -262,7 +270,7 @@ export default function AddSite() {
                           </div>
                           <Formik
                             initialValues={{
-                              password: "",
+                              password: password,
                               first_name: "",
                               last_name: "",
                               role: "customer",
@@ -291,7 +299,7 @@ export default function AddSite() {
                                         type="email"
                                         name="email"
                                         className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full"
-                                        placeholder="enter email"
+                                        placeholder="Enter email"
                                         onChange={handleChange("email")}
                                         onBlur={handleBlur("email")}
                                       />
@@ -304,7 +312,7 @@ export default function AddSite() {
                                         type="text"
                                         name="first_name"
                                         className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full"
-                                        placeholder="enter first name"
+                                        placeholder="Enter first name"
                                         onChange={handleChange("first_name")}
                                         onBlur={handleBlur("first_name")}
                                       />
@@ -317,13 +325,14 @@ export default function AddSite() {
                                         type="text"
                                         name="last_name"
                                         className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full"
-                                        placeholder="enter last name"
+                                        placeholder="Enter last name"
                                         onChange={handleChange("last_name")}
                                         onBlur={handleBlur("last_name")}
                                       />
                                     </div>
                                   </div>
-                                  <div className="flex flex-col gap-2  my-2">
+                                  <PasswordGenerator password={password} setPassword={setPassword} />
+                                  {/* <div className="flex flex-col gap-2  my-2">
                                     <label htmlFor="">Password</label>
                                     <div className="w-full">
                                       <input
@@ -335,7 +344,7 @@ export default function AddSite() {
                                         onBlur={handleBlur("password")}
                                       />
                                     </div>
-                                  </div>
+                                  </div> */}
                                   <button
                                     type="button"
                                     disabled={!(isValid && dirty)}

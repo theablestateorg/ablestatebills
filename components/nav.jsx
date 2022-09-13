@@ -10,6 +10,7 @@ import { useAuth } from "../utils/auth";
 import Notifications from "./Notifications";
 import { AiOutlineConsoleSql } from "react-icons/ai";
 import { downloadFile } from "../utils/getImages";
+import ActiveLink from "./ActiveLink";
 
 export default function Navbar() {
   const [showMenu, setShowMenu] = useState(false);
@@ -81,36 +82,10 @@ export default function Navbar() {
           </span>
         </div>
         <ul className={`${navStyles.navMenu} h-[70px] items-center`}>
-          <li
-            className={`h-[70px] flex items-center border-b-2 ${
-              router.asPath === "/" ? "border-black text-black" : "border-transparent text-gray-500"
-            }`}
-          >
-            <Link href="/"><span className="hover:bg-gray-100 px-2 py-1 rounded-lg cursor-pointer">Dashboard</span></Link>
-          </li>
-          <li
-            className={`h-[70px] flex items-center border-b-2 ${
-              router.asPath === "/add-site" ? "border-black" : "border-transparent text-gray-500"
-            }`}
-          >
-            <Link href="/add-site"><span className="hover:bg-gray-100 px-2 py-1 rounded-lg cursor-pointer">Add Product</span></Link>
-          </li>
-          {/* {user && user.role === "manager" && ( */}
-            <li
-              className={`h-[70px] flex items-center border-b-2 ${
-                router.asPath === "/tickets" ? "border-black" : "border-transparent text-gray-500"
-              }`}
-            >
-              <Link href="/tickets"><span className="hover:bg-gray-100 px-2 py-1 rounded-lg cursor-pointer">Tickets</span></Link>
-            </li>
-          {/* )} */}
-          <li
-            className={`h-[70px] flex items-center border-b-2 ${
-              router.asPath === "/logs" ? "border-black" : "border-transparent text-gray-500"
-            }`}
-          >
-            <Link href="/logs"><span className="hover:bg-gray-100 px-2 py-1 rounded-lg cursor-pointer">Logs</span></Link>
-          </li>
+          <ActiveLink name={"Dashboard"} href={"/"} />
+          <ActiveLink name={"Add Product"} href={"/add-site"} />
+          <ActiveLink name={"Tickets"} href={"/tickets"} />
+          <ActiveLink name={"Logs"} href={"/logs"} />
         </ul>
         <div className={navStyles.profileMenu}>
           <span

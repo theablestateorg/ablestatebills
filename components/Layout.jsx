@@ -1,27 +1,32 @@
-import React from "react";
 import { supabase } from "../utils/supabase";
 import { useAuth } from "../utils/auth";
 import Help from "../components/Help";
+import { Router } from "next/router";
+import { useRouter } from "next/router";
 
-function Layout({ children, websites }) {
+function Layout({ children }) {
 
   const { user } = useAuth();
-  return (
+  console.log("here on")
+  console.log("user is", user)
+  const router = useRouter()
+
+  // if(!user){
+  //   router.push("/")
+  // }
+
+  return  (
     <>
       {children}
       {user && <Help />}
     </>
-  );
+  )
+
 }
 
 export default Layout;
 
 export const getServerSideProps = async ({ req }) => {
-  const { data: websites } = await supabase
-    .from("websites")
-    .select("*")
-    .order("created_at", { ascending: false });
-
   const { user } = await supabase.auth.api.getUserByCookie(req);
 
   if (!user) {
@@ -35,8 +40,6 @@ export const getServerSideProps = async ({ req }) => {
   }
 
   return {
-    props: {
-      websites,
-    },
+    props: {},
   };
 };

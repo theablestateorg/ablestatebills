@@ -64,6 +64,8 @@ export default function Navbar() {
     };
   }
 
+  // console.log()
+
   return (
     <nav className="w-screen h-[70px] z-10 fixed top-0 right-0 left-0 bg-white py-2 px-3 md:px-16 flex justify-between items-center border-b-2 border-[#E4E6E5] select-none">
       <div className="flex gap-5 items-center justify-between w-[100%]">
@@ -80,34 +82,34 @@ export default function Navbar() {
         </div>
         <ul className={`${navStyles.navMenu} h-[70px] items-center`}>
           <li
-            className={`h-[70px] flex items-center border-b-2 border-transparent hover:border-b-2 hover:border-black ${
-              router.pathname === "/" && "border-black "
+            className={`h-[70px] flex items-center border-b-2 ${
+              router.asPath === "/" ? "border-black text-black" : "border-transparent text-gray-500"
             }`}
           >
-            <Link href="/">Dashboard</Link>
+            <Link href="/"><span className="hover:bg-gray-100 px-2 py-1 rounded-lg cursor-pointer">Dashboard</span></Link>
           </li>
           <li
-            className={`h-[70px] flex items-center border-b-2 border-transparent hover:border-b-2 hover:border-black ${
-              router.pathname === "/add-site" && "border-black "
+            className={`h-[70px] flex items-center border-b-2 ${
+              router.asPath === "/add-site" ? "border-black" : "border-transparent text-gray-500"
             }`}
           >
-            <Link href="/add-site">Add Product</Link>
+            <Link href="/add-site"><span className="hover:bg-gray-100 px-2 py-1 rounded-lg cursor-pointer">Add Product</span></Link>
           </li>
-          {user && user.role === "manager" && (
+          {/* {user && user.role === "manager" && ( */}
             <li
-              className={`h-[70px] flex items-center border-b-2 border-transparent hover:border-b-2 hover:border-black ${
-                router.pathname === "/tickets" && "border-black "
+              className={`h-[70px] flex items-center border-b-2 ${
+                router.asPath === "/tickets" ? "border-black" : "border-transparent text-gray-500"
               }`}
             >
-              <Link href="/tickets">Tickets</Link>
+              <Link href="/tickets"><span className="hover:bg-gray-100 px-2 py-1 rounded-lg cursor-pointer">Tickets</span></Link>
             </li>
-          )}
+          {/* )} */}
           <li
-            className={`h-[70px] flex items-center border-b-2 border-transparent hover:border-b-2 hover:border-black ${
-              router.pathname === "/logs" && "border-black "
+            className={`h-[70px] flex items-center border-b-2 ${
+              router.asPath === "/logs" ? "border-black" : "border-transparent text-gray-500"
             }`}
           >
-            <Link href="/logs">Logs</Link>
+            <Link href="/logs"><span className="hover:bg-gray-100 px-2 py-1 rounded-lg cursor-pointer">Logs</span></Link>
           </li>
         </ul>
         <div className={navStyles.profileMenu}>

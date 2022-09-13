@@ -16,7 +16,7 @@ export default function Home({ logs}) {
   return (
     <>
       <Head>
-        <title>Logs - Shine Africa</title>
+        <title>Logs - Shine Afrika</title>
       </Head>
       <Navbar />
       <main className="pt-[70px] relative pb-6 min-h-screen">

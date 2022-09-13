@@ -37,8 +37,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <link rel="shortcut icon" href="./static/shine.png" />
-        <title>Shine Afrika</title>
+        <title>Login - Shine Afrika</title>
       </Head>
       <ToastContainer />
       <main className="w-screen h-screen flex justify-center items-center relative pb-6 min-h-screen">
@@ -141,7 +140,6 @@ export default function Home() {
                 </button>
                 <p className="cursor-point">Don&apos;t have an account? <Link href="/register">
                   <span className="underline cursor-pointer">Sign Up</span>
-                  
                   </Link></p>
               </Form>
             );

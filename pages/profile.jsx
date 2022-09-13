@@ -47,7 +47,7 @@ export default function Dashboard() {
   return (
     <>
       <Head>
-        <title>Profile</title>
+        <title>Profile - Shine Afrika</title>
       </Head>
       <Navbar />
       <ToastContainer />

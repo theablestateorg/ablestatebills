@@ -69,7 +69,7 @@ export default function Home({ websites }) {
   return (
     <>
       <Head>
-        <title>Shine Africa</title>
+        <title>Shine Afrika</title>
       </Head>
       <Navbar />
       {/* <Help /> */}

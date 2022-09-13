@@ -6,6 +6,7 @@ import { toast, ToastContainer } from 'react-toastify'
 import { useState } from "react";
 import Router from "next/router";
 import Link from "next/link";
+import { Footer } from "../components";
 
 export default function Home() {
 
@@ -51,8 +52,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        {/* <link rel="shortcut icon" href="./static/shine.png" /> */}
-        <title>Shine Afrika</title>
+        <title>Register - Shine Afrika</title>
       </Head>
       <ToastContainer />
       <div className="w-screen h-screen flex justify-center items-center relative pb-6 min-h-screen">
@@ -216,16 +216,14 @@ export default function Home() {
                 </svg>}
                   {loading ? "Loading" : "Register"}
                 </button>
-                <p className="cursor-point">Already have an account? <Link href="/login" className="underline">Login</Link></p>
+                <p className="cursor-point">Already have an account? <Link href="/login">
+                <span className="underline cursor-pointer">Login</span>
+                  </Link></p>
               </Form>
             );
           }}
         </Formik>
-        <footer className="text-center text-gray-500 absolute bottom-1 h-6 w-full">
-          <p>
-            Copyright &#169; {new Date().getFullYear()} A service of Gagawala Graphics Limited
-          </p>
-        </footer>
+        <Footer />
       </div>
     </>
   );

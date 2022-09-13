@@ -26,7 +26,7 @@ function Tickets() {
   return (
     <>
       <Head>
-        <title>Shine Africa</title>
+        <title>Tickets - Shine Afrika</title>
       </Head>
       <Navbar />
       <ToastContainer />

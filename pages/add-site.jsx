@@ -125,7 +125,7 @@ export default function AddSite() {
   return (
     <>
       <Head>
-        <title>Add Site</title>
+        <title>Add Site - Shine Afrika</title>
       </Head>
       <Navbar />
       <ToastContainer />

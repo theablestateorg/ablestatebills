@@ -92,7 +92,15 @@ export default function Home({ websites }) {
           <table className="bg-white w-full table-auto p-10 select-none">
             <caption className=" bg-white py-3 outline outline-1 outline-[#e5e7eb] px-3">
               <section className="flex justify-between items-center">
-                <h3 className="font-bold text-left">Products</h3>
+                <h3 className="font-bold text-left">Products 
+                {deleteArrayIds.length > 0 &&
+                <span className="font-light ml-5 bg-gray-100 text-gray-500 p-2 rounded-lg">
+                  {deleteArrayIds.length === websites.length ? 
+                  <span>All 
+                  <b className="font-bold"> {deleteArrayIds.length}</b> products are selected. </span> : <span><b className="font-bold">{deleteArrayIds.length}</b> products are selected.</span>}
+                </span>
+                }
+                </h3>
                 <div className="flex items-center gap-2">
                 <form onSubmit={(event) => {
                   event.preventDefault()

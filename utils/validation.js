@@ -5,6 +5,10 @@ export const validationSchema = Yup.object({
   password: Yup.string().trim().min(8, 'Password must be atleast 8 characters').required("Password is required"),
 })
 
+export const resetPasswordSchema = Yup.object({
+  email: Yup.string().required("Email is required").matches(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'must follow example@example.com')
+})
+
 
 export const registerValidationSchema = Yup.object({
   email: Yup.string().required("Email is required"),

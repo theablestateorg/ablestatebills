@@ -26,25 +26,18 @@ export default function Home() {
         }
         )
       if(user){
-        // const { data, error } = await supabase
-        // .from('profiles')
-        // .update({ 
-        //   first_name, last_name, role 
-        // })
-        // .match({ id: user.id })
-        // console.log(data)
-        Router.push('/')
+        toast.success(`A confirmation mail has been sent`, {position: "top-center"})
+        setTimeout(() => {
+          Router.push('/login')
+        }, 1000)
       }
       if(error){
         toast.error(`${error?.message}`, {position: "top-center"})
-      }else if (!user){
-        toast.success(`A confirmation mail has been sent`, {position: "top-center"})
       }
     }catch(error){
       // console.log(error)
     }
 
-    // document.loginForm.reset()
     setLoading(false)
     resetForm({ password: "", first_name: "", last_name: "", role: "customer", email: ""  })
   };
@@ -83,7 +76,7 @@ export default function Home() {
                     <input
                       type="email"
                       name="email"
-                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2]"
+                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full"
                       placeholder="enter email"
                       onChange={handleChange("email")}
                       onBlur={handleBlur("email")}
@@ -115,7 +108,7 @@ export default function Home() {
                     <input
                       type="text"
                       name="first_name"
-                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2]"
+                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full"
                       placeholder="enter first name"
                       onChange={handleChange("first_name")}
                       onBlur={handleBlur("first_name")}
@@ -147,7 +140,7 @@ export default function Home() {
                     <input
                       type="text"
                       name="last_name"
-                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2]"
+                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full"
                       placeholder="enter last name"
                       onChange={handleChange("last_name")}
                       onBlur={handleBlur("last_name")}
@@ -180,7 +173,7 @@ export default function Home() {
                     <input
                       type="password"
                       name="password"
-                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2]"
+                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full"
                       placeholder="enter password"
                       onChange={handleChange("password")}
                       onBlur={handleBlur("password")}

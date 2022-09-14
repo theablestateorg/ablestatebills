@@ -1,4 +1,3 @@
-import { IoMdNotificationsOutline } from "react-icons/io";
 import { CgMenu } from "react-icons/cg";
 import navStyles from "../styles/Nav.module.css";
 import Link from "next/link";
@@ -8,7 +7,6 @@ import Router from "next/router";
 import { useRouter } from "next/router";
 import { useAuth } from "../utils/auth";
 import Notifications from "./Notifications";
-import { AiOutlineConsoleSql } from "react-icons/ai";
 import { downloadFile } from "../utils/getImages";
 import ActiveLink from "./ActiveLink";
 
@@ -17,10 +15,10 @@ export default function Navbar() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [notify, setNotify] = useState(false);
   const [avatar, setAvatar] = useState("");
+  const [notifications, setNotifications] = useState([]);
   const router = useRouter();
   const { signOut, user } = useAuth();
 
-  const [notifications, setNotifications] = useState([]);
   useEffect(() => {
     try {
       downloadFile(user.avatar_url.substring(8), "avatars")
@@ -45,8 +43,7 @@ export default function Navbar() {
   
 
   const getNotifications = async () => {
-    const { data, error } = await supabase.from("notifications").select("*");
-    // .order("created_at", { ascending: false });
+    const { data, error } = await supabase.from("notifications").select("*").order("created_at", { ascending: false });
 
     if (data) {
       setNotifications(data);
@@ -64,8 +61,6 @@ export default function Navbar() {
       }
     };
   }
-
-  // console.log()
 
   return (
     <nav className="w-screen h-[70px] z-10 fixed top-0 right-0 left-0 bg-white py-2 px-3 md:px-16 flex justify-between items-center border-b-2 border-[#E4E6E5] select-none">

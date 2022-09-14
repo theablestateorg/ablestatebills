@@ -57,7 +57,7 @@ export default function Dashboard() {
         </section>
         <div className="flex flex-grow">
           <section className="mb-5 w-3/12 border-r-2 mr-5 py-3 flex flex-col items-center">
-            <div className={`w-16 h-16 ${!avatar && "bg-[#CA3011]"} rounded-full flex items-center justify-center relative dialog cursor-pointer`}>
+            <div className={`w-16 h-16 ${!avatar && "bg-[#CA3011]"} rounded-full flex items-center justify-center relative dialog cursor-pointer overflow-hidden`}>
             {avatar ? (
               <img src={avatar} alt="profile" />
             ) : (

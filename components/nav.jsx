@@ -97,7 +97,7 @@ export default function Navbar() {
             Hi, {user && user?.user_metadata.first_name}
           </p>
           <div
-            className={`w-10 h-10 ${!avatar && "bg-[#CA3011]"} rounded-full flex items-center justify-center relative dialog cursor-pointer`}
+            className={`w-10 h-10 ${!avatar && "bg-[#CA3011]"} rounded-full flex items-center justify-center relative dialog cursor-pointer overflow-hidden`}
             onClick={(event) => {
               setShowMenu(!showMenu);
               event.stopPropagation();

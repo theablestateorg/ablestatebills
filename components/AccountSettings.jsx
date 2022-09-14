@@ -2,6 +2,7 @@ import { Form, Formik } from "formik";
 import { MdEdit, MdOutlineMail } from "react-icons/md";
 import { supabase } from "../utils/supabase";
 import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 function AccountSettings({ user, avatar }) {
   const [loading, setLoading] = useState(false);
@@ -15,14 +16,15 @@ function AccountSettings({ user, avatar }) {
         cacheControl: '3600',
         upsert: false,
       })
-      console.log(data)
         
     const { error } = await supabase
         .from('profiles')
         .update({ avatar_url: data.Key })
         .match({ id: user.id })
       
-
+    if(data){
+      toast.success(`Profile Updated successfully`, {position: "top-center"})
+    }
       
 
       
@@ -49,7 +51,7 @@ function AccountSettings({ user, avatar }) {
               name="signUpForm"
             >
               <div className="mb-5">
-                <div className={`w-16 h-16 ${!avatar && "bg-[#CA3011]"} rounded-full flex items-center justify-center relative dialog cursor-pointer mb-5`}>
+                <div className={`w-16 h-16 ${!avatar && "bg-[#CA3011]"} rounded-lg overflow-hidden flex items-center justify-center relative dialog cursor-pointer mb-5`}>
                 {avatar ? (
               <img src={avatar} alt="profile" />
             ) : (

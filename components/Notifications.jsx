@@ -60,12 +60,12 @@ function Notifications({ notify, notifications, setNotifications }) {
           <div className="overflow-y-scroll flex-grow">
             {notifications.map((notification, index) => (
               <>
-                <div className="flex gap-2 my-2 px-2" key={index}>
-                  <div className="w-12 h-12 bg-orange-300 rounded-full flex justify-center items-center font-bold">
-                  {notification.from[0].toUpperCase()}
+                <div className="grid grid-cols-5 gap-2 my-2 px-2" key={index}>
+                  <div className="col-span-1 flex items-center justify-center h-16">
+                    <span className="w-12 h-12 rounded-full flex justify-center items-center font-bold bg-orange-300">{notification.from[0].toUpperCase()}</span>
                   </div>
-                  <div>
-                    <h1><span className="font-bold">Charles</span> {notification.notification}</h1>
+                  <div className="col-span-4">
+                    <h1><span className="font-bold">{notification.from}</span> {notification.notification}</h1>
                     <p className="text-gray-500 text-sm">{notification.description}</p>
                   </div>
                 </div>

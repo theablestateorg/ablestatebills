@@ -11,6 +11,8 @@ import { Formik, Form } from "formik";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { useAuth } from "../../utils/auth";
 import { TbEdit } from 'react-icons/tb'
+import AddCustomerModal from "../../components/AddCustomerModal";
+import { MdAdd } from "react-icons/md";
 
 export default function Site() {
   const router = useRouter();
@@ -19,10 +21,61 @@ export default function Site() {
   const [popUp, setPopUp] = useState(false);
   const [popUpdate, setPopUpdate] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [customers, setCustomers] = useState([]);
+  const [customerModel, setCustomerModel] = useState(false);
+  const [customerId, setCustomerId] = useState(null);
+  const [contact, setContact] = useState({});
+  const [countryCode, setCountryCode] = useState("+256");
+  const [selected, setSelected] = useState(false);
+  const [ password, setPassword ] = useState(null)
 
   useEffect(() => {
     getSite();
   }, [site]);
+
+  useEffect(() => {
+    getCustomers();
+    getContact(customerId);
+  }, [selected]);
+
+  const getCustomers = async () => {
+    const { data } = await supabase.from("profiles").select("*");
+    // .eq("role", "customer")
+    setCustomers(data);
+  };
+
+  const getContact = async (id) => {
+    const { data } = await supabase.from("profiles").select("*").eq("id", id);
+    setContact(data);
+  };
+
+  const addNewCustomer = async (values) => {
+    if(password){
+      console.log(password)
+      const { email, first_name, last_name, role } = values;
+      setLoading(true);
+      const { user, session, error } = await supabase.auth.signUp(
+        { email, password },
+        {
+          data: {
+            first_name,
+            last_name,
+            role,
+          },
+        }
+      );
+      if (user) {
+        setCustomerModel(false);
+        setSelected(!selected)
+      }
+      if (error) {
+        toast.error(`${error?.message}`, { position: "top-center" });
+      }
+    }else{
+      toast.error(`No password`, { position: "top-center" });
+    }
+    setLoading(false);
+  };
 
   const { user } = useAuth();
 
@@ -106,7 +159,7 @@ export default function Site() {
   return (
     <div>
       <Head>
-        <title>Shine Africa</title>
+        <title>{site ? site.name : "loading..."} - Shine Africa</title>
       </Head>
       <Navbar />
 
@@ -158,6 +211,7 @@ export default function Site() {
                       handleChange,
                       handleBlur,
                       resetForm,
+                      setFieldValue,
                     }) => {
                       return (
                         <Form
@@ -182,15 +236,38 @@ export default function Site() {
                             <label htmlFor="contact_person">
                               Contact Person
                             </label>
-                            <input
-                              type="text"
-                              name="contact_person"
-                              placeholder="person's name"
-                              className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
-                              onChange={handleChange("contact_person")}
-                              onBlur={handleBlur("contact_person")}
-                              defaultValue={site.contact_person}
-                            />
+                            <div className="flex justify-between items-center gap-2 w-full">
+                    <select
+                      name=""
+                      id=""
+                      className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
+                      onChange={(e) => {
+                        setFieldValue("contact_person", e.target.value);
+                        setCustomerId(e.target.value);
+                        setSelected(!selected)
+                      }}
+                      onBlur={handleBlur("contact_person")}
+                      value={values.contact_person}
+                    >
+                      {/* <input type="text" name="" id="" /> */}
+                      <option value="">Select Customer</option>
+                      {customers &&
+                        customers.map((customer, index) => (
+                          <option value={customer.id} key={index}>
+                            {customer.first_name + " " + customer.last_name}
+                          </option>
+                        ))}
+                    </select>
+                    <button
+                      type="button"
+                      className="bg-[#1D1F20] text-white py-2 px-4  hover:bg-transparent hover:text-black outline outline-1 outline-black flex items-center gap-2 "
+                      onClick={() => setCustomerModel(true)}
+                    >
+                      <MdAdd />
+                      Add Customer
+                    </button>
+                    {customerModel && <AddCustomerModal loading={loading} setCustomerModel={setCustomerModel} addNewCustomer={addNewCustomer} password={password} setPassword={setPassword} />}
+                  </div>
                           </div>
                           <div className="flex flex-col gap-1 my-2">
                             <label htmlFor="telephone_number">Telephone</label>

@@ -1,13 +1,11 @@
 import { supabase } from "../utils/supabase";
 import { useAuth } from "../utils/auth";
 import Help from "../components/Help";
-import { useRouter } from "next/router";
 import Navbar from "./nav";
 
 function Layout({ children }) {
 
   const { user } = useAuth();
-  const router = useRouter()
 
   return  (
     <>

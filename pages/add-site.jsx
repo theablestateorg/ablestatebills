@@ -44,7 +44,6 @@ export default function AddSite() {
   };
 
   const handleSubmit = async (values, resetForm) => {
-    console.log("something")
     setLoading(true);
     try {
       const { data, error } = await supabase.from("websites").insert([
@@ -97,7 +96,6 @@ export default function AddSite() {
 
   const addNewCustomer = async (values) => {
     if(password){
-      console.log(password)
       const { email, first_name, last_name, role } = values;
       setLoading(true);
       const { user, session, error } = await supabase.auth.signUp(

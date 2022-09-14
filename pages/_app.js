@@ -7,8 +7,6 @@ import Navbar from "../components/nav";
 import React from "react";
 
 function MyApp({ Component, pageProps, ...appProps }) {
-  console.log(appProps.router.pathname);
-
   const isLayoutNeeded = ["/login", "/register", "/forgot-password"].includes(appProps.router.pathname);
 
   const LayoutComponent = isLayoutNeeded ? React.Fragment : Layout;

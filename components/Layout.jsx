@@ -7,13 +7,7 @@ import { useRouter } from "next/router";
 function Layout({ children }) {
 
   const { user } = useAuth();
-  console.log("here on")
-  console.log("user is", user)
   const router = useRouter()
-
-  // if(!user){
-  //   router.push("/")
-  // }
 
   return  (
     <>

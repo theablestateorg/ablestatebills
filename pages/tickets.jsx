@@ -37,10 +37,12 @@ function Tickets() {
             <TicketCard ticket={ticket} />
           </Fragment>
         ))}
-        <div className="flex-grow flex gap-5 flex-col justify-center items-center text-lg font-bold text-gray-400">
+        {tickets.length === 0 &&
+          <div className="flex-grow flex gap-5 flex-col justify-center items-center text-lg font-bold text-gray-400">
             <AiOutlineFileDone size={50} />
-          There are no new Tickets.
-        </div>
+            There are no new Tickets.
+          </div>
+        }
       </main>
     </>
   )

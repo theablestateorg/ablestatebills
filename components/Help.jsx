@@ -2,16 +2,23 @@ import { TbMessageCircle2 } from "react-icons/tb";
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../utils/auth";
 import { supabase } from "../utils/supabase";
-import { MdOutlineClose, MdOutlineArrowDownward } from "react-icons/md";
+import {
+  MdOutlineClose,
+  MdOutlineArrowDownward,
+  MdOutlineKeyboardArrowUp,
+} from "react-icons/md";
 import { AiOutlineConsoleSql } from "react-icons/ai";
+import { IoMdClose } from 'react-icons/io'
 
 function Help() {
   const { user } = useAuth();
   const [chatBox, setChatBox] = useState(false);
+  const [faqs, setFaqs] = useState(true)
   const [ticket, setTicket] = useState({
-    agency: false,
+    agency: "",
     customer_id: user.id,
     message: "",
+    category: "",
   });
   const [myMessages, setMyMessages] = useState([]);
   const [reload, setReload] = useState(false);
@@ -39,33 +46,30 @@ function Help() {
 
   useEffect(() => {
     const mySubscription = supabase
-    .from("tickets")
-    .on("*", (payload) => {
-      setMyMessages((current) => [payload.new, ...current])
-      getMessages().catch((error) => console.log(error));
-      updateScroll();
-    })
-    .subscribe();
+      .from("tickets")
+      .on("*", (payload) => {
+        setMyMessages((current) => [payload.new, ...current]);
+        getMessages().catch((error) => console.log(error));
+        updateScroll();
+      })
+      .subscribe();
 
     return () => supabase.removeSubscription(mySubscription);
-  }, [])
-
-
-
+  }, []);
 
   const handleSubmit = async () => {
     const { data, error } = await supabase.from("tickets").insert([ticket]);
 
     if (data) {
-      const { error } = await supabase
-      .from("notifications")
-      .insert([{
-        notification: `sent a message`,
-        description: `${data[0].message}`,
-        from: `${user.first_name}`
-      }])
-      if(error){
-        console.log(error)
+      const { error } = await supabase.from("notifications").insert([
+        {
+          notification: `sent a message`,
+          description: `${data[0].message}`,
+          from: `${user.first_name}`,
+        },
+      ]);
+      if (error) {
+        console.log(error);
       }
       setReload(!reload);
       updateScroll();
@@ -74,9 +78,10 @@ function Help() {
       // console.log(error);
     }
     setTicket({
-      agency: false,
+      agency: "",
       customer_id: user.id,
       message: "",
+      category: "",
     });
   };
 
@@ -104,7 +109,7 @@ function Help() {
       <TbMessageCircle2 size={30} />
       {chatBox && (
         <div
-          className="absolute  bottom-2 w-64 h-80 shadow-lg bg-white outline outline-1 outline-[#CA3011] rounded-t-md rounded-bl-md flex flex-col text-black items-center overflow-hidden -right-0 md:right-12"
+          className="absolute  bottom-2 w-72 h-96 shadow-lg bg-white outline outline-2 outline-[#CA3011] rounded-t-md rounded-bl-md flex flex-col text-black items-center overflow-hidden -right-0 md:right-12"
           onClick={(event) => {
             event.stopPropagation();
           }}
@@ -117,7 +122,24 @@ function Help() {
               <MdOutlineArrowDownward />
             </div>
           }
-          <p className="bg-gray-100 w-full text-sm font-bold py-2 flex justify-between px-2 items-center">
+          { ticket.message.length>0 && faqs &&
+            <div className="w-full  outline flex justify-center items-center">
+              <p
+                className="bg-white m-2 absolute shadow-lg bottom-24 z-20 text-gray-600 outline outline-1 p-3 rounded-lg text-sm"
+                onClick={() => scrollToBottom()}
+              >
+                <i
+                  onClick={() => setFaqs(false)}
+                  className=""
+                  >
+                  <IoMdClose size={20} />
+                </i>
+                Hello, you can see the FAQS, to see if your questions was answered at
+                <a href="https://shineafrika.com/index.php/faqs/" className="text-blue-500" target="blank"> https://shineafrika.com/index.php/faqs/</a>
+              </p>
+            </div>
+          }
+          <p className="bg-gray-100 w-full text-sm font-bold py-2 flex justify-between px-2 items-center border-b-2 border-[#CA3011]">
             Send message
             <span onClick={() => setChatBox(false)}>
               <MdOutlineClose />
@@ -154,16 +176,34 @@ function Help() {
             />
             <div className="flex justify-between p -1 mt-1">
               <div className="flex gap-1 text-sm">
-                <input
-                  type="checkbox"
-                  name="agency"
+                <select
+                  name=""
                   id=""
-                  className="accent-gray-700"
-                  onChange={(event) =>
-                    setTicket({ ...ticket, agency: event.target.checked })
+                  className="text-xs bg-gray-100 rounded-lg px-1 pr-1"
+                  onChange={(e) =>
+                    setTicket({ ...ticket, category: e.target.value })
                   }
-                />
-                <p>urgent</p>
+                  value={ticket.category}
+                >
+                  <option value="">category</option>
+                  <option value="sells">Sells</option>
+                  <option value="technical">Technical</option>
+                  <option value="customer care">Customer Care</option>
+                </select>
+                <select
+                  name=""
+                  id=""
+                  className="text-xs bg-gray-100 rounded-lg px-1 pr-1"
+                  onChange={(e) =>
+                    setTicket({ ...ticket, agency: e.target.value })
+                  }
+                  value={ticket.agency}
+                >
+                  <option value="">Priority</option>
+                  <option value="low">Low</option>
+                  <option value="mid">Mid</option>
+                  <option value="high">High</option>
+                </select>
               </div>
               <button
                 className={`${

@@ -18,7 +18,7 @@ export default function Home({ logs}) {
       <Head>
         <title>Logs - Shine Afrika</title>
       </Head>
-      <Navbar />
+      {/* <Navbar /> */}
       <main className="pt-[70px] relative pb-6 min-h-screen">
 
         <div className="mb-5 overflow-x-scroll ">

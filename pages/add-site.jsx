@@ -128,7 +128,7 @@ export default function AddSite() {
       <Head>
         <title>Add Site - Shine Afrika</title>
       </Head>
-      <Navbar />
+      {/* <Navbar /> */}
       <ToastContainer />
       <main className="pt-[70px] mx-5 md:mx-20 relative pb-6 min-h-screen">
         <section className="flex justify-between items-center">

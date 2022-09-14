@@ -1,8 +1,8 @@
 import { supabase } from "../utils/supabase";
 import { useAuth } from "../utils/auth";
 import Help from "../components/Help";
-import { Router } from "next/router";
 import { useRouter } from "next/router";
+import Navbar from "./nav";
 
 function Layout({ children }) {
 
@@ -11,6 +11,7 @@ function Layout({ children }) {
 
   return  (
     <>
+      <Navbar />
       {children}
       {user && <Help />}
     </>

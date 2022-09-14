@@ -71,7 +71,7 @@ export default function Home({ websites }) {
       <Head>
         <title>Shine Afrika</title>
       </Head>
-      <Navbar />
+      {/* <Navbar /> */}
       {/* <Help /> */}
 
       <ToastContainer />

@@ -62,6 +62,8 @@ export default function Navbar() {
     };
   }
 
+  console.log(showMenu)
+
   return (
     <nav className="w-screen h-[70px] z-10 fixed top-0 right-0 left-0 bg-white py-2 px-3 md:px-16 flex justify-between items-center border-b-2 border-[#E4E6E5] select-none">
       <div className="flex gap-5 items-center justify-between w-[100%]">
@@ -97,38 +99,40 @@ export default function Navbar() {
             Hi, {user && user?.user_metadata.first_name}
           </p>
           <div
-            className={`w-10 h-10 ${!avatar && "bg-[#CA3011]"} rounded-full flex items-center justify-center relative dialog cursor-pointer overflow-hidden`}
+            className={`w-10 h-10 rounded-full flex items-center justify-center relative dialog cursor-pointer`}
             onClick={(event) => {
               setShowMenu(!showMenu);
               event.stopPropagation();
             }}
           >
+            <span className="w-10 h-10 rounded-full overflow-hidden">
             {avatar ? (
               <img src={avatar} alt="profile" />
             ) : (
-              <span className="text-white font-bold">
+              <span className="text-white font-bold flex items-center justify-center bg-[#CA3011] w-10 h-10">
                 {user?.user_metadata.first_name[0].toUpperCase()}
                 {user?.user_metadata.last_name[0].toUpperCase()}
               </span>
             )}
+            </span>
             {showMenu && (
               <ul className="bg-white absolute z-10 outline outline-1 outline-[#E4E6E5] top-[60px] right-0 py-2">
-                <Link href="/profile">
-                  <li className="w-full p-2 px-12 mb-1 hover:bg-[#ececec]">
-                    Profile
-                  </li>
-                </Link>
-                <li className="w-full p-2 px-12 hover:bg-[#ececec]">
-                  <button
-                    onClick={() => {
-                      signOut();
-                      Router.push("/login");
-                    }}
-                  >
-                    Logout
-                  </button>
+              <Link href="/profile">
+                <li className="w-full p-2 px-12 mb-1 hover:bg-[#ececec]">
+                  Profile
                 </li>
-              </ul>
+              </Link>
+              <li className="w-full p-2 px-12 hover:bg-[#ececec]">
+                <button
+                  onClick={() => {
+                    signOut();
+                    Router.push("/login");
+                  }}
+                >
+                  Logout
+                </button>
+              </li>
+            </ul>
             )}
           </div>
         </div>

@@ -24,19 +24,19 @@ function Password({ user }) {
                 return (
                   <Form
                     onSubmit={(event) => handleSubmit(event, values)}
-                    className="my-5 flex-grow py-5 px-10"
+                    className="my-5 flex-grow py-5 md:px-10"
                     name="signUpForm"
                   >
 
-                    <div className="flex flex-col gap-5 my-5">
-                      <label htmlFor="" className="w-4/12 md:w-2/12">
+                    <div className="flex flex-col gap-5 md:my-5">
+                      <label htmlFor="" className="">
                         New Password
                       </label>
                       <div className="w-full">
                         <input
                           type="password"
                           name="password"
-                          className="outline outline-1 bg-transparent py-1 px-2 placeholder:text-[#bcbfc2] w-8/12 md:w-10/12"
+                          className="outline outline-1 bg-transparent py-1 px-2 placeholder:text-[#bcbfc2] w-full md:w-10/12"
                           placeholder="enter password"
                           defaultValue="**********"
                           onChange={handleChange("password")}
@@ -64,14 +64,14 @@ function Password({ user }) {
                       </div>
                     </div>
                     <div className="flex flex-col gap-5 my-5">
-                      <label htmlFor="" className="w-4/12 md:w-2/12">
+                      <label htmlFor="" className="">
                         Confirm Password
                       </label>
                       <div className="w-full">
                         <input
                           type="password"
                           name="password"
-                          className="outline outline-1 bg-transparent py-1 px-2 placeholder:text-[#bcbfc2] w-8/12 md:w-10/12"
+                          className="outline outline-1 bg-transparent py-1 px-2 placeholder:text-[#bcbfc2] w-full md:w-10/12"
                           placeholder="enter password"
                           onChange={handleChange("password")}
                           onBlur={handleBlur("password")}

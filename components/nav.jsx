@@ -174,22 +174,25 @@ export default function Navbar() {
           <CgMenu size={25} color={"#CA3011"} />
           {showMobileMenu && (
             <ul className="bg-white absolute z-20 outline outline-1 outline-[#E4E6E5] top-10 right-0 p-2 w-56">
-              <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic">
                 <Link href="/" className="nn">
+                <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic">
                   Dashboard
-                </Link>
               </li>
-              <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic">
+                </Link>
                 <Link href="/add-site" className="">
+                <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic">
                   Add Product
+              </li>
                 </Link>
+                <Link href="/logs">
+                <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic">Logs
               </li>
-              <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic">
-                <Link href="/logs">Logs</Link>
+                </Link>
+              
+                <Link href="/profile">
+                <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic">Profile
               </li>
-              <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic">
-                <Link href="/profile">Profile</Link>
-              </li>
+                </Link>
               <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic">
                 <button
                   onClick={() => {

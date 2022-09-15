@@ -8,10 +8,12 @@ import { useAuth } from "../utils/auth";
 import { TbSend } from "react-icons/tb";
 import { MdAdd } from "react-icons/md";
 import AddCustomerModal from "../components/AddCustomerModal";
+import useMediaQuery from "../hooks/useMediaQuery";
 
 export default function AddSite() {
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
+  const matches = useMediaQuery("(min-width: 800px)");
 
   const [customers, setCustomers] = useState([]);
   const [customerModel, setCustomerModel] = useState(false);
@@ -219,7 +221,7 @@ export default function AddSite() {
                     <select
                       name=""
                       id="contact_person"
-                      className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
+                      className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-10/12 md:w-8/12"
                       onChange={(e) => {
                         setFieldValue("contact_person", e.target.value);
                         setCustomerId(e.target.value);
@@ -239,11 +241,11 @@ export default function AddSite() {
                     </select>
                     <button
                       type="button"
-                      className="bg-[#1D1F20] text-white py-2 px-4 my-2 mt-4 hover:bg-transparent hover:text-black outline outline-1 outline-black flex items-center gap-2 "
+                      className="bg-[#1D1F20] text-white py-2 px-4 hover:bg-transparent hover:text-black outline outline-1 outline-black flex items-center gap-2 "
                       onClick={() => setCustomerModel(true)}
                     >
                       <MdAdd />
-                      Add Customer
+                      {matches && "Add Customer"}
                     </button>
                     {customerModel && <AddCustomerModal loading={loading} setCustomerModel={setCustomerModel} addNewCustomer={addNewCustomer} password={password} setPassword={setPassword} />}
                   </div>

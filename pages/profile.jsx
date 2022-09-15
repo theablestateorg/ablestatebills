@@ -10,12 +10,14 @@ import Password from "../components/Password";
 import Footer from "../components/Footer";
 import { downloadFile } from "../utils/getImages";
 import { useAuth } from "../utils/auth";
+import useMediaQuery from "../hooks/useMediaQuery";
 
 export default function Dashboard() {
   const [showInfo, setShowInfo] = useState(1)
   const [profiles, setProfiles] = useState([])
   const [avatar, setAvatar] = useState("");
   const { signOut, user } = useAuth();
+  const matches = useMediaQuery("(min-width: 800px)");
 
   useEffect(() => {
     getProfile()
@@ -49,14 +51,14 @@ export default function Dashboard() {
       <Head>
         <title>Profile - Shine Afrika</title>
       </Head>
-      {/* <Navbar /> */}
       <ToastContainer />
+
       <main className="pt-[70px] mx-5 md:mx-20 relative pb-6 min-h-screen flex flex-col">
         <section className="flex justify-between items-center">
           <h1 className="font-bold text-2xl my-5">Profile</h1>
         </section>
-        <div className="flex flex-grow">
-          <section className="mb-5 w-3/12 border-r-2 mr-5 py-3 flex flex-col items-center">
+        <div className="flex flex-col md:flex-row flex-grow">
+          <section className={`mb-5 w-full md:w-3/12 ${!matches && "border-b-2"} md:border-r-2 md:mr-5 py-3 flex flex-col items-center`}>
             <div className={`w-16 h-16 ${!avatar && "bg-[#CA3011]"} rounded-full flex items-center justify-center relative dialog cursor-pointer overflow-hidden`}>
             {avatar ? (
               <img src={avatar} alt="profile" />
@@ -73,7 +75,7 @@ export default function Dashboard() {
               <h3 className="border-b-2 pb-2 text-xs text-stone-500">
                 {user && user.email}
               </h3>
-              <div className="flex flex-col gap-5 mt-5 items-start">
+              <div className="flex text-sm md:text-lg md:flex-col gap-5 mt-5 items-start">
                 <button onClick={() =>setShowInfo(1)} className={`${showInfo === 1 && "bg-gray-200"}  py-2 px-4 w-full`}>Account Settings</button>
                 <button onClick={() =>setShowInfo(2)} className={`${showInfo === 2 && "bg-gray-200"}  py-2 px-4 w-full`}>Password</button>
               </div>

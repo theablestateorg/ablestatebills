@@ -3,10 +3,12 @@ import { MdEdit, MdOutlineMail } from "react-icons/md";
 import { supabase } from "../utils/supabase";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import useMediaQuery from "../hooks/useMediaQuery";
 
 function AccountSettings({ user, avatar }) {
   const [loading, setLoading] = useState(false);
   const [img, setImg] = useState(null)
+  const matches = useMediaQuery("(min-width: 800px)");
 
   const handleSubmit = async (event, values) => {
     event.preventDefault()
@@ -47,11 +49,11 @@ function AccountSettings({ user, avatar }) {
           return (
             <Form
               onSubmit={(event) => handleSubmit(event, values)}
-              className="my-5 flex-grow py-5 px-10"
+              className="my-5 flex-grow py-5 md:px-10"
               name="signUpForm"
             >
               <div className="mb-5">
-                <div className={`w-16 h-16 ${!avatar && "bg-[#CA3011]"} rounded-lg overflow-hidden flex items-center justify-center relative dialog cursor-pointer mb-5`}>
+                <div className={`w-16 h-16 ${!avatar && "bg-[#CA3011]"} overflow-hidden flex items-center justify-center relative dialog cursor-pointer mb-5`}>
                 {avatar ? (
               <img src={avatar} alt="profile" />
             ) : (
@@ -63,8 +65,8 @@ function AccountSettings({ user, avatar }) {
                 </div>
                 <input type="file" onChange={(event) => setImg(event.target.files[0])} />
               </div>
-              <div className="flex justify-between items-center gap-5">
-                <div className="w-6/12">
+              <div className="flex flex-col md:flex-row justify-between md:items-center gap-5">
+                <div className="w-full md:w-6/12">
                   <input
                     type="text"
                     name="first_name"
@@ -75,7 +77,7 @@ function AccountSettings({ user, avatar }) {
                     onBlur={handleBlur("first_name")}
                   />
                 </div>
-                <div className="w-6/12">
+                <div className="w-full md:w-6/12">
                   <input
                     type="text"
                     name="last_name"
@@ -86,38 +88,6 @@ function AccountSettings({ user, avatar }) {
                     onBlur={handleBlur("last_name")}
                   />
                 </div>
-                {/* <div className="flex gap-5 items-end w-6/12  my-2">
-                        <div className="items-end w-6/12  ">
-                          <input
-                            type="text"
-                            name="last_name"
-                            className="outline outline-1 outline-[#e7e5e4] bg-[#f5f5f5] py-1 px-2 placeholder:text-[#bcbfc2] w-12/12 md:w-12/12"
-                            placeholder="enter last name"
-                            defaultValue={user.user_metadata.last_name}
-                            onChange={handleChange("last_name")}
-                            onBlur={handleBlur("last_name")}
-                          />
-                          <div
-                            className={`${
-                              errors?.last_name && touched?.last_name
-                                ? "block"
-                                : "hidden"
-                            }`}
-                          >
-                            <label
-                              className={`${
-                                errors?.last_name && touched?.last_name
-                                  ? "text-red-500 text-xs"
-                                  : "text-transparent text-xs"
-                              }`}
-                            >{`${
-                              errors?.last_name && touched?.last_name
-                                ? errors.last_name
-                                : "hide"
-                            }`}</label>
-                          </div>
-                        </div>
-                      </div> */}
               </div>
               <div className="w-full outline outline-1 flex items-center outline-[#e7e5e4] bg-[#f5f5f5]  my-5">
                 <i className="p-2">

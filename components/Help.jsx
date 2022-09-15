@@ -10,6 +10,7 @@ import {
 import { AiOutlineConsoleSql } from "react-icons/ai";
 import { IoMdClose } from 'react-icons/io'
 import { Transition } from '@tailwindui/react'
+import Select from "./SelectBox";
 
 function Help() {
   const { user } = useAuth();
@@ -23,6 +24,8 @@ function Help() {
   });
   const [myMessages, setMyMessages] = useState([]);
   const [reload, setReload] = useState(false);
+  const [status, setStatus] = useState("")
+  const [priority, setPriority] = useState("")
 
   const msg = useRef();
   useEffect(() => {
@@ -59,7 +62,13 @@ function Help() {
   }, []);
 
   const handleSubmit = async () => {
-    const { data, error } = await supabase.from("tickets").insert([ticket]);
+    const { data, error } = await supabase.from("tickets").insert([
+      {
+        ...ticket,
+        category: status,
+        agency: priority
+      }
+    ]);
 
     if (data) {
       const { error } = await supabase.from("notifications").insert([
@@ -76,7 +85,7 @@ function Help() {
       updateScroll();
     }
     if (error) {
-      // console.log(error);
+      console.log(error);
     }
     setTicket({
       agency: "",
@@ -84,6 +93,8 @@ function Help() {
       message: "",
       category: "",
     });
+    setStatus("")
+    setPriority("")
   };
 
   function updateScroll() {
@@ -118,7 +129,7 @@ function Help() {
           leaveTo="opacity-0"
         >
         <div
-          className="absolute  bottom-2 w-72 h-96 shadow-lg bg-white outline outline-2 outline-[#CA3011] rounded-t-md rounded-bl-md flex flex-col text-black items-center overflow-hidden -right-0 md:right-12"
+          className="absolute  bottom-2 w-72 h-96 shadow-lg bg-white outline outline-2 outline-[#CA3011] rounded-t-md rounded-bl-md flex flex-col text-black items-center -right-0 md:right-12"
           onClick={(event) => {
             event.stopPropagation();
           }}
@@ -184,8 +195,8 @@ function Help() {
               value={ticket.message}
             />
             <div className="flex justify-between p -1 mt-1">
-              <div className="flex gap-1 text-sm">
-                <select
+              <div className="flex gap-2 text-sm">
+                {/* <select
                   name=""
                   id=""
                   className="text-xs bg-gray-100 rounded-lg px-1 pr-1"
@@ -198,8 +209,31 @@ function Help() {
                   <option value="sells">Sells</option>
                   <option value="technical">Technical</option>
                   <option value="customer care">Customer Care</option>
-                </select>
-                <select
+                </select> */}
+                <Select
+                  options={[
+                    { id: 1, value: "", name: "Category" },
+                    { id: 2, value: "sells", name: "Sells" },
+                    { id: 3, value: "technical", name: "Technical" },
+                    { id: 4, value: "customer care", name: "Customer care" },
+                  ]}
+                  initialLabel={"Category"}
+                  status={status}
+                  setStatus={setStatus}
+                  size={32}
+                />
+                <Select
+                  options={[
+                    { id: 1, value: "", name: "Priority" },
+                    { id: 2, value: "low", name: "Low" },
+                    { id: 3, value: "mid", name: "Mid" },
+                    { id: 4, value: "high", name: "High" },
+                  ]}
+                  initialLabel={"Priority"}
+                  status={priority}
+                  setStatus={setPriority}
+                />
+                {/* <select
                   name=""
                   id=""
                   className="text-xs bg-gray-100 rounded-lg px-1 pr-1"
@@ -212,7 +246,7 @@ function Help() {
                   <option value="low">Low</option>
                   <option value="mid">Mid</option>
                   <option value="high">High</option>
-                </select>
+                </select> */}
               </div>
               <button
                 className={`${

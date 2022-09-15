@@ -17,44 +17,6 @@ function Ticket({ ticket, customer }) {
   })
   const [reload, setReload] = useState(false)
 
-  // useEffect( () => {
-  //   getTicket();
-  // }, [reload, ticket]);
-
-  // const getTicket = async () => {
-  //   const { data } = await supabase.from("tickets").select("*").eq("id", id).single();
-
-    // if(data){
-    // const { data: cust } = await supabase
-    // .from("profiles")
-    // .select("*")
-    // .eq('id', data.customer_id)
-    // .single()
-
-    // setCustomer(cust)
-    // }
-
-    
-    // getCustomer()
-    
-  // };
-
-  // console.log(ticket)
-
-
-  // if(customer )
-
-  // const getCustomer = async () => {
-  //   const { data } = await supabase
-  //   .from("profiles")
-  //   .select("*")
-  //   .eq('id', ticket.customer_id)
-  //   .single()
-
-  //   // setCustomer(data)
-  //   setReload(!reload)
-  // }
-
   const handleResponse = async () => {
     const { data, error } = await supabase
     .from('tickets')
@@ -67,9 +29,6 @@ function Ticket({ ticket, customer }) {
     }
     setReload(!reload)
   }
-
-  console.log(ticket)
-  console.log(customer)
 
   return (
     <div>
@@ -84,9 +43,9 @@ function Ticket({ ticket, customer }) {
           <div className="flex justify-between mb-5">
             <h1 className="font-bold">#TK{ticket && ticket.id}</h1>
             <div>
-              <span className={`${ticket && ticket.agency ? "bg-red-100 text-red-600" : "bg-yellow-100 text-yellow-600"} px-2 py-1 rounded-2xl text-xs font-bold mb-1`}>{ticket && ticket.agency ? "urgent" : "not urgent"}</span>
+            <span className={`${ticket.agency == "high" ? "bg-red-100 text-red-400" : ticket.agency == "mid" ? "bg-indigo-100 text-indigo-400" : "bg-neutral-100 text-neutral-400"}  px-2 py-1 rounded-2xl text-xs font-bold mb-1`}>{ticket.agency}</span>
               <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded-2xl text-xs font-bold">
-                open
+                {ticket.category}
               </span>
             </div>
           </div>

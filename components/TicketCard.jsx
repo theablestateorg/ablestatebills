@@ -14,8 +14,8 @@ function TicketCard({ ticket, customer }) {
             </h2>
             <p className="text-gray-400 text-sm">{moment(`${ticket.created_at.substr(0, 10)} ${(+ticket.created_at.substr(11, 2) + 3) + ticket.created_at.substr(13, 6)} `, "YYYY-MM-DD hh:mm:ss").fromNow()}</p>
           </div>
-          <span className={`${ticket.agency ? "bg-red-100 text-red-600" : "bg-yellow-100 text-yellow-600"} px-2 py-1 rounded-2xl text-xs font-bold mb-1`}>{ticket.agency ? "urgent" : "not urgent"}</span>
-          {/* <p className="text-gray-400">Note</p> */}
+          <span className={`${ticket.agency == "high" ? "bg-red-100 text-red-400" : ticket.agency == "mid" ? "bg-indigo-100 text-indigo-400" : "bg-neutral-100 text-neutral-400"}  px-2 py-1 rounded-2xl text-xs font-bold mb-1`}>{ticket.agency}</span>
+          <span className="text-sm ml-1">{ticket.category}</span>
           <p className="bg-gray-100 px-2 py-3 rounded-lg m-2">
             {ticket.message}
           </p>

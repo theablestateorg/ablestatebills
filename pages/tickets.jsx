@@ -1,40 +1,20 @@
 import Head from "next/head";
-import Navbar from "../components/nav";
-import { toast, ToastContainer } from "react-toastify";
 import TicketCard from "../components/TicketCard";
 import { supabase } from "../utils/supabase";
 import { useState, useEffect, Fragment } from "react";
 import { AiOutlineFileDone } from 'react-icons/ai'
 
-function Tickets() {
-
-  const [tickets, setTickets] = useState([])
-
-  useEffect(() => {
-    getTickets()
-  }, [])
-
-  const getTickets = async () => {
-    const { data } = await supabase
-    .from("tickets")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-    setTickets(data)
-  }
-  
+function Tickets({ tickets, customers }) {
+  console.log(customers)
   return (
     <>
       <Head>
         <title>Tickets - Shine Afrika</title>
       </Head>
-      {/* <Navbar /> */}
-      <ToastContainer />
-
       <main className="pt-[70px] mx-3 md:mx-16 relative pb-6 min-h-screen flex flex-col">
         {tickets.length > 0 && tickets.map((ticket, index) => (
           <Fragment key={index}>
-            <TicketCard ticket={ticket} />
+            <TicketCard ticket={ticket} customer={customers.filter(customer => customer.id === ticket.customer_id).map(customer => customer.first_name + " " + customer.last_name)[0]} />
           </Fragment>
         ))}
         {tickets.length === 0 &&
@@ -51,8 +31,13 @@ function Tickets() {
 export default Tickets
 
 export const getServerSideProps = async ({ req }) => {
-
   const { user } = await supabase.auth.api.getUserByCookie(req);
+  const { data: customers } = await supabase.from("profiles").select("*");
+
+  const { data: tickets } = await supabase
+    .from("tickets")
+    .select("*")
+    .order("created_at", { ascending: false });
 
   if (!user) {
     return {
@@ -65,6 +50,6 @@ export const getServerSideProps = async ({ req }) => {
   }
 
   return {
-    props: {},
+    props: { tickets, customers },
   };
 };

@@ -6,38 +6,38 @@ import { useState, useEffect } from "react";
 import { supabase } from "../../utils/supabase";
 import { useAuth } from "../../utils/auth";
 
-function Ticket() {
+function Ticket({ ticket, customer }) {
   const router = useRouter();
   const { id } = router.query;
-  const [ticket, setTicket] = useState({});
+  // const [ticket, setTicket] = useState({});
   const { user } = useAuth()
-  const [customer, setCustomer] = useState({})
+  // const [customer, setCustomer] = useState({})
   const [values, setValues] = useState({
     response: ''
   })
   const [reload, setReload] = useState(false)
 
-  useEffect( () => {
-    getTicket();
-  }, [reload, ticket]);
+  // useEffect( () => {
+  //   getTicket();
+  // }, [reload, ticket]);
 
-  const getTicket = async () => {
-    const { data } = await supabase.from("tickets").select("*").eq("id", id).single();
+  // const getTicket = async () => {
+  //   const { data } = await supabase.from("tickets").select("*").eq("id", id).single();
 
-    setTicket(data);
-    if(data){
-    const { data: cust } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq('id', data.customer_id)
-    .single()
+    // if(data){
+    // const { data: cust } = await supabase
+    // .from("profiles")
+    // .select("*")
+    // .eq('id', data.customer_id)
+    // .single()
 
-    setCustomer(cust)
-    }
+    // setCustomer(cust)
+    // }
+
     
     // getCustomer()
     
-  };
+  // };
 
   // console.log(ticket)
 
@@ -45,14 +45,13 @@ function Ticket() {
   // if(customer )
 
   // const getCustomer = async () => {
-  //   console.log("hello")
   //   const { data } = await supabase
   //   .from("profiles")
   //   .select("*")
   //   .eq('id', ticket.customer_id)
   //   .single()
 
-  //   setCustomer(data)
+  //   // setCustomer(data)
   //   setReload(!reload)
   // }
 
@@ -70,14 +69,13 @@ function Ticket() {
   }
 
   console.log(ticket)
-  console.log(id)
+  console.log(customer)
 
   return (
     <div>
       <Head>
-        <title>Shine Africa</title>
+        <title>Ticket - Shine Africa</title>
       </Head>
-      <Navbar />
 
       <ToastContainer />
 
@@ -104,7 +102,7 @@ function Ticket() {
                   </p>
                   <p className="font-bold">
                     {customer && customer.first_name && customer.first_name + " " + customer.last_name}
-                    <span className="text-xs">(Customer)</span></p>
+                    <span className="text-xs">({customer.role})</span></p>
                 </div>
               </div>
               <div className="flex flex-col items-end">
@@ -145,3 +143,34 @@ function Ticket() {
 }
 
 export default Ticket;
+
+
+export const getServerSideProps = async ({ req, params }) => {
+  const { user } = await supabase.auth.api.getUserByCookie(req);
+
+  const { data: ticket } = await supabase
+    .from("tickets")
+    .select("*")
+    .eq("id", params.id)
+    .single();
+
+    const { data: customer } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq('id', ticket.customer_id)
+      .single()
+
+  if (!user) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/login",
+      },
+      props: {},
+    };
+  }
+
+  return {
+    props: { ticket, customer },
+  };
+};

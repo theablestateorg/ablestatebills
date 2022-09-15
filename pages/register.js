@@ -50,7 +50,7 @@ export default function Home() {
       <ToastContainer />
       <div className="w-screen h-screen flex justify-center items-center relative pb-6 min-h-screen">
         <Formik
-          initialValues={{ password: "", first_name: "", last_name: "", role: "", email: ""  }}
+          initialValues={{ password: "", first_name: "", last_name: "", role: "customer", email: ""  }}
           validationSchema={registerValidationSchema}
         >
           {({

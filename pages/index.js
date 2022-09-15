@@ -12,7 +12,7 @@ import { useAuth } from "../utils/auth";
 import { IoWarning } from "react-icons/io5";
 import { Footer } from "../components";
 
-export default function Home({ websites }) {
+export default function Home({ websites, customers }) {
   const router = useRouter();
   const [searchText, setSearchText] = useState("");
   const [status, setStatus] = useState("");
@@ -23,6 +23,8 @@ export default function Home({ websites }) {
   const [sortBy, setSortBy] = useState("");
   const checkbox = useRef()
   const { user } = useAuth();
+
+  console.log(customers)
 
   websites = websites
     .filter((website) =>
@@ -236,7 +238,7 @@ export default function Home({ websites }) {
                       {moment(new Date(site.expiry_date)).format("DD-MM-YYYY")}
                     </span>
                   </td>
-                  <td className="py-2 text-left pl-3">{site.contact_person}</td>
+                  <td className="py-2 text-left pl-3">{customers.filter((customer => customer.id === site.contact_person)).map((customer) => <p>{customer.first_name+ " " + customer.last_name}</p>)}</td>
                   <td className="py-2 text-left pl-3">
                     {`+256` + site.telephone_number}
                   </td>
@@ -310,6 +312,8 @@ export const getServerSideProps = async ({ req }) => {
     .select("*")
     .order("created_at", { ascending: false });
 
+    const { data: customers } = await supabase.from("profiles").select("*");
+
   const { user } = await supabase.auth.api.getUserByCookie(req);
 
   if (!user) {
@@ -325,6 +329,7 @@ export const getServerSideProps = async ({ req }) => {
   return {
     props: {
       websites,
+      customers
     },
   };
 };

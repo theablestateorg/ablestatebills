@@ -1,31 +1,16 @@
 import { useRouter } from "next/router";
-import { supabase } from "../utils/supabase";
-import { useState, useEffect } from "react";
 import moment from "moment/moment";
 
-function TicketCard({ ticket }) {
+function TicketCard({ ticket, customer }) {
   const router = useRouter();
-  const [customers, setCustomers] = useState([])
-
-  useEffect(() => {
-    getCustomer()
-  }, [])
-
-  const getCustomer = async () => {
-    const { data } = await supabase
-    .from("profiles")
-    .select("*")
-
-    setCustomers(data)
-  }
 
   return (
-    <div className="bg-white px-10 py-3 rounded-md my-5"
+    <div className="bg-white px-10 py-3 rounded-md my-5 cursor-pointer"
           onClick={() => router.push(`/tickets/${ticket.id}`)}
         >
           <div className="flex justify-between mb-2">
             <h2 className="font-bold">
-              {customers.filter(customer => customer.id === ticket.customer_id).map(customer => customer.first_name + " " + customer.last_name)[0]}
+              {customer}
             </h2>
             <p className="text-gray-400 text-sm">{moment(`${ticket.created_at.substr(0, 10)} ${(+ticket.created_at.substr(11, 2) + 3) + ticket.created_at.substr(13, 6)} `, "YYYY-MM-DD hh:mm:ss").fromNow()}</p>
           </div>

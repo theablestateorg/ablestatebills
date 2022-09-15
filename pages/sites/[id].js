@@ -1,5 +1,4 @@
 import Head from "next/head";
-import Navbar from "../../components/nav";
 import { useRouter } from "next/router";
 import { supabase } from "../../utils/supabase";
 import { useEffect, useState } from "react";
@@ -14,10 +13,9 @@ import { TbEdit } from 'react-icons/tb'
 import AddCustomerModal from "../../components/AddCustomerModal";
 import { MdAdd } from "react-icons/md";
 
-export default function Site() {
+export default function Site({product}) {
   const router = useRouter();
   const { id } = router.query;
-  const [site, setSite] = useState("");
   const [popUp, setPopUp] = useState(false);
   const [popUpdate, setPopUpdate] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -30,17 +28,12 @@ export default function Site() {
   const [ password, setPassword ] = useState(null)
 
   useEffect(() => {
-    getSite();
-  }, [site]);
-
-  useEffect(() => {
     getCustomers();
     getContact(customerId);
   }, [selected]);
 
   const getCustomers = async () => {
     const { data } = await supabase.from("profiles").select("*");
-    // .eq("role", "customer")
     setCustomers(data);
   };
 
@@ -79,16 +72,6 @@ export default function Site() {
 
   const { user } = useAuth();
 
-  const getSite = async () => {
-    const { data } = await supabase
-      .from("websites")
-      .select("*")
-      .eq("id", id)
-      .single();
-
-    setSite(data);
-  };
-
   const handleDelete = async () => {
     const { data, error } = await supabase
       .from("websites")
@@ -105,7 +88,7 @@ export default function Site() {
         .from("logs")
         .insert([
           {
-            name: `[Deleted] ${site.name}`,
+            name: `[Deleted] ${product.name}`,
             details: `deleted by ${user.first_name} ${user.last_name}`,
             status: "success",
           },
@@ -159,17 +142,16 @@ export default function Site() {
   return (
     <div>
       <Head>
-        <title>{site ? site.name : "loading..."} - Shine Africa</title>
+        <title>{product ? product.name : "loading..."} - Shine Africa</title>
       </Head>
-      <Navbar />
 
       <ToastContainer />
 
       <main className="pt-[70px] mx-5 md:mx-20 relative pb-6 min-h-screen">
-        {site && (
+        {product && (
           <>
             <section className="flex justify-between items-center">
-              <h1 className="font-bold text-2xl my-5">{site.name}</h1>
+              <h1 className="font-bold text-2xl my-5">{product.name}</h1>
               <button
                 className="bg-[#1D1F20] text-white py-2 px-4 my-2 mt-4 hover:bg-[#292C2D] flex items-center gap-2"
                 onClick={() => setPopUpdate(true)}
@@ -196,10 +178,10 @@ export default function Site() {
 
                   <Formik
                     initialValues={{
-                      name: site.name,
-                      website_link: site.website_link,
-                      contact_person: site.contact_person,
-                      telephone_number: site.telephone_number,
+                      name: product.name,
+                      website_link: product.website_link,
+                      contact_person: product.contact_person,
+                      telephone_number: product.telephone_number,
                     }}
                   >
                     {({
@@ -229,7 +211,7 @@ export default function Site() {
                               className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
                               onChange={handleChange("name")}
                               onBlur={handleBlur("name")}
-                              defaultValue={site.name}
+                              defaultValue={product.name}
                             />
                           </div>
                           <div className="flex flex-col gap-1 my-2">
@@ -278,7 +260,7 @@ export default function Site() {
                               className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
                               onChange={handleChange("telephone_number")}
                               onBlur={handleBlur("telephone_number")}
-                              defaultValue={"0" + site.telephone_number}
+                              defaultValue={"0" + product.telephone_number}
                             />
                           </div>
                           <div className="flex flex-col gap-1 my-2">
@@ -290,7 +272,7 @@ export default function Site() {
                               className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
                               onChange={handleChange("email")}
                               onBlur={handleBlur("email")}
-                              defaultValue={site.email}
+                              defaultValue={product.email}
                             />
                           </div>
 
@@ -303,7 +285,7 @@ export default function Site() {
                               className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
                               onChange={handleChange("website_link")}
                               onBlur={handleBlur("website_link")}
-                              defaultValue={site.website_link}
+                              defaultValue={product.website_link}
                             />
                           </div>
 
@@ -346,7 +328,7 @@ export default function Site() {
               </div>
             )}
             <p>
-              {site.contact_person}, {`+256` + site.telephone_number}
+              {product.contact_person}, {`+256` + product.telephone_number}
             </p>
             <section className="my-5">
               <h1>Extension</h1>
@@ -385,7 +367,7 @@ export default function Site() {
                 Delete Website
               </h1>
               <p>
-                Are you sure you want to delete <b>{site.name}</b>?
+                Are you sure you want to delete <b>{product.name}</b>?
               </p>
               <p className="bg-[#ffe9d9] p-2 border-l-2 text-[#bc4c2e] border-[#fa703f] flex flex-col text-sm my-1">
                 <span className="text-[#771505] font-bold flex items-center gap-1">
@@ -421,8 +403,14 @@ export default function Site() {
   );
 }
 
-export const getServerSideProps = async ({ req }) => {
+export const getServerSideProps = async ({ req, params }) => {
   const { user } = await supabase.auth.api.getUserByCookie(req);
+
+  const { data: product } = await supabase
+    .from("websites")
+    .select("*")
+    .eq("id", params.id)
+    .single();
 
   if (!user) {
     return {
@@ -435,6 +423,6 @@ export const getServerSideProps = async ({ req }) => {
   }
 
   return {
-    props: {},
+    props: { product },
   };
 };

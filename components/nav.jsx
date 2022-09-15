@@ -9,6 +9,7 @@ import { useAuth } from "../utils/auth";
 import Notifications from "./Notifications";
 import { downloadFile } from "../utils/getImages";
 import ActiveLink from "./ActiveLink";
+import { Transition } from '@tailwindui/react'
 
 export default function Navbar() {
   const [showMenu, setShowMenu] = useState(false);
@@ -113,7 +114,15 @@ export default function Navbar() {
               </span>
             )}
             </span>
-            {showMenu && (
+            <Transition
+              show={showMenu}
+              enter="transition ease-in-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="transition ease-in-out duration-150"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
               <ul className="bg-white absolute z-10 outline outline-1 outline-[#E4E6E5] top-[60px] right-0 py-2">
               <Link href="/profile">
                 <li className="w-full p-2 px-12 mb-1 hover:bg-[#ececec]">
@@ -131,7 +140,26 @@ export default function Navbar() {
                 </button>
               </li>
             </ul>
-            )}
+            </Transition>
+            {/* {showMenu && (
+              <ul className="bg-white absolute z-10 outline outline-1 outline-[#E4E6E5] top-[60px] right-0 py-2">
+              <Link href="/profile">
+                <li className="w-full p-2 px-12 mb-1 hover:bg-[#ececec]">
+                  Profile
+                </li>
+              </Link>
+              <li className="w-full p-2 px-12 hover:bg-[#ececec]">
+                <button
+                  onClick={() => {
+                    signOut();
+                    Router.push("/login");
+                  }}
+                >
+                  Logout
+                </button>
+              </li>
+            </ul>
+            )} */}
           </div>
         </div>
       </div>

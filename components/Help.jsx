@@ -9,6 +9,7 @@ import {
 } from "react-icons/md";
 import { AiOutlineConsoleSql } from "react-icons/ai";
 import { IoMdClose } from 'react-icons/io'
+import { Transition } from '@tailwindui/react'
 
 function Help() {
   const { user } = useAuth();
@@ -107,7 +108,15 @@ function Help() {
       onClick={() => setChatBox(!chatBox)}
     >
       <TbMessageCircle2 size={30} />
-      {chatBox && (
+      <Transition
+          show={chatBox}
+          enter="transition ease-in-out duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="transition ease-in-out duration-150"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
         <div
           className="absolute  bottom-2 w-72 h-96 shadow-lg bg-white outline outline-2 outline-[#CA3011] rounded-t-md rounded-bl-md flex flex-col text-black items-center overflow-hidden -right-0 md:right-12"
           onClick={(event) => {
@@ -218,7 +227,8 @@ function Help() {
             </div>
           </div>
         </div>
-      )}
+            </Transition>
+      
     </div>
   );
 }

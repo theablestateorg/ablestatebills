@@ -81,6 +81,7 @@ export default function Home() {
                       placeholder="enter email"
                       onChange={handleChange("email")}
                       onBlur={handleBlur("email")}
+                      value={values.email}
                     />
                     <div
                       className={`${
@@ -114,6 +115,7 @@ export default function Home() {
                       placeholder="enter first name"
                       onChange={handleChange("first_name")}
                       onBlur={handleBlur("first_name")}
+                      value={values.first_name}
                     />
                     <div
                       className={`${
@@ -147,6 +149,7 @@ export default function Home() {
                       placeholder="enter last name"
                       onChange={handleChange("last_name")}
                       onBlur={handleBlur("last_name")}
+                      value={values.last_name}
                     />
                     <div
                       className={`${
@@ -181,6 +184,7 @@ export default function Home() {
                       placeholder="enter password"
                       onChange={handleChange("password")}
                       onBlur={handleBlur("password")}
+                      value={values.password}
                     />
                     <div
                       className={`${

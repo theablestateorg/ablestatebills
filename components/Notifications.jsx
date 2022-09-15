@@ -3,40 +3,9 @@ import { useAuth } from "../utils/auth";
 import { supabase } from "../utils/supabase";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { IoNotificationsOffCircle } from 'react-icons/io5'
+import { Transition } from '@tailwindui/react'
 
 function Notifications({ notify, notifications, setNotifications }) {
-  // const [notifications, setNotifications] = useState([]);
-  // useEffect(() => {
-  //   const mySubscription = supabase
-  //     .from("notifications")
-  //     .on("*", (payload) => {
-  //       setNotifications((current) => [...current, payload.new]);
-  //       getNotifications()
-  //     })
-  //     .subscribe();
-
-  //   return () => supabase.removeSubscription(mySubscription);
-  // }, []);
-
-  // useEffect(() => {
-  //   getNotifications()
-  // }, [notify])
-
-  // const getNotifications = async () => {
-  //   const { data, error } = await supabase
-  //     .from("notifications")
-  //     .select("*")
-  //     // .order("timestamp", { ascending: false });
-
-  //   console.log(data)
-  //   if (data) {
-  //     setNotifications(data);
-  //   }
-  //   if (error) {
-  //     console.log(error);
-  //   }
-  // }
-
   return (
     <>
       {notifications && notifications.length > 0 && (
@@ -46,7 +15,15 @@ function Notifications({ notify, notifications, setNotifications }) {
       )}
       <IoMdNotificationsOutline size={25} />
 
-      {notify && notifications.length > 0 && (
+      <Transition
+          show={notify && notifications.length > 0}
+          enter="transition ease-in-out duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="transition ease-in-out duration-150"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
         <div className="absolute top-[50px] right-0 w-96 h-[500px] overflow-hidden shadow-md pt-4 pb-1 bg-white rounded flex flex-col">
           <div className="flex flex-col px-2 border-b-2 pt-2">
             <div className="flex w-full justify-between mb-3 items-end px-2 pt-2">
@@ -74,15 +51,23 @@ function Notifications({ notify, notifications, setNotifications }) {
             ))}
           </div>
         </div>
-      )}
-      {notify && notifications.length === 0 && (
-        <div className="absolute top-[50px] right-0 w-96 h-[500px] shadow p-4 bg-white flex justify-center items-center flex-col gap-3">
+      </Transition>
+      <Transition
+          show={notify && notifications.length === 0 > 0}
+          enter="transition ease-in-out duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="transition ease-in-out duration-150"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <div className="absolute top-[50px] right-0 w-96 h-[500px] shadow p-4 bg-white flex justify-center items-center flex-col gap-3">
           <i className="text-gray-400">
             <IoNotificationsOffCircle size={45} />
           </i>
           <p>No new Notifications</p>
         </div>
-      )}
+        </Transition>
     </>
   );
 }

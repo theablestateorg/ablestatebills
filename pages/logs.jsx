@@ -1,24 +1,15 @@
 import Head from "next/head";
-import Navbar from "../components/nav";
-import { useRouter } from "next/router";
-import { MdAdd, MdSearch } from "react-icons/md";
 import { supabase } from "../utils/supabase";
-import { useState } from "react";
 import moment from "moment";
 import { MdDeleteOutline } from 'react-icons/md'
-import { useAuth } from "../utils/auth";
 import Footer from "../components/Footer";
 
 export default function Home({ logs}) {
-  const router = useRouter();
-
-
   return (
     <>
       <Head>
         <title>Logs - Shine Afrika</title>
       </Head>
-      {/* <Navbar /> */}
       <main className="pt-[70px] relative pb-6 min-h-screen">
 
         <div className="mb-5 overflow-x-scroll ">
@@ -46,9 +37,6 @@ export default function Home({ logs}) {
                     (<span className={`${log.status.includes('success') ? "text-green-500" : "text-red-600"}`}>{log.status}</span>)
                     </span>
                   </td>
-                  {/* <td className={`py-2 flex items-center h-full ${log.status.includes('success') ? "text-green-500" : "text-red-600"}`}>
-                      <div>{log.status}</div>
-                  </td> */}
                   <td className="py-2 text-right pl-3 px-3 md:px-16">
                       {moment(new Date(log.created_at)).format("DD/MM/YYYY - hh:mm:ss")}
                   </td>

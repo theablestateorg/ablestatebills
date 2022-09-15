@@ -12,7 +12,7 @@ export default function Document() {
           rel="stylesheet"
         />
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet" />
-        <meta name="description" content="ShineAfrika" />
+        <meta name="description" content="ShineAfrika, web hosting, uganda, Domain Name" />
       </Head>
       <body className="">
         <Main />

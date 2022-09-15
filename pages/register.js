@@ -71,11 +71,12 @@ export default function Home() {
               >
                 <h1 className="text-3xl font-bold text-center">Register</h1>
                 <div className="flex flex-col gap-2  my-2">
-                  <label htmlFor="">Email</label>
+                  <label htmlFor="email">Email</label>
                   <div className="w-full">
                     <input
                       type="email"
                       name="email"
+                      id="email"
                       className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full"
                       placeholder="enter email"
                       onChange={handleChange("email")}
@@ -103,11 +104,12 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="flex flex-col gap-2  my-2">
-                  <label htmlFor="">First Name</label>
+                  <label htmlFor="first_name">First Name</label>
                   <div className="w-full">
                     <input
                       type="text"
                       name="first_name"
+                      id="first_name"
                       className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full"
                       placeholder="enter first name"
                       onChange={handleChange("first_name")}
@@ -135,11 +137,12 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="flex flex-col gap-2  my-2">
-                  <label htmlFor="">Last Name</label>
+                  <label htmlFor="last_name">Last Name</label>
                   <div className="w-full">
                     <input
                       type="text"
                       name="last_name"
+                      id="last_name"
                       className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full"
                       placeholder="enter last name"
                       onChange={handleChange("last_name")}
@@ -168,11 +171,12 @@ export default function Home() {
                 </div>
                 
                 <div className="flex flex-col gap-2  my-2">
-                  <label htmlFor="">Password</label>
+                  <label htmlFor="password">Password</label>
                   <div className="w-full">
                     <input
                       type="password"
                       name="password"
+                      id="password"
                       className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full"
                       placeholder="enter password"
                       onChange={handleChange("password")}

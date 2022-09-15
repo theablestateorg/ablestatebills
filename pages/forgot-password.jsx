@@ -71,6 +71,7 @@ export default function Home() {
                     <input
                       type="email"
                       name="email"
+                      id="email"
                       className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full"
                       placeholder="enter email"
                       onChange={handleChange("email")}

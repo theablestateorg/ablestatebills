@@ -1,5 +1,4 @@
 import Head from "next/head";
-import Navbar from "../components/nav";
 import { supabase } from "../utils/supabase";
 import { addSiteValidationSchema } from "../utils/validation";
 import { Formik, Form } from "formik";
@@ -7,17 +6,12 @@ import { toast, ToastContainer } from "react-toastify";
 import { useState, useEffect } from "react";
 import { useAuth } from "../utils/auth";
 import { TbSend } from "react-icons/tb";
-import { IconContext } from "react-icons";
 import { MdAdd } from "react-icons/md";
-import { AiFillCloseCircle } from "react-icons/ai";
-import PasswordGenerator from "../components/PasswordGenerator";
 import AddCustomerModal from "../components/AddCustomerModal";
 
 export default function AddSite() {
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
-
-  // console.log(user. + " " + user.last_name)
 
   const [customers, setCustomers] = useState([]);
   const [customerModel, setCustomerModel] = useState(false);
@@ -124,9 +118,8 @@ export default function AddSite() {
   return (
     <>
       <Head>
-        <title>Add Site - Shine Afrika</title>
+        <title>Add Product - Shine Afrika</title>
       </Head>
-      {/* <Navbar /> */}
       <ToastContainer />
       <main className="pt-[70px] mx-5 md:mx-20 relative pb-6 min-h-screen">
         <section className="flex justify-between items-center">
@@ -159,8 +152,6 @@ export default function AddSite() {
             handleBlur,
             setFieldValue,
           }) => {
-            // setExpiredDate(values.last_paid)
-            // console.log(values)
             return (
               <Form className="my-5">
                 <div className="flex items-center gap-10 my-5">
@@ -175,6 +166,7 @@ export default function AddSite() {
                       type="text"
                       name="website_link"
                       placeholder="Website"
+                      id="website_link"
                       className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-full"
                       onChange={handleChange("website_link")}
                       onBlur={handleBlur("website_link")}
@@ -208,6 +200,7 @@ export default function AddSite() {
                   <input
                     type="text"
                     name="name"
+                    id="name"
                     placeholder="Name"
                     className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
                     onChange={handleChange("name")}
@@ -225,7 +218,7 @@ export default function AddSite() {
                   <div className="flex justify-between items-center gap-2 w-8/12">
                     <select
                       name=""
-                      id=""
+                      id="contact_person"
                       className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
                       onChange={(e) => {
                         setFieldValue("contact_person", e.target.value);
@@ -265,6 +258,7 @@ export default function AddSite() {
                   <div className="w-8/12 md:w-8/12 relative outline outline-1 outline-[#121212] rounded flex">
                     <input
                       type="tel"
+                      id="telephone_number"
                       name="telephone_number"
                       placeholder="Telephone number"
                       className=" py-2 px-2 ml-16 bg-transparent flex-grow focus:outline-none"
@@ -290,6 +284,7 @@ export default function AddSite() {
                     <input
                       type="email"
                       name="email"
+                      id="email"
                       placeholder="Email"
                       className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-full"
                       onChange={handleChange("email")}
@@ -322,6 +317,7 @@ export default function AddSite() {
                   </label>
                   <input
                     type="date"
+                    id="last_paid"
                     name="date"
                     className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
                     onChange={handleChange("last_paid")}
@@ -339,6 +335,7 @@ export default function AddSite() {
                   <input
                     type="date"
                     name="date"
+                    id="expiry_date"
                     className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
                     onChange={handleChange("expiry_date")}
                     onBlur={handleBlur("expiry_date")}

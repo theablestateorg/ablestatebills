@@ -68,6 +68,7 @@ export default function Home() {
                     <input
                       type="email"
                       name="email"
+                      id="email"
                       className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full"
                       placeholder="enter email"
                       onChange={handleChange("email")}
@@ -101,6 +102,7 @@ export default function Home() {
                     <input
                       type="password"
                       name="password"
+                      id="password"
                       className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full"
                       placeholder="enter password"
                       onChange={handleChange("password")}
@@ -155,9 +157,7 @@ export default function Home() {
 }
 
 export const getServerSideProps = async ({ req }) => {
-
   const { user } = await supabase.auth.api.getUserByCookie(req)
-
   if(user){
     return {
       redirect: {

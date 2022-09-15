@@ -207,6 +207,7 @@ export default function Site({product}) {
                             <input
                               type="text"
                               name="name"
+                              id="name"
                               placeholder="name"
                               className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
                               onChange={handleChange("name")}
@@ -221,7 +222,7 @@ export default function Site({product}) {
                             <div className="flex justify-between items-center gap-2 w-full">
                     <select
                       name=""
-                      id=""
+                      id="contact_person"
                       className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
                       onChange={(e) => {
                         setFieldValue("contact_person", e.target.value);
@@ -255,6 +256,7 @@ export default function Site({product}) {
                             <label htmlFor="telephone_number">Telephone</label>
                             <input
                               type="tel"
+                              id="telephone_number"
                               name="telephone_number"
                               placeholder="telephone number"
                               className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
@@ -268,6 +270,7 @@ export default function Site({product}) {
                             <input
                               type="email"
                               name="email"
+                              id="email"
                               placeholder="Email"
                               className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
                               onChange={handleChange("email")}

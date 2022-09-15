@@ -1,6 +1,4 @@
 import Head from "next/head";
-import Navbar from "../components/nav";
-import Help from "../components/Help";
 import { useRouter } from "next/router";
 import { MdAdd, MdSearch } from "react-icons/md";
 import { FaSort } from "react-icons/fa";
@@ -23,8 +21,6 @@ export default function Home({ websites, customers }) {
   const [sortBy, setSortBy] = useState("");
   const checkbox = useRef()
   const { user } = useAuth();
-
-  console.log(customers)
 
   websites = websites
     .filter((website) =>
@@ -71,11 +67,8 @@ export default function Home({ websites, customers }) {
   return (
     <>
       <Head>
-        <title>Shine Afrika</title>
+        <title>Dashboard - Shine Afrika</title>
       </Head>
-      {/* <Navbar /> */}
-      {/* <Help /> */}
-
       <ToastContainer />
 
       <main className="pt-[70px] mx-3 md:mx-16 relative pb-6 min-h-screen">
@@ -238,7 +231,7 @@ export default function Home({ websites, customers }) {
                       {moment(new Date(site.expiry_date)).format("DD-MM-YYYY")}
                     </span>
                   </td>
-                  <td className="py-2 text-left pl-3">{customers.filter((customer => customer.id === site.contact_person)).map((customer) => <p>{customer.first_name+ " " + customer.last_name}</p>)}</td>
+                  <td className="py-2 text-left pl-3">{customers.filter((customer => customer.id === site.contact_person)).map((customer, index) => <p key={index}>{customer.first_name+ " " + customer.last_name}</p>)}</td>
                   <td className="py-2 text-left pl-3">
                     {`+256` + site.telephone_number}
                   </td>

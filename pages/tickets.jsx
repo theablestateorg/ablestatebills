@@ -5,7 +5,6 @@ import { useState, useEffect, Fragment } from "react";
 import { AiOutlineFileDone } from 'react-icons/ai'
 
 function Tickets({ tickets, customers }) {
-  console.log(customers)
   return (
     <>
       <Head>

@@ -2,6 +2,7 @@ import { supabase } from "../utils/supabase";
 import { useAuth } from "../utils/auth";
 import Help from "../components/Help";
 import Navbar from "./nav";
+import { toast, ToastContainer } from "react-toastify";
 
 function Layout({ children }) {
 
@@ -11,7 +12,7 @@ function Layout({ children }) {
     <>
       <Navbar />
       {children}
-      {user && <Help />}
+      {user && <Help toast={toast} />}
     </>
   )
 

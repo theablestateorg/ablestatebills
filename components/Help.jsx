@@ -11,8 +11,10 @@ import { AiOutlineConsoleSql } from "react-icons/ai";
 import { IoMdClose } from 'react-icons/io'
 import { Transition } from '@tailwindui/react'
 import Select from "./SelectBox";
+// import { toast, ToastContainer } from "react-toastify";
 
-function Help() {
+
+function Help({ toast }) {
   const { user, setLoading } = useAuth();
   const [chatBox, setChatBox] = useState(false);
   const [faqs, setFaqs] = useState(true)
@@ -62,6 +64,10 @@ function Help() {
   }, []);
 
   const handleSubmit = async () => {
+    if(status === "" || priority === ""){
+      toast.error(`Category and priority are required`, { position: "top-center" });
+      return;
+    }
     const { data, error } = await supabase.from("tickets").insert([
       {
         ...ticket,
@@ -71,11 +77,13 @@ function Help() {
     ]);
 
     if (data) {
+      console.log(data)
       const { error } = await supabase.from("notifications").insert([
         {
           notification: `sent a message`,
           description: `${data[0].message}`,
           from: `${user.first_name}`,
+          ticket_id: data[0].id,
         },
       ]);
       if (error) {

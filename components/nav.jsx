@@ -147,25 +147,6 @@ export default function Navbar() {
               </li>
             </ul>
             </Transition>
-            {/* {showMenu && (
-              <ul className="bg-white absolute z-10 outline outline-1 outline-[#E4E6E5] top-[60px] right-0 py-2">
-              <Link href="/profile">
-                <li className="w-full p-2 px-12 mb-1 hover:bg-[#ececec]">
-                  Profile
-                </li>
-              </Link>
-              <li className="w-full p-2 px-12 hover:bg-[#ececec]">
-                <button
-                  onClick={() => {
-                    signOut();
-                    Router.push("/login");
-                  }}
-                >
-                  Logout
-                </button>
-              </li>
-            </ul>
-            )} */}
           </div>
         </div>
       </div>

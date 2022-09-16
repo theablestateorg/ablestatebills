@@ -69,7 +69,7 @@ function Notifications({ notify, notifications, setNotifications }) {
         </div>
       </Transition>
       <Transition
-          show={notify && notifications.length === 0 > 0}
+          show={notify && notifications.length === 0}
           enter="transition ease-in-out duration-300"
           enterFrom="opacity-0"
           enterTo="opacity-100"

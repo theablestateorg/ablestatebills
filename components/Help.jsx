@@ -51,6 +51,7 @@ function Help({ toast }) {
   };
 
   useEffect(() => {
+    getManagers()
     const mySubscription = supabase
       .from("tickets")
       .on("*", (payload) => {
@@ -62,6 +63,15 @@ function Help({ toast }) {
 
     return () => supabase.removeSubscription(mySubscription);
   }, []);
+
+  const [managers, setManagers] = useState([])
+  const getManagers = async () => {
+    const { data } = await supabase
+      .from("profiles")
+      .select("id")
+      .in('role', ['manager', 'admin'])
+    setManagers(() => data.map((manager) => manager.id));
+  };
 
   const handleSubmit = async () => {
     if(status === "" || priority === ""){
@@ -77,13 +87,13 @@ function Help({ toast }) {
     ]);
 
     if (data) {
-      console.log(data)
       const { error } = await supabase.from("notifications").insert([
         {
           notification: `sent a message`,
           description: `${data[0].message}`,
-          from: `${user.first_name}`,
+          actor: `${user.first_name}`,
           ticket_id: data[0].id,
+          notifiers: managers
         },
       ]);
       if (error) {
@@ -111,6 +121,9 @@ function Help({ toast }) {
       msg.current.scrollTop = msg.current.scrollHeight;
     }
   }
+  useEffect(() => {
+    updateScroll()
+  }, [msg.current])
 
   const scrollToBottom = () => {
     if (!msg.current) return;
@@ -151,7 +164,7 @@ function Help({ toast }) {
           { ticket.message.length>0 && faqs &&
             <div className="w-full  outline flex justify-center items-center">
               <p
-                className="bg-white m-2 absolute shadow-lg bottom-24 z-20 text-gray-600 outline outline-1 p-3 rounded-lg text-sm"
+                className="bg-white m-2 absolute shadow-lg bottom-24 z-20 text-gray-600 outline outline-1 outline-red-400 p-3 rounded-lg text-sm"
                 onClick={() => scrollToBottom()}
               >
                 <i
@@ -172,7 +185,7 @@ function Help({ toast }) {
             </span>
           </p>
           <div
-            className="w-full flex flex-col h-48 overflow-y-scroll pb-10 bg-white"
+            className="w-full flex flex-col h-72 overflow-y-scroll pb-10 bg-white"
             id="messages"
             ref={msg}
           >
@@ -202,20 +215,6 @@ function Help({ toast }) {
             />
             <div className="flex justify-between p -1 mt-1">
               <div className="flex gap-2 text-sm">
-                {/* <select
-                  name=""
-                  id=""
-                  className="text-xs bg-gray-100 rounded-lg px-1 pr-1"
-                  onChange={(e) =>
-                    setTicket({ ...ticket, category: e.target.value })
-                  }
-                  value={ticket.category}
-                >
-                  <option value="">category</option>
-                  <option value="sells">Sells</option>
-                  <option value="technical">Technical</option>
-                  <option value="customer care">Customer Care</option>
-                </select> */}
                 <Select
                   options={[
                     { id: 1, value: "", name: "Category" },
@@ -239,20 +238,6 @@ function Help({ toast }) {
                   status={priority}
                   setStatus={setPriority}
                 />
-                {/* <select
-                  name=""
-                  id=""
-                  className="text-xs bg-gray-100 rounded-lg px-1 pr-1"
-                  onChange={(e) =>
-                    setTicket({ ...ticket, agency: e.target.value })
-                  }
-                  value={ticket.agency}
-                >
-                  <option value="">Priority</option>
-                  <option value="low">Low</option>
-                  <option value="mid">Mid</option>
-                  <option value="high">High</option>
-                </select> */}
               </div>
               <button
                 className={`${
@@ -267,7 +252,7 @@ function Help({ toast }) {
             </div>
           </div>
         </div>
-            </Transition>
+        </Transition>
       
     </div>
   );

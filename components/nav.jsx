@@ -43,15 +43,17 @@ export default function Navbar() {
     return () => supabase.removeSubscription(navSubscription);
   }, [user, loading]);
 
-  console.log(loading)
-
   
 
   const getNotifications = async () => {
-    const { data, error } = await supabase.from("notifications").select("*").order("created_at", { ascending: false });
+    const { data, error } = await supabase
+      .from("notifications")
+      .select("*")
+      .order("created_at", { ascending: false });
 
     if (data) {
-      setNotifications(data);
+      const myNotifications = data.filter((note) => note.notifiers.includes(user.id))
+      setNotifications(myNotifications);
     }
     if (error) {
       console.log(error);

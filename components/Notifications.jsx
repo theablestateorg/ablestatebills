@@ -4,8 +4,22 @@ import { supabase } from "../utils/supabase";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { IoNotificationsOffCircle } from 'react-icons/io5'
 import { Transition } from '@tailwindui/react'
+import { useRouter } from "next/router";
 
 function Notifications({ notify, notifications, setNotifications }) {
+  const router = useRouter()
+  const { user, setLoading } = useAuth()
+
+  const seenNotification = async (ticket_id, id, notifiers) => {
+    const list = notifiers.filter(note => note !== user.id)
+    const { data, error } = await supabase
+      .from("notifications")
+      .update({ notifiers: list })
+      .match({ id: id })
+    router.push(`/tickets/${ticket_id}`)
+    setLoading(true)
+  }
+
   return (
     <>
       {notifications && notifications.length > 0 && (
@@ -37,12 +51,14 @@ function Notifications({ notify, notifications, setNotifications }) {
           <div className="overflow-y-scroll flex-grow">
             {notifications.map((notification, index) => (
               <Fragment key={index}>
-                <div className="grid grid-cols-5 gap-2 my-2 px-2">
+                <div className="grid grid-cols-5 gap-2 my-2 px-2 hover:bg-gray-100"
+                  onClick={() => seenNotification(notification.ticket_id, notification.id, notification.notifiers)}
+                >
                   <div className="col-span-1 flex items-center justify-center h-16">
-                    <span className="w-12 h-12 rounded-full flex justify-center items-center font-bold bg-orange-300">{notification.from[0].toUpperCase()}</span>
+                    <span className="w-12 h-12 rounded-full flex justify-center items-center font-bold bg-orange-300">{notification.actor[0].toUpperCase()}</span>
                   </div>
                   <div className="col-span-4">
-                    <h1><span className="font-bold">{notification.from}</span> {notification.notification}</h1>
+                    <h1><span className="font-bold">{notification.actor}</span> {notification.notification}</h1>
                     <p className="text-gray-500 text-sm">{notification.description}</p>
                   </div>
                 </div>

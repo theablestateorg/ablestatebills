@@ -52,7 +52,7 @@ export default function Navbar() {
       .order("created_at", { ascending: false });
 
     if (data) {
-      const myNotifications = data.filter((note) => note.notifiers.includes(user.id))
+      const myNotifications = data.filter((note) => user && note.notifiers.includes(user.id))
       setNotifications(myNotifications);
     }
     if (error) {

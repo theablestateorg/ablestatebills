@@ -13,7 +13,7 @@ import { Transition } from '@tailwindui/react'
 import Select from "./SelectBox";
 
 function Help() {
-  const { user } = useAuth();
+  const { user, setLoading } = useAuth();
   const [chatBox, setChatBox] = useState(false);
   const [faqs, setFaqs] = useState(true)
   const [ticket, setTicket] = useState({
@@ -83,6 +83,7 @@ function Help() {
       }
       setReload(!reload);
       updateScroll();
+      setLoading(true)
     }
     if (error) {
       console.log(error);
@@ -98,8 +99,6 @@ function Help() {
   };
 
   function updateScroll() {
-    // const element = document.getElementById("messages");
-    // element.scrollTop = element.scrollHeight;
     if (msg.current) {
       msg.current.scrollTop = msg.current.scrollHeight;
     }
@@ -107,7 +106,6 @@ function Help() {
 
   const scrollToBottom = () => {
     if (!msg.current) return;
-    // console.log(msg.current.clientHeight + 1)
     msg.current.scrollTop = msg.current.scrollHeight;
   };
 

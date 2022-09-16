@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Fragment } from "react";
 import { useAuth } from "../utils/auth";
 import { supabase } from "../utils/supabase";
 import { IoMdNotificationsOutline } from "react-icons/io";
@@ -36,8 +36,8 @@ function Notifications({ notify, notifications, setNotifications }) {
           </div>
           <div className="overflow-y-scroll flex-grow">
             {notifications.map((notification, index) => (
-              <>
-                <div className="grid grid-cols-5 gap-2 my-2 px-2" key={index}>
+              <Fragment key={index}>
+                <div className="grid grid-cols-5 gap-2 my-2 px-2">
                   <div className="col-span-1 flex items-center justify-center h-16">
                     <span className="w-12 h-12 rounded-full flex justify-center items-center font-bold bg-orange-300">{notification.from[0].toUpperCase()}</span>
                   </div>
@@ -47,7 +47,7 @@ function Notifications({ notify, notifications, setNotifications }) {
                   </div>
                 </div>
                 {notifications.length !== (index + 1) && <hr />}
-              </>
+              </Fragment>
             ))}
           </div>
         </div>

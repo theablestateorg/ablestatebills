@@ -8,8 +8,6 @@ function Select({ options, status, setStatus, initialLabel, size }) {
   // click outside to close
   if (show === true) {
     window.onclick = function (event) {
-      console.log(show)
-      console.log("clicked")
       if (!event.target.matches(".dialog")) {
         if (event.target.matches(".dialog2")) {
         } else {
@@ -49,7 +47,10 @@ function Select({ options, status, setStatus, initialLabel, size }) {
                 label.id !== 1 &&
                 "bg-[#CA3011] hover:bg-[#CA3011] text-white"
               } ${label.id === 1 && "text-gray-400"} `}
-              onClick={() => setStatus(label.value)}
+              onClick={() => {
+                setStatus(label.value)
+                setShow(false)
+              }}
               key={label.id}
             >
               {label.name}

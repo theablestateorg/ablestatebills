@@ -44,8 +44,6 @@ export default function Dashboard() {
     setProfiles(data);
   };
 
-  // console.log(profiles)
-
   return (
     <>
       <Head>

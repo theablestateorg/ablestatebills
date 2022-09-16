@@ -18,7 +18,7 @@ export default function Navbar() {
   const [avatar, setAvatar] = useState("");
   const [notifications, setNotifications] = useState([]);
   const router = useRouter();
-  const { signOut, user } = useAuth();
+  const { signOut, user, loading, setLoading } = useAuth();
 
   useEffect(() => {
     try {
@@ -38,8 +38,12 @@ export default function Navbar() {
       })
       .subscribe();
 
+    setLoading(false)
+
     return () => supabase.removeSubscription(navSubscription);
-  }, []);
+  }, [user, loading]);
+
+  console.log(loading)
 
   
 

@@ -5,13 +5,10 @@ import { supabase } from "../utils/supabase";
 import {
   MdOutlineClose,
   MdOutlineArrowDownward,
-  MdOutlineKeyboardArrowUp,
 } from "react-icons/md";
-import { AiOutlineConsoleSql } from "react-icons/ai";
 import { IoMdClose } from 'react-icons/io'
 import { Transition } from '@tailwindui/react'
 import Select from "./SelectBox";
-// import { toast, ToastContainer } from "react-toastify";
 
 
 function Help({ toast }) {

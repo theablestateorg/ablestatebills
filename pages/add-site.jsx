@@ -14,6 +14,9 @@ export default function AddSite() {
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
   const matches = useMediaQuery("(min-width: 800px)");
+  const tablet = useMediaQuery("(max-width: 1000px)");
+
+  console.log(tablet)
 
   const [customers, setCustomers] = useState([]);
   const [customerModel, setCustomerModel] = useState(false);
@@ -245,7 +248,7 @@ export default function AddSite() {
                       onClick={() => setCustomerModel(true)}
                     >
                       <MdAdd />
-                      {matches && "Add Customer"}
+                      {tablet && matches ? "Add" : matches ? "Add Customer" : ""}
                     </button>
                     {customerModel && <AddCustomerModal loading={loading} setCustomerModel={setCustomerModel} addNewCustomer={addNewCustomer} password={password} setPassword={setPassword} />}
                   </div>

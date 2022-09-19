@@ -1,7 +1,7 @@
 import Head from "next/head";
 import TicketCard from "../components/TicketCard";
 import { supabase } from "../utils/supabase";
-import { useState, useEffect, Fragment } from "react";
+import { Fragment } from "react";
 import { AiOutlineFileDone } from 'react-icons/ai'
 
 function Tickets({ tickets, customers }) {

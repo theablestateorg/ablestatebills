@@ -10,8 +10,10 @@ import Notifications from "./Notifications";
 import { downloadFile } from "../utils/getImages";
 import ActiveLink from "./ActiveLink";
 import { Transition } from '@tailwindui/react'
+import useMediaQuery from "../hooks/useMediaQuery";
 
 export default function Navbar() {
+  const tablet = useMediaQuery("(max-width: 1000px)");
   const [showMenu, setShowMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [notify, setNotify] = useState(false);
@@ -85,7 +87,7 @@ export default function Navbar() {
         </div>
         <ul className={`${navStyles.navMenu} h-[70px] items-center`}>
           <ActiveLink name={"Dashboard"} href={"/"} />
-          <ActiveLink name={"Add Product"} href={"/add-site"} />
+          <ActiveLink name={tablet ? "Add" : "Add Product"} href={"/add-site"} />
           <ActiveLink name={"Tickets"} href={"/tickets"} />
           <ActiveLink name={"Logs"} href={"/logs"} />
         </ul>

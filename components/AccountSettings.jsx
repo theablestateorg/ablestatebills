@@ -53,11 +53,11 @@ function AccountSettings({ user, avatar }) {
               name="signUpForm"
             >
               <div className="mb-5">
-                <div className={`w-16 h-16 ${!avatar && "bg-[#CA3011]"} overflow-hidden flex items-center justify-center relative dialog cursor-pointer mb-5`}>
+                <div className={`w-20 h-20 overflow-hidden dialog cursor-pointer mb-5`}>
                 {avatar ? (
               <img src={avatar} alt="profile" />
             ) : (
-              <span className="text-white font-bold">
+              <span className="text-white font-bold bg-[#CA3011] flex items-center justify-center relative w-20 h-20">
                 {user?.user_metadata.first_name[0].toUpperCase()}
                 {user?.user_metadata.last_name[0].toUpperCase()}
               </span>

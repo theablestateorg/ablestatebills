@@ -1,10 +1,8 @@
 import Head from "next/head";
 import Navbar from "../components/nav";
 import { supabase } from "../utils/supabase";
-import { Form, Formik } from "formik";
 import { ToastContainer, toast } from "react-toastify";
 import { useState, useEffect } from "react";
-import { MdEdit, MdOutlineMail } from "react-icons/md";
 import AccountSettings from "../components/AccountSettings";
 import Password from "../components/Password";
 import Footer from "../components/Footer";
@@ -20,7 +18,6 @@ export default function Dashboard() {
   const matches = useMediaQuery("(min-width: 800px)");
 
   useEffect(() => {
-    getProfile()
     try {
       downloadFile(user.avatar_url.substring(8), "avatars")
         .then((data) => setAvatar(data.avatar_url))
@@ -32,16 +29,6 @@ export default function Dashboard() {
 
   const handleSubmit = async (event, values) => {
     event.preventDefault();
-  };
-
-  const getProfile = async () => {
-    const { data } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", user.id)
-      .single();
-
-    setProfiles(data);
   };
 
   return (
@@ -57,11 +44,11 @@ export default function Dashboard() {
         </section>
         <div className="flex flex-col md:flex-row flex-grow">
           <section className={`mb-5 w-full md:w-3/12 ${!matches && "border-b-2"} md:border-r-2 md:mr-5 py-3 flex flex-col items-center`}>
-            <div className={`w-16 h-16 ${!avatar && "bg-[#CA3011]"} rounded-full flex items-center justify-center relative dialog cursor-pointer overflow-hidden`}>
+            <div className={`w-16 h-16 rounded-full relative dialog cursor-pointer overflow-hidden`}>
             {avatar ? (
               <img src={avatar} alt="profile" />
             ) : (
-              <span className="text-white font-bold">
+              <span className="text-white font-bold flex items-center justify-center bg-[#CA3011] w-16 h-16">
                 {user?.user_metadata.first_name[0].toUpperCase()}
                 {user?.user_metadata.last_name[0].toUpperCase()}
               </span>
@@ -89,9 +76,9 @@ export default function Dashboard() {
 }
 
 export const getServerSideProps = async ({ req }) => {
-  const { user } = await supabase.auth.api.getUserByCookie(req);
+  const { user: person } = await supabase.auth.api.getUserByCookie(req);
 
-  if (!user) {
+  if (!person) {
     return {
       redirect: {
         permanent: false,

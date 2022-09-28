@@ -4,6 +4,7 @@ import { supabase } from "../utils/supabase";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import useMediaQuery from "../hooks/useMediaQuery";
+import { BsFillCameraFill } from 'react-icons/bs'
 
 function AccountSettings({ user, avatar }) {
   const [loading, setLoading] = useState(false);
@@ -52,18 +53,29 @@ function AccountSettings({ user, avatar }) {
               className="my-5 flex-grow py-5 md:px-10"
               name="signUpForm"
             >
-              <div className="mb-5">
-                <div className={`w-20 h-20 overflow-hidden dialog cursor-pointer mb-5`}>
-                {avatar ? (
-              <img src={avatar} alt="profile" />
-            ) : (
-              <span className="text-white font-bold bg-[#CA3011] flex items-center justify-center relative w-20 h-20">
-                {user?.user_metadata.first_name[0].toUpperCase()}
-                {user?.user_metadata.last_name[0].toUpperCase()}
-              </span>
-            )}
+              <div className="mb-5 w-36 h-36 rounded-lg overflow-hidden relative flex justify-center">
+                <div className={`w-36 h-36 overflow-hidden dialog cursor-pointer mb-5`}>
+                  {avatar ? (
+                    <img src={avatar} alt="profile" />
+                  ) : (
+                    <span className="text-white font-bold bg-[#CA3011] flex items-center justify-center relative w-36 h-36">
+                      {user?.user_metadata.first_name[0].toUpperCase()}
+                      {user?.user_metadata.last_name[0].toUpperCase()}
+                    </span>
+                  )}
                 </div>
-                <input type="file" onChange={(event) => setImg(event.target.files[0])} />
+                <label htmlFor="profile-upload" className="absolute bottom-1 bg-white bg-opacity-50 p-1 text-sm text-white rounded-full z-10 cursor-pointer">
+                  <span className="flex gap-1 justify-center items-center">
+                    <BsFillCameraFill /> Change photo
+                  </span>
+                  <input className="hidden" id="profile-upload" type="file" onChange={(event) => setImg(event.target.files[0])} />
+                </label>
+                <label htmlFor="" className="absolute bottom-1 bg-white bg-opacity-10 p-1 text-sm text-white rounded-full blur-sm">
+                  <span className="flex gap-1 justify-center items-center">
+                    <BsFillCameraFill /> Change photo
+                  </span>
+                  <input className="hidden" type="file" onChange={(event) => setImg(event.target.files[0])} />
+                </label>
               </div>
               <div className="flex flex-col md:flex-row justify-between md:items-center gap-5">
                 <div className="w-full md:w-6/12">

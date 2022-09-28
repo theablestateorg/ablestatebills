@@ -2,7 +2,7 @@ import { AiOutlineCopy } from 'react-icons/ai'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
-function PasswordGenerator({ password, setPassword}) {
+function PasswordGenerator({ password, setPassword, resize=false}) {
   console.log(password)
     const handleGeneratePassword = () => {
         setPassword(createPassword())
@@ -42,9 +42,9 @@ function PasswordGenerator({ password, setPassword}) {
 
 
   return (
-    <div>
-        <label htmlFor="">Password</label>
-      <div className="my-2 flex gap-2 justify-between">
+    <div className={`${resize && "flex items-center gap-10 my-5"}`}>
+        <label htmlFor="" className={`${resize && "text-xl w-4/12 md:w-2/12"}`}>Password</label>
+      <div className={`my-2 flex gap-2 justify-between ${resize && "w-8/12 md:w-8/12"}`}>
       <div className='outline outline-1 outline-black w-full bg-blue-50 flex justify-between items-center px-5 py-2'>
           <h3 className='password-h3'>{password}</h3>
           <button type='button' className='py-2' onClick={handleCopyPassword}>

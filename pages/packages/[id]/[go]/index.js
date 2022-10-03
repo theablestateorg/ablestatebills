@@ -26,11 +26,11 @@ function Go() {
     setRun(true);
     event.preventDefault();
     // console.log(searched);
-    await axios.post("http://localhost:3000/api/check-domain",
+    await axios.post("/api/check-domain",
     {
       "domainName": `${searched}${domainExt}`
     }).then((res) => {
-      console.log(res.data)
+      // console.log(res.data)
       setAvailability(res.data)
     })
   };

@@ -5,6 +5,7 @@ import { FaSearch } from "react-icons/fa";
 import Starter from "../../../../components/Starter";
 import HelpDeck from "../../../../components/HelpDeck";
 import { CKAirtel, CKMtn } from "../../../../components/ck";
+import { Formik, Form } from 'formik'
 
 function Checkout() {
   const router = useRouter();
@@ -15,13 +16,8 @@ function Checkout() {
   );
 
   const [searched, setSearched] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState("")
   const [run, setRun] = useState(false);
-
-  const handleSearch = (event) => {
-    setRun(true);
-    event.preventDefault();
-    // console.log(searched);
-  };
 
   const [cart, setCart] = useState([]);
 
@@ -30,6 +26,12 @@ function Checkout() {
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [complete, setComplete] = useState(null);
 
+  const handleSubmit = async (event, values, resetForm) => {
+    event.preventDefault();
+    console.log(values)
+
+  }
+
   return (
     <div>
       <PackageNav />
@@ -37,9 +39,8 @@ function Checkout() {
       <main
         className={`pt-[70px] mx-5 md:mx-20 relative pb-6 min-h-screen gap-10 `}
       >
-        <section>
-          <h1 className="font-medium text-xl mt-5 mb-5">Payment</h1>
-          <div className="">
+        <h1 className="font-medium text-xl mt-5 mb-5">Payment</h1>
+                <div className="">
             <div className="flex gap-5">
               <p>Amount: </p>
               <p className="font-bold">{go}</p>
@@ -55,6 +56,7 @@ function Checkout() {
           </div>
 
           <h3 className="mt-10 text-xl">Payment is easy, just like 1, 2, 3.</h3>
+
           <section className="mt-5">
             <div className="flex gap-2">
               <div className="bg-black p-1 w-5 h-5 text-white rounded-full text-xs flex justify-center items-center">
@@ -115,6 +117,9 @@ function Checkout() {
                       id="number"
                       className="outline outline-1 px-2 py-1 bg-transparent"
                       placeholder="Enter phone Number"
+                      onChange={({target}) => setPhoneNumber(target.value)}
+                      value={phoneNumber}
+                      required
                     />
                   </div>
                 </>
@@ -133,7 +138,18 @@ function Checkout() {
               {paymentMethod != null && (
                 <div className="flex justify-end">
                   <button className="text-white bg-[#121212] px-2 py-1"
-                  onClick={() => setComplete(true)}
+                  onClick={async () => {
+                    if(paymentMethod === "1"){
+                      const results = await axios.post("/send-token", {
+                          phone: phoneNumber
+                      })
+                      .then(res => setComplete(true))
+                      .catch(error => console.log(error))
+                    }else {
+                      setComplete(true)
+                    }
+                    
+                  }}
                   >
                     Next
                   </button>
@@ -141,8 +157,25 @@ function Checkout() {
               )}
             </div>
           </section>
-
-          <section className="mt-2">
+        <Formik
+          initialValues={{ amount: go, phone: "", secret_code: "", reason: "" }}
+        >
+          {({
+            values,
+            errors,
+            touched,
+            isValid,
+            dirty,
+            handleChange,
+            handleBlur,
+            resetForm
+          }) => {
+            return (
+              <Form
+                onSubmit={(event) => handleSubmit(event, values, resetForm)}
+                className="mt-2"
+                name="loginForm"
+              >
             <div className="flex gap-2">
               <div className="bg-black p-1 w-5 h-5 text-white rounded-full text-xs flex justify-center items-center">
                 3
@@ -156,52 +189,55 @@ function Checkout() {
                 <label htmlFor="number">Amount</label>
                 <input
                   type="text"
-                  name=""
-                  id="number"
+                  name="amount"
+                  id="amount"
                   className="outline outline-1 px-2 py-1 bg-transparent"
                   value={go}
                 />
               </div>
               <div className="flex flex-col my-2">
-                <label htmlFor="number">Phone Number</label>
+                <label htmlFor="phone">Phone Number</label>
                 <input
-                  type="text"
-                  name=""
-                  id="number"
+                  type="tel"
+                  name="phone"
+                  id="phone"
                   className="outline outline-1 px-2 py-1 bg-transparent"
                   placeholder="Enter phone Number"
+                  onChange={handleChange("phone")}
                 />
               </div>
               <div className="flex flex-col my-2">
-                <label htmlFor="number">Secret Code</label>
+                <label htmlFor="secret_code">Secret Code</label>
                 <input
                   type="text"
-                  name=""
-                  id="number"
+                  name="secret_code"
+                  id="secret_code"
                   className="outline outline-1 px-2 py-1 bg-transparent"
                   placeholder="Enter secret code"
+                  onChange={handleChange("secret_code")}
                 />
               </div>
               <div className="flex flex-col my-2">
-                <label htmlFor="number">Reason</label>
+                <label htmlFor="reason">Reason</label>
                 <input
                   type="text"
-                  name=""
-                  id="number"
+                  name="reason"
+                  id="reason"
                   className="outline outline-1 px-2 py-1 bg-transparent"
                   placeholder="Enter reason"
+                  onChange={handleChange("reason")}
                 />
               </div>
               <div className="flex justify-end">
-                <button className="bg-[#121212] text-white p-1 px-2 mt-5">
-                            Make Payment
-                          </button>
+                <button type="submit" className="bg-[#121212] text-white p-1 px-2 mt-5">
+                  Make Payment
+                </button>
               </div>
             </div>
             }
-          </section>
-
-        </section>
+              </Form>
+            )}}
+          </Formik>
       </main>
     </div>
   );

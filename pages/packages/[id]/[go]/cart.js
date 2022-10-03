@@ -6,11 +6,11 @@ import Starter from "../../../../components/Starter";
 import HelpDeck from "../../../../components/HelpDeck";
 import { useAuth } from "../../../../utils/auth";
 
-function go() {
+function Cart() {
   const router = useRouter();
   const { id, go, domain } = router.query;
 
-  const { user } = useAuth()
+  const { user } = useAuth();
 
   const packages = ["starter", "scaler", "stablizer"].filter(
     (pack) => pack !== id?.toLowerCase()
@@ -25,9 +25,9 @@ function go() {
     // console.log(searched);
   };
 
-  const [cart, setCart] = useState([])
+  const [cart, setCart] = useState([]);
 
-  const names = cart && cart.map(product => product.name)
+  const names = cart && cart.map((product) => product.name);
 
   return (
     <div>
@@ -45,16 +45,20 @@ function go() {
           </div>
 
           <div className="flex flex-col justify-center items-center mt-10 gap-3">
-            <button className="bg-[#ca3011] text-white p-1 px-2"
-            onClick={() => {
-              if(user){
-                Router.push(`/packages/${id}/${go}/checkout/?domain=${domain}`)
-              }else {
-                Router.push(`/packages/${id}/${go}/login/?domain=${domain}`)
-              }
-              
-            }}
-            >Order Now</button>
+            <button
+              className="bg-[#ca3011] text-white p-1 px-2"
+              onClick={() => {
+                if (user) {
+                  Router.push(
+                    `/packages/${id}/${go}/checkout/?domain=${domain}`
+                  );
+                } else {
+                  Router.push(`/packages/${id}/${go}/login/?domain=${domain}`);
+                }
+              }}
+            >
+              Order Now
+            </button>
             <button>clear cart</button>
           </div>
         </section>
@@ -63,4 +67,4 @@ function go() {
   );
 }
 
-export default go;
+export default Cart;

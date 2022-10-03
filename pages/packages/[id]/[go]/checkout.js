@@ -6,7 +6,7 @@ import Starter from "../../../../components/Starter";
 import HelpDeck from "../../../../components/HelpDeck";
 import { CKAirtel, CKMtn } from "../../../../components/ck";
 
-function go() {
+function Checkout() {
   const router = useRouter();
   const { id, go, domain } = router.query;
 
@@ -207,4 +207,4 @@ function go() {
   );
 }
 
-export default go;
+export default Checkout;

@@ -8,7 +8,7 @@ import HelpDeck from "../../../../components/HelpDeck";
 import axios from "axios";
 import moment from "moment/moment";
 
-function go() {
+function Go() {
   const router = useRouter();
   const { id, go } = router.query;
 
@@ -234,4 +234,4 @@ function go() {
   );
 }
 
-export default go;
+export default Go;

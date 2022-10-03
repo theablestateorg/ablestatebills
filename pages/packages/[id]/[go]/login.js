@@ -1,17 +1,28 @@
-import Head from "next/head";
-import { supabase } from "../utils/supabase";
-import { validationSchema } from "../utils/validation";
-import { Formik, Form } from "formik";
-import { toast, ToastContainer } from 'react-toastify'
-import Router from 'next/router'
-import { useState } from "react";
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState } from "react";
+import Router, { useRouter } from "next/router";
+import PackageNav from "../../../../components/PackageNav";
+import { FaSearch } from "react-icons/fa";
+import Starter from "../../../../components/Starter";
+import HelpDeck from "../../../../components/HelpDeck";
+import { useAuth } from "../../../../utils/auth";
 import Link from "next/link";
-import Footer from "../components/Footer";
+import { supabase } from "../../../../utils/supabase";
+import { Formik, Form } from "formik";
+import { validationSchema } from "../../../../utils/validation";
+import Footer from "../../../../components/Footer";
+import { CKLoader } from "../../../../components/ck";
 
-export default function Home({ prev }) {
-  const [ loading, setLoading ] = useState(false)
-  console.log(prev)
+function LoginFirst() {
+  const router = useRouter();
+  const { id, go, domain } = router.query;
+
+  const packages = ["starter", "scaler", "stablizer"].filter(
+    (pack) => pack !== id?.toLowerCase()
+  );
+
+  const [searched, setSearched] = useState(null);
+  const [loading, setLoading] = useState(false)
+  const [run, setRun] = useState(false);
 
   const handleSubmit = async (event, {email, password}, resetForm) => {
     event.preventDefault();
@@ -20,7 +31,7 @@ export default function Home({ prev }) {
       const {user,session, error} = await supabase.auth.signIn({ email: email, password })
       if(user){
         setLoading(false)
-        Router.push('/')
+        Router.push(`/packages/${id}/${go}/checkout/?domain=${domain}`)
       }
       if(error){
         setLoading(false)
@@ -34,15 +45,16 @@ export default function Home({ prev }) {
     resetForm({ email: "", password: "" })
 
   };
-  // console.log(Router)
+
+  const [cart, setCart] = useState([])
 
   return (
-    <>
-      <Head>
-        <title>Login - Shine Afrika</title>
-      </Head>
-      <ToastContainer />
-      <main className="w-screen h-screen flex justify-center items-center relative pb-6 min-h-screen">
+    <div>
+      <PackageNav />
+      <HelpDeck />
+      <main
+        className={`pt-[70px] mx-5 md:mx-20 relative pb-6 min-h-screen gap-10 `}
+      >
         <Formik
           initialValues={{ email: "", password: "" }}
           validationSchema={validationSchema}
@@ -60,10 +72,13 @@ export default function Home({ prev }) {
             return (
               <Form
                 onSubmit={(event) => handleSubmit(event, values, resetForm)}
-                className="bg-white mx-5 sm:mx-0 p-6 md:p-10 shadow"
+                className="mx-5 sm:mx-0 p-6 md:p-10"
                 name="loginForm"
               >
-                <h1 className="text-3xl font-bold text-center">Login</h1>
+                <div className="flex justify-between items-center">
+            <h1 className="font-medium text-xl mt-5">Login</h1>
+            <a href={`/packages/${id}/${go}/create-account/?domain=${domain}`} className="underline">or create account</a>
+          </div>
                 <div className="flex flex-col gap-2  my-2">
                   <label htmlFor="email">Email</label>
                   <div className="w-full">
@@ -71,7 +86,7 @@ export default function Home({ prev }) {
                       type="email"
                       name="email"
                       id="email"
-                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full"
+                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full bg-transparent"
                       placeholder="Enter email"
                       onChange={handleChange("email")}
                       onBlur={handleBlur("email")}
@@ -105,7 +120,7 @@ export default function Home({ prev }) {
                       type="password"
                       name="password"
                       id="password"
-                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full"
+                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full bg-transparent"
                       placeholder="Enter password"
                       onChange={handleChange("password")}
                       onBlur={handleBlur("password")}
@@ -133,47 +148,18 @@ export default function Home({ prev }) {
                   </div>
                 </div>
                 <button type="submit" disabled={!(isValid && dirty)} className="bg-[#1D1F20] text-white py-1 px-3 my-2 mt-4 hover:bg-[#292C2D] flex items-center cursor-pointer">
-                {loading && <svg className="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none"
-            viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-            <path className="opacity-75" fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-            </path>
-        </svg>}
+                {loading && CKLoader}
                   {loading ? "Loading" : "Login"}
                 </button>
-                <p className="cursor-point">Don&apos;t have an account? <Link href="/register">
-                  <span className="underline cursor-pointer">Sign Up</span>
-                  </Link></p>
-                <p className="cursor-point"><Link href="/forgot-password">
-                  <span className="underline cursor-pointer">Forgot Password?</span>
-                  </Link></p>
+                
               </Form>
             );
           }}
         </Formik>
         <Footer />
       </main>
-    </>
+    </div>
   );
 }
 
-export const getServerSideProps = async ({ req, resolvedUrl }) => {
-  const prev = resolvedUrl || null
-  const { user } = await supabase.auth.api.getUserByCookie(req)
-  if(user){
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/"
-      },
-      props: {},
-    }
-  }
-
-  return {
-    props: {
-      prev
-    }
-  }
-}
+export default LoginFirst;

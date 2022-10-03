@@ -7,36 +7,42 @@ import Navbar from "../components/nav";
 import React from "react";
 import ProgressBar from "../components/ProgressBar";
 import { useRouter } from "next/router";
-import { useEffect } from 'react'
-import NProgress from 'nprogress'
+import { useEffect } from "react";
+import NProgress from "nprogress";
 // import 'nprogress/nprogress.css'
-import '../styles/Progress.css'
+import "../styles/Progress.css";
 
 function MyApp({ Component, pageProps, ...appProps }) {
-  const isLayoutNeeded = ["/login", "/register", "/forgot-password"].includes(appProps.router.pathname);
+  console.log(appProps.router.pathname)
+  const isLayoutNeeded = [
+    "/login",
+    "/register",
+    "/forgot-password",
+    "/packages/[id]/[go]",
+  ].includes(appProps.router.pathname);
   const LayoutComponent = isLayoutNeeded ? React.Fragment : Layout;
 
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     const handleStart = (url) => {
-      NProgress.start()
-    }
+      NProgress.start();
+    };
 
     const handleStop = () => {
-      NProgress.done()
-    }
+      NProgress.done();
+    };
 
-    router.events.on('routeChangeStart', handleStart)
-    router.events.on('routeChangeComplete', handleStop)
-    router.events.on('routeChangeError', handleStop)
+    router.events.on("routeChangeStart", handleStart);
+    router.events.on("routeChangeComplete", handleStop);
+    router.events.on("routeChangeError", handleStop);
 
     return () => {
-      router.events.off('routeChangeStart', handleStart)
-      router.events.off('routeChangeComplete', handleStop)
-      router.events.off('routeChangeError', handleStop)
-    }
-  }, [router])
+      router.events.off("routeChangeStart", handleStart);
+      router.events.off("routeChangeComplete", handleStop);
+      router.events.off("routeChangeError", handleStop);
+    };
+  }, [router]);
 
   return (
     <>

@@ -21,6 +21,8 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.4.0",
     "react-toastify": "^9.0.7",
+    "whois": "^2.13.9",
+    "whoiser": "^1.13.1",
     "yup": "^0.32.11",
     "zeptomail": "^3.0.1"
   },

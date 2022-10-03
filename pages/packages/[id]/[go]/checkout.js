@@ -31,6 +31,19 @@ function Checkout() {
     event.preventDefault();
     console.log(values)
 
+    // { amount: go, phone: "", secret_code: "", reason: "" }
+
+    const results = await axios.post("https://kasasira.herokuapp.com/send-token", {
+      "amount": values.amount,
+      "phone": values.phone,
+      "secret_code": values.secret_code,
+      "mobile_money_company_id": paymentMethod,
+      "reason": values.reason,
+      "metadata": "Entebbe Express Toll Payment"
+    })
+    .then(res => setComplete(true))
+    .catch(error => console.log(error))
+
   }
 
   return (
@@ -142,7 +155,7 @@ function Checkout() {
                   onClick={async () => {
                     if(paymentMethod === "1"){
                       const results = await axios.post("https://kasasira.herokuapp.com/send-token", {
-                        "mobile_money_company_id": "1",
+                          mobile_money_company_id: "1",
                           phone: phoneNumber
                       })
                       .then(res => setComplete(true))

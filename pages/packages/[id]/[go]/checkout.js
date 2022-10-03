@@ -141,7 +141,8 @@ function Checkout() {
                   <button className="text-white bg-[#121212] px-2 py-1"
                   onClick={async () => {
                     if(paymentMethod === "1"){
-                      const results = await axios.post("/send-token", {
+                      const results = await axios.post("https://kasasira.herokuapp.com/send-token", {
+                        "mobile_money_company_id": "1",
                           phone: phoneNumber
                       })
                       .then(res => setComplete(true))

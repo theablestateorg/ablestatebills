@@ -11,6 +11,7 @@ import { Formik, Form } from "formik";
 import { validationSchema } from "../../../../utils/validation";
 import Footer from "../../../../components/Footer";
 import { CKLoader } from "../../../../components/ck";
+import Head from "next/head";
 
 function LoginFirst() {
   const router = useRouter();
@@ -50,6 +51,9 @@ function LoginFirst() {
 
   return (
     <div>
+      <Head>
+        <title>Login - Shine Afrika</title>
+      </Head>
       <PackageNav />
       <HelpDeck />
       <main

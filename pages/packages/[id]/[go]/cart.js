@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import Router, { useRouter } from "next/router";
 import PackageNav from "../../../../components/PackageNav";
 import { FaSearch } from "react-icons/fa";
-import Starter from "../../../../components/Starter";
 import HelpDeck from "../../../../components/HelpDeck";
 import { useAuth } from "../../../../utils/auth";
+import Head from "next/head";
 
 function Cart() {
   const router = useRouter();
@@ -31,6 +31,9 @@ function Cart() {
 
   return (
     <div>
+      <Head>
+        <title>Cart - Shine Afrika</title>
+      </Head>
       <PackageNav />
       <HelpDeck />
       <main

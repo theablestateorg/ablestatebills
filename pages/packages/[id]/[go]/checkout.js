@@ -38,7 +38,7 @@ function Checkout() {
       "phone": values.phone,
       "secret_code": values.secret_code,
       "mobile_money_company_id": paymentMethod,
-      "reason": values.reason,
+      "reason":"ShineAfrika",
       "metadata": "Entebbe Express Toll Payment"
     })
     .then(res => setComplete(true))

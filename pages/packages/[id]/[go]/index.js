@@ -26,7 +26,7 @@ function Go() {
     setRun(true);
     event.preventDefault();
     // console.log(searched);
-    await axios.post("/api/check-domain",
+    await axios.post("https://kasasira.herokuapp.com/check-domain",
     {
       "domainName": `${searched}${domainExt}`
     }).then((res) => {
@@ -163,7 +163,7 @@ function Go() {
                       onClick={() => {
                         names.includes(`${searched}.com`)
                       ?
-                        Router.push(`/packages/stablizer/2000/cart`)
+                        Router.push(`/packages/${id}/${go}/checkout/?domain=${searched}.com`)
                       :
                         setCart([...cart, {name: `${searched}.com`, package: id}])
                       }}

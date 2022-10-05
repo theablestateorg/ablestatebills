@@ -99,16 +99,16 @@ function Go() {
             :
             <div className="bg-white py-10 px-3 mt-10 shadow-sm">
               <h1 className="font-bold text-xl">{`${searched}${domainExt}`}</h1>
-              <span className="px-2 py-1 bg-[#cfe2ff] text-[#0d6efd] font-medium rounded-md mt-3">{availability?.availability}</span>
+              <span className="px-2 py-1 bg-[#cfe2ff] text-[#0d6efd] font-medium rounded-md mt-3">{availability? availability?.availability : "...loading"}</span>
 
               <div className="mt-2" onClick={() => {
                 names.includes(`${searched}.com`)
                 ?
                   Router.push(`/packages/${id}/${go}/cart/?domain=${searched}${domainExt}`)
                 :
-                  setCart([...cart, {name: `${searched}.com`, package: id}])
+                  setCart([...cart, {name: `${searched}${domainExt}`, package: id}])
               }}>
-                {names.includes(`${searched}.com`)
+                {names.includes(`${searched}${domainExt}`)
                 ?
                   <span className="bg-[#ca3011] text-white px-1 py-1 mt-2 cursor-pointer">View</span>
                 :
@@ -161,7 +161,7 @@ function Go() {
                       onClick={() => {
                         names.includes(`${searched}.com`)
                       ?
-                        Router.push(`/packages/${id}/${go}/checkout/?domain=${searched}.com`)
+                        Router.push(`/packages/${id}/${go}/cart/?domain=${searched}.com`)
                       :
                         setCart([...cart, {name: `${searched}.com`, package: id}])
                       }}
@@ -188,25 +188,22 @@ function Go() {
                     60,000
                   </td>
                   <td className="py-2 text-left pl-3">
-                    <span className="bg-[#6D6E70] text-white px-1"
-                      onClick={() => setCart([...cart, {name: `${searched}.org`, package: id}])}
-                    >Add to Cart</span>
-                  </td>
-                </tr>
-                <tr
-                  className={`border-b border-l-2 border-l-transparent hover:border-l-[#ca3011] cursor-pointer mb-10`}
-                >
-                  <td className="py-2 text-left pl-3">
-                    {searched}.ug
-                  </td>
-                  <td className="py-2 text-left pl-3 text-sm text-red-500">
-                    taken
-                  </td>
-                  <td className="py-2 text-left pl-3">
-                    160,000
-                  </td>
-                  <td className="py-2 text-left pl-3">
+                    <span className=" text-white px-1"
+                      onClick={() => {
+                        names.includes(`${searched}.org`)
+                      ?
+                        Router.push(`/packages/${id}/${go}/cart/?domain=${searched}.org`)
+                      :
+                        setCart([...cart, {name: `${searched}.org`, package: id}])
+                      }}
+                    >
+                      {names.includes(`${searched}.org`)
+                    ?
+                      <span className="bg-[#ca3011] text-white px-1">View</span>
+                    :
                     <span className="bg-[#6D6E70] text-white px-1">Add to Cart</span>
+                    }
+                    </span>
                   </td>
                 </tr>
                 </tbody>
@@ -216,11 +213,11 @@ function Go() {
           }
         </section>
         <section className="mt-10">
-              <h3 className="text-center mb-5">Our Packages</h3>
-              <div className="flex gap-5 justify-center">
-                <Packages myPackage={id} />
-              </div>
-            </section>
+          <h3 className="text-center mb-5">Our Packages</h3>
+          <div className="flex gap-5 justify-center">
+            <Packages myPackage={id} />
+          </div>
+        </section>
       </main>
     </div>
   );

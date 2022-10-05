@@ -5,7 +5,7 @@ function Scaler({selected}) {
     <div className={`w-72 text-center shadow-lg rounded-2xl bg-white ${selected && "outline outline-[#CA3011] shadow-2xl"}`}>
       <header className=" py-3">
         <h1 className="font-bold text-2xl text-center text-[#CA3011]">Scaler</h1>
-        <p className="text-center text-gray-600">Demand respect and authenticity </p>
+        <p className="text-center text-gray-600">Store more, accept more traffic</p>
 
         <h1 className="py-5 flex flex-col justify-center items-center">
           <div className='flex justify-center items-center'>

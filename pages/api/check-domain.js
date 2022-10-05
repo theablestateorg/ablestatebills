@@ -36,11 +36,13 @@ const handler = async (req, res) => {
       server_name: firstDomainWhois["Name Server"],
       registrar: firstDomainWhois.Registrar
     });
+    return
   } else if (domainAvailability === "available") {
     res.status(200).json({ 
       availability: domainAvailability,
       message: "This domain is available for registration right now"
     });
+    return
   }
 
   // console.log(domainAvailability)

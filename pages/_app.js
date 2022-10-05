@@ -20,6 +20,7 @@ function MyApp({ Component, pageProps, ...appProps }) {
     "/forgot-password",
     "/packages/[id]/[go]",
     "/404",
+    "/500",
   ].includes(appProps.router.pathname);
   const LayoutComponent = isLayoutNeeded ? React.Fragment : Layout;
 

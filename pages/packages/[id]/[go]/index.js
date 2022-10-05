@@ -97,23 +97,27 @@ function Go() {
               </div>
             </div>
             :
-            <div className="bg-white py-10 px-3 mt-10 shadow-sm">
-              <h1 className="font-bold text-xl">{`${searched}${domainExt}`}</h1>
-              <span className="px-2 py-1 bg-[#cfe2ff] text-[#0d6efd] font-medium rounded-md mt-3">{availability? availability?.availability : "...loading"}</span>
+            <div className="bg-white mt-10 outline outline-1 outline-gray-200 shadow-lg rounded-md pb-5">
+              <div className="font-medium text-2xl p-5 bg-[#f7f7f7] mb-5">{`${searched}${domainExt}`}</div>
+              <span className="px-2 py-1 bg-[#d2f4ea] text-[#198754]font-medium m-5">{availability? (availability?.availability).toUpperCase() : "...loading"}
+              </span>
 
-              <div className="mt-2" onClick={() => {
-                names.includes(`${searched}.com`)
-                ?
-                  Router.push(`/packages/${id}/${go}/cart/?domain=${searched}${domainExt}`)
-                :
-                  setCart([...cart, {name: `${searched}${domainExt}`, package: id}])
-              }}>
-                {names.includes(`${searched}${domainExt}`)
-                ?
-                  <span className="bg-[#ca3011] text-white px-1 py-1 mt-2 cursor-pointer">View</span>
-                :
-                <span className="bg-[#6D6E70] text-white px-1 py-1 mt-2 cursor-pointer">Add to Cart</span>
-                }
+              <div className="m-5 rounded-md bg-[#f8f9fa] p-5">
+                <p><b>{`${searched}${domainExt}`}</b> is available to register</p>
+                <div className="mt-5" onClick={() => {
+                  names.includes(`${searched}.com`)
+                  ?
+                    Router.push(`/packages/${id}/${go}/cart/?domain=${searched}${domainExt}`)
+                  :
+                    setCart([...cart, {name: `${searched}${domainExt}`, package: id}])
+                }}>
+                  {names.includes(`${searched}${domainExt}`)
+                  ?
+                    <span className="bg-[#ca3011] text-white px-1 py-1 mt-2 cursor-pointer">View</span>
+                  :
+                  <span className="outline outline-1 rounded-sm outline-[#6D6E70] text-[#6D6E70] px-3 py-1 mt-2 cursor-pointer hover:bg-[#6D6E70] hover:text-white font-medium">Add to Cart</span>
+                  }
+                </div>
               </div>
 
             </div>}

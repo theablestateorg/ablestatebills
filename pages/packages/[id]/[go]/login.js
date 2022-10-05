@@ -32,7 +32,12 @@ function LoginFirst() {
       const {user,session, error} = await supabase.auth.signIn({ email: email, password })
       if(user){
         setLoading(false)
-        Router.push(`/packages/${id}/${go}/checkout/?domain=${domain}`)
+        if(domain){
+          Router.push(`/packages/${id}/${go}/checkout/?domain=${domain}`)
+        } else {
+          Router.push(`/packages/${id}/${go}/`)
+        }
+        
       }
       if(error){
         setLoading(false)

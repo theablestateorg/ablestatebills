@@ -98,11 +98,16 @@ export default function PackageNav() {
           <select name="" id="" className="bg-transparent">
             <option value="ugx">UGX</option>
           </select>
-          <button className="text-white bg-[#121212] px-2 py-1"
+          <button className="px-2 py-1"
           onClick={() => {
             Router.push(`/packages/${id}/${go}/login/?domain=${domain}`)
           }}
           >Login</button>
+          <button className="text-white bg-gradient-to-r from-[#121212] to-[#1e293b] font-medium rounded px-2 py-1"
+          onClick={() => {
+            Router.push(`/packages/${id}/${go}/create-account/?domain=${domain}`)
+          }}
+          >Create Account</button>
         </div>
       :
         <div className={navStyles.profileMenu}>
@@ -155,7 +160,7 @@ export default function PackageNav() {
                 <button
                   onClick={() => {
                     signOut();
-                    Router.push("/login");
+                    Router.push("/packages/starter/175000/");
                   }}
                 >
                   Logout

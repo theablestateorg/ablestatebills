@@ -1,18 +1,16 @@
-import { BiCheckCircle } from 'react-icons/bi'
 import Router from 'next/router';
 
-function Starter({selected}) {
-  console.log(selected)
+function Scaler({selected}) {
   return (
-    <div className={`w-72 text-center rounded-2xl bg-white shadow-lg ${selected && "outline outline-[#CA3011] shadow-2xl"}`}>
+    <div className={`w-72 text-center shadow-lg rounded-2xl bg-white ${selected && "outline outline-[#CA3011] shadow-2xl"}`}>
       <header className=" py-3">
-        <h1 className="font-bold text-2xl text-center text-[#CA3011]">Starter</h1>
-        <p className="text-center text-gray-600">Take your business online</p>
+        <h1 className="font-bold text-2xl text-center text-[#CA3011]">Scaler</h1>
+        <p className="text-center text-gray-600">Demand respect and authenticity </p>
 
         <h1 className="py-5 flex flex-col justify-center items-center">
           <div className='flex justify-center items-center'>
             <span className="text-sm font-medium">UGX</span>
-            <span className="text-4xl font-bold mx-2">175,000</span>
+            <span className="text-4xl font-bold mx-2">255,000</span>
           </div>
           <h5 className="font-medium">Yearly</h5>
         </h1>
@@ -22,10 +20,10 @@ function Starter({selected}) {
 
         <section className="px-8 flex flex-col items-center">
           <div className='border-b-[1px] border-gray-400 w-full py-2 mb-2'>
-            <p>2GB Storage</p>
+            <p>5GB Storage</p>
           </div>
           <div className='border-b-[1px] border-gray-400 w-full py-2 mb-2'>
-            <p>10GB bandwidith</p>
+            <p>20GB bandwidith</p>
           </div>
           <div className='border-b-[1px] border-gray-400 w-full py-2 mb-2'>
             <p>99.9% uptime</p>
@@ -38,14 +36,14 @@ function Starter({selected}) {
           </div>
           <div className='w-full py-2 mb-3'>
             {selected 
-            ?
-            <p className='py-2 px-5'>You are Ordering</p>
-            :
-            <button className='bg-[#CA3011] text-white py-2 px-5 font-bold rounded-full'
-            onClick={() => {
-              Router.push(`/packages/starter/175000`)
-            }}
-            >Order Now</button>
+              ?
+              <p className='py-2 px-5'>You are Ordering</p>
+              :
+              <button className='bg-[#CA3011] text-white py-2 px-5 font-bold rounded-full'
+              onClick={() => {
+                Router.push(`/packages/scaler/255000`)
+              }}
+              >Order Now</button>
             }
           </div>
           
@@ -55,4 +53,4 @@ function Starter({selected}) {
   );
 }
 
-export default Starter;
+export default Scaler;

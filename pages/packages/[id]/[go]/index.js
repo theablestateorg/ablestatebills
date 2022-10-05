@@ -7,14 +7,11 @@ import Starter from "../../../../components/Starter";
 import HelpDeck from "../../../../components/HelpDeck";
 import axios from "axios";
 import moment from "moment/moment";
+import Packages from "../../../../components/Packages";
 
 function Go() {
   const router = useRouter();
   const { id, go } = router.query;
-
-  const packages = ["starter", "scaler", "stablizer"].filter(
-    (pack) => pack !== id?.toLowerCase()
-  );
 
   const [searched, setSearched] = useState(null);
   const [domainExt, setDomainExt] = useState(".com");
@@ -80,8 +77,8 @@ function Go() {
               Search
             </button>
           </form>
-          {searched && run ? (
-            <>
+          {searched && run &&
+          <>
             {availability && availability?.availability === "registered"?
             <div className="bg-white py-10 px-3 mt-10 shadow-sm">
               <h1 className="font-bold text-xl">{`${searched}${domainExt}`}</h1>
@@ -119,8 +116,9 @@ function Go() {
                 }
               </div>
 
-            </div>
-            }
+            </div>}
+            
+          
             
             <div className="outline outline-1 outline-[#e5e7eb] mb-5 mt-5 overflow-x-scroll select-none">
               <table className="bg-white w-full table-auto p-10 select-none">
@@ -215,20 +213,14 @@ function Go() {
               </table>
             </div>
             </>
-          ) : (
-            <section className="mt-10">
-              <h3 className="text-center mb-5">Other Packages</h3>
+          }
+        </section>
+        <section className="mt-10">
+              <h3 className="text-center mb-5">Our Packages</h3>
               <div className="flex gap-5 justify-center">
-                {packages.map((pack, index) => (
-                  <div key={index}>
-                    <p>{pack}</p>
-                    <Starter pack={pack} />
-                  </div>
-                ))}
+                <Packages myPackage={id} />
               </div>
             </section>
-          )}
-        </section>
       </main>
     </div>
   );

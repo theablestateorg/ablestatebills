@@ -79,12 +79,12 @@ function Go() {
             <h1 className="font-bold text-3xl mb-5">You are one Step away from changing the world.</h1>
             <br />
             <div className="mb-5">
-              <button className={`outline outline-1 p-2 font-medium ${selectedBtn === 1 && "bg-black text-white outline"}`}
+              <button className={`outline outline-1 p-2 font-medium ${selectedBtn === 1 && "bg-black text-white outline-black"}`}
               onClick={() => {
                 setSelectedBtn(1)
               }}
               >I have my domain</button>
-              <button className={`outline outline-1 p-2 font-medium ${selectedBtn === 2 && "bg-black text-white outline"}`}
+              <button className={`outline outline-1 p-2 font-medium ${selectedBtn === 2 && "bg-black text-white outline-black"}`}
               onClick={() => {
                 setSelectedBtn(2)
               }}

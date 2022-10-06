@@ -1,7 +1,10 @@
 import { BiCheckCircle } from 'react-icons/bi'
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 
 function Stablizer({selected}) {
+
+  const router = useRouter()
+
   return (
     <div className={`w-72 text-center shadow-lg rounded-2xl bg-white ${selected && "outline outline-[#CA3011] shadow-2xl"}`}>
       <header className=" py-3">
@@ -42,9 +45,9 @@ function Stablizer({selected}) {
             :
             <button className='bg-[#CA3011] text-white py-2 px-5 font-bold rounded-full'
             onClick={() => {
-              Router.push(`/packages/stablizer/355000`)
+              Router.push(`/packages/stablizer/355000/?domain=${router.query.domain}`)
             }}
-            >Order Now</button>
+            >Change</button>
             }
           </div>
           

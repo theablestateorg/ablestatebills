@@ -1,6 +1,9 @@
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 
 function Scaler({selected}) {
+
+  const router = useRouter()
+
   return (
     <div className={`w-72 text-center shadow-lg rounded-2xl bg-white ${selected && "outline outline-[#CA3011] shadow-2xl"}`}>
       <header className=" py-3">
@@ -41,9 +44,10 @@ function Scaler({selected}) {
               :
               <button className='bg-[#CA3011] text-white py-2 px-5 font-bold rounded-full'
               onClick={() => {
-                Router.push(`/packages/scaler/255000`)
+                // Router.push(`/packages/scaler/255000`)
+                Router.push(`/packages/scaler/255000/?domain=${router.query.domain}`)
               }}
-              >Order Now</button>
+              >Change</button>
             }
           </div>
           

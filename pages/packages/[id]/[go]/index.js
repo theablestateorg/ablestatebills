@@ -8,6 +8,7 @@ import HelpDeck from "../../../../components/HelpDeck";
 import axios from "axios";
 import moment from "moment/moment";
 import Packages from "../../../../components/Packages";
+import Spinner from "../../../../components/Spinner";
 
 function Go() {
   const router = useRouter();
@@ -17,8 +18,11 @@ function Go() {
   const [searched, setSearched] = useState(null);
   const [domainExt, setDomainExt] = useState(".com");
   const [availability, setAvailability] = useState(null);
+  const [selectedBtn, setSelectedBtn] = useState(2)
   const [extStatus, setExtStatus] = useState(null);
   const [run, setRun] = useState(false);
+
+  const loadingMessages = ["Please wait", "We are getting everything ready"]
 
   const handleSearch = async (event) => {
     setLoading(true)
@@ -33,7 +37,7 @@ function Go() {
         console.log(res.data)
         setAvailability(res.data);
       });
-      setLoading(false)
+    setLoading(false)
   };
 
   const handleLiveSearch = async (domain) => {
@@ -46,18 +50,19 @@ function Go() {
           setAvailability(res.data);
         });
     }
+    setLoading(false)
   };
-
-  console.log(availability);
 
   const [cart, setCart] = useState([]);
 
-  const names = cart && cart.map((product) => product.name);
+  const names = cart && cart.map((product) => product.name)
+  // let myText = loadingMessages[0]
+  const [myText, setMyText] = useState(loadingMessages[0])
 
   return (
     <div>
       <Head>
-        <title>Packages - Shine Africa</title>
+        <title>Hosting - Shine Africa</title>
       </Head>
 
       <PackageNav />
@@ -66,40 +71,76 @@ function Go() {
         className={`pt-[70px] mx-5 md:mx-20 relative pb-6 min-h-screen gap-10 `}
       >
         <section>
-          <h1 className="font-medium text-xl mt-5">{id} package</h1>
-          <p>Free .com/.org domain</p>
-          <br />
-          <h1 className="font-bold text-3xl mb-1">Get a Domain name</h1>
-          <form onSubmit={handleSearch} className="flex gap-4">
-            <div className="outline outline-1 w-64 md:w-96 flex">
-              <input
-                type="text"
-                placeholder="Register your domain name"
-                className="px-2 py-1 mr-3 outline outline-1 w-64 md:w-96"
-                onChange={({ target }) => {
-                  setSearched(target.value);
-                  handleLiveSearch(target.value);
-                }}
-                value={searched}
-              />
-              <select
-                name=""
-                id=""
-                className="bg-transparent"
-                onChange={({ target }) => setDomainExt(target.value)}
-              >
-                <option value=".com">.com</option>
-                <option value=".org">.org</option>
-                <option value=".biz">.biz</option>
-                <option value=".info">.info</option>
-                <option value=".net">.net</option>
-              </select>
+          <div className="flex flex-col items-center p-20">
+            <h1 className="font-bold text-3xl mb-5">You are one Step away from changing the world.</h1>
+            <br />
+            <div className="mb-5">
+              <button className={`outline outline-1 p-2 font-medium ${selectedBtn === 1 && "bg-black text-white outline"}`}
+              onClick={() => {
+                setSelectedBtn(1)
+              }}
+              >I have my domain</button>
+              <button className={`outline outline-1 p-2 font-medium ${selectedBtn === 2 && "bg-black text-white outline"}`}
+              onClick={() => {
+                setSelectedBtn(2)
+              }}
+              >Register a domain</button>
             </div>
-            <button className="bg-[#121212] text-white px-2 py-2 flex gap-1 justify-center items-center">
-              <FaSearch />
-              Search
-            </button>
-          </form>
+            <form onSubmit={handleSearch} className="flex gap-4">
+              <div className="outline outline-1 w-64 md:w-96 flex">
+                <input
+                  type="text"
+                  placeholder={`${selectedBtn === 1? "Enter domain name" : "Register your domain name"}`}
+                  className="px-2 py-1 outline outline-1 w-64 md:w-96"
+                  onChange={({ target }) => {
+                    setLoading(true)
+                    router.push(`/packages/${id}/${go}?domain=${target.value}${domainExt}`, undefined, { shallow: true })
+                    setSearched(target.value);
+                    handleLiveSearch(target.value);
+                  }}
+                  value={searched}
+                />
+                {selectedBtn !== 1 &&
+                  <select
+                    name=""
+                    id=""
+                    className="bg-transparent"
+                    onChange={({ target }) => {
+                      setDomainExt(target.value)
+                      router.push(`/packages/${id}/${go}?domain=${searched}${target.value}`, undefined, { shallow: true })
+                    }}
+                  >
+                    <option value=".com">.com</option>
+                    <option value=".org">.org</option>
+                    <option value=".biz">.biz</option>
+                    <option value=".info">.info</option>
+                    <option value=".net">.net</option>
+                  </select>
+                }
+              </div>
+              <button className="bg-[#121212] text-white px-3 py-2 flex gap-1 justify-center items-center">
+                {selectedBtn !== 1
+                ?
+                  <>
+                    <FaSearch />
+                    Search
+                  </>
+                :
+                  <>
+                    Add
+                  </>
+                }
+                
+              </button>
+            </form>
+
+            <div className="flex gap-2 mt-2">
+              <p><span className="underline">.com</span> 50,000</p>
+              <p><span className="underline">.org</span> 65,000</p>
+              <p><span className="underline">.net</span> 50,000</p>
+              <p><span className="underline">.biz</span> 50,000</p>
+            </div>
+          </div>
 
           {searched && run && (
             <div className="flex flex-row-reverse flex-wrap gap-5 items-start mt-10 justify-between">
@@ -139,7 +180,10 @@ function Go() {
                   </div>
                 </div>
                   :
-                  <p>...Loading</p>
+                  <div className="flex flex-col justify-center items-center p-5 ">
+                    <Spinner />
+                    <p>{myText}</p>
+                  </div>
                   }
                 </div>
               ) : (
@@ -185,7 +229,10 @@ function Go() {
                     </div>
                   </div>
                   :
-                  <p>...loading</p>
+                  <div className="flex flex-col justify-center items-center p-5 ">
+                    <Spinner />
+                    <p>{myText}</p>
+                  </div>
                   }
                 </div>
               )}
@@ -222,7 +269,10 @@ function Go() {
           )}
         </section>
         <section className="mt-10">
-          <h3 className="text-center mb-5">Our Packages</h3>
+        <h1 className="text-center font-medium text-xl">
+          You chose {id} Hosting
+        </h1>
+          <h3 className="text-center mb-5">You can choose another below</h3>
           <div className="flex gap-5 justify-center">
             <Packages myPackage={id} />
           </div>

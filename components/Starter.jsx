@@ -1,8 +1,10 @@
 import { BiCheckCircle } from 'react-icons/bi'
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 
 function Starter({selected}) {
-  console.log(selected)
+
+  const router = useRouter()
+
   return (
     <div className={`w-72 text-center rounded-2xl bg-white shadow-lg ${selected && "outline outline-[#CA3011] shadow-2xl"}`}>
       <header className=" py-3">
@@ -43,9 +45,9 @@ function Starter({selected}) {
             :
             <button className='bg-[#CA3011] text-white py-2 px-5 font-bold rounded-full'
             onClick={() => {
-              Router.push(`/packages/starter/175000`)
+              Router.push(`/packages/starter/175000/?domain=${router.query.domain}`)
             }}
-            >Order Now</button>
+            >Change</button>
             }
           </div>
           

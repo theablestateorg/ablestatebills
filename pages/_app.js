@@ -13,7 +13,7 @@ import NProgress from "nprogress";
 import "../styles/Progress.css";
 
 function MyApp({ Component, pageProps, ...appProps }) {
-  console.log(appProps.router.pathname)
+
   const isLayoutNeeded = [
     "/login",
     "/register",
@@ -44,6 +44,7 @@ function MyApp({ Component, pageProps, ...appProps }) {
       router.events.off("routeChangeComplete", handleStop);
       router.events.off("routeChangeError", handleStop);
     };
+
   }, [router]);
 
   return (

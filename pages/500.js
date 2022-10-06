@@ -16,7 +16,11 @@ function ServerError() {
       <h4 className='w-64 text-gray-500'>
         we suggest that you go back to the homepage while we fix the problem.
       </h4>
-      <button className='outline outline-1 outline-black rounded-full px-3 py-2 mt-10'>Back to home</button>
+      <button className='outline outline-1 outline-black rounded-full px-3 py-2 mt-10 cursor-pointer hover:bg-black hover:text-white z-10'
+      onClick={() => {
+        Router.push("/")
+      }}
+      >Back to home</button>
     </main>
   )
 }

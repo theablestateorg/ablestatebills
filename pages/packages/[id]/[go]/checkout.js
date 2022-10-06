@@ -1,28 +1,17 @@
 import React, { useState } from "react";
 import Router, { useRouter } from "next/router";
 import PackageNav from "../../../../components/PackageNav";
-import { FaSearch } from "react-icons/fa";
-import Starter from "../../../../components/Starter";
 import HelpDeck from "../../../../components/HelpDeck";
 import { CKAirtel, CKMtn } from "../../../../components/ck";
 import { Formik, Form } from 'formik'
 import axios from "axios";
+import { UG } from "../../../../components/react-flags/index"
 
 function Checkout() {
   const router = useRouter();
   const { id, go, domain } = router.query;
 
-  const packages = ["starter", "scaler", "stablizer"].filter(
-    (pack) => pack !== id?.toLowerCase()
-  );
-
-  const [searched, setSearched] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState("")
-  const [run, setRun] = useState(false);
-
-  const [cart, setCart] = useState([]);
-
-  const names = cart && cart.map((product) => product.name);
 
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [complete, setComplete] = useState(null);
@@ -33,13 +22,13 @@ function Checkout() {
 
     // { amount: go, phone: "", secret_code: "", reason: "" }
 
-    const results = await axios.post("https://kasasira.herokuapp.com/send-token", {
+    const results = await axios.post("/send-token", {
       "amount": values.amount,
       "phone": values.phone,
       "secret_code": values.secret_code,
       "mobile_money_company_id": paymentMethod,
       "reason":"ShineAfrika",
-      "metadata": "Entebbe Express Toll Payment"
+      "metadata": "Paying for hosting"
     })
     .then(res => setComplete(true))
     .catch(error => console.log(error))
@@ -60,11 +49,11 @@ function Checkout() {
               <p className="font-bold">{go}</p>
             </div>
             <div className="flex gap-5">
-              <p>Package: </p>
-              <p className="font-bold">{id} Package</p>
+              <p>Hosting: </p>
+              <p className="font-bold">{id && id[0].toUpperCase() + id.substring(1)} Hosting</p>
             </div>
             <div className="flex gap-5">
-              <p>Domain: </p>
+              <p>Domain Name: </p>
               <p className="font-bold">{domain}</p>
             </div>
           </div>
@@ -76,9 +65,9 @@ function Checkout() {
               <div className="bg-black p-1 w-5 h-5 text-white rounded-full text-xs flex justify-center items-center">
                 1
               </div>
-              <h3>Choose Payment Method</h3>
+              <h3>Choose a Payment Method</h3>
             </div>
-            <div className="flex gap-5 mt-2 ml-10">
+            <div className="flex flex-wrap gap-5 mt-2 ml-10">
               <span
                 className={`bg-[#FFCC00] p-2 w-[150px] flex justify-around items-center gap-2 cursor-pointer ${
                   paymentMethod === "1" && "outline outline-black"
@@ -123,18 +112,25 @@ function Checkout() {
                     <span className="font-bold">*secret code*</span> then press
                     next to continue
                   </p>
+                  
                   <div className="flex flex-col my-2">
                     <label htmlFor="number">MTN phone Number</label>
-                    <input
-                      type="text"
-                      name=""
-                      id="number"
-                      className="outline outline-1 px-2 py-1 bg-transparent"
-                      placeholder="Enter phone Number"
-                      onChange={({target}) => setPhoneNumber(target.value)}
-                      value={phoneNumber}
-                      required
-                    />
+                    <div className="outline outline-1 flex pl-2 gap-2">
+                      <div className="flex gap-1 items-center">
+                        <UG />
+                        +256
+                      </div>
+                      <input
+                        type="text"
+                        name=""
+                        id="number"
+                        className="outline outline-1 px-2 py-1 bg-transparent flex-grow"
+                        placeholder="771234567"
+                        onChange={({target}) => setPhoneNumber(target.value)}
+                        value={phoneNumber}
+                        required
+                      />
+                    </div>
                   </div>
                 </>
               )}
@@ -154,12 +150,17 @@ function Checkout() {
                   <button className="text-white bg-[#121212] px-2 py-1"
                   onClick={async () => {
                     if(paymentMethod === "1"){
-                      const results = await axios.post("https://kasasira.herokuapp.com/send-token", {
+                      const phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})$/;
+                      if(phoneNumber.match(phoneno)){
+                        console.log(`0${phoneNumber}`)
+                        const results = await axios.post("/send-token", {
                           mobile_money_company_id: "1",
                           phone: phoneNumber
                       })
                       .then(res => setComplete(true))
                       .catch(error => console.log(error))
+                        setComplete(true)
+                      }
                     }else {
                       setComplete(true)
                     }
@@ -202,13 +203,7 @@ function Checkout() {
             <div className="ml-10">
               <div className="flex flex-col my-2">
                 <label htmlFor="number">Amount</label>
-                <input
-                  type="text"
-                  name="amount"
-                  id="amount"
-                  className="outline outline-1 px-2 py-1 bg-transparent"
-                  value={go}
-                />
+                <label htmlFor="number">{go}</label>
               </div>
               <div className="flex flex-col my-2">
                 <label htmlFor="phone">Phone Number</label>
@@ -230,17 +225,6 @@ function Checkout() {
                   className="outline outline-1 px-2 py-1 bg-transparent"
                   placeholder="Enter secret code"
                   onChange={handleChange("secret_code")}
-                />
-              </div>
-              <div className="flex flex-col my-2">
-                <label htmlFor="reason">Reason</label>
-                <input
-                  type="text"
-                  name="reason"
-                  id="reason"
-                  className="outline outline-1 px-2 py-1 bg-transparent"
-                  placeholder="Enter reason"
-                  onChange={handleChange("reason")}
                 />
               </div>
               <div className="flex justify-end">

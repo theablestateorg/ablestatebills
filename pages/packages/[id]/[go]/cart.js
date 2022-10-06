@@ -12,19 +12,6 @@ function Cart() {
 
   const { user } = useAuth();
 
-  const packages = ["starter", "scaler", "stablizer"].filter(
-    (pack) => pack !== id?.toLowerCase()
-  );
-
-  const [searched, setSearched] = useState(null);
-  const [run, setRun] = useState(false);
-
-  const handleSearch = (event) => {
-    setRun(true);
-    event.preventDefault();
-    // console.log(searched);
-  };
-
   const [cart, setCart] = useState([]);
 
   const names = cart && cart.map((product) => product.name);

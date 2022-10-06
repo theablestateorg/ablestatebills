@@ -9,10 +9,13 @@ import axios from "axios";
 import moment from "moment/moment";
 import Packages from "../../../../components/Packages";
 import Spinner from "../../../../components/Spinner";
+import { MdPayment } from 'react-icons/md'
+import { useAuth } from "../../../../utils/auth";
 
 function Go() {
   const router = useRouter();
-  const { id, go } = router.query;
+  const { id, go, domain } = router.query;
+  const { user } = useAuth();
 
   const [loading, setLoading] = useState(false)
   const [searched, setSearched] = useState(null);
@@ -200,32 +203,50 @@ function Go() {
 
                   {!loading ?
                   <div className="m-5 rounded-md bg-[#f8f9fa] p-5">
-                    <p>
-                      <b>{`${searched}${domainExt}`}</b> is available to
-                      register
-                    </p>
+                    <div className="flex justify-between">
+                      <p>
+                        <b>{`${searched}${domainExt}`}</b>
+                      </p>
+                      <p>available</p>
+                      <p className="line-through">50,000</p>
+                    </div>
+                    <br />
+                    <div className="flex justify-between">
+                      <p>
+                        {/* <b>{`${searched}${domainExt}`}</b> */}
+                      </p>
+                      <p className="font-medium">{id}</p>
+                      <p>{go}</p>
+                    </div>
+                    <br />
+                    <hr />
+                    <br />
+                    <div className="flex justify-between">
+                      <p>
+                        {/* <b>{`${searched}${domainExt}`}</b> */}
+                      </p>
+                      <p>Total</p>
+                      <p>{go}</p>
+                    </div>
                     <div
                       className="mt-5"
                       onClick={() => {
-                        names.includes(`${searched}.com`)
-                          ? Router.push(
-                              `/packages/${id}/${go}/cart/?domain=${searched}${domainExt}`
-                            )
-                          : setCart([
-                              ...cart,
-                              { name: `${searched}${domainExt}`, package: id },
-                            ]);
+                        // Router.push(
+                        //       `/packages/${id}/${go}/cart/?domain=${searched}${domainExt}`
+                        //     )
+                            if (user) {
+                              Router.push(
+                                `/packages/${id}/${go}/checkout/?domain=${domain}`
+                              );
+                            } else {
+                              Router.push(`/packages/${id}/${go}/login/?domain=${domain}`);
+                            }
                       }}
                     >
-                      {names.includes(`${searched}${domainExt}`) ? (
-                        <span className="bg-[#ca3011] text-white px-1 py-1 mt-2 cursor-pointer">
-                          View
-                        </span>
-                      ) : (
-                        <span className="outline outline-1 rounded-sm outline-[#6D6E70] text-[#6D6E70] px-3 py-1 mt-2 cursor-pointer hover:bg-[#6D6E70] hover:text-white font-medium">
-                          Add to Cart
-                        </span>
-                      )}
+                        <div className="outline outline-1 rounded-sm outline-[#6D6E70] text-[#6D6E70] px-3 py-1 mt-2 cursor-pointer hover:bg-[#6D6E70] hover:text-white font-medium flex items-center gap-3 w-28">
+                          <MdPayment />
+                          Pay
+                        </div>
                     </div>
                   </div>
                   :

@@ -11,6 +11,7 @@ import Packages from "../../../../components/Packages";
 import Spinner from "../../../../components/Spinner";
 import { MdPayment } from 'react-icons/md'
 import { useAuth } from "../../../../utils/auth";
+import { currencyFormatter } from "../../../../utils/currencyFormatter";
 
 function Go() {
   const router = useRouter();
@@ -208,7 +209,9 @@ function Go() {
                         <b>{`${searched}${domainExt}`}</b>
                       </p>
                       <p>available</p>
-                      <p className="line-through">50,000</p>
+                      <p className={`${[".com", ".org"].includes(domainExt) && "line-through" }`}>{
+                      domainExt === ".com" ? "50,000" : domainExt === ".org" ? "65,000" : "50,000"
+                      }</p>
                     </div>
                     <br />
                     <div className="flex justify-between">
@@ -216,7 +219,7 @@ function Go() {
                         {/* <b>{`${searched}${domainExt}`}</b> */}
                       </p>
                       <p className="font-medium">{id}</p>
-                      <p>{go}</p>
+                      <p>{currencyFormatter(go)}</p>
                     </div>
                     <br />
                     <hr />
@@ -226,7 +229,7 @@ function Go() {
                         {/* <b>{`${searched}${domainExt}`}</b> */}
                       </p>
                       <p>Total</p>
-                      <p>{go}</p>
+                      <p>{[".com", ".org"].includes(domainExt) ? currencyFormatter(go) : currencyFormatter(+go + 50000)}</p>
                     </div>
                     <div
                       className="mt-5"

@@ -25,6 +25,7 @@ function Go() {
   const [selectedBtn, setSelectedBtn] = useState(2)
   const [extStatus, setExtStatus] = useState(null);
   const [run, setRun] = useState(false);
+  const [alternative, setAlternative] = useState([]);
 
   const loadingMessages = ["Please wait", "We are getting everything ready"]
 
@@ -38,11 +39,23 @@ function Go() {
         domainName: `${searched}${domainExt}`,
       })
       .then((res) => {
-        console.log(res.data)
+        setAlternative(res.data.other)
         setAvailability(res.data);
       });
     setLoading(false)
   };
+
+  const handleWithoutDomain = (event) => {
+    event.preventDefault();
+    console.log("something greet is happening")
+    if (user) {
+      Router.push(
+        `/packages/${id}/${go}/checkout/?domain=${domain}`
+      );
+    } else {
+      Router.push(`/packages/${id}/${go}/login/?domain=${domain}`);
+    }
+  }
 
   const handleLiveSearch = async (domain) => {
     if (run && domain) {
@@ -72,34 +85,37 @@ function Go() {
       <PackageNav />
       <HelpDeck />
       <main
-        className={`pt-[70px] mx-5 md:mx-20 relative pb-6 min-h-screen gap-10 `}
+        className={`pt-[70px] relative pb-6 min-h-screen gap-10 `}
       >
-        <section>
-          <div className="flex flex-col items-center p-20">
+        <section className="relative">
+          <div className="w-screen h-[85vh] bg-[#e8e7e7] bg-opacity-40 absolute -z-10 clipMyPath"></div>
+          <div className="flex flex-col items-center p-20 w-screen">
             <h1 className="font-bold text-3xl mb-5">You are one Step away from changing the world.</h1>
             <br />
-            <div className="mb-5">
-              <button className={`outline outline-1 p-2 font-medium ${selectedBtn === 1 && "bg-black text-white outline-black"}`}
-              onClick={() => {
-                setSelectedBtn(1)
-              }}
-              >I have my domain</button>
-              <button className={`outline outline-1 p-2 font-medium ${selectedBtn === 2 && "bg-black text-white outline-black"}`}
+            <div className="mb-10 shadow-lg">
+            <button className={`outline outline-1 p-2 font-medium rounded-l-lg ${selectedBtn === 2 && "bg-black text-white outline-black"}`}
               onClick={() => {
                 setSelectedBtn(2)
               }}
               >Register a domain</button>
+              <button className={`outline outline-1 p-2 font-medium rounded-r-lg ${selectedBtn === 1 && "bg-black text-white outline-black"}`}
+              onClick={() => {
+                setSelectedBtn(1)
+              }}
+              >I have my domain</button>
+              
             </div>
-            <form onSubmit={handleSearch} className="flex gap-4">
-              <div className="outline outline-1 w-64 md:w-96 flex">
+            <form onSubmit={selectedBtn === 2 ? handleSearch : handleWithoutDomain} className="flex gap-4">
+              <div className={`outline outline-1 w-64 md:w-96 flex rounded-md ${selectedBtn === 2 && "pr-2"} bg-white`}>
                 <input
                   type="text"
                   placeholder={`${selectedBtn === 1? "Enter domain name" : "Register your domain name"}`}
-                  className="px-2 py-1 outline outline-1 w-64 md:w-96"
+                  className={`first-letter:px-2 py-1 pl-2 w-64 md:w-96 rounded-l-md ${selectedBtn === 2 && "rounded-r-md"}`}
                   onChange={({ target }) => {
                     setLoading(true)
-                    router.push(`/packages/${id}/${go}?domain=${target.value}${domainExt}`, undefined, { shallow: true })
-                    setSearched(target.value);
+                    router.push(`/packages/${id}/${go}?domain=${selectedBtn === 1 ? target.value : target.value + domainExt}`, undefined, { shallow: true })
+
+                    selectedBtn === 2 ? setSearched(target.value.split(".")[0]) : setSearched(target.value);
                     handleLiveSearch(target.value);
                   }}
                   value={searched}
@@ -108,7 +124,7 @@ function Go() {
                   <select
                     name=""
                     id=""
-                    className="bg-transparent"
+                    className="bg-white pr-1"
                     onChange={({ target }) => {
                       setDomainExt(target.value)
                       router.push(`/packages/${id}/${go}?domain=${searched}${target.value}`, undefined, { shallow: true })
@@ -122,7 +138,7 @@ function Go() {
                   </select>
                 }
               </div>
-              <button className="bg-[#121212] text-white px-3 py-2 flex gap-1 justify-center items-center">
+              <button className={`bg-[#121212] text-white px-3 py-2 flex gap-1 justify-center items-center rounded-md shadow-md`}  >
                 {selectedBtn !== 1
                 ?
                   <>
@@ -234,9 +250,6 @@ function Go() {
                     <div
                       className="mt-5"
                       onClick={() => {
-                        // Router.push(
-                        //       `/packages/${id}/${go}/cart/?domain=${searched}${domainExt}`
-                        //     )
                             if (user) {
                               Router.push(
                                 `/packages/${id}/${go}/checkout/?domain=${domain}`
@@ -269,10 +282,20 @@ function Go() {
                 <div className="outline outline-1 outline-[#e5e7eb] mb-5 overflow-x-scroll select-none">
                   <table className="bg-white w-full table-auto p-10 select-none">
                     <tbody>
-                      <tr
+                      {alternative ?
+                       alternative.map((alt, index) => (
+                        <tr key={index} className={`border-b border-l-2 border-l-transparent hover:border-l-[#ca3011] cursor-pointer mb-10`}>
+                          <td className="py-2 text-left pl-3">{alt.name}</td>
+                          <td className="py-2 text-left pl-3">{alt.availability}</td>
+                        </tr>
+                      ))
+                      :(
+
+                        <>
+                        <tr
                         className={`border-b border-l-2 border-l-transparent hover:border-l-[#ca3011] cursor-pointer mb-10`}
                       >
-                        <td className="py-2 text-left pl-3">{searched}.com</td>
+                        <td className="py-2 text-left pl-3">Loading</td>
                         <td className="py-2 text-left pl-3 text-sm text-green-500">
                           available
                         </td>
@@ -280,11 +303,15 @@ function Go() {
                       <tr
                         className={`border-b border-l-2 border-l-transparent hover:border-l-[#ca3011] cursor-pointer mb-10`}
                       >
-                        <td className="py-2 text-left pl-3">{searched}.org</td>
+                        <td className="py-2 text-left pl-3">Loading</td>
                         <td className="py-2 text-left pl-3 text-sm text-green-500">
                           available
                         </td>
                       </tr>
+                      </>
+                      )
+                    }
+                      
                     </tbody>
                   </table>
                 </div>

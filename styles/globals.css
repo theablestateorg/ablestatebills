@@ -20,3 +20,13 @@ a {
   box-sizing: border-box;
 }
 
+
+.clipMyPath {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 12vw),
+    0 100%
+  );
+}
+

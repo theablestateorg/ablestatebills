@@ -110,13 +110,16 @@ function Go() {
                 <input
                   type="text"
                   placeholder={`${selectedBtn === 1? "Enter domain name" : "Register your domain name"}`}
-                  className={`first-letter:px-2 py-1 pl-2 w-64 md:w-96 rounded-l-md ${selectedBtn === 2 && "rounded-r-md"}`}
+                  className={`first-letter:px-2 py-1 pl-2 w-64 md:w-96 rounded-l-md focus:outline-none ${selectedBtn === 2 && "rounded-r-md"}`}
                   onChange={({ target }) => {
                     setLoading(true)
-                    router.push(`/packages/${id}/${go}?domain=${selectedBtn === 1 ? target.value : target.value + domainExt}`, undefined, { shallow: true })
+                    // router.push(`/packages/${id}/${go}?domain=${selectedBtn === 1 ? target.value : target.value + domainExt}`, undefined, { shallow: true })
+
+                    // router.query.NEWPARAMS = "VALUE"
+                    // router.push(router)
 
                     selectedBtn === 2 ? setSearched(target.value.split(".")[0]) : setSearched(target.value);
-                    handleLiveSearch(target.value);
+                    // handleLiveSearch(target.value);
                   }}
                   value={searched}
                 />
@@ -163,7 +166,7 @@ function Go() {
           </div>
 
           {searched && run && (
-            <div className="flex flex-row-reverse flex-wrap gap-5 items-start mt-10 justify-between">
+            <div className="flex flex-row-reverse flex-wrap gap-5 items-start mt-10 mx-10 justify-between">
               {availability && availability?.availability === "registered" ? (
                 <div className="bg-white outline outline-1 outline-gray-200 shadow-lg rounded-md pb-5 flex-grow">
                   <div className="font-medium text-2xl p-5 bg-[#f7f7f7] mb-5">{`${searched}${domainExt}`}</div>

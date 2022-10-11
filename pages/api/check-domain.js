@@ -82,6 +82,7 @@ const handler = async (req, res) => {
 
   if (domainAvailability === "registered") {
     return res.status(200).json({
+      domainName: domainName,
       availability: domainAvailability,
       created_at: firstDomainWhois["Created Date"],
       expire_at: firstDomainWhois["Expiry Date"],
@@ -104,6 +105,7 @@ const handler = async (req, res) => {
     });;
   } else if (domainAvailability === "available") {
     return res.status(200).json({
+      domainName: domainName,
       availability: domainAvailability,
       message: "This domain is available for registration right now",
       other: [
@@ -125,6 +127,7 @@ const handler = async (req, res) => {
 
   // console.log(domainAvailability)
   return res.status(200).json({ 
+    domainName: domainName,
     availability: domainAvailability,
     other: [
       {

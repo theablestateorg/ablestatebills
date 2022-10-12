@@ -33,6 +33,7 @@ function Go() {
     setLoading(true)
     setRun(true);
     event.preventDefault();
+    // console.log(searched);
     await axios
       .post("/api/check-domain", {
         domainName: `${searched}${domainExt}`,
@@ -46,6 +47,7 @@ function Go() {
 
   const handleWithoutDomain = (event) => {
     event.preventDefault();
+    console.log("something greet is happening")
     if (user) {
       Router.push(
         `/packages/${id}/${go}/checkout/?domain=${domain}`
@@ -110,14 +112,11 @@ function Go() {
                   placeholder={`${selectedBtn === 1? "Enter domain name" : "Register your domain name"}`}
                   className={`first-letter:px-2 py-1 pl-2 w-64 md:w-96 rounded-l-md focus:outline-none ${selectedBtn === 2 && "rounded-r-md"}`}
                   onChange={({ target }) => {
-                    // setLoading(true)
-                    // router.push(`/packages/${id}/${go}?domain=${selectedBtn === 1 ? target.value : target.value + domainExt}`, undefined, { shallow: true })
-
-                    // router.query.NEWPARAMS = "VALUE"
-                    // router.push(router)
+                    setLoading(true)
+                    router.push(`/packages/${id}/${go}?domain=${selectedBtn === 1 ? target.value : target.value + domainExt}`, undefined, { shallow: true })
 
                     selectedBtn === 2 ? setSearched(target.value.split(".")[0]) : setSearched(target.value);
-                    // handleLiveSearch(target.value);
+                    handleLiveSearch(target.value);
                   }}
                   value={searched}
                 />
@@ -164,7 +163,7 @@ function Go() {
           </div>
 
           {searched && run && (
-            <div className="flex flex-row-reverse flex-wrap gap-5 items-start mt-10 mx-10 justify-between">
+            <div className="flex flex-row-reverse flex-wrap gap-5 items-start mt-10 justify-between">
               {availability && availability?.availability === "registered" ? (
                 <div className="bg-white outline outline-1 outline-gray-200 shadow-lg rounded-md pb-5 flex-grow">
                   <div className="font-medium text-2xl p-5 bg-[#f7f7f7] mb-5">{availability.domainName}</div>
@@ -209,7 +208,7 @@ function Go() {
                 </div>
               ) : (
                 <div className="bg-white outline outline-1 outline-gray-200 shadow-lg rounded-md pb-5 flex-grow">
-                  <div className="font-medium text-2xl p-5 bg-[#f7f7f7] mb-5">{!loading ? availability.domainName : "loading..."}</div>
+                  <div className="font-medium text-2xl p-5 bg-[#f7f7f7] mb-5">{`${searched}${domainExt}`}</div>
 
                   {!loading &&
                     <span className="px-2 py-1 bg-[#d2f4ea] text-[#198754]font-medium m-5">
@@ -223,7 +222,7 @@ function Go() {
                   <div className="m-5 rounded-md bg-[#f8f9fa] p-5">
                     <div className="flex justify-between">
                       <p>
-                        <b>{availability.domainName}</b>
+                        <b>{`${searched}${domainExt}`}</b>
                       </p>
                       <p>available</p>
                       <p className={`${[".com", ".org"].includes(domainExt) && "line-through" }`}>{
@@ -287,7 +286,7 @@ function Go() {
                        alternative.map((alt, index) => (
                         <tr key={index} className={`border-b border-l-2 border-l-transparent hover:border-l-[#ca3011] cursor-pointer mb-10`}>
                           <td className="py-2 text-left pl-3">{alt.name}</td>
-                          <td className="py-2 text-left text-xs p-3">{alt.availability}</td>
+                          <td className="py-2 text-left pl-3">{alt.availability}</td>
                         </tr>
                       ))
                       :(

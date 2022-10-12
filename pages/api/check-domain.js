@@ -4,9 +4,6 @@ const handler = async (req, res) => {
   const { domainName } = req.body;
   const onlyName = domainName.split(".")[0]
 
-  // retrieve WHOIS info from Registrar WHOIS servers
-  const domainWhois = await whoiser(domainName, { follow: 1 });
-
   // get for [.com, .org, .biz]
   // Start 
   // .com
@@ -63,6 +60,8 @@ const handler = async (req, res) => {
 
 
   // End
+  // retrieve WHOIS info from Registrar WHOIS servers
+  const domainWhois = await whoiser(domainName, { follow: 1 });
 
   const firstDomainWhois = whoiser.firstResult(domainWhois);
   const firstTextLine = (firstDomainWhois.text[0] || "").toLowerCase();
@@ -102,7 +101,7 @@ const handler = async (req, res) => {
           availability: domainAvailabilityBiz
         }
       ]
-    });;
+    });
   } else if (domainAvailability === "available") {
     return res.status(200).json({
       domainName: domainName,

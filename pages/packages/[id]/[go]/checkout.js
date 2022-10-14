@@ -30,8 +30,18 @@ function Checkout() {
       "reason":"ShineAfrika",
       "metadata": "Paying for hosting"
     })
-    .then(res => setComplete(true))
+    .then(async (res) => {
+      setComplete(true)
+
+      const paymentMade = await axios.post("/api/buy-domain", {
+        domain: domain
+      })
+    })
     .catch(error => console.log(error))
+
+    resetForm({
+      amount: go, phone: "", secret_code: ""
+    })
 
   }
 
@@ -174,7 +184,7 @@ function Checkout() {
             </div>
           </section>
         <Formik
-          initialValues={{ amount: go, phone: "", secret_code: "", reason: "" }}
+          initialValues={{ amount: go, phone: "", secret_code: "" }}
         >
           {({
             values,

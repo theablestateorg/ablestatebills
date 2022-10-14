@@ -10,6 +10,7 @@ import { MdAdd } from "react-icons/md";
 import AddCustomerModal from "../components/AddCustomerModal";
 import useMediaQuery from "../hooks/useMediaQuery";
 import PasswordGenerator from "../components/PasswordGenerator";
+import axios from "axios";
 
 export default function AddClient() {
   const [loading, setLoading] = useState(false);
@@ -23,7 +24,7 @@ export default function AddClient() {
   const [contact, setContact] = useState({});
   const [countryCode, setCountryCode] = useState("+256");
   const [selected, setSelected] = useState(false);
-  const [ password, setPassword ] = useState(null)
+  const [password, setPassword] = useState(null);
 
   useEffect(() => {
     // getCustomers();
@@ -31,33 +32,44 @@ export default function AddClient() {
   }, [selected]);
 
   const addNewCustomer = async (values, resetForm) => {
-    if(password){
+    if (password) {
       const { email, first_name, last_name, role } = values;
       setLoading(true);
-      const { user, session, error } = await supabase.auth.signUp(
-        { email, password },
-        {
-          data: {
-            first_name,
-            last_name,
-            role,
-          },
-        }
-      );
-      if (user) {
-        toast.success(`${values.first_name} was added successfully`, {
-          position: "top-center",
-        });
-      }
-      if (error) {
-        toast.error(`${error?.message}`, { position: "top-center" });
-      }
-    }else{
+      await axios.post("/api/add-customer", {
+        email: email,
+        password: password,
+        added_by: user.id,
+        details: {
+          first_name: first_name,
+          last_name: last_name,
+          role: role
+        },
+      }).then(res => console.log(res))
+      .catch(error => console.log(error))
+      // const { user, session, error } = await supabase.auth.signUp(
+      //   { email, password },
+      //   {
+      //     data: {
+      //       first_name,
+      //       last_name,
+      //       role,
+      //     },
+      //   }
+      // );
+      // if (user) {
+      //   toast.success(`${values.first_name} was added successfully`, {
+      //     position: "top-center",
+      //   });
+      // }
+      // if (error) {
+      //   toast.error(`${error?.message}`, { position: "top-center" });
+      // }
+    } else {
       toast.error(`No password`, { position: "top-center" });
     }
     setLoading(false);
 
-    setPassword(null)
+    setPassword(null);
 
     resetForm({
       password: password,
@@ -104,52 +116,59 @@ export default function AddClient() {
             return (
               <Form className="my-5">
                 <div className="flex items-center gap-10 my-5">
-                    <label htmlFor=""
-                    className="text-xl w-4/12 md:w-2/12">Email</label>
-                    <div className="w-8/12 md:w-8/12">
-                      <input
-                        type="email"
-                        name="email"
-                        className="py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-full"
-                        placeholder="Enter email"
-                        onChange={handleChange("email")}
-                        onBlur={handleBlur("email")}
-                        value={values.email}
-                      />
-                    </div>
+                  <label htmlFor="" className="text-xl w-4/12 md:w-2/12">
+                    Email
+                  </label>
+                  <div className="w-8/12 md:w-8/12">
+                    <input
+                      type="email"
+                      name="email"
+                      className="py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-full"
+                      placeholder="Enter email"
+                      onChange={handleChange("email")}
+                      onBlur={handleBlur("email")}
+                      value={values.email}
+                    />
                   </div>
-                <div className="flex items-center gap-10 my-5">
-                    <label htmlFor=""
-                    className="text-xl w-4/12 md:w-2/12">First Name</label>
-                    <div className="w-8/12 md:w-8/12">
-                      <input
-                        type="text"
-                        name="text"
-                        className="py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-full"
-                        placeholder="Enter first name"
-                        onChange={handleChange("first_name")}
-                        onBlur={handleBlur("first_name")}
-                        value={values.first_name}
-                      />
-                    </div>
-                  </div>
-                <div className="flex items-center gap-10 my-5">
-                    <label htmlFor=""
-                    className="text-xl w-4/12 md:w-2/12">Last Name</label>
-                    <div className="w-8/12 md:w-8/12">
-                      <input
-                        type="text"
-                        name="text"
-                        className="py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-full"
-                        placeholder="Enter last name"
-                        onChange={handleChange("last_name")}
-                        onBlur={handleBlur("last_name")}
-                        value={values.last_name}
-                      />
-                    </div>
                 </div>
-                <PasswordGenerator password={password} setPassword={setPassword} resize={true} />
-                
+                <div className="flex items-center gap-10 my-5">
+                  <label htmlFor="" className="text-xl w-4/12 md:w-2/12">
+                    First Name
+                  </label>
+                  <div className="w-8/12 md:w-8/12">
+                    <input
+                      type="text"
+                      name="text"
+                      className="py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-full"
+                      placeholder="Enter first name"
+                      onChange={handleChange("first_name")}
+                      onBlur={handleBlur("first_name")}
+                      value={values.first_name}
+                    />
+                  </div>
+                </div>
+                <div className="flex items-center gap-10 my-5">
+                  <label htmlFor="" className="text-xl w-4/12 md:w-2/12">
+                    Last Name
+                  </label>
+                  <div className="w-8/12 md:w-8/12">
+                    <input
+                      type="text"
+                      name="text"
+                      className="py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-full"
+                      placeholder="Enter last name"
+                      onChange={handleChange("last_name")}
+                      onBlur={handleBlur("last_name")}
+                      value={values.last_name}
+                    />
+                  </div>
+                </div>
+                <PasswordGenerator
+                  password={password}
+                  setPassword={setPassword}
+                  resize={true}
+                />
+
                 <div className="flex justify-end mt-10">
                   <button
                     type="submit"

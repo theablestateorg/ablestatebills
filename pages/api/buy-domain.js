@@ -4,10 +4,12 @@ const { INTERNETBS, INTERNETACCESS } = process.env;
 
 const handler = async (req, res) => {
   try{
-    const result = await axios.post(`https://api.internet.bs/Domain/Create?ApiKey=${INTERNETBS}&Password=${INTERNETACCESS}&Domain=${req.body.domain}&CloneContactsFromDomain=test-api-domain11.com`);
+    const result = await axios.post(`https://api.internet.bs/Domain/Create?ApiKey=${INTERNETBS}&Password=${INTERNETACCESS}&Domain=${req.body.domain}&CloneContactsFromDomain=shineafrika.com`);
+
+
+    console.log(result)
 
     res.json({"response": result.data});
-
   }
   catch (error){
     res.json({

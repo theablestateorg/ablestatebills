@@ -39,7 +39,7 @@ function Checkout() {
     const paymentMade = await axios.post("/api/buy-domain", {
       domain: domain
     }).then(res => {
-      router.push('packages/Starter/175,000/success')
+      Router.push(`/packages/${id}/${go}/success`)
     })
 
     resetForm({

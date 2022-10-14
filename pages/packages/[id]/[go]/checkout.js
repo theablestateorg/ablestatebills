@@ -21,26 +21,24 @@ function Checkout() {
 
     // { amount: go, phone: "", secret_code: "", reason: "" }
 
-    // const results = await axios.post("/api/make-payment", {
-    //   "amount": values.amount,
-    //   "phone": values.phone,
-    //   "secret_code": values.secret_code,
-    //   "mobile_money_company_id": paymentMethod,
-    //   "reason":"ShineAfrika",
-    //   "metadata": "Paying for hosting"
-    // })
-    // .then(async (res) => {
-    //   setComplete(true)
-
-      
-    // })
-    // .catch(error => console.log(error))
-
-    const paymentMade = await axios.post("/api/buy-domain", {
-      domain: domain
-    }).then(res => {
-      Router.push(`/packages/${id}/${go}/success`)
+    const results = await axios.post("/api/make-payment", {
+      "amount": values.amount,
+      "phone": values.phone,
+      "secret_code": values.secret_code,
+      "mobile_money_company_id": paymentMethod,
+      "reason":"ShineAfrika",
+      "metadata": "Paying for hosting"
     })
+    .then(async (res) => {
+      setComplete(true)
+
+      const paymentMade = await axios.post("/api/buy-domain", {
+        domain: domain
+      }).then(res => {
+        Router.push(`/packages/${id}/${go}/success`)
+      })
+    })
+    .catch(error => console.log(error))
 
     resetForm({
       amount: go, phone: "", secret_code: ""

@@ -22,7 +22,7 @@ function Checkout() {
 
     // { amount: go, phone: "", secret_code: "", reason: "" }
 
-    const results = await axios.post("/send-token", {
+    const results = await axios.post("/api/make-payment", {
       "amount": values.amount,
       "phone": values.phone,
       "secret_code": values.secret_code,
@@ -152,18 +152,18 @@ function Checkout() {
                     if(paymentMethod === "1"){
                       const phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})$/;
                       if(phoneNumber.match(phoneno)){
-                        console.log(`0${phoneNumber}`)
-                        const results = await axios.post("/send-token", {
-                          mobile_money_company_id: "1",
-                          phone: phoneNumber
+                        console.log(`256${phoneNumber}`)
+                        const results = await axios.post("/api/send-token", {
+                          phone: `256${phoneNumber}`
                       })
                       .then(res => setComplete(true))
-                      .catch(error => console.log(error))
+                      .catch(error => console.log(error.message))
                         setComplete(true)
                       }
                     }else {
                       setComplete(true)
                     }
+                    
                     
                   }}
                   >

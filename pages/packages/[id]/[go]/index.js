@@ -43,6 +43,9 @@ function Go() {
         setAvailability(res.data);
       });
     setLoading(false)
+    Router.push(
+      `/packages/${id}/${go}/?domain=${searched}${domainExt}`
+    );
   };
 
   const handleWithoutDomain = (event) => {
@@ -112,11 +115,12 @@ function Go() {
                   placeholder={`${selectedBtn === 1? "Enter domain name" : "Register your domain name"}`}
                   className={`first-letter:px-2 py-1 pl-2 w-64 md:w-96 rounded-l-md focus:outline-none ${selectedBtn === 2 && "rounded-r-md"}`}
                   onChange={({ target }) => {
-                    setLoading(true)
-                    router.push(`/packages/${id}/${go}?domain=${selectedBtn === 1 ? target.value : target.value + domainExt}`, undefined, { shallow: true })
+                    // setLoading(true)
+                    // router.push(`/packages/${id}/${go}?domain=${selectedBtn === 1 ? target.value : target.value + domainExt}`, undefined, { shallow: true })
 
                     selectedBtn === 2 ? setSearched(target.value.split(".")[0]) : setSearched(target.value);
-                    handleLiveSearch(target.value);
+                    // handleLiveSearch(target.value);
+                    // setSearched(target.value)
                   }}
                   value={searched}
                 />
@@ -163,7 +167,7 @@ function Go() {
           </div>
 
           {searched && run && (
-            <div className="flex flex-row-reverse flex-wrap gap-5 items-start mt-10 justify-between">
+            <div className="flex flex-row-reverse flex-wrap gap-5 items-start mt-10 mx-10 justify-between">
               {availability && availability?.availability === "registered" ? (
                 <div className="bg-white outline outline-1 outline-gray-200 shadow-lg rounded-md pb-5 flex-grow">
                   <div className="font-medium text-2xl p-5 bg-[#f7f7f7] mb-5">{availability.domainName}</div>
@@ -208,7 +212,7 @@ function Go() {
                 </div>
               ) : (
                 <div className="bg-white outline outline-1 outline-gray-200 shadow-lg rounded-md pb-5 flex-grow">
-                  <div className="font-medium text-2xl p-5 bg-[#f7f7f7] mb-5">{`${searched}${domainExt}`}</div>
+                  <div className="font-medium text-2xl p-5 bg-[#f7f7f7] mb-5">{availability && availability.domainName}</div>
 
                   {!loading &&
                     <span className="px-2 py-1 bg-[#d2f4ea] text-[#198754]font-medium m-5">
@@ -222,7 +226,7 @@ function Go() {
                   <div className="m-5 rounded-md bg-[#f8f9fa] p-5">
                     <div className="flex justify-between">
                       <p>
-                        <b>{`${searched}${domainExt}`}</b>
+                        <b>{availability && availability.domainName}</b>
                       </p>
                       <p>available</p>
                       <p className={`${[".com", ".org"].includes(domainExt) && "line-through" }`}>{
@@ -235,7 +239,7 @@ function Go() {
                         {/* <b>{`${searched}${domainExt}`}</b> */}
                       </p>
                       <p className="font-medium">{id}</p>
-                      <p>{currencyFormatter(go)}</p>
+                      <p>{go}</p>
                     </div>
                     <br />
                     <hr />
@@ -245,7 +249,7 @@ function Go() {
                         {/* <b>{`${searched}${domainExt}`}</b> */}
                       </p>
                       <p>Total</p>
-                      <p>{[".com", ".org"].includes(domainExt) ? currencyFormatter(go) : currencyFormatter(+go + 50000)}</p>
+                      <p>{[".com", ".org"].includes(domainExt) ? go : +go + 50000}</p>
                     </div>
                     <div
                       className="mt-5"
@@ -277,7 +281,7 @@ function Go() {
               <section>
                 <div className="bg-white outline outline-1 outline-gray-200 shadow-none rounded-md pb-5 flex-grow mb-5 p-5">
                   <span className="text-slate-400">keyword</span>{" "}
-                  <b>{availability.domainName.split(".")[0]}</b>
+                  <b>{availability && availability.domainName.split(".")[0]}</b>
                 </div>
                 <div className="outline outline-1 outline-[#e5e7eb] mb-5 overflow-x-scroll select-none">
                   <table className="bg-white w-full table-auto p-10 select-none">

@@ -9,14 +9,13 @@ import { TbSend } from "react-icons/tb";
 import { MdAdd } from "react-icons/md";
 import AddCustomerModal from "../components/AddCustomerModal";
 import useMediaQuery from "../hooks/useMediaQuery";
+import axios from "axios";
 
 export default function AddSite() {
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
   const matches = useMediaQuery("(min-width: 800px)");
   const tablet = useMediaQuery("(max-width: 1000px)");
-
-  console.log(tablet)
 
   const [customers, setCustomers] = useState([]);
   const [customerModel, setCustomerModel] = useState(false);
@@ -95,26 +94,31 @@ export default function AddSite() {
 
   const addNewCustomer = async (values) => {
     if(password){
-      const { email, first_name, last_name, role } = values;
       setLoading(true);
-      const { user, session, error } = await supabase.auth.signUp(
-        { email, password },
-        {
-          data: {
-            first_name,
-            last_name,
-            role,
-          },
-        }
-      );
-      if (user) {
+      const { email, first_name, last_name, role } = values;
+      const data = await axios.post("/api/add-customer", {
+        email: email,
+        password: password,
+        added_by: user.id,
+        details: {
+          first_name: first_name,
+          last_name: last_name,
+          role: role
+        },
+      }).then(res => {
+        setLoading(false);
         setCustomerModel(false);
         setSelected(!selected)
-      }
-      if (error) {
+      })
+      .catch(error => {
+        setLoading(false);
         toast.error(`${error?.message}`, { position: "top-center" });
-      }
+      })
+      // if (data) {}
+      // if (error) {}
+      setLoading(false);
     }else{
+      setLoading(false);
       toast.error(`No password`, { position: "top-center" });
     }
     setLoading(false);

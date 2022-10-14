@@ -33,7 +33,7 @@ export default function AddClient() {
 
   const addNewCustomer = async (values, resetForm) => {
     if (password) {
-      const { email, first_name, last_name, role } = values;
+      const { email, first_name, last_name, role, contact_number } = values;
       setLoading(true);
       await axios.post("/api/add-customer", {
         email: email,
@@ -42,28 +42,12 @@ export default function AddClient() {
         details: {
           first_name: first_name,
           last_name: last_name,
+          email: email,
+          contact_number: contact_number,
           role: role
         },
       }).then(res => console.log(res))
       .catch(error => console.log(error))
-      // const { user, session, error } = await supabase.auth.signUp(
-      //   { email, password },
-      //   {
-      //     data: {
-      //       first_name,
-      //       last_name,
-      //       role,
-      //     },
-      //   }
-      // );
-      // if (user) {
-      //   toast.success(`${values.first_name} was added successfully`, {
-      //     position: "top-center",
-      //   });
-      // }
-      // if (error) {
-      //   toast.error(`${error?.message}`, { position: "top-center" });
-      // }
     } else {
       toast.error(`No password`, { position: "top-center" });
     }
@@ -77,6 +61,7 @@ export default function AddClient() {
       last_name: "",
       role: "customer",
       email: "",
+      contact_number: "",
     });
   };
 
@@ -98,6 +83,7 @@ export default function AddClient() {
             last_name: "",
             role: "customer",
             email: "",
+            contact_number: "",
           }}
           onSubmit={(values, { resetForm }) => {
             addNewCustomer(values, resetForm);
@@ -160,6 +146,22 @@ export default function AddClient() {
                       onChange={handleChange("last_name")}
                       onBlur={handleBlur("last_name")}
                       value={values.last_name}
+                    />
+                  </div>
+                </div>
+                <div className="flex items-center gap-10 my-5">
+                  <label htmlFor="" className="text-xl w-4/12 md:w-2/12">
+                    Telephone Number
+                  </label>
+                  <div className="w-8/12 md:w-8/12">
+                    <input
+                      type="text"
+                      name="text"
+                      className="py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-full"
+                      placeholder="Enter number"
+                      onChange={handleChange("contact_number")}
+                      onBlur={handleBlur("contact_number")}
+                      value={values.contact_number}
                     />
                   </div>
                 </div>

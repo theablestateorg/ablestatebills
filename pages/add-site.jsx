@@ -92,10 +92,26 @@ export default function AddSite() {
     setLoading(false);
   };
 
+  const [contactDetails, setContactDetails] = useState({email: "", contact_number: ""})
+  const getContactPersonDetails = async (contact_id) => {
+    const { data, error } = await supabase
+                          .from("profiles")
+                          .select("email, contact_number")
+                          .eq('id', contact_id)
+                          .single()
+
+    if(data){
+      setContactDetails(data)
+    }
+
+    console.log(data)
+  }
+
+  
   const addNewCustomer = async (values) => {
     if(password){
       setLoading(true);
-      const { email, first_name, last_name, role } = values;
+      const { email, first_name, last_name, role, contact_number } = values;
       const data = await axios.post("/api/add-customer", {
         email: email,
         password: password,
@@ -103,6 +119,8 @@ export default function AddSite() {
         details: {
           first_name: first_name,
           last_name: last_name,
+          email: email,
+          contact_number: contact_number,
           role: role
         },
       }).then(res => {
@@ -232,6 +250,7 @@ export default function AddSite() {
                       onChange={(e) => {
                         setFieldValue("contact_person", e.target.value);
                         setCustomerId(e.target.value);
+                        getContactPersonDetails(e.target.value)
                         setSelected(!selected)
                       }}
                       onBlur={handleBlur("contact_person")}
@@ -254,7 +273,7 @@ export default function AddSite() {
                       <MdAdd />
                       {tablet && matches ? "Add" : matches ? "Add Customer" : ""}
                     </button>
-                    {customerModel && <AddCustomerModal loading={loading} setCustomerModel={setCustomerModel} addNewCustomer={addNewCustomer} password={password} setPassword={setPassword} />}
+                    {customerModel && <AddCustomerModal loading={loading} setCustomerModel={setCustomerModel} addNewCustomer={addNewCustomer} password={password} setPassword={setPassword} contactDetails={contactDetails} />}
                   </div>
                 </div>
                 <div className="flex items-center gap-10 my-5">

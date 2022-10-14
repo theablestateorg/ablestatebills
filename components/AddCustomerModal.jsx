@@ -2,7 +2,7 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import PasswordGenerator from './PasswordGenerator'
 import { Formik, Form } from "formik";
 
-function AddCustomerModal( { loading, setCustomerModel, addNewCustomer, password, setPassword}) {
+function AddCustomerModal( { loading, setCustomerModel, addNewCustomer, password, setPassword, contactDetails}) {
   return (
       <div
         className={`bg-black z-20 bg-opacity-40 w-screen min-h-screen fixed top-0 left-0 right-0 flex justify-center`}
@@ -24,7 +24,8 @@ function AddCustomerModal( { loading, setCustomerModel, addNewCustomer, password
               first_name: "",
               last_name: "",
               role: "customer",
-              email: "",
+              email: contactDetails.email,
+              contact_number: contactDetails.contact_number,
             }}
           >
             {({
@@ -78,6 +79,20 @@ function AddCustomerModal( { loading, setCustomerModel, addNewCustomer, password
                         placeholder="Enter last name"
                         onChange={handleChange("last_name")}
                         onBlur={handleBlur("last_name")}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2  my-2">
+                    <label htmlFor="">Telephone Number</label>
+                    <div className="w-full">
+                      <input
+                        type="text"
+                        name="contact_number"
+                        className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full"
+                        placeholder="Enter telephone"
+                        onChange={handleChange("contact_number")}
+                        onBlur={handleBlur("contact_number")}
+                        value={contactDetails.contact_number}
                       />
                     </div>
                   </div>

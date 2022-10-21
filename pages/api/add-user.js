@@ -1,13 +1,13 @@
 // require('dotenv').config();
 const { createClient } = require('@supabase/supabase-js');
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseKey = process.env.NEXT_SUPABASE_SERVICE_ROLE_KEY
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL_TOLL
+const supabaseKey = process.env.NEXT_SUPABASE_SERVICE_ROLE_KEY_TOLL
 const supabase = createClient(supabaseUrl, supabaseKey)
 
 const handler = async ( req, res ) => {
     try {
-        const { email, password, username, roles, phoneNumber, organization_id } = req.body
+        const { email, password, username, roles, phoneNumber, organisation_id } = req.body
 
         if ( !email ) {
             const response = { "Status":"Failure","Details": "Email not provided"}
@@ -46,7 +46,7 @@ const handler = async ( req, res ) => {
                     roles: roles,
                     phone: phoneNumber,
                     email: email,
-                    organization_id: organization_id
+                    organisation_id: organisation_id
                   })
                   .eq("id", id)
         if (response?.error) {

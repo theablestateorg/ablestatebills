@@ -23,7 +23,7 @@ export default function AddSite() {
   const [contact, setContact] = useState({});
   const [countryCode, setCountryCode] = useState("+256");
   const [selected, setSelected] = useState(false);
-  const [ password, setPassword ] = useState(null)
+  const [password, setPassword] = useState(null);
 
   useEffect(() => {
     getCustomers();
@@ -92,50 +92,54 @@ export default function AddSite() {
     setLoading(false);
   };
 
-  const [contactDetails, setContactDetails] = useState({email: "", contact_number: ""})
+  const [contactDetails, setContactDetails] = useState({
+    email: "",
+    contact_number: "",
+  });
   const getContactPersonDetails = async (contact_id) => {
-    const { data, error } = await supabase
-                          .from("profiles")
-                          .select("email, contact_number")
-                          .eq('id', contact_id)
-                          .single()
+    if (contact_id) {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("email, contact_number")
+        .eq("id", contact_id)
+        .single();
 
-    if(data){
-      setContactDetails(data)
+      if (data) {
+        setContactDetails(data);
+      }
     }
+  };
 
-    console.log(data)
-  }
-
-  
   const addNewCustomer = async (values) => {
-    if(password){
+    if (password) {
       setLoading(true);
       const { email, first_name, last_name, role, contact_number } = values;
-      const data = await axios.post("/api/add-customer", {
-        email: email,
-        password: password,
-        added_by: user.id,
-        details: {
-          first_name: first_name,
-          last_name: last_name,
+      const data = await axios
+        .post("/api/add-customer", {
           email: email,
-          contact_number: contact_number,
-          role: role
-        },
-      }).then(res => {
-        setLoading(false);
-        setCustomerModel(false);
-        setSelected(!selected)
-      })
-      .catch(error => {
-        setLoading(false);
-        toast.error(`${error?.message}`, { position: "top-center" });
-      })
+          password: password,
+          added_by: user.id,
+          details: {
+            first_name: first_name,
+            last_name: last_name,
+            email: email,
+            contact_number: contact_number,
+            role: role,
+          },
+        })
+        .then((res) => {
+          setLoading(false);
+          setCustomerModel(false);
+          setSelected(!selected);
+        })
+        .catch((error) => {
+          setLoading(false);
+          toast.error(`${error?.message}`, { position: "top-center" });
+        });
       // if (data) {}
       // if (error) {}
       setLoading(false);
-    }else{
+    } else {
       setLoading(false);
       toast.error(`No password`, { position: "top-center" });
     }
@@ -152,7 +156,7 @@ export default function AddSite() {
         <section className="flex justify-between items-center">
           <h1 className="font-bold text-2xl my-5">Add Site</h1>
         </section>
-
+        some thing {contactDetails.email}
         <Formik
           initialValues={{
             name: "",
@@ -250,8 +254,8 @@ export default function AddSite() {
                       onChange={(e) => {
                         setFieldValue("contact_person", e.target.value);
                         setCustomerId(e.target.value);
-                        getContactPersonDetails(e.target.value)
-                        setSelected(!selected)
+                        getContactPersonDetails(e.target.value);
+                        setSelected(!selected);
                       }}
                       onBlur={handleBlur("contact_person")}
                       value={values.contact_person}
@@ -271,9 +275,22 @@ export default function AddSite() {
                       onClick={() => setCustomerModel(true)}
                     >
                       <MdAdd />
-                      {tablet && matches ? "Add" : matches ? "Add Customer" : ""}
+                      {tablet && matches
+                        ? "Add"
+                        : matches
+                        ? "Add Customer"
+                        : ""}
                     </button>
-                    {customerModel && <AddCustomerModal loading={loading} setCustomerModel={setCustomerModel} addNewCustomer={addNewCustomer} password={password} setPassword={setPassword} contactDetails={contactDetails} />}
+                    {customerModel && (
+                      <AddCustomerModal
+                        loading={loading}
+                        setCustomerModel={setCustomerModel}
+                        addNewCustomer={addNewCustomer}
+                        password={password}
+                        setPassword={setPassword}
+                        contactDetails={contactDetails}
+                      />
+                    )}
                   </div>
                 </div>
                 <div className="flex items-center gap-10 my-5">
@@ -292,7 +309,8 @@ export default function AddSite() {
                       className=" py-2 px-2 ml-16 bg-transparent flex-grow focus:outline-none"
                       onChange={handleChange("telephone_number")}
                       onBlur={handleBlur("telephone_number")}
-                      value={values.telephone_number}
+                      defaultValue={"Hello"}
+                      value={contactDetails.contact_number || values.contact_number }
                     />
                     <select
                       name=""
@@ -317,7 +335,7 @@ export default function AddSite() {
                       className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-full"
                       onChange={handleChange("email")}
                       onBlur={handleBlur("email")}
-                      value={values.email}
+                      value={contactDetails.email || values.email}
                     />
                     <div
                       className={`${

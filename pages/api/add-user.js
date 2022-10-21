@@ -7,7 +7,7 @@ const supabase = createClient(supabaseUrl, supabaseKey)
 
 const handler = async ( req, res ) => {
     try {
-        const { email, password, details, added_by } = req.body
+        const { email, password, username, roles, phoneNumber, organization_id } = req.body
 
         if ( !email ) {
             const response = { "Status":"Failure","Details": "Email not provided"}
@@ -19,15 +19,15 @@ const handler = async ( req, res ) => {
             return res.status(400).json(response)
         }
 
-        if ( !details || details.length < 1 ) {
-            const response = { "Status": "Failure", "Details": "Information not provided"}
-            return res.status(400).json(response)
-        }
+        // if ( !details || details.length < 1 ) {
+        //     const response = { "Status": "Failure", "Details": "Information not provided"}
+        //     return res.status(400).json(response)
+        // }
 
-        if ( !added_by ) {
-            const response = { "Status": "Failure", "Details": "Manager not provided"}
-            return res.status(400).json(response)
-        }
+        // if ( !added_by ) {
+        //     const response = { "Status": "Failure", "Details": "Manager not provided"}
+        //     return res.status(400).json(response)
+        // }
 
         const { data: user, error } = await supabase.auth.api.createUser({
             email: email,
@@ -42,7 +42,11 @@ const handler = async ( req, res ) => {
 
         const response = await supabase.from("profiles")
                   .update({
-                    ...details, added_by
+                    username: username,
+                    roles: roles,
+                    phone: phoneNumber,
+                    email: email,
+                    organization_id: organization_id
                   })
                   .eq("id", id)
         if (response?.error) {

@@ -24,7 +24,6 @@ const handler = async ( req, res ) => {
           throw error
         }
         else {
-          console.log("reached here")
           const { data, user, error } = await supabase.auth.api.deleteUser(userId);
 
         if ( error ) throw error

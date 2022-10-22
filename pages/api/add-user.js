@@ -3,7 +3,11 @@ const { createClient } = require('@supabase/supabase-js');
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL_TOLL
 const supabaseKey = process.env.NEXT_SUPABASE_SERVICE_ROLE_KEY_TOLL
+
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY_TOLL;
+
 const supabase = createClient(supabaseUrl, supabaseKey)
+const supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
 
 const handler = async ( req, res ) => {
     try {
@@ -53,6 +57,14 @@ const handler = async ( req, res ) => {
           throw error
         }
         else {
+          const res = await supabaseClient.from("logs")
+                  .insert({
+                    "description": `Added ${username} - ${roles}`,
+                    "actor": actor_id,
+                    "status": "Successful"
+                  })
+                  .eq("id", id)
+
           const response = { "Status": "Success", "Details": "Memeber successfully created"}
           res.status(200).json(response) 
 

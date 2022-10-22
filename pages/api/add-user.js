@@ -11,7 +11,7 @@ const supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
 
 const handler = async ( req, res ) => {
     try {
-        const { email, password, username, roles, phoneNumber, organisation_id } = req.body
+        const { email, password, lane, username, roles, phoneNumber, organisation_id } = req.body
 
         if ( !email ) {
             const response = { "Status":"Failure","Details": "Email not provided"}
@@ -49,6 +49,7 @@ const handler = async ( req, res ) => {
                     username: username,
                     roles: roles,
                     phone: phoneNumber,
+                    lane: lane,
                     email: email,
                     organisation_id: organisation_id
                   })

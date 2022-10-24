@@ -9,8 +9,9 @@ import { toast, ToastContainer } from "react-toastify";
 import { useAuth } from "../utils/auth";
 import { IoWarning } from "react-icons/io5";
 import { Footer } from "../components";
+import { avatarColors } from "../utils/avatarColors";
 
-export default function Home({ websites, customers }) {
+export default function Customers({ websites, customers }) {
   const router = useRouter();
   const [searchText, setSearchText] = useState("");
   const [status, setStatus] = useState("");
@@ -21,6 +22,8 @@ export default function Home({ websites, customers }) {
   const [sortBy, setSortBy] = useState("");
   const checkbox = useRef()
   const { user } = useAuth();
+
+  console.log(avatarColors["X"])
 
   websites = websites
     .filter((website) =>
@@ -67,7 +70,7 @@ export default function Home({ websites, customers }) {
   return (
     <>
       <Head>
-        <title>Dashboard - Shine Afrika</title>
+        <title>Customers - Shine Afrika</title>
       </Head>
       <ToastContainer />
 
@@ -76,10 +79,10 @@ export default function Home({ websites, customers }) {
           <h1 className="font-bold text-2xl"></h1>
           <button
             className="bg-[#1D1F20] text-white py-2 px-4 my-2 mt-4 hover:bg-transparent hover:text-black outline outline-1 outline-black flex items-center gap-2 "
-            onClick={() => router.push("/add-site")}
+            onClick={() => router.push("/add-customer")}
           >
             <MdAdd />
-            New Product
+            New Customer
           </button>
         </section>
 
@@ -87,7 +90,7 @@ export default function Home({ websites, customers }) {
           <table className="bg-white w-full table-auto p-10 select-none">
             <caption className=" bg-white py-3 outline outline-1 outline-[#e5e7eb] px-3">
               <section className="flex justify-between items-center">
-                <h3 className="font-bold text-left">Products 
+                <h3 className="font-bold text-left">Customers 
                 {deleteArrayIds.length > 0 &&
                 <span className="font-light ml-5 bg-gray-100 text-gray-500 p-2 rounded-lg">
                   {deleteArrayIds.length === websites.length ? 
@@ -136,7 +139,7 @@ export default function Home({ websites, customers }) {
             </caption>
             <thead>
               <tr className="border-b bg-[#f7f7f7] text-[#555b6d]">
-                <th className="py-4 text-center px-3 w-1">
+                {/* <th className="py-4 text-center px-3 w-1">
                   <input type="checkbox" className="accent-[#ca3011]" name="" id="" ref={checkbox} onChange={() => {
                     if(checkbox.current.checked === true){
                       Object.values(document.getElementsByClassName("checkboxes")).map(checkbox => checkbox.checked = true)
@@ -146,10 +149,10 @@ export default function Home({ websites, customers }) {
                       setDeleteArray([])
                     }
                   }} />
-                </th>
+                </th> */}
                 <th className="py-4 text-left pl-3 font-light">
                   <div className="flex items-center">
-                    Website
+                    Name
                     <i
                       className="cursor-pointer"
                       onClick={() => {
@@ -160,18 +163,6 @@ export default function Home({ websites, customers }) {
                       <FaSort size={13} />
                     </i>
                   </div>
-                </th>
-                <th className="py-4 text-left pl-3 font-light flex items-center">
-                  Contact Person
-                  <i
-                    className="cursor-pointer"
-                    onClick={() => {
-                      setSortNames(!sortNames);
-                      setSortBy("contact_person");
-                    }}
-                  >
-                    <FaSort size={13} />
-                  </i>
                 </th>
                 <th className="py-4 text-left pl-3 font-light">
                   <div className="flex items-center">
@@ -187,34 +178,19 @@ export default function Home({ websites, customers }) {
                     </i>
                   </div>
                 </th>
-                <th className="py-4 text-left pl-3 font-light">
-                  <select
-                    name=""
-                    className="font-light bg-transparent"
-                    id=""
-                    onChange={(event) => setStatus(event.target.value)}
-                  >
-                    <option value="">Status</option>
-                    <option value="active" className="font-light">
-                      Active
-                    </option>
-                    <option value="expired">Expired</option>
-                    <option value="warning">Warning</option>
-                  </select>
-                </th>
               </tr>
             </thead>
             <tbody>
-              {websites.map((site, index) => (
+              {customers.map((customer, index) => (
                 <tr
-                  className={`border-b border-l-2 border-l-transparent hover:border-l-[#ca3011] cursor-pointer mb-10 ${deleteArrayIds.includes(site.id.toString()) && "bg-red-50 border-l-[#ca3011]"}`}
+                  className={`border-b border-l-2 border-l-transparent hover:border-l-[#ca3011] cursor-pointer mb-10 ${deleteArrayIds.includes(customer.id.toString()) && "bg-red-50 border-l-[#ca3011]"}`}
                   key={index}
-                  onClick={() => router.push(`/sites/${site.id}`)}
+                  onClick={() => router.push(`/customers/${customer.id}`)}
                 >
-                  <td className="py-4 text-center px-3"
+                  {/* <td className="py-4 text-center px-3"
                     onClick={(event) => event.stopPropagation()}
-                  >
-                    <input type="checkbox" name="" id="" className="checkboxes accent-[#ca3011]"
+                  > */}
+                    {/* <input type="checkbox" name="" id="" className="checkboxes accent-[#ca3011]"
                       onChange={(event) => {
                         event.stopPropagation()
                         checkbox.current.checked = false
@@ -222,32 +198,19 @@ export default function Home({ websites, customers }) {
                                   setDeleteArray([ ...deleteArray, [site.id, site.name]]) : 
                                   setDeleteArray(deleteArray.filter(element => element[0] !== site.id))
                       }}
-                     />
-                  </td>
+                     /> */}
+                  {/* </td> */}
                   <td className="py-2 text-left pl-3">
-                    <h1 className="font-medium">{site.name}</h1>
-                    <span className="font-extralight text-sm text-[#bcbfc2]">
-                      expiring on{" "}
-                      {moment(new Date(site.expiry_date)).format("DD-MM-YYYY")}
+                    <span className="flex items-center gap-2">
+                      <div className={`bg-[${avatarColors["B"]}] w-10 h-10 rounded-full text-white flex items-center justify-center`}>
+                      {customer.first_name[0].toUpperCase() + customer.last_name[0].toUpperCase()}
+                      </div>
+                      <h1 className="font-medium">{customer.first_name + " "+ customer.last_name}</h1>
                     </span>
                   </td>
-                  <td className="py-2 text-left pl-3">{customers.filter((customer => customer.id === site.contact_person)).map((customer, index) => <p key={index}>{customer.first_name+ " " + customer.last_name}</p>)}</td>
+                  {/* <td className="py-2 text-left pl-3">{customers.filter((customer => customer.id === site.contact_person)).map((customer, index) => <p key={index}>{customer.first_name+ " " + customer.last_name}</p>)}</td> */}
                   <td className="py-2 text-left pl-3">
-                    {site.telephone_number}
-                  </td>
-                  <td className="py-2 text-left text-xs pl-3 font-light flex">
-                    <span className="outline outline-1 outline-[#e5e3e3] px-2 gap-1 py-1 rounded-lg flex items-center justify-between font-light">
-                      <span
-                        className={`w-2 h-2 rounded-full ${
-                          site.status.includes("active")
-                            ? "bg-green-500"
-                            : site.status.includes("warning")
-                            ? "bg-yellow-200"
-                            : "bg-red-600"
-                        }`}
-                      ></span>
-                      {site.status}
-                    </span>
+                    {customer.contact_number}
                   </td>
                 </tr>
               ))}
@@ -255,7 +218,7 @@ export default function Home({ websites, customers }) {
           </table>
         </div>
 
-        {popUp && (
+        {/* {popUp && (
           <div
             className={`bg-black z-20 bg-opacity-40 w-screen min-h-screen fixed top-0 left-0 right-0 flex justify-center items-center`}
           >
@@ -291,7 +254,7 @@ export default function Home({ websites, customers }) {
               </div>
             </div>
           </div>
-        )}
+        )} */}
 
 <Footer />
       </main>
@@ -305,7 +268,7 @@ export const getServerSideProps = async ({ req }) => {
     .select("*")
     .order("created_at", { ascending: false });
 
-    const { data: customers } = await supabase.from("profiles").select("*");
+    const { data: customers } = await supabase.from("profiles").select("*").eq("role", "customer");
 
   const { user } = await supabase.auth.api.getUserByCookie(req);
 

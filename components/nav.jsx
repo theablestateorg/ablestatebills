@@ -87,6 +87,7 @@ export default function Navbar() {
         </div>
         <ul className={`${navStyles.navMenu} h-[70px] items-center`}>
           <ActiveLink name={"Dashboard"} href={"/"} />
+          <ActiveLink name={"Customers"} href={"/customers"} />
           <ActiveLink name={tablet ? "Add" : "Add Product"} href={"/add-site"} />
           <ActiveLink name={"Tickets"} href={"/tickets"} />
           <ActiveLink name={"Add Customer"} href={"/add-customer"} />

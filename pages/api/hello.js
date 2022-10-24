@@ -52,7 +52,8 @@ export default function handler(req, res) {
         .catch();
 
       client.SMS.send({
-        to: `+256${website.telephone_number}`,
+        // to: `+256${website.telephone_number}`,
+        to: website.telephone_number,
         message: `Your website ${website.name.toUpperCase()} (${
           website.website_link
         }) will expiry in a day. Please make payment on +256756085187 / +256771 561682 to keep it running. If you require any further information, please let us know.`,
@@ -98,7 +99,8 @@ export default function handler(req, res) {
         .catch();
 
       client.SMS.send({
-        to: `+256${website.telephone_number}`,
+        // to: `+256${website.telephone_number}`,
+        to: website.telephone_number,
         message: `Your website ${website.name.toUpperCase()} (${
           website.website_link
         }) will expiry in a week. Please make payment on +256756085187 / +256771 561682 to keep it running. If you require any further information, please let us know.`,
@@ -144,7 +146,8 @@ export default function handler(req, res) {
         .catch();
 
       client.SMS.send({
-        to: `+256${website.telephone_number}`,
+        // to: `+256${website.telephone_number}`,
+        to: website.telephone_number,
         message: `Your website ${website.name.toUpperCase()} (${
           website.website_link
         }) will expiry in a month. Please make payment on +256756085187 / +256771 561682 to keep it running. If you require any further information, please let us know.`,
@@ -190,7 +193,8 @@ export default function handler(req, res) {
         .catch();
 
       client.SMS.send({
-        to: `+256${website.telephone_number}`,
+        // to: `+256${website.telephone_number}`,
+        to: website.telephone_number,
         message: `Your website ${website.name.toUpperCase()} (${
           website.website_link
         }) will expiry in a 60 days. Please make payment on +256756085187 / +256771 561682 to keep it running. If you require any further information, please let us know.`,

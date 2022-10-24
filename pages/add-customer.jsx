@@ -43,7 +43,7 @@ export default function AddClient() {
           first_name: first_name,
           last_name: last_name,
           email: email,
-          contact_number: contact_number,
+          contact_number: countryCode + contact_number,
           role: role
         },
       }).then(res => console.log(res))
@@ -149,7 +149,7 @@ export default function AddClient() {
                     />
                   </div>
                 </div>
-                <div className="flex items-center gap-10 my-5">
+                {/* <div className="flex items-center gap-10 my-5">
                   <label htmlFor="" className="text-xl w-4/12 md:w-2/12">
                     Telephone Number
                   </label>
@@ -163,6 +163,34 @@ export default function AddClient() {
                       onBlur={handleBlur("contact_number")}
                       value={values.contact_number}
                     />
+                  </div>
+                </div> */}
+                <div className="flex items-center gap-10 my-5">
+                  <label
+                    htmlFor="telephone_number"
+                    className="text-xl w-4/12 md:w-2/12"
+                  >
+                    Telephone
+                  </label>
+                  <div className="w-8/12 md:w-8/12 relative outline outline-1 outline-[#121212] rounded flex">
+                    <input
+                      type="tel"
+                      id="telephone_number"
+                      name="telephone_number"
+                      placeholder="Telephone number"
+                      className=" py-2 px-2 ml-16 bg-transparent flex-grow focus:outline-none"
+                      onChange={handleChange("contact_number")}
+                      onBlur={handleBlur("contact_number")}
+                      value={values.contact_number }
+                    />
+                    <select
+                      name=""
+                      id=""
+                      className="bg-transparent absolute left-0 h-full w-16 border-r-2"
+                      onChange={(e) => setCountryCode(e.target.value)}
+                    >
+                      <option value="+256">+256</option>
+                    </select>
                   </div>
                 </div>
                 <PasswordGenerator

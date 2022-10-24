@@ -90,7 +90,7 @@ export default function Navbar() {
           <ActiveLink name={"Customers"} href={"/customers"} />
           <ActiveLink name={tablet ? "Add" : "Add Product"} href={"/add-site"} />
           <ActiveLink name={"Tickets"} href={"/tickets"} />
-          <ActiveLink name={"Add Customer"} href={"/add-customer"} />
+          {/* <ActiveLink name={"Add Customer"} href={"/add-customer"} /> */}
           <ActiveLink name={"Logs"} href={"/logs"} />
         </ul>
         <div className={navStyles.profileMenu}>

@@ -22,6 +22,7 @@ export default function Site({product}) {
   const [customers, setCustomers] = useState([]);
   const [customerModel, setCustomerModel] = useState(false);
   const [customerId, setCustomerId] = useState(null);
+  const [newCustomer, setNewCustomer] = useState(null);
   const [contact, setContact] = useState({});
   const [countryCode, setCountryCode] = useState("+256");
   const [selected, setSelected] = useState(false);
@@ -29,7 +30,7 @@ export default function Site({product}) {
 
   useEffect(() => {
     getCustomers();
-    getContact(customerId);
+    getContact();
   }, [selected]);
 
   const getCustomers = async () => {
@@ -37,14 +38,22 @@ export default function Site({product}) {
     setCustomers(data);
   };
 
-  const getContact = async (id) => {
-    const { data } = await supabase.from("profiles").select("*").eq("id", id);
+  const getContact = async () => {
+    const { data } = await supabase.from("profiles").select("*").eq("id", product.contact_person).single();
     setContact(data);
   };
 
+  const getNewCustomer = async (id) => {
+    const { data } = await supabase.from("profiles").select("*").eq("id", id).single();
+    // setContact(data);
+    setNewCustomer(data)
+  };
+
+  // console.log(newCustomer)
+
   const addNewCustomer = async (values) => {
     if(password){
-      console.log(password)
+      // console.log(password)
       const { email, first_name, last_name, role } = values;
       setLoading(true);
       const { user, session, error } = await supabase.auth.signUp(
@@ -172,7 +181,10 @@ export default function Site({product}) {
                     <AiFillCloseCircle
                       size={25}
                       className="cursor-pointer"
-                      onClick={() => setPopUpdate(false)}
+                      onClick={() => {
+                        setPopUpdate(false)
+                        setNewCustomer(null)
+                      }}
                     />
                   </div>
 
@@ -227,6 +239,7 @@ export default function Site({product}) {
                       onChange={(e) => {
                         setFieldValue("contact_person", e.target.value);
                         setCustomerId(e.target.value);
+                        getNewCustomer(e.target.value)
                         setSelected(!selected)
                       }}
                       onBlur={handleBlur("contact_person")}
@@ -262,7 +275,7 @@ export default function Site({product}) {
                               className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
                               onChange={handleChange("telephone_number")}
                               onBlur={handleBlur("telephone_number")}
-                              defaultValue={"0" + product.telephone_number}
+                              defaultValue={newCustomer ? newCustomer.contact_number : product.telephone_number}
                             />
                           </div>
                           <div className="flex flex-col gap-1 my-2">
@@ -331,7 +344,7 @@ export default function Site({product}) {
               </div>
             )}
             <p>
-              {product.contact_person}, {`+256` + product.telephone_number}
+              {contact?.first_name + " " + contact?.last_name}, {product.telephone_number}
             </p>
             <section className="my-5">
               <h1>Extension</h1>

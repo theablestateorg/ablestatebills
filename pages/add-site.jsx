@@ -10,6 +10,7 @@ import { MdAdd } from "react-icons/md";
 import AddCustomerModal from "../components/AddCustomerModal";
 import useMediaQuery from "../hooks/useMediaQuery";
 import axios from "axios";
+import Footer from "../components/Footer";
 
 export default function AddSite() {
   const [loading, setLoading] = useState(false);
@@ -309,7 +310,7 @@ export default function AddSite() {
                       className=" py-2 px-2 ml-16 bg-transparent flex-grow focus:outline-none"
                       onChange={handleChange("telephone_number")}
                       onBlur={handleBlur("telephone_number")}
-                      defaultValue={"Hello"}
+                      defaultValue={""}
                       value={contactDetails.contact_number || values.contact_number }
                     />
                     <select
@@ -427,12 +428,7 @@ export default function AddSite() {
             );
           }}
         </Formik>
-        <footer className="text-center text-sm text-gray-500 absolute bottom-1 h-6 w-full">
-          <p>
-            Copyright &#169; {new Date().getFullYear()} A service of Gagawala
-            Graphics Limited
-          </p>
-        </footer>
+        <Footer />
       </main>
     </>
   );

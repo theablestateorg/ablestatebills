@@ -122,15 +122,26 @@ export default function Site({profile}) {
     event.preventDefault();
     setLoading(true);
 
-    const { data, error } = await supabase
-      .from("websites")
-      .update(values)
-      .match({ id: id });
+    const { first_name, last_name, email, contact_number } = values
 
-    if (data) {
-      toast.success(`Successfully updated`, { position: "top-center" });
-    }
+    const { error } = await supabase
+      .from("profiles")
+      .update({
+        first_name: first_name,
+        last_name: last_name,
+        email: email,
+        contact_number: countryCode + contact_number
+      })
+      .eq('id', id);
+
+    // console.log(error)
+    // console.log(data)
+
+    // if (data) {
+    //   toast.success(`Successfully updated`, { position: "top-center" });
+    // }
     if (error) {
+      console.log(error)
       toast.error(`${error?.message}`, { position: "top-center" });
     }
 
@@ -160,14 +171,14 @@ export default function Site({profile}) {
                 Edit
               </button>
             </section>
-            {/* {popUpdate && (
+            {popUpdate && profile && (
               <div
                 className={`bg-black z-20 bg-opacity-40 w-screen min-h-screen fixed top-0 left-0 right-0 flex justify-center`}
               >
                 <div className="relative bg-white dark:bg-dark-bg max-h-screen overflow-auto dark:text-secondary-text p-10 w-10/12 md:8/12  rounded-md m-5 sm:mb-5 shadow-md top-50 z-20">
                   <div className="flex items-center justify-between">
                     <h1 className="text-center font-bold text-lg my-5">
-                      Update Website
+                      Edit {profile.last_name}'s information
                     </h1>
                     <AiFillCloseCircle
                       size={25}
@@ -175,13 +186,14 @@ export default function Site({profile}) {
                       onClick={() => setPopUpdate(false)}
                     />
                   </div>
+                  <hr />
 
                   <Formik
                     initialValues={{
-                      name: product.name,
-                      website_link: product.website_link,
-                      contact_person: product.contact_person,
-                      telephone_number: product.telephone_number,
+                      last_name: profile.last_name,
+                      first_name: profile.first_name,
+                      contact_number: profile.contact_number &&(profile.contact_number).slice(4, 13),
+                      email: profile.email
                     }}
                   >
                     {({
@@ -201,95 +213,77 @@ export default function Site({profile}) {
                           onSubmit={(event) => handleUpdate(event, values)}
                         >
                           <div className="flex flex-col gap-1 my-2">
-                            <label htmlFor="name" className="">
-                              Site Name
+                            <label htmlFor="last_name" className="">
+                              Last Name
                             </label>
                             <input
                               type="text"
-                              name="name"
-                              id="name"
-                              placeholder="name"
+                              name="last_name"
+                              id="last_name"
+                              placeholder="Enter Last Name"
                               className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
-                              onChange={handleChange("name")}
-                              onBlur={handleBlur("name")}
-                              defaultValue={product.name}
+                              onChange={handleChange("last_name")}
+                              onBlur={handleBlur("last_name")}
+                              value={values.last_name}
                             />
                           </div>
                           <div className="flex flex-col gap-1 my-2">
-                            <label htmlFor="contact_person">
-                              Contact Person
+                            <label htmlFor="first-name" className="">
+                              First Name
                             </label>
-                            <div className="flex justify-between items-center gap-2 w-full">
+                            <input
+                              type="text"
+                              name="first_name"
+                              id="first_name"
+                              placeholder="first_name"
+                              className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
+                              onChange={handleChange("first_name")}
+                              onBlur={handleBlur("first_name")}
+                              value={values.first_name}
+                            />
+                          </div>
+                          <div className="flex flex-col gap-1 my-2">
+                            <label htmlFor="contact_number" className="">
+                              Telephone Number 
+                            </label>
+                            <div className="relative outline outline-1 outline-[#c1c7d6] rounded flex">
+                    <input
+                      type="tel"
+                      id="telephone_number"
+                      name="telephone_number"
+                      placeholder="Telephone number"
+                      className=" py-2 px-2 ml-16 bg-transparent flex-grow focus:outline-none"
+                      onChange={handleChange("contact_number")}
+                      onBlur={handleBlur("contact_number")}
+                      value={values.contact_number}
+                    />
                     <select
                       name=""
-                      id="contact_person"
-                      className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
-                      onChange={(e) => {
-                        setFieldValue("contact_person", e.target.value);
-                        setCustomerId(e.target.value);
-                        setSelected(!selected)
-                      }}
-                      onBlur={handleBlur("contact_person")}
-                      value={values.contact_person}
+                      id=""
+                      className="bg-transparent absolute left-0 h-full w-16 border-r-2"
+                      onChange={(e) => setCountryCode(e.target.value)}
                     >
-                      <option value="">Select Customer</option>
-                      {customers &&
-                        customers.map((customer, index) => (
-                          <option value={customer.id} key={index}>
-                            {customer.first_name + " " + customer.last_name}
-                          </option>
-                        ))}
+                      <option value="+256">+256</option>
                     </select>
-                    <button
-                      type="button"
-                      className="bg-[#1D1F20] text-white py-2 px-4  hover:bg-transparent hover:text-black outline outline-1 outline-black flex items-center gap-2 "
-                      onClick={() => setCustomerModel(true)}
-                    >
-                      <MdAdd />
-                      Add Customer
-                    </button>
-                    {customerModel && <AddCustomerModal loading={loading} setCustomerModel={setCustomerModel} addNewCustomer={addNewCustomer} password={password} setPassword={setPassword} />}
                   </div>
                           </div>
                           <div className="flex flex-col gap-1 my-2">
-                            <label htmlFor="telephone_number">Telephone</label>
+                            <label htmlFor="email" className="">
+                              Email
+                            </label>
                             <input
-                              type="tel"
-                              id="telephone_number"
-                              name="telephone_number"
-                              placeholder="telephone number"
-                              className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
-                              onChange={handleChange("telephone_number")}
-                              onBlur={handleBlur("telephone_number")}
-                              defaultValue={"0" + product.telephone_number}
-                            />
-                          </div>
-                          <div className="flex flex-col gap-1 my-2">
-                            <label htmlFor="email">Email</label>
-                            <input
-                              type="email"
+                              type="text"
                               name="email"
                               id="email"
-                              placeholder="Email"
+                              placeholder="email"
                               className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
                               onChange={handleChange("email")}
                               onBlur={handleBlur("email")}
-                              defaultValue={product.email}
+                              value={values.email}
                             />
                           </div>
 
-                          <div className="flex flex-col gap-1 my-2">
-                            <label htmlFor="website_link">Website</label>
-                            <input
-                              type="text"
-                              name="website_link"
-                              placeholder="website"
-                              className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
-                              onChange={handleChange("website_link")}
-                              onBlur={handleBlur("website_link")}
-                              defaultValue={product.website_link}
-                            />
-                          </div>
+                          
 
                           <div className="flex justify-end mt-5">
                             <button
@@ -328,7 +322,7 @@ export default function Site({profile}) {
                   </Formik>
                 </div>
               </div>
-            )} */}
+            )}
             {/* <p>
               {product.contact_person}, {`+256` + product.telephone_number}
             </p> */}
@@ -354,7 +348,7 @@ export default function Site({profile}) {
                 className="outline outline-1 outline-[#1D1F20] text-[#1D1F20] py-2 px-4 hover:bg-[#1D1F20] hover:text-white flex items-center gap-2"
                 onClick={() => setPopUp(true)}
               >
-                <MdDeleteOutline size={20} /> Delete Website
+                <MdDeleteOutline size={20} /> Delete Customer
               </button>
             </div>
           </>
@@ -366,7 +360,7 @@ export default function Site({profile}) {
           >
             <div className="relative bg-white dark:bg-dark-bg max-h-screen overflow-auto dark:text-secondary-text p-10  rounded-md m-2 sm:mb-5 shadow-md top-50 z-20">
               <h1 className="text-center font-bold text-lg my-5">
-                Delete Website
+                Delete Customer
               </h1>
               <p>
                 Are you sure you want to delete <b>{profile.first_name}</b>?

@@ -10,6 +10,7 @@ import { useAuth } from "../utils/auth";
 import { IoWarning } from "react-icons/io5";
 import { Footer } from "../components";
 import { avatarColors } from "../utils/avatarColors";
+import Avatar from "../components/Avatar";
 
 export default function Customers({ websites, customers }) {
   const router = useRouter();
@@ -22,8 +23,6 @@ export default function Customers({ websites, customers }) {
   const [sortBy, setSortBy] = useState("");
   const checkbox = useRef()
   const { user } = useAuth();
-
-  console.log(avatarColors["X"])
 
   websites = websites
     .filter((website) =>
@@ -202,9 +201,10 @@ export default function Customers({ websites, customers }) {
                   {/* </td> */}
                   <td className="py-2 text-left pl-3">
                     <span className="flex items-center gap-2">
-                      <div className={`bg-[${avatarColors["B"]}] w-10 h-10 rounded-full text-white flex items-center justify-center`}>
+                      {/* <div className={`bg-[${avatarColors["S"]}] w-10 h-10 rounded-full text-white flex items-center justify-center`}>
                       {customer.first_name[0].toUpperCase() + customer.last_name[0].toUpperCase()}
-                      </div>
+                      </div> */}
+                      <Avatar first_name={customer.first_name} last_name={customer.last_name} />
                       <h1 className="font-medium">{customer.first_name + " "+ customer.last_name}</h1>
                     </span>
                   </td>

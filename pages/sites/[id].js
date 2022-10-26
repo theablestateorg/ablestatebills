@@ -12,6 +12,7 @@ import { useAuth } from "../../utils/auth";
 import { TbEdit } from "react-icons/tb";
 import AddCustomerModal from "../../components/AddCustomerModal";
 import { MdAdd } from "react-icons/md";
+import { RiExternalLinkFill } from 'react-icons/ri'
 
 export default function Site({ product }) {
   const router = useRouter();
@@ -391,6 +392,11 @@ export default function Site({ product }) {
                 </div>
               </div>
             )}
+            <a href={`https://${product.website_link}`} target="_blank" className="flex items-center gap-2 cursor-pointer underline"
+            >
+              {product.website_link}
+              <RiExternalLinkFill />
+            </a>
             <p>
               {contact?.first_name + " " + contact?.last_name},{" "}
               {product.telephone_number}

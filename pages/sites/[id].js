@@ -9,11 +9,11 @@ import Router from "next/router";
 import { Formik, Form } from "formik";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { useAuth } from "../../utils/auth";
-import { TbEdit } from 'react-icons/tb'
+import { TbEdit } from "react-icons/tb";
 import AddCustomerModal from "../../components/AddCustomerModal";
 import { MdAdd } from "react-icons/md";
 
-export default function Site({product}) {
+export default function Site({ product }) {
   const router = useRouter();
   const { id } = router.query;
   const [popUp, setPopUp] = useState(false);
@@ -26,7 +26,7 @@ export default function Site({product}) {
   const [contact, setContact] = useState({});
   const [countryCode, setCountryCode] = useState("+256");
   const [selected, setSelected] = useState(false);
-  const [ password, setPassword ] = useState(null)
+  const [password, setPassword] = useState(null);
 
   useEffect(() => {
     getCustomers();
@@ -39,20 +39,32 @@ export default function Site({product}) {
   };
 
   const getContact = async () => {
-    const { data } = await supabase.from("profiles").select("*").eq("id", product.contact_person).single();
+    const { data } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", product.contact_person)
+      .single();
     setContact(data);
   };
 
-  const getNewCustomer = async (id) => {
-    const { data } = await supabase.from("profiles").select("*").eq("id", id).single();
+  const getNewCustomer = async (id, setFieldValue) => {
+    const { data } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", id)
+      .single();
     // setContact(data);
-    setNewCustomer(data)
+    if(data.contact_number){
+      // values.telephone_number = "+256985"
+      setFieldValue('telephone_number', data.contact_number.slice(4, 13))
+    }
+    setNewCustomer(data);
   };
 
   // console.log(newCustomer)
 
   const addNewCustomer = async (values) => {
-    if(password){
+    if (password) {
       // console.log(password)
       const { email, first_name, last_name, role } = values;
       setLoading(true);
@@ -68,12 +80,12 @@ export default function Site({product}) {
       );
       if (user) {
         setCustomerModel(false);
-        setSelected(!selected)
+        setSelected(!selected);
       }
       if (error) {
         toast.error(`${error?.message}`, { position: "top-center" });
       }
-    }else{
+    } else {
       toast.error(`No password`, { position: "top-center" });
     }
     setLoading(false);
@@ -93,15 +105,13 @@ export default function Site({product}) {
 
     if (data) {
       toast.success(`Successfully deleted`, { position: "top-center" });
-      await supabase
-        .from("logs")
-        .insert([
-          {
-            name: `[Deleted] ${product.name}`,
-            details: `deleted by ${user.first_name} ${user.last_name}`,
-            status: "success",
-          },
-        ]);
+      await supabase.from("logs").insert([
+        {
+          name: `[Deleted] ${product.name}`,
+          details: `deleted by ${user.first_name} ${user.last_name}`,
+          status: "success",
+        },
+      ]);
     }
     if (error) {
       toast.error(`${error?.message}`, { position: "top-center" });
@@ -131,9 +141,17 @@ export default function Site({product}) {
     event.preventDefault();
     setLoading(true);
 
+    const { name, website_link, contact_person, telephone_number } = values;
+    console.log(values);
+
     const { data, error } = await supabase
       .from("websites")
-      .update(values)
+      .update({
+        name: name,
+        website_link: website_link,
+        contact_person: contact_person,
+        telephone_number: countryCode + telephone_number
+      })
       .match({ id: id });
 
     if (data) {
@@ -182,8 +200,8 @@ export default function Site({product}) {
                       size={25}
                       className="cursor-pointer"
                       onClick={() => {
-                        setPopUpdate(false)
-                        setNewCustomer(null)
+                        setPopUpdate(false);
+                        setNewCustomer(null);
                       }}
                     />
                   </div>
@@ -193,7 +211,9 @@ export default function Site({product}) {
                       name: product.name,
                       website_link: product.website_link,
                       contact_person: product.contact_person,
-                      telephone_number: product.telephone_number,
+                      telephone_number:
+                        product.telephone_number &&
+                        product.telephone_number.slice(4, 13),
                     }}
                   >
                     {({
@@ -214,7 +234,7 @@ export default function Site({product}) {
                         >
                           <div className="flex flex-col gap-1 my-2">
                             <label htmlFor="name" className="">
-                              Site Name
+                              Product Name
                             </label>
                             <input
                               type="text"
@@ -224,7 +244,7 @@ export default function Site({product}) {
                               className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
                               onChange={handleChange("name")}
                               onBlur={handleBlur("name")}
-                              defaultValue={product.name}
+                              value={values.name}
                             />
                           </div>
                           <div className="flex flex-col gap-1 my-2">
@@ -232,51 +252,77 @@ export default function Site({product}) {
                               Contact Person
                             </label>
                             <div className="flex justify-between items-center gap-2 w-full">
-                    <select
-                      name=""
-                      id="contact_person"
-                      className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
-                      onChange={(e) => {
-                        setFieldValue("contact_person", e.target.value);
-                        setCustomerId(e.target.value);
-                        getNewCustomer(e.target.value)
-                        setSelected(!selected)
-                      }}
-                      onBlur={handleBlur("contact_person")}
-                      value={values.contact_person}
-                    >
-                      {/* <input type="text" name="" id="" /> */}
-                      <option value="">Select Customer</option>
-                      {customers &&
-                        customers.map((customer, index) => (
-                          <option value={customer.id} key={index}>
-                            {customer.first_name + " " + customer.last_name}
-                          </option>
-                        ))}
-                    </select>
-                    <button
-                      type="button"
-                      className="bg-[#1D1F20] text-white py-2 px-4  hover:bg-transparent hover:text-black outline outline-1 outline-black flex items-center gap-2 "
-                      onClick={() => setCustomerModel(true)}
-                    >
-                      <MdAdd />
-                      Add Customer
-                    </button>
-                    {customerModel && <AddCustomerModal loading={loading} setCustomerModel={setCustomerModel} addNewCustomer={addNewCustomer} password={password} setPassword={setPassword} />}
-                  </div>
+                              <select
+                                name=""
+                                id="contact_person"
+                                className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
+                                onChange={(e) => {
+                                  setFieldValue(
+                                    "contact_person",
+                                    e.target.value
+                                  );
+                                  setCustomerId(e.target.value);
+                                  getNewCustomer(e.target.value, setFieldValue);
+                                  setSelected(!selected);
+                                }}
+                                onBlur={handleBlur("contact_person")}
+                                value={values.contact_person}
+                              >
+                                {/* <input type="text" name="" id="" /> */}
+                                <option value="">Select Customer</option>
+                                {customers &&
+                                  customers.map((customer, index) => (
+                                    <option value={customer.id} key={index}>
+                                      {customer.first_name +
+                                        " " +
+                                        customer.last_name}
+                                    </option>
+                                  ))}
+                              </select>
+                              <button
+                                type="button"
+                                className="bg-[#1D1F20] text-white py-2 px-4  hover:bg-transparent hover:text-black outline outline-1 outline-black flex items-center gap-2 "
+                                onClick={() => setCustomerModel(true)}
+                              >
+                                <MdAdd />
+                                Add Customer
+                              </button>
+                              {customerModel && (
+                                <AddCustomerModal
+                                  loading={loading}
+                                  setCustomerModel={setCustomerModel}
+                                  addNewCustomer={addNewCustomer}
+                                  password={password}
+                                  setPassword={setPassword}
+                                />
+                              )}
+                            </div>
                           </div>
                           <div className="flex flex-col gap-1 my-2">
                             <label htmlFor="telephone_number">Telephone</label>
-                            <input
-                              type="tel"
-                              id="telephone_number"
-                              name="telephone_number"
-                              placeholder="telephone number"
-                              className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
-                              onChange={handleChange("telephone_number")}
-                              onBlur={handleBlur("telephone_number")}
-                              defaultValue={newCustomer ? newCustomer.contact_number : product.telephone_number}
-                            />
+                            <div className="relative outline outline-1 outline-[#c1c7d6] rounded flex">
+                              <input
+                                type="tel"
+                                id="telephone_number"
+                                name="telephone_number"
+                                placeholder="Telephone number"
+                                className=" py-2 px-2 ml-16 bg-transparent flex-grow focus:outline-none"
+                                onChange={handleChange("telephone_number")}
+                                onBlur={handleBlur("telephone_number")}
+                                value={
+                                  newCustomer?.contact_number ? newCustomer?.contact_number.slice(4, 13) :
+                                  product?.telephone_number.slice(4, 13)
+                                }
+                              />
+                              <select
+                                name=""
+                                id=""
+                                className="bg-transparent absolute left-0 h-full w-16 border-r-2"
+                                onChange={(e) => setCountryCode(e.target.value)}
+                              >
+                                <option value="+256">+256</option>
+                              </select>
+                            </div>
                           </div>
                           <div className="flex flex-col gap-1 my-2">
                             <label htmlFor="email">Email</label>
@@ -288,7 +334,9 @@ export default function Site({product}) {
                               className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
                               onChange={handleChange("email")}
                               onBlur={handleBlur("email")}
-                              defaultValue={product.email}
+                              value={
+                                newCustomer ? newCustomer?.email : product.email
+                              }
                             />
                           </div>
 
@@ -344,7 +392,8 @@ export default function Site({product}) {
               </div>
             )}
             <p>
-              {contact?.first_name + " " + contact?.last_name}, {product.telephone_number}
+              {contact?.first_name + " " + contact?.last_name},{" "}
+              {product.telephone_number}
             </p>
             <section className="my-5">
               <h1>Extension</h1>
@@ -411,7 +460,8 @@ export default function Site({product}) {
         )}
         <footer className="text-center text-gray-500 absolute bottom-1 h-6 w-full">
           <p>
-            Copyright &#169; {new Date().getFullYear()} A service of Gagawala Graphics Limited
+            Copyright &#169; {new Date().getFullYear()} A service of Gagawala
+            Graphics Limited
           </p>
         </footer>
       </main>

@@ -178,7 +178,7 @@ export default function Site({profile}) {
                 <div className="relative bg-white dark:bg-dark-bg max-h-screen overflow-auto dark:text-secondary-text p-10 w-10/12 md:8/12  rounded-md m-5 sm:mb-5 shadow-md top-50 z-20">
                   <div className="flex items-center justify-between">
                     <h1 className="text-center font-bold text-lg my-5">
-                      Edit {profile.last_name}'s information
+                      Edit {profile.last_name}&apos;s information
                     </h1>
                     <AiFillCloseCircle
                       size={25}

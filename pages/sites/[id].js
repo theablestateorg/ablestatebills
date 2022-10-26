@@ -392,7 +392,7 @@ export default function Site({ product }) {
                 </div>
               </div>
             )}
-            <a href={`https://${product.website_link}`} target="_blank" className="flex items-center gap-2 cursor-pointer underline"
+            <a href={`https://${product.website_link}`} className="flex items-center gap-2 cursor-pointer underline"
             >
               {product.website_link}
               <RiExternalLinkFill />

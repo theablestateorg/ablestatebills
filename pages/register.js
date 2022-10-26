@@ -12,7 +12,7 @@ export default function Home() {
 
   const [ loading, setLoading ] = useState(false)
 
-  const handleSubmit = async (event, {email, password, first_name, last_name, role}, resetForm) => {
+  const handleSubmit = async (event, {email, password, first_name, last_name, role, contact_number}, resetForm) => {
     event.preventDefault();
     try{
       setLoading(true)
@@ -21,7 +21,8 @@ export default function Home() {
           data: { 
             first_name, 
             last_name,
-            role
+            role, 
+            contact_number: ""
           }
         }
         )
@@ -50,7 +51,7 @@ export default function Home() {
       <ToastContainer />
       <div className="w-screen h-screen flex justify-center items-center relative pb-6 min-h-screen">
         <Formik
-          initialValues={{ password: "", first_name: "", last_name: "", role: "customer", email: ""  }}
+          initialValues={{ password: "", first_name: "", last_name: "", role: "customer", email: "", contact_number: ""  }}
           validationSchema={registerValidationSchema}
         >
           {({
@@ -170,6 +171,36 @@ export default function Home() {
                           : "hide"
                       }`}</label>
                     </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2  my-2">
+                  <label
+                    htmlFor="telephone_number"
+                  >
+                    Telephone
+                  </label>
+                  <div className="relative flex
+                  outline outline-1 placeholder:text-[#bcbfc2] w-full">
+                    <input
+                      type="tel"
+                      id="telephone_number"
+                      name="telephone_number"
+                      placeholder="Telephone number"
+                      className=" py-2 px-2 ml-16 bg-transparent flex-grow focus:outline-none
+                      "
+                      onChange={handleChange("contact_number")}
+                      onBlur={handleBlur("contact_number")}
+                      value={values.contact_number}
+                    />
+                    <select
+                      name=""
+                      id=""
+                      className="bg-transparent absolute left-0 h-full w-16 border-r-2"
+                      onChange={(e) => setCountryCode(e.target.value)}
+                    >
+                      <option value="+256">+256</option>
+                    </select>
                   </div>
                 </div>
                 

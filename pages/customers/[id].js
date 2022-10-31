@@ -9,11 +9,11 @@ import Router from "next/router";
 import { Formik, Form } from "formik";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { useAuth } from "../../utils/auth";
-import { TbEdit } from 'react-icons/tb'
+import { TbEdit } from "react-icons/tb";
 import AddCustomerModal from "../../components/AddCustomerModal";
 import { MdAdd } from "react-icons/md";
 
-export default function Site({profile}) {
+export default function Site({ profile }) {
   const router = useRouter();
   const { id } = router.query;
   const [popUp, setPopUp] = useState(false);
@@ -25,49 +25,21 @@ export default function Site({profile}) {
   const [contact, setContact] = useState({});
   const [countryCode, setCountryCode] = useState("+256");
   const [selected, setSelected] = useState(false);
-  const [ password, setPassword ] = useState(null)
+  const [password, setPassword] = useState(null);
+  const [addedBy, setAddedBy] = useState(null);
 
   useEffect(() => {
-    getCustomers();
-    getContact(customerId);
-  }, [selected]);
+    getAddedBy();
+  }, []);
 
-  const getCustomers = async () => {
-    const { data } = await supabase.from("profiles").select("*");
-    setCustomers(data);
-  };
-
-  const getContact = async (id) => {
-    const { data } = await supabase.from("profiles").select("*").eq("id", id);
-    setContact(data);
-  };
-
-  const addNewCustomer = async (values) => {
-    if(password){
-      console.log(password)
-      const { email, first_name, last_name, role } = values;
-      setLoading(true);
-      const { user, session, error } = await supabase.auth.signUp(
-        { email, password },
-        {
-          data: {
-            first_name,
-            last_name,
-            role,
-          },
-        }
-      );
-      if (user) {
-        setCustomerModel(false);
-        setSelected(!selected)
-      }
-      if (error) {
-        toast.error(`${error?.message}`, { position: "top-center" });
-      }
-    }else{
-      toast.error(`No password`, { position: "top-center" });
-    }
-    setLoading(false);
+  const getAddedBy = async () => {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", profile.added_by)
+      .single();
+    setAddedBy(data);
+    console.log("was added by, ", data);
   };
 
   const { user } = useAuth();
@@ -84,37 +56,16 @@ export default function Site({profile}) {
 
     if (data) {
       toast.success(`Successfully deleted`, { position: "top-center" });
-      await supabase
-        .from("logs")
-        .insert([
-          {
-            name: `[Deleted] ${profile.first_name}`,
-            details: `deleted by ${user.first_name} ${user.last_name}`,
-            status: "success",
-          },
-        ]);
+      await supabase.from("logs").insert([
+        {
+          name: `[Deleted] ${profile.first_name}`,
+          details: `deleted by ${user.first_name} ${user.last_name}`,
+          status: "success",
+        },
+      ]);
     }
     if (error) {
       toast.error(`${error?.message}`, { position: "top-center" });
-    }
-  };
-
-  const handleExtension = async () => {
-    if (document.getElementById("extension").value !== "") {
-      const { data, error } = await supabase
-        .from("websites")
-        .update({
-          last_paid: new Date(document.getElementById("extension").value),
-          expiry_date: new Date(document.getElementById("extension").value),
-        })
-        .match({ id: id });
-
-      if (data) {
-        toast.success(`Successfully extended`, { position: "top-center" });
-      }
-      if (error) {
-        toast.error(`${error?.message}`, { position: "top-center" });
-      }
     }
   };
 
@@ -122,7 +73,7 @@ export default function Site({profile}) {
     event.preventDefault();
     setLoading(true);
 
-    const { first_name, last_name, email, contact_number } = values
+    const { first_name, last_name, email, contact_number } = values;
 
     const { error } = await supabase
       .from("profiles")
@@ -130,9 +81,9 @@ export default function Site({profile}) {
         first_name: first_name,
         last_name: last_name,
         email: email,
-        contact_number: countryCode + contact_number
+        contact_number: countryCode + contact_number,
       })
-      .eq('id', id);
+      .eq("id", id);
 
     // console.log(error)
     // console.log(data)
@@ -141,7 +92,7 @@ export default function Site({profile}) {
     //   toast.success(`Successfully updated`, { position: "top-center" });
     // }
     if (error) {
-      console.log(error)
+      console.log(error);
       toast.error(`${error?.message}`, { position: "top-center" });
     }
 
@@ -150,10 +101,14 @@ export default function Site({profile}) {
     setPopUpdate(false);
   };
 
+  console.log(profile);
+
   return (
     <div>
       <Head>
-        <title>{profile ? profile.first_name : "loading..."} - Shine Africa</title>
+        <title>
+          {profile ? profile.first_name : "loading..."} - Shine Africa
+        </title>
       </Head>
 
       <ToastContainer />
@@ -162,7 +117,9 @@ export default function Site({profile}) {
         {profile && (
           <>
             <section className="flex justify-between items-center">
-              <h1 className="font-bold text-2xl my-5">{profile.first_name + " " + profile.last_name}</h1>
+              <h1 className="font-bold text-2xl">
+                {profile.first_name + " " + profile.last_name}
+              </h1>
               <button
                 className="bg-[#1D1F20] text-white py-2 px-4 my-2 mt-4 hover:bg-[#292C2D] flex items-center gap-2"
                 onClick={() => setPopUpdate(true)}
@@ -170,6 +127,21 @@ export default function Site({profile}) {
                 <TbEdit />
                 Edit
               </button>
+            </section>
+            <section className="my-5">
+              <p>{profile.role}</p>
+              <p>{profile.email}</p>
+              <p>{profile.contact_number}</p>
+              <br />
+
+              {addedBy && (
+                <div className="flex gap-2">
+                  <p className="">Added By:</p>
+                  <p className="">
+                    {addedBy.first_name + " " + addedBy.last_name}
+                  </p>
+                </div>
+              )}
             </section>
             {popUpdate && profile && (
               <div
@@ -192,8 +164,10 @@ export default function Site({profile}) {
                     initialValues={{
                       last_name: profile.last_name,
                       first_name: profile.first_name,
-                      contact_number: profile.contact_number &&(profile.contact_number).slice(4, 13),
-                      email: profile.email
+                      contact_number:
+                        profile.contact_number &&
+                        profile.contact_number.slice(4, 13),
+                      email: profile.email,
                     }}
                   >
                     {({
@@ -244,28 +218,28 @@ export default function Site({profile}) {
                           </div>
                           <div className="flex flex-col gap-1 my-2">
                             <label htmlFor="contact_number" className="">
-                              Telephone Number 
+                              Telephone Number
                             </label>
                             <div className="relative outline outline-1 outline-[#c1c7d6] rounded flex">
-                    <input
-                      type="tel"
-                      id="telephone_number"
-                      name="telephone_number"
-                      placeholder="Telephone number"
-                      className=" py-2 px-2 ml-16 bg-transparent flex-grow focus:outline-none"
-                      onChange={handleChange("contact_number")}
-                      onBlur={handleBlur("contact_number")}
-                      value={values.contact_number}
-                    />
-                    <select
-                      name=""
-                      id=""
-                      className="bg-transparent absolute left-0 h-full w-16 border-r-2"
-                      onChange={(e) => setCountryCode(e.target.value)}
-                    >
-                      <option value="+256">+256</option>
-                    </select>
-                  </div>
+                              <input
+                                type="tel"
+                                id="telephone_number"
+                                name="telephone_number"
+                                placeholder="Telephone number"
+                                className=" py-2 px-2 ml-16 bg-transparent flex-grow focus:outline-none"
+                                onChange={handleChange("contact_number")}
+                                onBlur={handleBlur("contact_number")}
+                                value={values.contact_number}
+                              />
+                              <select
+                                name=""
+                                id=""
+                                className="bg-transparent absolute left-0 h-full w-16 border-r-2"
+                                onChange={(e) => setCountryCode(e.target.value)}
+                              >
+                                <option value="+256">+256</option>
+                              </select>
+                            </div>
                           </div>
                           <div className="flex flex-col gap-1 my-2">
                             <label htmlFor="email" className="">
@@ -282,8 +256,6 @@ export default function Site({profile}) {
                               value={values.email}
                             />
                           </div>
-
-                          
 
                           <div className="flex justify-end mt-5">
                             <button
@@ -391,7 +363,8 @@ export default function Site({profile}) {
         )}
         <footer className="text-center text-gray-500 absolute bottom-1 h-6 w-full">
           <p>
-            Copyright &#169; {new Date().getFullYear()} A service of Gagawala Graphics Limited
+            Copyright &#169; {new Date().getFullYear()} A service of Gagawala
+            Graphics Limited
           </p>
         </footer>
       </main>

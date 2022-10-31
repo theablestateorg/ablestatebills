@@ -394,28 +394,54 @@ export default function Site({ product }) {
                 </div>
               </div>
             )}
-            <div className="flex flex-col md:flex-row gap-2">
+            <div className="flex flex-col md:flex-row gap-5 outline outline-1 outline-[#e4e6e5] bg-white p-2 md:p-5 rounded-sm md:shadow-sm justify-center md:justify-start items-center md:items-start">
               <iframe
-                className="h-80 w-80 outline outline-1 outline-[#e4e6e5] rounded-lg"
+                id="website_frame"
+                scrolling="no"
+                className="h-80 w-80 outline outline-1 outline-[#e4e6e5] rounded-sm bg-[#f7f7f7]"
                 src={`https://${product.website_link}`}
                 title={product.name}
               ></iframe>
               <div>
-                <a
-                  href={`https://${product.website_link}`}
-                  className="flex items-center gap-2 cursor-pointer underline"
-                >
-                  {product.website_link}
-                  <RiExternalLinkFill />
-                </a>
-                <p>
-              {contact?.first_name + " " + contact?.last_name},{" "}
-              {product.telephone_number}
-            </p>
+                <div className="mb-3">
+                  <p className="uppercase font-medium">DOMAIN</p>
+                  <a
+                    href={`https://${product.website_link}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 cursor-pointer underline font-bold text-sm text-gray-700"
+                  >
+                    {product.website_link}
+                    <RiExternalLinkFill />
+                  </a>
+                </div>
+
+                <div className="mb-3">
+                  <p className="uppercase font-medium">CONTACT PERSON</p>
+                  <p className="font-bold text-sm text-gray-700">
+                    {contact?.first_name + " " + contact?.last_name},{" "}
+                    {product.telephone_number}
+                  </p>
+                </div>
+
+                <div className="mb-3">
+                  <p className="uppercase font-medium">STATUS</p>
+                  <div className="flex gap-1 items-center">
+                    <p className="font-bold text-sm text-gray-700">{product.status}</p>
+                    <div
+                      className={`w-2 h-2 rounded-full ${
+                        product.status === "active"
+                          ? "bg-green-500"
+                          : product.status === "warning"
+                          ? "bg-yellow-200"
+                          : "bg-red-600"
+                      }`}
+                    ></div>
+                  </div>
+                </div>
               </div>
             </div>
 
-            
             <section className="my-5">
               <h1>Extension</h1>
               <div className="flex gap-5 items-center my-1">
@@ -433,7 +459,7 @@ export default function Site({ product }) {
               </div>
             </section>
 
-            <div className="flex gap-5 items-center my-1">
+            <div className="flex gap-5 items-center mt-1 mb-5">
               <button
                 className="outline outline-1 outline-[#1D1F20] text-[#1D1F20] py-2 px-4 hover:bg-[#1D1F20] hover:text-white flex items-center gap-2"
                 onClick={() => setPopUp(true)}

@@ -12,7 +12,7 @@ import { Footer } from "../components";
 import { avatarColors } from "../utils/avatarColors";
 import Avatar from "../components/Avatar";
 
-export default function Customers({ websites, customers }) {
+export default function Customers({ websites, customers, managers }) {
   const router = useRouter();
   const [searchText, setSearchText] = useState("");
   const [status, setStatus] = useState("");
@@ -23,6 +23,8 @@ export default function Customers({ websites, customers }) {
   const [sortBy, setSortBy] = useState("");
   const checkbox = useRef()
   const { user } = useAuth();
+
+  console.log("the managers are ", managers)
 
   websites = websites
     .filter((website) =>
@@ -99,7 +101,7 @@ export default function Customers({ websites, customers }) {
                 }
                 </h3>
                 <div className="flex items-center gap-2">
-                <form onSubmit={(event) => {
+                {/* <form onSubmit={(event) => {
                   event.preventDefault()
                   setPopUp(true)
                 }}>
@@ -112,7 +114,7 @@ export default function Customers({ websites, customers }) {
                         <option value="telephone_number">Delete</option>
                       </select>
                       <input type="submit" value="apply" className="px-3 py-2 ml-2 bg-gray-700 text-white rounded-lg text-sm cursor-pointer" />
-                  </form>
+                  </form> */}
                   <div className="flex justify-between items-center">
                     <div className="flex justify-between items-center relative focus-within:text-black ">
                       <input
@@ -127,9 +129,9 @@ export default function Customers({ websites, customers }) {
                         className="absolute right-1 px-1 py-2 ml-2 bg-white rounded-lg outline outline-1 outline-[#ededed] text-sm"
                         onChange={(event) => setSearchBy(event.target.value)}
                       >
-                        <option value="name">name</option>
-                        <option value="telephone_number">no.</option>
-                        <option value="contact_person">person</option>
+                        <option value="first_name">First name</option>
+                        <option value="last_name">Last name</option>
+                        <option value="contact_number">no.</option>
                       </select>
                     </div>
                   </div>
@@ -177,6 +179,20 @@ export default function Customers({ websites, customers }) {
                     </i>
                   </div>
                 </th>
+                <th className="py-4 text-left pl-3 font-light">
+                  <div className="flex items-center">
+                    Added By
+                    <i
+                      className="cursor-pointer"
+                      onClick={() => {
+                        setSortNames(!sortNames);
+                        setSortBy("telephone_number");
+                      }}
+                    >
+                      <FaSort size={13} />
+                    </i>
+                  </div>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -212,6 +228,7 @@ export default function Customers({ websites, customers }) {
                   <td className="py-2 text-left pl-3">
                     {customer.contact_number}
                   </td>
+                  <td className="py-2 text-left pl-3">{managers.filter((manager => manager.id === customer.added_by)).map((manager, index) => <p key={index}>{manager.first_name+ " " + manager.last_name}</p>)}</td>
                 </tr>
               ))}
             </tbody>
@@ -270,6 +287,8 @@ export const getServerSideProps = async ({ req }) => {
 
     const { data: customers } = await supabase.from("profiles").select("*").eq("role", "customer");
 
+    const { data: managers } = await supabase.from("profiles").select("*").neq("role", "customer")
+
   const { user } = await supabase.auth.api.getUserByCookie(req);
 
   if (!user) {
@@ -285,7 +304,8 @@ export const getServerSideProps = async ({ req }) => {
   return {
     props: {
       websites,
-      customers
+      customers,
+      managers
     },
   };
 };

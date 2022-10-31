@@ -12,7 +12,7 @@ import { useAuth } from "../../utils/auth";
 import { TbEdit } from "react-icons/tb";
 import AddCustomerModal from "../../components/AddCustomerModal";
 import { MdAdd } from "react-icons/md";
-import { RiExternalLinkFill } from 'react-icons/ri'
+import { RiExternalLinkFill } from "react-icons/ri";
 
 export default function Site({ product }) {
   const router = useRouter();
@@ -55,9 +55,9 @@ export default function Site({ product }) {
       .eq("id", id)
       .single();
     // setContact(data);
-    if(data.contact_number){
+    if (data.contact_number) {
       // values.telephone_number = "+256985"
-      setFieldValue('telephone_number', data.contact_number.slice(4, 13))
+      setFieldValue("telephone_number", data.contact_number.slice(4, 13));
     }
     setNewCustomer(data);
   };
@@ -152,7 +152,7 @@ export default function Site({ product }) {
         name: name,
         website_link: website_link,
         contact_person: contact_person,
-        telephone_number: countryCode + telephone_number
+        telephone_number: countryCode + telephone_number,
       })
       .match({ id: id });
 
@@ -312,8 +312,9 @@ export default function Site({ product }) {
                                 onChange={handleChange("telephone_number")}
                                 onBlur={handleBlur("telephone_number")}
                                 value={
-                                  newCustomer?.contact_number ? newCustomer?.contact_number.slice(4, 13) :
-                                  product?.telephone_number.slice(4, 13)
+                                  newCustomer?.contact_number
+                                    ? newCustomer?.contact_number.slice(4, 13)
+                                    : product?.telephone_number.slice(4, 13)
                                 }
                               />
                               <select
@@ -393,15 +394,28 @@ export default function Site({ product }) {
                 </div>
               </div>
             )}
-            <a href={`https://${product.website_link}`} className="flex items-center gap-2 cursor-pointer underline"
-            >
-              {product.website_link}
-              <RiExternalLinkFill />
-            </a>
-            <p>
+            <div className="flex flex-col md:flex-row gap-2">
+              <iframe
+                className="h-80 w-80 outline outline-1 outline-[#e4e6e5] rounded-lg"
+                src={`https://${product.website_link}`}
+                title={product.name}
+              ></iframe>
+              <div>
+                <a
+                  href={`https://${product.website_link}`}
+                  className="flex items-center gap-2 cursor-pointer underline"
+                >
+                  {product.website_link}
+                  <RiExternalLinkFill />
+                </a>
+                <p>
               {contact?.first_name + " " + contact?.last_name},{" "}
               {product.telephone_number}
             </p>
+              </div>
+            </div>
+
+            
             <section className="my-5">
               <h1>Extension</h1>
               <div className="flex gap-5 items-center my-1">

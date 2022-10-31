@@ -126,6 +126,7 @@ export default function Site({ product }) {
         .update({
           last_paid: new Date(document.getElementById("extension").value),
           expiry_date: new Date(document.getElementById("extension").value),
+          status: "active",
         })
         .match({ id: id });
 

@@ -15,11 +15,12 @@ export default function Home({ websites, customers }) {
   const [searchText, setSearchText] = useState("");
   const [status, setStatus] = useState("");
   const [searchBy, setSearchBy] = useState("name");
+  const [recommend, setRecommend] = useState(null);
   const [sortNames, setSortNames] = useState(false);
-  const [deleteArray, setDeleteArray] = useState([])
-  const [popUp, setPopUp] = useState(false)
+  const [deleteArray, setDeleteArray] = useState([]);
+  const [popUp, setPopUp] = useState(false);
   const [sortBy, setSortBy] = useState("");
-  const checkbox = useRef()
+  const checkbox = useRef();
   const { user } = useAuth();
 
   websites = websites
@@ -38,32 +39,31 @@ export default function Home({ websites, customers }) {
     ? websites.sort((a, b) => a[sortBy] > b[sortBy])
     : websites.sort((a, b) => b[sortBy] > a[sortBy]);
 
-  const deleteArrayIds = deleteArray.map(site => site[0].toString())
+  const deleteArrayIds = deleteArray.map((site) => site[0].toString());
 
   const bulkDelete = async () => {
     const { data, error } = await supabase
-      .from('websites')
+      .from("websites")
       .delete()
-      .in('id', deleteArrayIds)
+      .in("id", deleteArrayIds);
 
-      if (data) {
-        toast.success(`Successfully deleted`, { position: "top-center" });
-        await supabase
-          .from("logs")
-          .insert([
-            {
-              name: `[Bulk Deleted] ${deleteArray.map(site => site[1])}`,
-              details: `deleted by ${user.first_name} ${user.last_name}`,
-              status: "success",
-            },
-          ]);
-      }
-      if (error) {
-        toast.error(`${error?.message}`, { position: "top-center" });
-      }
-    setPopUp(false)
-  }
+    if (data) {
+      toast.success(`Successfully deleted`, { position: "top-center" });
+      await supabase.from("logs").insert([
+        {
+          name: `[Bulk Deleted] ${deleteArray.map((site) => site[1])}`,
+          details: `deleted by ${user.first_name} ${user.last_name}`,
+          status: "success",
+        },
+      ]);
+    }
+    if (error) {
+      toast.error(`${error?.message}`, { position: "top-center" });
+    }
+    setPopUp(false);
+  };
 
+  // console.log(document.getElementById);
   return (
     <>
       <Head>
@@ -87,38 +87,88 @@ export default function Home({ websites, customers }) {
           <table className="bg-white w-full table-auto p-10 select-none">
             <caption className=" bg-white py-3 outline outline-1 outline-[#e5e7eb] px-3">
               <section className="flex justify-between items-center">
-                <h3 className="font-bold text-left">Products 
-                {deleteArrayIds.length > 0 &&
-                <span className="font-light ml-5 bg-gray-100 text-gray-500 p-2 rounded-lg">
-                  {deleteArrayIds.length === websites.length ? 
-                  <span>All 
-                  <b className="font-bold"> {deleteArrayIds.length}</b> products are selected. </span> : <span><b className="font-bold">{deleteArrayIds.length}</b> products are selected.</span>}
-                </span>
-                }
+                <h3 className="font-bold text-left">
+                  Products
+                  {deleteArrayIds.length > 0 && (
+                    <span className="font-light ml-5 bg-gray-100 text-gray-500 p-2 rounded-lg">
+                      {deleteArrayIds.length === websites.length ? (
+                        <span>
+                          All
+                          <b className="font-bold">
+                            {" "}
+                            {deleteArrayIds.length}
+                          </b>{" "}
+                          products are selected.{" "}
+                        </span>
+                      ) : (
+                        <span>
+                          <b className="font-bold">{deleteArrayIds.length}</b>{" "}
+                          products are selected.
+                        </span>
+                      )}
+                    </span>
+                  )}
                 </h3>
                 <div className="flex items-center gap-2">
-                <form onSubmit={(event) => {
-                  event.preventDefault()
-                  setPopUp(true)
-                }}>
+                  <form
+                    onSubmit={(event) => {
+                      event.preventDefault();
+                      setPopUp(true);
+                    }}
+                  >
                     <select
-                        name=""
-                        id=""
-                        className="px-3 py-2 bg-[#f7f7f7] rounded-lg placeholder:text-[#bcbfc2] outline outline-1 outline-[#f4f3f7]" required
-                      >
-                        <option value="">Bulk Actions</option>
-                        <option value="telephone_number">Delete</option>
-                      </select>
-                      <input type="submit" value="apply" className="px-3 py-2 ml-2 bg-gray-700 text-white rounded-lg text-sm cursor-pointer" />
+                      name=""
+                      id=""
+                      className="px-3 py-2 bg-[#f7f7f7] rounded-lg placeholder:text-[#bcbfc2] outline outline-1 outline-[#f4f3f7]"
+                      required
+                    >
+                      <option value="">Bulk Actions</option>
+                      <option value="telephone_number">Delete</option>
+                    </select>
+                    <input
+                      type="submit"
+                      value="apply"
+                      className="px-3 py-2 ml-2 bg-gray-700 text-white rounded-lg text-sm cursor-pointer"
+                    />
                   </form>
                   <div className="flex justify-between items-center">
                     <div className="flex justify-between items-center relative focus-within:text-black ">
-                      <input
-                        type="text"
-                        placeholder="search"
-                        className="px-3 py-2 bg-[#f7f7f7] rounded-lg placeholder:text-[#bcbfc2] w-full outline outline-1 outline-[#f4f3f7]"
-                        onChange={(event) => setSearchText(event.target.value)}
-                      />
+                      <div className="relative">
+                        <input
+                          type="text"
+                          placeholder="search"
+                          className="px-3 py-2 bg-[#f7f7f7] rounded-lg placeholder:text-[#bcbfc2] w-full outline outline-1 outline-[#f4f3f7]"
+                          onChange={(event) => {
+                            setSearchText(event.target.value);
+                            // console.log(event.target.value)
+                            // console.log(websites[0].name)
+                            if (event.target.value !== "") {
+                              const rightWeb = websites.filter((web) =>
+                                web.name
+                                  .toLowerCase()
+                                  .startsWith(event.target.value.toLowerCase())
+                              );
+                              const recommendation =
+                                rightWeb.length > 0 ? rightWeb[0] : null;
+                              setRecommend(recommendation?.name.toLowerCase());
+
+                              document.getElementById("paragraph").innerHTML = rightWeb.length > 0 ? rightWeb[0]?.name.toLowerCase().replace(event.target.value, `<span class="text-black">${event.target.value}</span>`) : "";
+
+                            } else {
+                              setRecommend(null);
+                              document.getElementById("paragraph").innerHTML = "";
+                            }
+                            
+                          }}
+                        />
+                        <p id="paragraph" className="text-gray-400 absolute top-2 left-3 pointer-events-none">
+                          {/* {recommend
+                            ? recommend.replace(searchText, () => {
+                                return "<span>dark<span>";
+                              })
+                            : ""} */}
+                        </p>
+                      </div>
                       <select
                         name=""
                         id=""
@@ -137,15 +187,28 @@ export default function Home({ websites, customers }) {
             <thead>
               <tr className="border-b bg-[#f7f7f7] text-[#555b6d]">
                 <th className="py-4 text-center px-3 w-1">
-                  <input type="checkbox" className="accent-[#ca3011]" name="" id="" ref={checkbox} onChange={() => {
-                    if(checkbox.current.checked === true){
-                      Object.values(document.getElementsByClassName("checkboxes")).map(checkbox => checkbox.checked = true)
-                      setDeleteArray(websites.map(site => [site.id, site.name]))
-                    } else {
-                      Object.values(document.getElementsByClassName("checkboxes")).map(checkbox => checkbox.checked = false)
-                      setDeleteArray([])
-                    }
-                  }} />
+                  <input
+                    type="checkbox"
+                    className="accent-[#ca3011]"
+                    name=""
+                    id=""
+                    ref={checkbox}
+                    onChange={() => {
+                      if (checkbox.current.checked === true) {
+                        Object.values(
+                          document.getElementsByClassName("checkboxes")
+                        ).map((checkbox) => (checkbox.checked = true));
+                        setDeleteArray(
+                          websites.map((site) => [site.id, site.name])
+                        );
+                      } else {
+                        Object.values(
+                          document.getElementsByClassName("checkboxes")
+                        ).map((checkbox) => (checkbox.checked = false));
+                        setDeleteArray([]);
+                      }
+                    }}
+                  />
                 </th>
                 <th className="py-4 text-left pl-3 font-light">
                   <div className="flex items-center">
@@ -207,22 +270,37 @@ export default function Home({ websites, customers }) {
             <tbody>
               {websites.map((site, index) => (
                 <tr
-                  className={`border-b border-l-2 border-l-transparent hover:border-l-[#ca3011] cursor-pointer mb-10 ${deleteArrayIds.includes(site.id.toString()) && "bg-red-50 border-l-[#ca3011]"}`}
+                  className={`border-b border-l-2 border-l-transparent hover:border-l-[#ca3011] cursor-pointer mb-10 ${
+                    deleteArrayIds.includes(site.id.toString()) &&
+                    "bg-red-50 border-l-[#ca3011]"
+                  }`}
                   key={index}
                   onClick={() => router.push(`/sites/${site.id}`)}
                 >
-                  <td className="py-4 text-center px-3"
+                  <td
+                    className="py-4 text-center px-3"
                     onClick={(event) => event.stopPropagation()}
                   >
-                    <input type="checkbox" name="" id="" className="checkboxes accent-[#ca3011]"
+                    <input
+                      type="checkbox"
+                      name=""
+                      id=""
+                      className="checkboxes accent-[#ca3011]"
                       onChange={(event) => {
-                        event.stopPropagation()
-                        checkbox.current.checked = false
-                        return event.target.checked ? 
-                                  setDeleteArray([ ...deleteArray, [site.id, site.name]]) : 
-                                  setDeleteArray(deleteArray.filter(element => element[0] !== site.id))
+                        event.stopPropagation();
+                        checkbox.current.checked = false;
+                        return event.target.checked
+                          ? setDeleteArray([
+                              ...deleteArray,
+                              [site.id, site.name],
+                            ])
+                          : setDeleteArray(
+                              deleteArray.filter(
+                                (element) => element[0] !== site.id
+                              )
+                            );
                       }}
-                     />
+                    />
                   </td>
                   <td className="py-2 text-left pl-3">
                     <h1 className="font-medium">{site.name}</h1>
@@ -231,7 +309,15 @@ export default function Home({ websites, customers }) {
                       {moment(new Date(site.expiry_date)).format("DD-MM-YYYY")}
                     </span>
                   </td>
-                  <td className="py-2 text-left pl-3">{customers.filter((customer => customer.id === site.contact_person)).map((customer, index) => <p key={index}>{customer.first_name+ " " + customer.last_name}</p>)}</td>
+                  <td className="py-2 text-left pl-3">
+                    {customers
+                      .filter((customer) => customer.id === site.contact_person)
+                      .map((customer, index) => (
+                        <p key={index}>
+                          {customer.first_name + " " + customer.last_name}
+                        </p>
+                      ))}
+                  </td>
                   <td className="py-2 text-left pl-3">
                     {site.telephone_number}
                   </td>
@@ -264,16 +350,15 @@ export default function Home({ websites, customers }) {
                 Delete {deleteArray.length} Websites
               </h1>
               <p>
-                Are you sure you want to delete <b>
-                    {deleteArray.map(site => site[1] + " ")}
-                  </b>?
+                Are you sure you want to delete{" "}
+                <b>{deleteArray.map((site) => site[1] + " ")}</b>?
               </p>
               <p className="bg-[#ffe9d9] p-2 border-l-2 text-[#bc4c2e] border-[#fa703f] flex flex-col text-sm my-1">
                 <span className="text-[#771505] font-bold flex items-center gap-1">
                   <IoWarning /> Warning
                 </span>
-                By deleting these website, you won&apos;t be able to access it or
-                it&apos;s info
+                By deleting these website, you won&apos;t be able to access it
+                or it&apos;s info
               </p>
               <div className="flex justify-between mt-5">
                 <button
@@ -293,7 +378,7 @@ export default function Home({ websites, customers }) {
           </div>
         )}
 
-<Footer />
+        <Footer />
       </main>
     </>
   );
@@ -305,7 +390,7 @@ export const getServerSideProps = async ({ req }) => {
     .select("*")
     .order("created_at", { ascending: false });
 
-    const { data: customers } = await supabase.from("profiles").select("*");
+  const { data: customers } = await supabase.from("profiles").select("*");
 
   const { user } = await supabase.auth.api.getUserByCookie(req);
 
@@ -322,7 +407,7 @@ export const getServerSideProps = async ({ req }) => {
   return {
     props: {
       websites,
-      customers
+      customers,
     },
   };
 };

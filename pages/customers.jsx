@@ -87,12 +87,28 @@ export default function Customers({ websites, customers, managers }) {
                   </form> */}
                   <div className="flex justify-between items-center">
                     <div className="flex justify-between items-center relative focus-within:text-black ">
-                      <input
-                        type="text"
-                        placeholder="search"
-                        className="px-3 py-2 bg-[#f7f7f7] rounded-lg placeholder:text-[#bcbfc2] w-full outline outline-1 outline-[#f4f3f7]"
-                        onChange={(event) => setSearchText(event.target.value)}
-                      />
+                      <div className="relative">
+                        <input
+                          type="text"
+                          placeholder="search"
+                          className="px-3 py-2 bg-[#f7f7f7] rounded-lg placeholder:text-[#bcbfc2] w-full outline outline-1 outline-[#f4f3f7]"
+                          onChange={(event) => {
+                            setSearchText(event.target.value)
+                            if (event.target.value !== "") {
+                              const rightWeb = customers.filter((customer) =>
+                                  customer.first_name
+                                    .toLowerCase()
+                                    .startsWith(event.target.value.toLowerCase())
+                                );
+                                document.getElementById("paragraph").innerHTML = rightWeb.length > 0 ? `${rightWeb[0]?.first_name} ${rightWeb[0]?.last_name}`.toLowerCase().replace(event.target.value, `<span class="text-black">${event.target.value}</span>`) : "";
+                            } else {
+                              document.getElementById("paragraph").innerHTML = "";
+                            }
+                          }}
+                        />
+                        <p id="paragraph" className="text-gray-400 absolute top-2 left-3 pointer-events-none">
+                          </p>
+                      </div>
                       <select
                         name=""
                         id=""

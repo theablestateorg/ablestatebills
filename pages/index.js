@@ -140,8 +140,7 @@ export default function Home({ websites, customers }) {
                           className="px-3 py-2 bg-[#f7f7f7] rounded-lg placeholder:text-[#bcbfc2] w-full outline outline-1 outline-[#f4f3f7]"
                           onChange={(event) => {
                             setSearchText(event.target.value);
-                            // console.log(event.target.value)
-                            // console.log(websites[0].name)
+                            
                             if (event.target.value !== "") {
                               const rightWeb = websites.filter((web) =>
                                 web.name

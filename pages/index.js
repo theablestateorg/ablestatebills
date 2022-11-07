@@ -417,7 +417,7 @@ export const getServerSideProps = async ({ req }) => {
 
   const { data: customers } = await supabase.from("profiles").select("*");
 
-  // const { user: person } = await supabase.auth.api.getUserByCookie(req);
+  const { user: person } = await supabase.auth.api.getUserByCookie(req);
 
   if (!person) {
     return {

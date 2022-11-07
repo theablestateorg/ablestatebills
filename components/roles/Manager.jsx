@@ -309,7 +309,7 @@ function Manager({ websites, customers}) {
               </h1>
               <p>
                 Are you sure you want to delete{" "}
-                <b>{deleteArray.map((site) => site[1] + " ")}</b>?
+                <b>{deleteArray.map((site, index) => site[1] + " ")}</b>?
               </p>
               <p className="bg-[#ffe9d9] p-2 border-l-2 text-[#bc4c2e] border-[#fa703f] flex flex-col text-sm my-1">
                 <span className="text-[#771505] font-bold flex items-center gap-1">

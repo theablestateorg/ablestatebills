@@ -13,6 +13,7 @@ import { TbEdit } from "react-icons/tb";
 import AddCustomerModal from "../../components/AddCustomerModal";
 import { MdAdd } from "react-icons/md";
 import { RiExternalLinkFill } from "react-icons/ri";
+import moment from "moment";
 
 export default function Site({ product }) {
   const router = useRouter();
@@ -167,6 +168,8 @@ export default function Site({ product }) {
 
     setPopUpdate(false);
   };
+
+  console.log(product)
 
   return (
     <div>
@@ -438,6 +441,12 @@ export default function Site({ product }) {
                       }`}
                     ></div>
                   </div>
+                </div>
+                <div className="mb-3">
+                  <p className="uppercase font-medium">EXPIRING ON</p>
+                  <p className="font-bold text-sm text-gray-700">
+                    {moment(new Date(product.expiry_date)).format("DD/MM/YYYY")}
+                  </p>
                 </div>
               </div>
             </div>

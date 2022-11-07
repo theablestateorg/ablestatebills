@@ -63,8 +63,6 @@ export default function Home({ websites, customers, person }) {
     setPopUp(false);
   };
 
-  console.log("user ", user)
-  console.log("person ",person)
   return (
     <>
       <Head>

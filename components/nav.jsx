@@ -11,6 +11,7 @@ import { downloadFile } from "../utils/getImages";
 import ActiveLink from "./ActiveLink";
 import { Transition } from '@tailwindui/react'
 import useMediaQuery from "../hooks/useMediaQuery";
+import { menuData } from "../utils/menuData";
 
 export default function Navbar() {
   const tablet = useMediaQuery("(max-width: 1000px)");
@@ -71,6 +72,8 @@ export default function Navbar() {
     };
   }
 
+  console.log("the user is a ", user?.role)
+
   return (
     <nav className="w-screen h-[70px] z-10 fixed top-0 right-0 left-0 bg-white py-2 px-3 md:px-16 flex justify-between items-center border-b-2 border-[#E4E6E5] select-none">
       <div className="flex gap-5 items-center justify-between w-[100%]">
@@ -86,12 +89,16 @@ export default function Navbar() {
           </span>
         </div>
         <ul className={`${navStyles.navMenu} h-[70px] items-center`}>
-          <ActiveLink name={"Dashboard"} href={"/"} />
+
+          {menuData[`${user?.role}`]?.map(menuItem => (
+            <ActiveLink name={menuItem.label} href={menuItem.link} />
+          ))}
+          {/* <ActiveLink name={"Dashboard"} href={"/"} />
           <ActiveLink name={"Customers"} href={"/customers"} />
-          <ActiveLink name={tablet ? "Add" : "Add Product"} href={"/add-site"} />
           <ActiveLink name={"Tickets"} href={"/tickets"} />
+          <ActiveLink name={"Logs"} href={"/logs"} /> */}
+          {/* <ActiveLink name={tablet ? "Add" : "Add Product"} href={"/add-site"} /> */}
           {/* <ActiveLink name={"Add Customer"} href={"/add-customer"} /> */}
-          <ActiveLink name={"Logs"} href={"/logs"} />
         </ul>
         <div className={navStyles.profileMenu}>
           <span

@@ -10,7 +10,7 @@ import { useAuth } from "../utils/auth";
 import { IoWarning } from "react-icons/io5";
 import { Footer } from "../components";
 
-export default function Home({ websites, customers }) {
+export default function Home({ websites, customers, person }) {
   const router = useRouter();
   const [searchText, setSearchText] = useState("");
   const [status, setStatus] = useState("");
@@ -63,7 +63,8 @@ export default function Home({ websites, customers }) {
     setPopUp(false);
   };
 
-  // console.log(document.getElementById);
+  console.log("user ", user)
+  console.log("person ",person)
   return (
     <>
       <Head>
@@ -391,9 +392,9 @@ export const getServerSideProps = async ({ req }) => {
 
   const { data: customers } = await supabase.from("profiles").select("*");
 
-  const { user } = await supabase.auth.api.getUserByCookie(req);
+  const { user: person } = await supabase.auth.api.getUserByCookie(req);
 
-  if (!user) {
+  if (!person) {
     return {
       redirect: {
         permanent: false,
@@ -407,6 +408,7 @@ export const getServerSideProps = async ({ req }) => {
     props: {
       websites,
       customers,
+      person
     },
   };
 };

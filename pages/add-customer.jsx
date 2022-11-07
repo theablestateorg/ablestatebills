@@ -46,8 +46,8 @@ export default function AddClient() {
           contact_number: countryCode + contact_number,
           role: role
         },
-      }).then(res => console.log(res))
-      .catch(error => console.log(error))
+      }).then(res => toast.success(`Successfully added customer`, { position: "top-center" }))
+      .catch(error => toast.error(`Error adding customer`, { position: "top-center" }))
     } else {
       toast.error(`No password`, { position: "top-center" });
     }
@@ -239,10 +239,9 @@ export default function AddClient() {
           }}
         </Formik>
         <footer className="text-center text-sm text-gray-500 absolute bottom-1 h-6 w-full">
-          <p>
-            Copyright &#169; {new Date().getFullYear()} A service of Gagawala
-            Graphics Limited
-          </p>
+        <p>
+        Copyright &#169; {new Date().getFullYear()} A service of Ablestate Creatives Limited
+      </p>
         </footer>
       </main>
     </>

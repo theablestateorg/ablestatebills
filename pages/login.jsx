@@ -39,7 +39,7 @@ export default function Home({ prev }) {
   return (
     <>
       <Head>
-        <title>Login - Shine Afrika</title>
+        <title>Welcome to Shine Afrika</title>
       </Head>
       <ToastContainer />
       <main className="w-screen h-screen flex justify-center items-center relative pb-6 min-h-screen">

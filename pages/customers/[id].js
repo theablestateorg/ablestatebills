@@ -12,6 +12,7 @@ import { useAuth } from "../../utils/auth";
 import { TbEdit } from "react-icons/tb";
 import AddCustomerModal from "../../components/AddCustomerModal";
 import { MdAdd } from "react-icons/md";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Site({ profile }) {
   const router = useRouter();
@@ -31,6 +32,37 @@ export default function Site({ profile }) {
   useEffect(() => {
     getAddedBy();
   }, []);
+
+  //actual drop
+  const dropIn = {
+    hidden: {
+      y: "-100vh",
+      opacity: 0,
+    },
+    visible: {
+      y: "0",
+      opacity: 1,
+      transition: {
+        duration: 0.1,
+        type: "spring",
+        damping: 50,
+        stiffness: 450,
+        default: { ease: "easeInOut" }
+      },
+    },
+    exit: {
+      y: "-100vh",
+      opacity: 0,
+      transition: {
+        duration: 0.2,
+        type: "linear",
+        damping: 50,
+        stiffness: 450,
+        default: { ease: "easeOut" }
+      },
+    },
+  };
+
 
   const getAddedBy = async () => {
     const { data, error } = await supabase
@@ -326,11 +358,23 @@ export default function Site({ profile }) {
           </>
         )}
 
+<AnimatePresence
+     
+            >
         {popUp && (
           <div
             className={`bg-black z-20 bg-opacity-40 w-screen min-h-screen fixed top-0 left-0 right-0 flex justify-center items-center`}
           >
-            <div className="relative bg-white dark:bg-dark-bg max-h-screen overflow-auto dark:text-secondary-text p-10  rounded-md m-2 sm:mb-5 shadow-md top-50 z-20">
+            {/* actual modal */}
+            
+            <motion.div
+                        onClick={(e) => e.stopPropagation()} 
+                        variants={dropIn}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+            
+             className="relative bg-white dark:bg-dark-bg max-h-screen overflow-auto dark:text-secondary-text p-10  rounded-md m-2 sm:mb-5 shadow-md top-50 z-20">
               <h1 className="text-center font-bold text-lg my-5">
                 Delete Customer
               </h1>
@@ -358,9 +402,11 @@ export default function Site({ profile }) {
                   Yes, Delete
                 </button>
               </div>
-            </div>
+            </motion.div>
+            {/* actual modal */}
           </div>
         )}
+        </AnimatePresence>
         <footer className="text-center text-gray-500 absolute bottom-1 h-6 w-full">
           <p>
             Copyright &#169; {new Date().getFullYear()} A service of Gagawala

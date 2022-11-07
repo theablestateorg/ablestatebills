@@ -35,7 +35,10 @@ export default function handler(req, res) {
           subject: `${website.name} Expiry Date`,
           textbody: "Kindly update your websites payment to keep it online",
           htmlbody: `<html><body><h2>Hi ${website.name},</h2>
-          I hope that you are well. I am contacting you on behalf of shineAfrika. We noticed that your website <b>(${website.website_link})</b> will expire <b>today</b>. Payment can be made on these numbers +256756085187 / +256771 561682 to make sure that it stays up and running and remind to tell us the reason for the payment. If you require any further information, please let us know hello@shineafrika.com.
+          I hope that you are well. We are informing you that the website/domain - <b>${website.website_link}</b> is expiring today.
+          <br /> To avoid inconveniences, make Payment via Airtel Money +256756085187, or MM +256771 561682. You can as well login and make a renewal payment.
+          <br />
+          If you require any further assistance, please let us know hello@shineafrika.com.
             <br />
             <br />
             <footer>
@@ -82,7 +85,10 @@ export default function handler(req, res) {
           subject: `${website.name} Expiry Date`,
           textbody: "Kindly update your websites payment to keep it online",
           htmlbody: `<html><body><h2>Hi ${website.name},</h2>
-          I hope that you are well. I am contacting you on behalf of shineAfrika. We noticed that your website <b>(${website.website_link})</b> will expire in a <b>week</b>. Payment can be made on these numbers +256756085187 / +256771 561682 to make sure that it stays up and running and remind to tell us the reason for the payment. If you require any further information, please let us know hello@shineafrika.com.
+          I hope that you are well. We are informing you that the website/domain - <b>${website.website_link}</b> is expiring in a week.
+          <br /> To avoid inconveniences, make Payment via Airtel Money +256756085187, or MM +256771 561682. You can as well login and make a renewal payment.
+          <br />
+          If you require any further assistance, please let us know hello@shineafrika.com.
             <br />
             <br />
             <footer>
@@ -129,7 +135,10 @@ export default function handler(req, res) {
           subject: `${website.name} Expiry Date`,
           textbody: "Kindly update your websites payment to keep it online",
           htmlbody: `<html><body><h2>Hi ${website.name},</h2>
-          I hope that you are well. I am contacting you on behalf of shineAfrika. We noticed that your website <b>(${website.website_link})</b> will expire in a <b>month</b>. Payment can be made on these numbers +256756085187 / +256771 561682 to make sure that it stays up and running and remind to tell us the reason for the payment. If you require any further information, please let us know hello@shineafrika.com.
+          I hope that you are well. We are informing you that the website/domain - <b>${website.website_link}</b> is expiring in a month.
+          <br /> To avoid inconveniences, make Payment via Airtel Money +256756085187, or MM +256771 561682. You can as well login and make a renewal payment.
+          <br />
+          If you require any further assistance, please let us know hello@shineafrika.com.
             <br />
             <br />
             <footer>
@@ -176,7 +185,10 @@ export default function handler(req, res) {
           subject: `${website.name} Expiry Date`,
           textbody: "Kindly update your websites payment to keep it online",
           htmlbody: `<html><body><h2>Hi ${website.name},</h2>
-          I hope that you are well. I am contacting you on behalf of shineAfrika. We noticed that your website <b>(${website.website_link})</b> will expire in a <b>60 days</b>. Payment can be made on these numbers +256756085187 / +256771 561682 to make sure that it stays up and running and remind to tell us the reason for the payment. If you require any further information, please let us know hello@shineafrika.com.
+          I hope that you are well. We are informing you that the website/domain - <b>${website.website_link}</b> is expiring in 60 days.
+          <br /> To avoid inconveniences, make Payment via Airtel Money +256756085187, or MM +256771 561682. You can as well login and make a renewal payment.
+          <br />
+          If you require any further assistance, please let us know hello@shineafrika.com.
             <br />
             <br />
             <footer>

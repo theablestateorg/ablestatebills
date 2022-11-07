@@ -90,8 +90,8 @@ export default function Navbar() {
         </div>
         <ul className={`${navStyles.navMenu} h-[70px] items-center`}>
 
-          {menuData[`${user?.role}`]?.map(menuItem => (
-            <ActiveLink name={menuItem.label} href={menuItem.link} />
+          {menuData[`${user?.role}`]?.map((menuItem, index) => (
+            <ActiveLink name={menuItem.label} href={menuItem.link} key={index} />
           ))}
           {/* <ActiveLink name={"Dashboard"} href={"/"} />
           <ActiveLink name={"Customers"} href={"/customers"} />

@@ -9,6 +9,9 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(supabase.auth.user());
   const [loading, setLoading] = useState(false)
 
+  console.log("did it reload")
+  console.log(session)
+
   useEffect(() => {
     const getUserProfile = async () => {
       const sessionUser = supabase.auth.user()
@@ -49,7 +52,7 @@ export const AuthProvider = ({ children }) => {
       event: user? "SIGNED_IN" : "SIGNED_OUT",
       session: supabase.auth.session(),
     })
-  }, [user])
+  }, [])
 
   const values = {
     session,

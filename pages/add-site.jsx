@@ -157,7 +157,6 @@ export default function AddSite() {
         <section className="flex justify-between items-center">
           <h1 className="font-bold text-2xl my-5">Add Site</h1>
         </section>
-        some thing {contactDetails.email}
         <Formik
           initialValues={{
             name: "",

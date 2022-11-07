@@ -13,6 +13,7 @@ import { TbEdit } from "react-icons/tb";
 import AddCustomerModal from "../../components/AddCustomerModal";
 import { MdAdd } from "react-icons/md";
 import { motion, AnimatePresence } from "framer-motion";
+import { dropIn } from '../../utils/dropIn'
 
 export default function Site({ profile }) {
   const router = useRouter();
@@ -33,36 +34,6 @@ export default function Site({ profile }) {
     getAddedBy();
   }, []);
 
-  //actual drop
-  const dropIn = {
-    hidden: {
-      y: "-100vh",
-      opacity: 0,
-    },
-    visible: {
-      y: "0",
-      opacity: 1,
-      transition: {
-        duration: 0.1,
-        type: "spring",
-        damping: 50,
-        stiffness: 450,
-        default: { ease: "easeInOut" }
-      },
-    },
-    exit: {
-      y: "-100vh",
-      opacity: 0,
-      transition: {
-        duration: 0.2,
-        type: "linear",
-        damping: 50,
-        stiffness: 450,
-        default: { ease: "easeOut" }
-      },
-    },
-  };
-
 
   const getAddedBy = async () => {
     const { data, error } = await supabase
@@ -71,7 +42,6 @@ export default function Site({ profile }) {
       .eq("id", profile.added_by)
       .single();
     setAddedBy(data);
-    console.log("was added by, ", data);
   };
 
   const { user } = useAuth();
@@ -124,7 +94,7 @@ export default function Site({ profile }) {
     //   toast.success(`Successfully updated`, { position: "top-center" });
     // }
     if (error) {
-      console.log(error);
+      // console.log(error);
       toast.error(`${error?.message}`, { position: "top-center" });
     }
 
@@ -132,8 +102,6 @@ export default function Site({ profile }) {
 
     setPopUpdate(false);
   };
-
-  console.log(profile);
 
   return (
     <div>
@@ -175,11 +143,21 @@ export default function Site({ profile }) {
                 </div>
               )}
             </section>
+
+            {/*something here*/}
+            <AnimatePresence>
             {popUpdate && profile && (
               <div
                 className={`bg-black z-20 bg-opacity-40 w-screen min-h-screen fixed top-0 left-0 right-0 flex justify-center`}
               >
-                <div className="relative bg-white dark:bg-dark-bg max-h-screen overflow-auto dark:text-secondary-text p-10 w-10/12 md:8/12  rounded-md m-5 sm:mb-5 shadow-md top-50 z-20">
+                <motion.div
+                        onClick={(e) => e.stopPropagation()} 
+                        variants={dropIn}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+                        className="relative bg-white dark:bg-dark-bg max-h-screen overflow-auto dark:text-secondary-text p-10 w-10/12 md:8/12  rounded-md m-5 sm:mb-5 shadow-md top-50 z-20"
+                      >
                   <div className="flex items-center justify-between">
                     <h1 className="text-center font-bold text-lg my-5">
                       Edit {profile.last_name}&apos;s information
@@ -324,9 +302,11 @@ export default function Site({ profile }) {
                       );
                     }}
                   </Formik>
-                </div>
+                </motion.div>
+                
               </div>
             )}
+            </AnimatePresence>
             {/* <p>
               {product.contact_person}, {`+256` + product.telephone_number}
             </p> */}

@@ -14,6 +14,7 @@ import AddCustomerModal from "../../../components/AddCustomerModal";
 import { MdAdd } from "react-icons/md";
 import { RiExternalLinkFill } from "react-icons/ri";
 import moment from "moment";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function CustomerSite({ product }) {
   const router = useRouter();

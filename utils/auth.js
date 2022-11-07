@@ -9,8 +9,8 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(supabase.auth.user());
   const [loading, setLoading] = useState(false)
 
-  console.log("did it reload")
-  console.log(session)
+  // console.log("did it reload")
+  // console.log(session)
 
   useEffect(() => {
     const getUserProfile = async () => {

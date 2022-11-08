@@ -64,18 +64,19 @@ export default function Home({ websites, customers, person }) {
     }
     setPopUp(false);
   };
-  console.log(user?.role)
-  if(user?.role === "customer"){
+  console.log("the person is ", person?.user_metadata?.role)
+
+  if([user?.role, person?.user_metadata?.role].includes("customer")){
     return (
       <Customer websites={websites} customers={customers} />
     )
   }
-  else if(user?.role === "manager"){
+  else if([user?.role, person?.user_metadata?.role].includes("manager")){
     return (
       <Manager websites={websites} customers={customers} />
     )
   }
-  else if(user?.role === "admin"){
+  else if([user?.role, person?.user_metadata?.role].includes("admin")){
     return (
       <main className="pt-[70px] mx-3 md:mx-16 relative pb-6 min-h-screen">
         <h1>Hello world admin</h1>

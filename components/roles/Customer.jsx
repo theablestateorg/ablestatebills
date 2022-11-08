@@ -49,7 +49,7 @@ function Customer({ websites, customers}) {
 
         <div className="mb-5 py-5 pb-10 px-2 overflow-x-scroll select-none flex flex-wrap">
           {myWebsites && myWebsites.map((website, index) => (
-            <div className="outline outline-1 outline-[#e5e7eb] bg-white px-4 py-2 rounded-lg w-64 h-32 cursor-pointer shadow-md hover:shadow-lg flex flex-col justify-between" onClick={() => router.push(`/sites/${website.id}`)} key={index}>
+            <div className="outline outline-1 outline-[#e5e7eb] bg-white px-4 py-2 rounded-lg w-64 h-32 cursor-pointer shadow-md hover:shadow-lg flex flex-col justify-between" onClick={() => router.push(`customers/sites/${website.id}`)} key={index}>
               <div>
               <h1 className="font-medium">{website.name}</h1>
               <p className="font-light text-gray-400">{website.website_link}</p>

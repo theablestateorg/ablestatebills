@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from './supabase';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
 export const AuthContext = createContext(null);
 
@@ -8,9 +9,7 @@ export const AuthProvider = ({ children }) => {
   const [session, setSession] = useState(supabase.auth.session());
   const [user, setUser] = useState(supabase.auth.user());
   const [loading, setLoading] = useState(false)
-
-  // console.log("did it reload")
-  // console.log(session)
+  const router  = useRouter()
 
   useEffect(() => {
     const getUserProfile = async () => {
@@ -56,11 +55,21 @@ export const AuthProvider = ({ children }) => {
 
   const values = {
     session,
+    setSession,
     user,
     loading,
     setLoading,
-    signOut: () => supabase.auth.signOut(),
-    signIn: (data) => supabase.auth.signIn(data),
+    signOut: () => {
+      const {data, error } = supabase.auth.signOut()
+      console.log("error ", error)
+      console.log("data ", data)
+      setSession(null)
+      setUser(null)
+      router.push("/login")
+    },
+    signIn: (data) => {
+      supabase.auth.signIn(data)
+    },
     signUp: (data) => supabase.auth.signUp(data)
   }
   

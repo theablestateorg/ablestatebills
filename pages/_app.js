@@ -3,13 +3,11 @@ import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "../utils/auth";
 import Head from "next/head";
 import Layout from "../components/Layout";
-import Navbar from "../components/nav";
 import React from "react";
 import ProgressBar from "../components/ProgressBar";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import NProgress from "nprogress";
-// import 'nprogress/nprogress.css'
 import "../styles/Progress.css";
 
 function MyApp({ Component, pageProps, ...appProps }) {
@@ -54,7 +52,6 @@ function MyApp({ Component, pageProps, ...appProps }) {
         <meta charSet="UTF-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
       </Head>
-      {/* <ProgressBar /> */}
       <AuthProvider>
         <LayoutComponent>
           <Component {...pageProps} />

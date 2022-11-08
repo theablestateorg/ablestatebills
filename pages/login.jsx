@@ -8,10 +8,12 @@ import { useState } from "react";
 import 'react-toastify/dist/ReactToastify.css';
 import Link from "next/link";
 import Footer from "../components/Footer";
+import { useAuth } from "../utils/auth";
 
-export default function Home({ prev }) {
+export default function Home({  }) {
   const [ loading, setLoading ] = useState(false)
-  console.log(prev)
+  const { setSession } = useAuth()
+
 
   const handleSubmit = async (event, {email, password}, resetForm) => {
     event.preventDefault();
@@ -19,7 +21,11 @@ export default function Home({ prev }) {
     try{
       const {user,session, error} = await supabase.auth.signIn({ email: email, password })
       if(user){
+        setSession(session)
+        console.log(session)
+        console.log("logged in user: ",user)
         setLoading(false)
+        resetForm({ email: "", password: "" })
         Router.push('/')
       }
       if(error){
@@ -30,11 +36,7 @@ export default function Home({ prev }) {
       setLoading(false)
     }
 
-    document.loginForm.reset()
-    resetForm({ email: "", password: "" })
-
   };
-  // console.log(Router)
 
   return (
     <>
@@ -158,8 +160,7 @@ export default function Home({ prev }) {
   );
 }
 
-export const getServerSideProps = async ({ req, resolvedUrl }) => {
-  const prev = resolvedUrl || null
+export const getServerSideProps = async ({ req }) => {
   const { user } = await supabase.auth.api.getUserByCookie(req)
   if(user){
     return {
@@ -172,8 +173,6 @@ export const getServerSideProps = async ({ req, resolvedUrl }) => {
   }
 
   return {
-    props: {
-      prev
-    }
+    props: { }
   }
 }

@@ -14,7 +14,7 @@ import useMediaQuery from "../hooks/useMediaQuery";
 import { menuData } from "../utils/menuData";
 import { motion, AnimateSharedLayout } from "framer-motion";
 
-export default function Navbar() {
+export default function Navbar({user, person}) {
   const tablet = useMediaQuery("(max-width: 1000px)");
   const [showMenu, setShowMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -22,7 +22,7 @@ export default function Navbar() {
   const [avatar, setAvatar] = useState("");
   const [notifications, setNotifications] = useState([]);
   const router = useRouter();
-  const { signOut, user, loading, setLoading } = useAuth();
+  const { signOut, loading, setLoading } = useAuth();
 
   useEffect(() => {
     try {
@@ -30,7 +30,7 @@ export default function Navbar() {
         .then((data) => setAvatar(data.avatar_url))
         .catch((error) => console.log(error));
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
 
     getNotifications();
@@ -60,7 +60,7 @@ export default function Navbar() {
       setNotifications(myNotifications);
     }
     if (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
@@ -74,6 +74,8 @@ export default function Navbar() {
   }
 
   const [activeIndex, setActiveIndex] = useState(null);
+
+
 
   return (
     <nav className="w-screen h-[70px] z-10 fixed top-0 right-0 left-0 bg-white py-2 px-3 md:px-16 flex justify-between items-center border-b-2 border-[#E4E6E5] select-none">
@@ -215,3 +217,25 @@ export default function Navbar() {
     </nav>
   );
 }
+
+
+export const getServerSideProps = async ({ req }) => {
+
+  const { user: person } = await supabase.auth.api.getUserByCookie(req);
+
+  if (!person) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/login",
+      },
+      props: {},
+    };
+  }
+
+  return {
+    props: {
+      person
+    },
+  };
+};

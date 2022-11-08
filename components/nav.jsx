@@ -98,6 +98,9 @@ export default function Navbar() {
               name={menuItem.label}
               href={menuItem.link}
               key={index}
+              activeIndex={activeIndex}
+              setActiveIndex={setActiveIndex}
+              index={index}
             />
           ))}
         </motion.ul>

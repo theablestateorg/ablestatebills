@@ -9,10 +9,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import Link from "next/link";
 import Footer from "../components/Footer";
 import { useAuth } from "../utils/auth";
+import { getCookies, getCookie, setCookies, removeCookies } from 'cookies-next';
 
-export default function Home({  }) {
+export default function Home({ person }) {
   const [ loading, setLoading ] = useState(false)
   const { setSession } = useAuth()
+
+  console.log(person)
 
 
   const handleSubmit = async (event, {email, password}, resetForm) => {
@@ -22,8 +25,6 @@ export default function Home({  }) {
       const {user,session, error} = await supabase.auth.signIn({ email: email, password })
       if(user){
         setSession(session)
-        console.log(session)
-        console.log("logged in user: ",user)
         setLoading(false)
         resetForm({ email: "", password: "" })
         Router.push('/')
@@ -160,8 +161,10 @@ export default function Home({  }) {
   );
 }
 
-export const getServerSideProps = async ({ req }) => {
+export const getServerSideProps = async ({ req, res }) => {
+  console.log(req)
   const { user } = await supabase.auth.api.getUserByCookie(req)
+  const person = getCookie('person', { req, res});
   if(user){
     return {
       redirect: {
@@ -173,6 +176,6 @@ export const getServerSideProps = async ({ req }) => {
   }
 
   return {
-    props: { }
+    props: { person }
   }
 }

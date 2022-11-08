@@ -12,8 +12,9 @@ import { Footer } from "../components";
 import Manager from "../components/roles/Manager"
 import Customer from '../components/roles/Customer'
 import Admin from "../components/roles/Admin";
+import { getCookies, getCookie, setCookies, removeCookies } from 'cookies-next';
 
-export default function Home({ websites, customers, person }) {
+export default function Home({ websites, customers, person, people }) {
   const router = useRouter();
   const [searchText, setSearchText] = useState("");
   const [status, setStatus] = useState("");
@@ -25,6 +26,8 @@ export default function Home({ websites, customers, person }) {
   const [sortBy, setSortBy] = useState("");
   const checkbox = useRef();
   const { user } = useAuth();
+
+  console.log("people", people)
 
   websites = websites
     .filter((website) =>
@@ -90,7 +93,7 @@ export default function Home({ websites, customers, person }) {
   }
 }
 
-export const getServerSideProps = async ({ req }) => {
+export const getServerSideProps = async ({ req, res }) => {
   const { data: websites } = await supabase
     .from("websites")
     .select("*")
@@ -99,8 +102,9 @@ export const getServerSideProps = async ({ req }) => {
   const { data: customers } = await supabase.from("profiles").select("*");
 
   const { user: person } = await supabase.auth.api.getUserByCookie(req);
+  const people = JSON.parse(getCookie('person', { req, res}));
 
-  if (!person) {
+  if (!people) {
     return {
       redirect: {
         permanent: false,
@@ -114,7 +118,8 @@ export const getServerSideProps = async ({ req }) => {
     props: {
       websites,
       customers,
-      person
+      person,
+      people
     },
   };
 };

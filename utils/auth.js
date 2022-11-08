@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from './supabase';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { getCookies, getCookie, setCookies, removeCookies } from 'cookies-next';
 
 export const AuthContext = createContext(null);
 
@@ -47,6 +48,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    setCookies('person', user, { maxAge: 60 * 6 * 24 });
     axios.post("/api/set-supabase-cookie", {
       event: user? "SIGNED_IN" : "SIGNED_OUT",
       session: supabase.auth.session(),
@@ -63,6 +65,7 @@ export const AuthProvider = ({ children }) => {
       const {data, error } = supabase.auth.signOut()
       console.log("error ", error)
       console.log("data ", data)
+      removeCookies('person');
       setSession(null)
       setUser(null)
       router.push("/login")

@@ -11,6 +11,7 @@ import { IoWarning } from "react-icons/io5";
 import { Footer } from "../components";
 import Manager from "../components/roles/Manager"
 import Customer from '../components/roles/Customer'
+import Admin from "../components/roles/Admin";
 
 export default function Home({ websites, customers, person }) {
   const router = useRouter();
@@ -78,9 +79,7 @@ export default function Home({ websites, customers, person }) {
   }
   else if([user?.role, person?.user_metadata?.role].includes("admin")){
     return (
-      <main className="pt-[70px] mx-3 md:mx-16 relative pb-6 min-h-screen">
-        <h1>Hello world admin</h1>
-      </main>
+      <Admin websites={websites} customers={customers} />
     )
   }
   else {

@@ -11,6 +11,8 @@ import AddCustomerModal from "../components/AddCustomerModal";
 import useMediaQuery from "../hooks/useMediaQuery";
 import axios from "axios";
 import Footer from "../components/Footer";
+import { motion, AnimatePresence } from "framer-motion";
+import { dropIn } from "../utils/dropIn";
 
 export default function AddSite() {
   const [loading, setLoading] = useState(false);
@@ -281,6 +283,7 @@ export default function AddSite() {
                         ? "Add Customer"
                         : ""}
                     </button>
+                    <AnimatePresence>
                     {customerModel && (
                       <AddCustomerModal
                         loading={loading}
@@ -291,6 +294,7 @@ export default function AddSite() {
                         contactDetails={contactDetails}
                       />
                     )}
+                    </AnimatePresence>
                   </div>
                 </div>
                 <div className="flex items-center gap-10 my-5">

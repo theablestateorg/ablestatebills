@@ -1,13 +1,25 @@
 import { AiFillCloseCircle } from "react-icons/ai";
 import PasswordGenerator from './PasswordGenerator'
 import { Formik, Form } from "formik";
+import { motion, AnimatePresence } from "framer-motion";
+import { dropIn } from "../utils/dropIn";
 
 function AddCustomerModal( { loading, setCustomerModel, addNewCustomer, password, setPassword, contactDetails}) {
   return (
-      <div
+      <motion.div
+      onClick={() => setCustomerModel(false)}
+      initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
         className={`bg-black z-20 bg-opacity-40 w-screen min-h-screen fixed top-0 left-0 right-0 flex justify-center`}
       >
-        <div className="relative bg-white dark:bg-dark-bg max-h-screen overflow-auto dark:text-secondary-text p-10 w-10/12 md:8/12  rounded-md m-5 sm:mb-5 shadow-md top-50 z-20">
+        <motion.div
+        onClick={(e) => e.stopPropagation()}
+        variants={dropIn}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+         className="relative bg-white dark:bg-dark-bg max-h-screen overflow-auto dark:text-secondary-text p-10 w-10/12 md:8/12  rounded-md m-5 sm:mb-5 shadow-md top-50 z-20">
           <div className="flex items-center justify-between">
             <h1 className="text-center font-bold text-lg my-5">
               Add New Customer
@@ -92,7 +104,7 @@ function AddCustomerModal( { loading, setCustomerModel, addNewCustomer, password
                         placeholder="Enter telephone"
                         onChange={handleChange("contact_number")}
                         onBlur={handleBlur("contact_number")}
-                        value={contactDetails.contact_number}
+                        value={values.contact_number}
                       />
                     </div>
                   </div>
@@ -133,8 +145,8 @@ function AddCustomerModal( { loading, setCustomerModel, addNewCustomer, password
               );
             }}
           </Formik>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
   )
 }
 

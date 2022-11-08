@@ -3,10 +3,8 @@ import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 function PasswordGenerator({ password, setPassword, resize=false}) {
-  console.log(password)
     const handleGeneratePassword = () => {
         setPassword(createPassword())
-        // console.log(fields)
       }
     const createPassword = () => {
         const characterList = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!^+%&=?#$*@"

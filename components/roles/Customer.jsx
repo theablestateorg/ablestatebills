@@ -10,7 +10,7 @@ import { useAuth } from "../../utils/auth";
 import { IoWarning } from "react-icons/io5";
 import Footer from "../Footer";
 
-function Customer({ websites, customers}) {
+function Customer({ websites, customers, person}) {
   const router = useRouter();
   const [searchText, setSearchText] = useState("");
   const [status, setStatus] = useState("");
@@ -25,9 +25,7 @@ function Customer({ websites, customers}) {
   const deleteArrayIds = deleteArray.map((site) => site[0].toString());
 
 
-
-  const myWebsites = websites.filter(website => website.contact_person === user.id)
-  console.log(myWebsites)
+  const myWebsites = websites.filter(website => website.contact_person === person.id)
   return (
     <>
       <Head>
@@ -47,7 +45,7 @@ function Customer({ websites, customers}) {
           </button>
         </section>
 
-        <div className="mb-5 py-5 pb-10 px-2 overflow-x-scroll select-none flex flex-wrap">
+        <div className="mb-5 py-5 pb-10 px-2 overflow-x-scroll select-none flex flex-wrap gap-2">
           {myWebsites && myWebsites.map((website, index) => (
             <div className="outline outline-1 outline-[#e5e7eb] bg-white px-4 py-2 rounded-lg w-64 h-32 cursor-pointer shadow-md hover:shadow-lg flex flex-col justify-between" onClick={() => router.push(`customers/sites/${website.id}`)} key={index}>
               <div>

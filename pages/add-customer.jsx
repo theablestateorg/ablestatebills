@@ -149,22 +149,6 @@ export default function AddClient() {
                     />
                   </div>
                 </div>
-                {/* <div className="flex items-center gap-10 my-5">
-                  <label htmlFor="" className="text-xl w-4/12 md:w-2/12">
-                    Telephone Number
-                  </label>
-                  <div className="w-8/12 md:w-8/12">
-                    <input
-                      type="text"
-                      name="text"
-                      className="py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-full"
-                      placeholder="Enter number"
-                      onChange={handleChange("contact_number")}
-                      onBlur={handleBlur("contact_number")}
-                      value={values.contact_number}
-                    />
-                  </div>
-                </div> */}
                 <div className="flex items-center gap-10 my-5">
                   <label
                     htmlFor="telephone_number"

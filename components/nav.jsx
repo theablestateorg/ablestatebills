@@ -9,9 +9,10 @@ import { useAuth } from "../utils/auth";
 import Notifications from "./Notifications";
 import { downloadFile } from "../utils/getImages";
 import ActiveLink from "./ActiveLink";
-import { Transition } from '@tailwindui/react'
+import { Transition } from "@tailwindui/react";
 import useMediaQuery from "../hooks/useMediaQuery";
 import { menuData } from "../utils/menuData";
+import { motion, AnimateSharedLayout } from "framer-motion";
 
 export default function Navbar() {
   const tablet = useMediaQuery("(max-width: 1000px)");
@@ -41,12 +42,10 @@ export default function Navbar() {
       })
       .subscribe();
 
-    setLoading(false)
+    setLoading(false);
 
     return () => supabase.removeSubscription(navSubscription);
   }, [user, loading]);
-
-  
 
   const getNotifications = async () => {
     const { data, error } = await supabase
@@ -55,7 +54,9 @@ export default function Navbar() {
       .order("created_at", { ascending: false });
 
     if (data) {
-      const myNotifications = data.filter((note) => user && note.notifiers.includes(user.id))
+      const myNotifications = data.filter(
+        (note) => user && note.notifiers.includes(user.id)
+      );
       setNotifications(myNotifications);
     }
     if (error) {
@@ -72,6 +73,8 @@ export default function Navbar() {
     };
   }
 
+  const [activeIndex, setActiveIndex] = useState(null);
+
   return (
     <nav className="w-screen h-[70px] z-10 fixed top-0 right-0 left-0 bg-white py-2 px-3 md:px-16 flex justify-between items-center border-b-2 border-[#E4E6E5] select-none">
       <div className="flex gap-5 items-center justify-between w-[100%]">
@@ -86,18 +89,19 @@ export default function Navbar() {
             beta
           </span>
         </div>
-        <ul className={`${navStyles.navMenu} h-[70px] items-center`}>
-
+        <AnimateSharedLayout>
+        <motion.ul 
+        onHoverEnd={() => setActiveIndex(null)}
+        className={`${navStyles.navMenu} h-[70px] items-center`}>
           {menuData[`${user?.role}`]?.map((menuItem, index) => (
-            <ActiveLink name={menuItem.label} href={menuItem.link} key={index} />
+            <ActiveLink
+              name={menuItem.label}
+              href={menuItem.link}
+              key={index}
+            />
           ))}
-          {/* <ActiveLink name={"Dashboard"} href={"/"} />
-          <ActiveLink name={"Customers"} href={"/customers"} />
-          <ActiveLink name={"Tickets"} href={"/tickets"} />
-          <ActiveLink name={"Logs"} href={"/logs"} /> */}
-          {/* <ActiveLink name={tablet ? "Add" : "Add Product"} href={"/add-site"} /> */}
-          {/* <ActiveLink name={"Add Customer"} href={"/add-customer"} /> */}
-        </ul>
+        </motion.ul>
+        </AnimateSharedLayout>
         <div className={navStyles.profileMenu}>
           <span
             className="cursor-pointer relative"
@@ -120,14 +124,14 @@ export default function Navbar() {
             }}
           >
             <span className="w-10 h-10 rounded-full overflow-hidden">
-            {avatar ? (
-              <img src={avatar} alt="profile" />
-            ) : (
-              <span className="text-white font-bold flex items-center justify-center bg-[#CA3011] w-10 h-10">
-                {user?.user_metadata.first_name[0].toUpperCase()}
-                {user?.user_metadata.last_name[0].toUpperCase()}
-              </span>
-            )}
+              {avatar ? (
+                <img src={avatar} alt="profile" />
+              ) : (
+                <span className="text-white font-bold flex items-center justify-center bg-[#CA3011] w-10 h-10">
+                  {user?.user_metadata.first_name[0].toUpperCase()}
+                  {user?.user_metadata.last_name[0].toUpperCase()}
+                </span>
+              )}
             </span>
             <Transition
               show={showMenu}
@@ -139,22 +143,22 @@ export default function Navbar() {
               leaveTo="opacity-0"
             >
               <ul className="bg-white absolute z-10 outline outline-1 outline-[#E4E6E5] top-[60px] right-0 py-2">
-              <Link href="/profile">
-                <li className="w-full p-2 px-12 mb-1 hover:bg-[#ececec]">
-                  Profile
+                <Link href="/profile">
+                  <li className="w-full p-2 px-12 mb-1 hover:bg-[#ececec]">
+                    Profile
+                  </li>
+                </Link>
+                <li className="w-full p-2 px-12 hover:bg-[#ececec]">
+                  <button
+                    onClick={() => {
+                      signOut();
+                      Router.push("/login");
+                    }}
+                  >
+                    Logout
+                  </button>
                 </li>
-              </Link>
-              <li className="w-full p-2 px-12 hover:bg-[#ececec]">
-                <button
-                  onClick={() => {
-                    signOut();
-                    Router.push("/login");
-                  }}
-                >
-                  Logout
-                </button>
-              </li>
-            </ul>
+              </ul>
             </Transition>
           </div>
         </div>
@@ -170,25 +174,27 @@ export default function Navbar() {
           <CgMenu size={25} color={"#CA3011"} />
           {showMobileMenu && (
             <ul className="bg-white absolute z-20 outline outline-1 outline-[#E4E6E5] top-10 right-0 p-2 w-56">
-                <Link href="/" className="nn">
+              <Link href="/" className="nn">
                 <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic">
                   Dashboard
-              </li>
-                </Link>
-                <Link href="/add-site" className="">
+                </li>
+              </Link>
+              <Link href="/add-site" className="">
                 <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic">
                   Add Product
-              </li>
-                </Link>
-                <Link href="/logs">
-                <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic">Logs
-              </li>
-                </Link>
-              
-                <Link href="/profile">
-                <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic">Profile
-              </li>
-                </Link>
+                </li>
+              </Link>
+              <Link href="/logs">
+                <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic">
+                  Logs
+                </li>
+              </Link>
+
+              <Link href="/profile">
+                <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic">
+                  Profile
+                </li>
+              </Link>
               <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic">
                 <button
                   onClick={() => {
@@ -206,4 +212,3 @@ export default function Navbar() {
     </nav>
   );
 }
-

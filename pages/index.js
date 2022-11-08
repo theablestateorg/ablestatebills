@@ -69,7 +69,7 @@ export default function Home({ websites, customers, person }) {
 
   if([user?.role, person?.user_metadata?.role].includes("customer")){
     return (
-      <Customer websites={websites} customers={customers} />
+      <Customer websites={websites} customers={customers} person={person} />
     )
   }
   else if([user?.role, person?.user_metadata?.role].includes("manager")){

@@ -68,7 +68,6 @@ export const AuthProvider = ({ children }) => {
       removeCookies('person');
       setSession(null)
       setUser(null)
-      router.push("/login")
     },
     signIn: (data) => {
       supabase.auth.signIn(data)

@@ -104,7 +104,7 @@ export const getServerSideProps = async ({ req, res }) => {
   const { user: person } = await supabase.auth.api.getUserByCookie(req);
   const people = JSON.parse(getCookie('person', { req, res}));
 
-  if (!people) {
+  if (!person) {
     return {
       redirect: {
         permanent: false,

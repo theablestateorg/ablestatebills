@@ -75,6 +75,9 @@ export default function Navbar({user, person}) {
 
   const [activeIndex, setActiveIndex] = useState(null);
 
+  const myRole = user?.role || person?.user_metadata?.role
+  console.log(user?.role)
+
 
 
   return (
@@ -95,7 +98,7 @@ export default function Navbar({user, person}) {
         <motion.ul 
         onHoverEnd={() => setActiveIndex(null)}
         className={`${navStyles.navMenu} h-[70px] items-center`}>
-          {menuData[`${user?.role}`]?.map((menuItem, index) => (
+          {menuData[`${myRole}`]?.map((menuItem, index) => (
             <ActiveLink
               name={menuItem.label}
               href={menuItem.link}

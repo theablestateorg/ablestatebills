@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import { MdAdd, MdSearch } from "react-icons/md";
 import { FaSort } from "react-icons/fa";
 import { supabase } from "../../utils/supabase";
@@ -9,8 +9,9 @@ import { toast, ToastContainer } from "react-toastify";
 import { useAuth } from "../../utils/auth";
 import { IoWarning } from "react-icons/io5";
 import Footer from "../Footer";
+import { motion, AnimatePresence} from 'framer-motion'
 
-function Customer({ websites, customers, person}) {
+function Customer({ websites, customers, person }) {
   const router = useRouter();
   const [searchText, setSearchText] = useState("");
   const [status, setStatus] = useState("");
@@ -24,8 +25,11 @@ function Customer({ websites, customers, person}) {
   const { user } = useAuth();
   const deleteArrayIds = deleteArray.map((site) => site[0].toString());
 
+  const myWebsites = websites.filter(
+    (website) => website.contact_person === person.id
+  );
 
-  const myWebsites = websites.filter(website => website.contact_person === person.id)
+  const [productsContext, setProductsContext] = useState(false);
   return (
     <>
       <Head>
@@ -36,31 +40,52 @@ function Customer({ websites, customers, person}) {
       <main className="pt-[70px] mx-3 md:mx-16 relative pb-6 min-h-screen">
         <section className="flex justify-between items-center my-10">
           <h1 className="font-bold text-2xl"></h1>
-          <button
-            className="bg-[#1D1F20] text-white py-2 px-4 my-2 mt-4 hover:bg-transparent hover:text-black outline outline-1 outline-black flex items-center gap-2 "
-            onClick={() => router.push("/add-site")}
-          >
-            <MdAdd />
-            New Product
-          </button>
+          <div className="relative">
+            <button
+              className="bg-[#1D1F20] text-white py-2 px-4 my-2 mt-4 hover:bg-transparent hover:text-black outline outline-1 outline-black flex items-center gap-2 "
+              onClick={() => {
+                setProductsContext(!productsContext);
+              }}
+            >
+              <MdAdd />
+              Add New...
+            </button>
+            <AnimatePresence></AnimatePresence>
+            {productsContext && (
+              <ul className="absolute right-0 outline outline-1 outline-gray-200 px-3 py-2 bg-white rounded-md shadow-lg w-40">
+                <li className="px-3 py-1 mb-1 rounded-md hover:bg-[#eaeaea] cursor-pointer" onClick={() => {
+                  Router.push("/packages/Starter/175,000")
+                }}>Full Package</li>
+                <li className="px-3 py-1 mb-1 rounded-md hover:bg-[#eaeaea] cursor-pointer" onClick={() => {
+                  Router.push("/packages/domains")
+                }}>Domain only</li>
+              </ul>
+            )}
+          </div>
         </section>
 
         <div className="mb-5 py-5 pb-10 px-2 overflow-x-scroll select-none flex flex-wrap gap-2">
-          {myWebsites && myWebsites.map((website, index) => (
-            <div className="outline outline-1 outline-[#e5e7eb] bg-white px-4 py-2 rounded-lg w-64 h-32 cursor-pointer shadow-md hover:shadow-lg flex flex-col justify-between" onClick={() => router.push(`customers/sites/${website.id}`)} key={index}>
-              <div>
-              <h1 className="font-medium">{website.name}</h1>
-              <p className="font-light text-gray-400">{website.website_link}</p>
+          {myWebsites &&
+            myWebsites.map((website, index) => (
+              <div
+                className="outline outline-1 outline-[#e5e7eb] bg-white px-4 py-2 rounded-lg w-64 h-32 cursor-pointer shadow-md hover:shadow-lg flex flex-col justify-between"
+                onClick={() => router.push(`customers/sites/${website.id}`)}
+                key={index}
+              >
+                <div>
+                  <h1 className="font-medium">{website.name}</h1>
+                  <p className="font-light text-gray-400">
+                    {website.website_link}
+                  </p>
+                </div>
+                <div>
+                  <p className="font-medium text-sm">expiring</p>
+                  <p className="font-light text-gray-400 text-sm">
+                    {moment(new Date(website.expiry_date)).format("DD-MM-YYYY")}
+                  </p>
+                </div>
               </div>
-              <div>
-              <p className="font-medium text-sm">expiring</p>
-              <p className="font-light text-gray-400 text-sm">{moment(new Date(website.expiry_date)).format("DD-MM-YYYY")}</p>
-              </div>
-              
-
-</div>
-          ))}
-          
+            ))}
         </div>
 
         {popUp && (
@@ -106,4 +131,4 @@ function Customer({ websites, customers, person}) {
   );
 }
 
-export default Customer
+export default Customer;

@@ -9,6 +9,8 @@ import Footer from "../components/Footer";
 import { downloadFile } from "../utils/getImages";
 import { useAuth } from "../utils/auth";
 import useMediaQuery from "../hooks/useMediaQuery";
+import { useCookies } from "react-cookie"
+import { parseCookies } from "../utils/parseCookies";
 
 export default function Dashboard() {
   const [showInfo, setShowInfo] = useState(1)
@@ -75,18 +77,19 @@ export default function Dashboard() {
   );
 }
 
-export const getServerSideProps = async ({ req }) => {
-  const { user: person } = await supabase.auth.api.getUserByCookie(req);
-
-  if (!person) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/login",
-      },
-      props: {},
-    };
-  }
+export const getServerSideProps = async ({ req, res }) => {
+  const person = parseCookies(req)
+    if (res) {
+      if (!person.user) {
+        return {
+          redirect: {
+            permanent: false,
+            destination: "/login",
+          },
+          props: {},
+        };
+      }
+    }
 
   return {
     props: {},

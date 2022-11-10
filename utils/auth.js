@@ -2,7 +2,8 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from './supabase';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { getCookies, getCookie, setCookies, removeCookies } from 'cookies-next';
+import Router from 'next/router';
+import { useCookies } from "react-cookie"
 
 export const AuthContext = createContext(null);
 
@@ -11,6 +12,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(supabase.auth.user());
   const [loading, setLoading] = useState(false)
   const router  = useRouter()
+  const [cookie, setCookie, removeCookie] = useCookies(["user"])
 
   useEffect(() => {
     const getUserProfile = async () => {
@@ -48,7 +50,6 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    setCookies('person', user, { maxAge: 60 * 6 * 24 });
     axios.post("/api/set-supabase-cookie", {
       event: user? "SIGNED_IN" : "SIGNED_OUT",
       session: supabase.auth.session(),
@@ -62,10 +63,10 @@ export const AuthProvider = ({ children }) => {
     loading,
     setLoading,
     signOut: () => {
+      removeCookie("user")
       const {data, error } = supabase.auth.signOut()
       console.log("error ", error)
       console.log("data ", data)
-      removeCookies('person');
       setSession(null)
       setUser(null)
     },
@@ -75,6 +76,7 @@ export const AuthProvider = ({ children }) => {
     signUp: (data) => supabase.auth.signUp(data)
   }
   
+  console.log("is this called everywhere: ", router.pathname)
 
   return (
     <AuthContext.Provider value={values} >

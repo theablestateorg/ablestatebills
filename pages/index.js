@@ -12,9 +12,10 @@ import { Footer } from "../components";
 import Manager from "../components/roles/Manager"
 import Customer from '../components/roles/Customer'
 import Admin from "../components/roles/Admin";
-import { getCookies, getCookie, setCookies, removeCookies } from 'cookies-next';
+import { useCookies } from "react-cookie"
+import { parseCookies } from "../utils/parseCookies";
 
-export default function Home({ websites, customers, person, people }) {
+export default function Home({ websites, customers, person }) {
   const router = useRouter();
   const [searchText, setSearchText] = useState("");
   const [status, setStatus] = useState("");
@@ -27,7 +28,10 @@ export default function Home({ websites, customers, person, people }) {
   const checkbox = useRef();
   const { user } = useAuth();
 
-  console.log("people", people)
+  const [cookie, setCookie] = useCookies(["user"])
+
+  console.log("userData ",person)
+
 
   websites = websites
     .filter((website) =>
@@ -94,32 +98,47 @@ export default function Home({ websites, customers, person, people }) {
 }
 
 export const getServerSideProps = async ({ req, res }) => {
+  const person = parseCookies(req)
+  if (res) {
+    if (!person.user) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: "/login",
+        },
+        props: {},
+      };
+    }
+  }
+
+
   const { data: websites } = await supabase
     .from("websites")
     .select("*")
     .order("created_at", { ascending: false });
 
+
   const { data: customers } = await supabase.from("profiles").select("*");
 
-  const { user: person } = await supabase.auth.api.getUserByCookie(req);
-  const people = JSON.parse(getCookie('person', { req, res}));
+  // const { user: person } = await supabase.auth.api.getUserByCookie(req);
+  // const people = JSON.parse(getCookie('person', { req, res}) || null);
+  
 
-  if (!person) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/login",
-      },
-      props: {},
-    };
-  }
+  // if (!person) {
+  //   return {
+  //     redirect: {
+  //       permanent: false,
+  //       destination: "/login",
+  //     },
+  //     props: {},
+  //   };
+  // }
 
   return {
     props: {
       websites,
       customers,
-      person,
-      people
+      person
     },
   };
 };

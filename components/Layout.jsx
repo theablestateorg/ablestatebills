@@ -1,14 +1,16 @@
-import { supabase } from "../utils/supabase";
 import { useAuth } from "../utils/auth";
 import Help from "../components/Help";
 import Navbar from "./nav";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
+import Router from "next/router";
+import { useRouter } from "next/router";
 
 function Layout({ children}) {
 
   const { user } = useAuth();
+  
 
-  return  (
+  return (
     <>
       <Navbar user={user} />
       {children}

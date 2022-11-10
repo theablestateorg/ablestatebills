@@ -3,6 +3,8 @@ import { supabase } from "../utils/supabase";
 import moment from "moment";
 import { MdDeleteOutline } from 'react-icons/md'
 import Footer from "../components/Footer";
+import { useCookies } from "react-cookie"
+import { parseCookies } from "../utils/parseCookies";
 
 export default function Home({ logs}) {
   return (
@@ -51,19 +53,20 @@ export default function Home({ logs}) {
   );
 }
 
-export const getServerSideProps = async ({ req }) => {
+export const getServerSideProps = async ({ req,res }) => {
   const { data: logs } = await supabase.from("logs").select("*").order('created_at', { ascending: false });
 
-  const { user } = await supabase.auth.api.getUserByCookie(req);
-
-  if (!user) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/login",
-      },
-      props: {},
-    };
+  const person = parseCookies(req)
+  if (res) {
+    if (!person.user) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: "/login",
+        },
+        props: {},
+      };
+    }
   }
 
   return {

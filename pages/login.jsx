@@ -9,14 +9,18 @@ import 'react-toastify/dist/ReactToastify.css';
 import Link from "next/link";
 import Footer from "../components/Footer";
 import { useAuth } from "../utils/auth";
-import { getCookies, getCookie, setCookies, removeCookies } from 'cookies-next';
+import { useCookies } from "react-cookie"
+import { parseCookies } from "../utils/parseCookies";
 
-export default function Home({ person }) {
+export default function Home({ userData }) {
   const [ loading, setLoading ] = useState(false)
   const { setSession } = useAuth()
 
-  console.log(person)
+  console.log("userData", userData)
 
+  const [cookie, setCookie] = useCookies(["user"])
+
+  console.log(cookie?.user)
 
   const handleSubmit = async (event, {email, password}, resetForm) => {
     event.preventDefault();
@@ -27,6 +31,12 @@ export default function Home({ person }) {
         setSession(session)
         setLoading(false)
         resetForm({ email: "", password: "" })
+
+        setCookie("user", JSON.stringify(user), {
+          path: "/",
+          maxAge: 3600, // Expires after 1hr
+          sameSite: true,
+        })
         Router.push('/')
       }
       if(error){
@@ -162,20 +172,19 @@ export default function Home({ person }) {
 }
 
 export const getServerSideProps = async ({ req, res }) => {
-  console.log(req)
-  const { user } = await supabase.auth.api.getUserByCookie(req)
-  const person = getCookie('person', { req, res});
-  if(user){
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/"
-      },
-      props: {},
+  const userData = parseCookies(req)
+
+    if (userData?.user) {
+      return {
+            redirect: {
+              permanent: false,
+              destination: "/",
+            },
+            props: {},
+          };
     }
-  }
 
   return {
-    props: { person }
+    props: { userData }
   }
 }

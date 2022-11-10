@@ -3,6 +3,8 @@ import TicketCard from "../components/TicketCard";
 import { supabase } from "../utils/supabase";
 import { Fragment } from "react";
 import { AiOutlineFileDone } from 'react-icons/ai'
+import { useCookies } from "react-cookie"
+import { parseCookies } from "../utils/parseCookies";
 
 function Tickets({ tickets, customers }) {
   return (
@@ -29,8 +31,20 @@ function Tickets({ tickets, customers }) {
 
 export default Tickets
 
-export const getServerSideProps = async ({ req }) => {
-  const { user } = await supabase.auth.api.getUserByCookie(req);
+export const getServerSideProps = async ({ req, res }) => {
+  const person = parseCookies(req)
+    if (res) {
+      if (!person.user) {
+        return {
+          redirect: {
+            permanent: false,
+            destination: "/login",
+          },
+          props: {},
+        };
+      }
+    }
+
   const { data: customers } = await supabase.from("profiles").select("*");
 
   const { data: tickets } = await supabase
@@ -38,15 +52,6 @@ export const getServerSideProps = async ({ req }) => {
     .select("*")
     .order("created_at", { ascending: false });
 
-  if (!user) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/login",
-      },
-      props: {},
-    };
-  }
 
   return {
     props: { tickets, customers },

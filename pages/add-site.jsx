@@ -13,6 +13,8 @@ import axios from "axios";
 import Footer from "../components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
 import { dropIn } from "../utils/dropIn";
+import { useCookies } from "react-cookie"
+import { parseCookies } from "../utils/parseCookies";
 
 export default function AddSite() {
   const [loading, setLoading] = useState(false);
@@ -437,17 +439,18 @@ export default function AddSite() {
   );
 }
 
-export const getServerSideProps = async ({ req }) => {
-  const { user } = await supabase.auth.api.getUserByCookie(req);
-
-  if (!user) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/login",
-      },
-      props: {},
-    };
+export const getServerSideProps = async ({ req, res }) => {
+  const person = parseCookies(req)
+  if (res) {
+    if (!person.user) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: "/login",
+        },
+        props: {},
+      };
+    }
   }
 
   return {

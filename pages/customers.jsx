@@ -11,6 +11,8 @@ import { IoWarning } from "react-icons/io5";
 import { Footer } from "../components";
 import { avatarColors } from "../utils/avatarColors";
 import Avatar from "../components/Avatar";
+import { useCookies } from "react-cookie"
+import { parseCookies } from "../utils/parseCookies";
 
 export default function Customers({ websites, customers, managers }) {
   const router = useRouter();
@@ -216,7 +218,7 @@ export default function Customers({ websites, customers, managers }) {
   );
 }
 
-export const getServerSideProps = async ({ req }) => {
+export const getServerSideProps = async ({ req, res }) => {
   const { data: websites } = await supabase
     .from("websites")
     .select("*")
@@ -232,17 +234,18 @@ export const getServerSideProps = async ({ req }) => {
     .select("*")
     .neq("role", "customer");
 
-  const { user } = await supabase.auth.api.getUserByCookie(req);
-
-  if (!user) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/login",
-      },
-      props: {},
-    };
-  }
+    const person = parseCookies(req)
+    if (res) {
+      if (!person.user) {
+        return {
+          redirect: {
+            permanent: false,
+            destination: "/login",
+          },
+          props: {},
+        };
+      }
+    }
 
   return {
     props: {

@@ -5,6 +5,8 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { supabase } from "../../utils/supabase";
 import { useAuth } from "../../utils/auth";
+import { useCookies } from "react-cookie"
+import { parseCookies } from "../../utils/parseCookies";
 
 function Ticket({ ticket, customer }) {
   const router = useRouter();
@@ -104,8 +106,7 @@ function Ticket({ ticket, customer }) {
 export default Ticket;
 
 
-export const getServerSideProps = async ({ req, params }) => {
-  const { user } = await supabase.auth.api.getUserByCookie(req);
+export const getServerSideProps = async ({ req, res, params }) => {
 
   const { data: ticket } = await supabase
     .from("tickets")
@@ -119,15 +120,18 @@ export const getServerSideProps = async ({ req, params }) => {
       .eq('id', ticket.customer_id)
       .single()
 
-  if (!user) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/login",
-      },
-      props: {},
-    };
-  }
+      const person = parseCookies(req)
+      if (res) {
+        if (!person.user) {
+          return {
+            redirect: {
+              permanent: false,
+              destination: "/login",
+            },
+            props: {},
+          };
+        }
+      }
 
   return {
     props: { ticket, customer },

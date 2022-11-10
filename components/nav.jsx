@@ -13,6 +13,8 @@ import { Transition } from "@tailwindui/react";
 import useMediaQuery from "../hooks/useMediaQuery";
 import { menuData } from "../utils/menuData";
 import { motion, AnimateSharedLayout } from "framer-motion";
+import { useCookies } from "react-cookie"
+import { parseCookies } from "../utils/parseCookies";
 
 export default function Navbar({user, person}) {
   const tablet = useMediaQuery("(max-width: 1000px)");
@@ -224,17 +226,32 @@ export default function Navbar({user, person}) {
 
 export const getServerSideProps = async ({ req }) => {
 
-  const { user: person } = await supabase.auth.api.getUserByCookie(req);
-
-  if (!person) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/login",
-      },
-      props: {},
-    };
+  const person = parseCookies(req)
+  if (res) {
+    if (!person) {
+      // res.writeHead(301, { Location: "/login" })
+      // res.end()
+      return {
+            redirect: {
+              permanent: false,
+              destination: "/login",
+            },
+            props: {},
+          };
+    }
   }
+
+  // const { user: person } = await supabase.auth.api.getUserByCookie(req);
+
+  // if (!person) {
+  //   return {
+  //     redirect: {
+  //       permanent: false,
+  //       destination: "/login",
+  //     },
+  //     props: {},
+  //   };
+  // }
 
   return {
     props: {

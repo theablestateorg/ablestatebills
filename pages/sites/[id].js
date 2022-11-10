@@ -16,6 +16,8 @@ import { RiExternalLinkFill } from "react-icons/ri";
 import moment from "moment";
 import { motion, AnimatePresence } from "framer-motion";
 import { dropIn } from "../../utils/dropIn";
+import { useCookies } from "react-cookie"
+import { parseCookies } from "../../utils/parseCookies";
 
 export default function Site({ product }) {
   const router = useRouter();
@@ -563,8 +565,7 @@ export default function Site({ product }) {
   );
 }
 
-export const getServerSideProps = async ({ req, params }) => {
-  const { user } = await supabase.auth.api.getUserByCookie(req);
+export const getServerSideProps = async ({ req, res, params }) => {
 
   const { data: product } = await supabase
     .from("websites")
@@ -572,15 +573,18 @@ export const getServerSideProps = async ({ req, params }) => {
     .eq("id", params.id)
     .single();
 
-  if (!user) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/login",
-      },
-      props: {},
-    };
-  }
+    const person = parseCookies(req)
+    if (res) {
+      if (!person.user) {
+        return {
+          redirect: {
+            permanent: false,
+            destination: "/login",
+          },
+          props: {},
+        };
+      }
+    }
 
   return {
     props: { product },

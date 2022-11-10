@@ -14,6 +14,8 @@ import AddCustomerModal from "../../components/AddCustomerModal";
 import { MdAdd } from "react-icons/md";
 import { motion, AnimatePresence } from "framer-motion";
 import { dropIn } from '../../utils/dropIn'
+import { useCookies } from "react-cookie"
+import { parseCookies } from "../../utils/parseCookies";
 
 export default function Site({ profile }) {
   const router = useRouter();
@@ -398,8 +400,7 @@ export default function Site({ profile }) {
   );
 }
 
-export const getServerSideProps = async ({ req, params }) => {
-  const { user } = await supabase.auth.api.getUserByCookie(req);
+export const getServerSideProps = async ({ req, res, params }) => {
 
   const { data: profile } = await supabase
     .from("profiles")
@@ -407,15 +408,18 @@ export const getServerSideProps = async ({ req, params }) => {
     .eq("id", params.id)
     .single();
 
-  if (!user) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/login",
-      },
-      props: {},
-    };
-  }
+    const person = parseCookies(req)
+    if (res) {
+      if (!person.user) {
+        return {
+          redirect: {
+            permanent: false,
+            destination: "/login",
+          },
+          props: {},
+        };
+      }
+    }
 
   return {
     props: { profile },

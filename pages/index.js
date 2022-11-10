@@ -28,10 +28,6 @@ export default function Home({ websites, customers, person }) {
   const checkbox = useRef();
   const { user } = useAuth();
 
-  const [cookie, setCookie] = useCookies(["user"])
-
-  console.log("userData ",person)
-
 
   websites = websites
     .filter((website) =>
@@ -50,6 +46,7 @@ export default function Home({ websites, customers, person }) {
     : websites.sort((a, b) => b[sortBy] > a[sortBy]);
 
   const deleteArrayIds = deleteArray.map((site) => site[0].toString());
+  const { role } = JSON.parse(person.user).profile
 
   const bulkDelete = async () => {
     const { data, error } = await supabase
@@ -73,17 +70,17 @@ export default function Home({ websites, customers, person }) {
     setPopUp(false);
   };
 
-  if([user?.role, person?.user_metadata?.role].includes("customer")){
+  if(role === "customer"){
     return (
       <Customer websites={websites} customers={customers} person={person} />
     )
   }
-  else if([user?.role, person?.user_metadata?.role].includes("manager")){
+  else if(role === "manager"){
     return (
       <Manager websites={websites} customers={customers} />
     )
   }
-  else if([user?.role, person?.user_metadata?.role].includes("admin")){
+  else if(role === "admin"){
     return (
       <Admin websites={websites} customers={customers} />
     )
@@ -119,20 +116,6 @@ export const getServerSideProps = async ({ req, res }) => {
 
 
   const { data: customers } = await supabase.from("profiles").select("*");
-
-  // const { user: person } = await supabase.auth.api.getUserByCookie(req);
-  // const people = JSON.parse(getCookie('person', { req, res}) || null);
-  
-
-  // if (!person) {
-  //   return {
-  //     redirect: {
-  //       permanent: false,
-  //       destination: "/login",
-  //     },
-  //     props: {},
-  //   };
-  // }
 
   return {
     props: {

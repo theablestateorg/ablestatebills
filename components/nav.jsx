@@ -26,13 +26,22 @@ export default function Navbar({user, person}) {
   const router = useRouter();
   const { signOut, loading, setLoading } = useAuth();
 
+  const [cookie] = useCookies(['user'])
+  let role
+  if(cookie?.user?.profile){
+    role = cookie?.user?.profile.role
+  }else {
+    role = "customer"
+  }
+
+  
+
   useEffect(() => {
     try {
       downloadFile(user.avatar_url.substring(8), "avatars")
         .then((data) => setAvatar(data.avatar_url))
         .catch((error) => console.log(error));
     } catch (error) {
-      // console.log(error);
     }
 
     getNotifications();
@@ -62,7 +71,6 @@ export default function Navbar({user, person}) {
       setNotifications(myNotifications);
     }
     if (error) {
-      // console.log(error);
     }
   };
 
@@ -100,7 +108,7 @@ export default function Navbar({user, person}) {
         <motion.ul 
         onHoverEnd={() => setActiveIndex(null)}
         className={`${navStyles.navMenu} h-[70px] items-center`}>
-          {menuData[`${myRole}`]?.map((menuItem, index) => (
+          {menuData[`${role}`]?.map((menuItem, index) => (
             <ActiveLink
               name={menuItem.label}
               href={menuItem.link}
@@ -229,8 +237,6 @@ export const getServerSideProps = async ({ req }) => {
   const person = parseCookies(req)
   if (res) {
     if (!person?.user) {
-      // res.writeHead(301, { Location: "/login" })
-      // res.end()
       return {
             redirect: {
               permanent: false,

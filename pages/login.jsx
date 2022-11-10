@@ -26,9 +26,10 @@ export default function Home({}) {
         password,
       });
       if (user) {
+        const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
         setSession(session);
         resetForm({ email: "", password: "" });
-        setCookie("user", JSON.stringify(user), {
+        setCookie("user", JSON.stringify({user: user, profile:profile}), {
           path: "/",
           maxAge: 3600, // Expires after 1hr
           sameSite: true,

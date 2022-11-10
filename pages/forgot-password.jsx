@@ -8,6 +8,7 @@ import { useState } from "react";
 import 'react-toastify/dist/ReactToastify.css';
 import Link from "next/link";
 import Footer from "../components/Footer";
+import { parseCookies } from "../utils/parseCookies";
 
 export default function Home() {
   const [ loading, setLoading ] = useState(false)
@@ -125,19 +126,19 @@ export default function Home() {
 
 export const getServerSideProps = async ({ req }) => {
 
-  // const { user } = await supabase.auth.api.getUserByCookie(req)
+  const userData = parseCookies(req);
 
-  // if(user){
-  //   return {
-  //     redirect: {
-  //       permanent: false,
-  //       destination: "/"
-  //     },
-  //     props: {},
-  //   }
-  // }
+  if (userData?.user) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      },
+      props: {},
+    };
+  }
 
-  // return {
-  //   props: {}
-  // }
+  return {
+    props: {},
+  };
 }

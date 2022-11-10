@@ -228,7 +228,7 @@ export const getServerSideProps = async ({ req }) => {
 
   const person = parseCookies(req)
   if (res) {
-    if (!person) {
+    if (!person?.user) {
       // res.writeHead(301, { Location: "/login" })
       // res.end()
       return {
@@ -240,18 +240,6 @@ export const getServerSideProps = async ({ req }) => {
           };
     }
   }
-
-  // const { user: person } = await supabase.auth.api.getUserByCookie(req);
-
-  // if (!person) {
-  //   return {
-  //     redirect: {
-  //       permanent: false,
-  //       destination: "/login",
-  //     },
-  //     props: {},
-  //   };
-  // }
 
   return {
     props: {

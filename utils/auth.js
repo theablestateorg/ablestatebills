@@ -65,18 +65,13 @@ export const AuthProvider = ({ children }) => {
     signOut: () => {
       removeCookie("user")
       const {data, error } = supabase.auth.signOut()
-      console.log("error ", error)
-      console.log("data ", data)
-      setSession(null)
-      setUser(null)
+      removeCookie("user")
     },
     signIn: (data) => {
       supabase.auth.signIn(data)
     },
     signUp: (data) => supabase.auth.signUp(data)
   }
-  
-  console.log("is this called everywhere: ", router.pathname)
 
   return (
     <AuthContext.Provider value={values} >

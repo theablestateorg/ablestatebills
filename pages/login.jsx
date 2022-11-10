@@ -2,51 +2,47 @@ import Head from "next/head";
 import { supabase } from "../utils/supabase";
 import { validationSchema } from "../utils/validation";
 import { Formik, Form } from "formik";
-import { toast, ToastContainer } from 'react-toastify'
-import Router from 'next/router'
+import { toast, ToastContainer } from "react-toastify";
+import Router from "next/router";
 import { useState } from "react";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import Footer from "../components/Footer";
 import { useAuth } from "../utils/auth";
-import { useCookies } from "react-cookie"
+import { useCookies } from "react-cookie";
 import { parseCookies } from "../utils/parseCookies";
 
-export default function Home({ userData }) {
-  const [ loading, setLoading ] = useState(false)
-  const { setSession } = useAuth()
+export default function Home({}) {
+  const [loading, setLoading] = useState(false);
+  const { setSession } = useAuth();
+  const [cookie, setCookie] = useCookies(["user"]);
 
-  console.log("userData", userData)
-
-  const [cookie, setCookie] = useCookies(["user"])
-
-  console.log(cookie?.user)
-
-  const handleSubmit = async (event, {email, password}, resetForm) => {
+  const handleSubmit = async (event, { email, password }, resetForm) => {
     event.preventDefault();
-    setLoading(true)
-    try{
-      const {user,session, error} = await supabase.auth.signIn({ email: email, password })
-      if(user){
-        setSession(session)
-        setLoading(false)
-        resetForm({ email: "", password: "" })
-
+    setLoading(true);
+    try {
+      const { user, session, error } = await supabase.auth.signIn({
+        email: email,
+        password,
+      });
+      if (user) {
+        setSession(session);
+        resetForm({ email: "", password: "" });
         setCookie("user", JSON.stringify(user), {
           path: "/",
           maxAge: 3600, // Expires after 1hr
           sameSite: true,
-        })
-        Router.push('/')
+        });
+        Router.push("/");
       }
-      if(error){
-        setLoading(false)
-        toast.error(`${error?.message}`, {position: "top-center"})
+      if (error) {
+        setLoading(false);
+        toast.error(`${error?.message}`, { position: "top-center" });
       }
-    }catch(error){
-      setLoading(false)
+    } catch (error) {
+      setLoading(false);
     }
-
+    setLoading(false);
   };
 
   return (
@@ -68,7 +64,7 @@ export default function Home({ userData }) {
             dirty,
             handleChange,
             handleBlur,
-            resetForm
+            resetForm,
           }) => {
             return (
               <Form
@@ -92,9 +88,7 @@ export default function Home({ userData }) {
                     />
                     <div
                       className={`${
-                        errors?.email && touched?.email
-                          ? "block"
-                          : "hidden"
+                        errors?.email && touched?.email ? "block" : "hidden"
                       }`}
                     >
                       <label
@@ -104,9 +98,7 @@ export default function Home({ userData }) {
                             : "text-transparent text-xs"
                         }`}
                       >{`${
-                        errors?.email && touched?.email
-                          ? errors.email
-                          : "hide"
+                        errors?.email && touched?.email ? errors.email : "hide"
                       }`}</label>
                     </div>
                   </div>
@@ -145,22 +137,48 @@ export default function Home({ userData }) {
                     </div>
                   </div>
                 </div>
-                <button type="submit" disabled={!(isValid && dirty)} className="bg-[#1D1F20] text-white py-1 px-3 my-2 mt-4 hover:bg-[#292C2D] flex items-center cursor-pointer">
-                {loading && <svg className="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none"
-            viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-            <path className="opacity-75" fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-            </path>
-        </svg>}
+                <button
+                  type="submit"
+                  disabled={!(isValid && dirty)}
+                  className="bg-[#1D1F20] text-white py-1 px-3 my-2 mt-4 hover:bg-[#292C2D] flex items-center cursor-pointer"
+                >
+                  {loading && (
+                    <svg
+                      className="w-5 h-5 mr-3 -ml-1 text-white animate-spin"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                  )}
                   {loading ? "Loading" : "Login"}
                 </button>
-                <p className="cursor-point">Don&apos;t have an account? <Link href="/register">
-                  <span className="underline cursor-pointer">Sign Up</span>
-                  </Link></p>
-                <p className="cursor-point"><Link href="/forgot-password">
-                  <span className="underline cursor-pointer">Forgot Password?</span>
-                  </Link></p>
+                <p className="cursor-point">
+                  Don&apos;t have an account?{" "}
+                  <Link href="/register">
+                    <span className="underline cursor-pointer">Sign Up</span>
+                  </Link>
+                </p>
+                <p className="cursor-point">
+                  <Link href="/forgot-password">
+                    <span className="underline cursor-pointer">
+                      Forgot Password?
+                    </span>
+                  </Link>
+                </p>
               </Form>
             );
           }}
@@ -172,19 +190,19 @@ export default function Home({ userData }) {
 }
 
 export const getServerSideProps = async ({ req, res }) => {
-  const userData = parseCookies(req)
+  const userData = parseCookies(req);
 
-    if (userData?.user) {
-      return {
-            redirect: {
-              permanent: false,
-              destination: "/",
-            },
-            props: {},
-          };
-    }
+  if (userData?.user) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      },
+      props: {},
+    };
+  }
 
   return {
-    props: { userData }
-  }
-}
+    props: {},
+  };
+};

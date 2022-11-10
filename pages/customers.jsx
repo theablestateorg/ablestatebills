@@ -40,13 +40,10 @@ export default function Customers({ websites, customers, managers }) {
           .toLowerCase()
           .indexOf(searchText.toLowerCase()) > -1
   );
-  // .filter((customer) => !status || customer.status === status);
 
   customers = sortNames
     ? customers.sort((a, b) => a[sortBy] > b[sortBy])
     : customers.sort((a, b) => b[sortBy] > a[sortBy]);
-
-  console.log(customers);
 
   return (
     <>

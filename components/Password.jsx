@@ -2,14 +2,41 @@ import { Form, Formik } from "formik";
 import { MdEdit, MdOutlineMail } from "react-icons/md";
 import { supabase } from "../utils/supabase";
 import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 function Password({ user }) {
   const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (event, values, resetForm) => {
+    event.preventDefault()
+    console.log(values)
+    const { new_password, confirm_password} = values
+    if(new_password === confirm_password){
+      const { user, error } = await supabase.auth.update({password: new_password})
+
+      if(error){
+        toast.error(`${error.message}`, {
+          position: "top-center",
+        });
+      }else {
+        toast.success(`Successfully changed password`, {
+          position: "top-center",
+        });
+      }
+
+      resetForm({ old_password: "", new_password: "", confirm_password: ""})
+    } else {
+      resetForm({ old_password: "", new_password: "", confirm_password: ""})
+      toast.error(`Password is inconsistent`, {
+        position: "top-center",
+      });
+    }
+  }
   return (
     <section className="my-5 flex-grow flex flex-col">
       <h1 className="font-bold">Password</h1>
       <Formik
-              initialValues={{ first_name: "", last_name: "", email: "" }}
+              initialValues={{ old_password: "",new_password: "", confirm_password: "" }}
             >
               {({
                 values,
@@ -23,24 +50,57 @@ function Password({ user }) {
               }) => {
                 return (
                   <Form
-                    onSubmit={(event) => handleSubmit(event, values)}
+                    onSubmit={(event) => handleSubmit(event, values, resetForm)}
                     className="my-5 flex-grow py-5 md:px-10"
                     name="signUpForm"
                   >
 
+                    {/* <div className="flex flex-col gap-5 md:my-5">
+                      <label htmlFor="old_password" className="">
+                        Old Password
+                      </label>
+                      <div className="w-full">
+                        <input
+                          type="password"
+                          name="old_password"
+                          className="outline outline-1 bg-transparent py-1 px-2 placeholder:text-[#bcbfc2] w-full md:w-10/12"
+                          placeholder="enter password"
+                          onChange={handleChange("old_password")}
+                          onBlur={handleBlur("old_password")}
+                        />
+                        <div
+                          className={`${
+                            errors?.password && touched?.password
+                              ? "block"
+                              : "hidden"
+                          }`}
+                        >
+                          <label
+                            className={`${
+                              errors?.password && touched?.password
+                                ? "text-red-500 text-xs"
+                                : "text-transparent text-xs"
+                            }`}
+                          >{`${
+                            errors?.password && touched?.password
+                              ? errors.password
+                              : "hide"
+                          }`}</label>
+                        </div>
+                      </div>
+                    </div> */}
                     <div className="flex flex-col gap-5 md:my-5">
-                      <label htmlFor="" className="">
+                      <label htmlFor="new_password" className="">
                         New Password
                       </label>
                       <div className="w-full">
                         <input
                           type="password"
-                          name="password"
+                          name="new_password"
                           className="outline outline-1 bg-transparent py-1 px-2 placeholder:text-[#bcbfc2] w-full md:w-10/12"
                           placeholder="enter password"
-                          defaultValue="**********"
-                          onChange={handleChange("password")}
-                          onBlur={handleBlur("password")}
+                          onChange={handleChange("new_password")}
+                          onBlur={handleBlur("new_password")}
                         />
                         <div
                           className={`${
@@ -64,17 +124,17 @@ function Password({ user }) {
                       </div>
                     </div>
                     <div className="flex flex-col gap-5 my-5">
-                      <label htmlFor="" className="">
+                      <label htmlFor="confirm_password" className="">
                         Confirm Password
                       </label>
                       <div className="w-full">
                         <input
                           type="password"
-                          name="password"
+                          name="confirm_password"
                           className="outline outline-1 bg-transparent py-1 px-2 placeholder:text-[#bcbfc2] w-full md:w-10/12"
                           placeholder="enter password"
-                          onChange={handleChange("password")}
-                          onBlur={handleBlur("password")}
+                          onChange={handleChange("confirm_password")}
+                          onBlur={handleBlur("confirm_password")}
                         />
                         <div
                           className={`${

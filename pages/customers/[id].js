@@ -89,14 +89,10 @@ export default function Site({ profile }) {
       })
       .eq("id", id);
 
-    // console.log(error)
-    // console.log(data)
-
     // if (data) {
     //   toast.success(`Successfully updated`, { position: "top-center" });
     // }
     if (error) {
-      // console.log(error);
       toast.error(`${error?.message}`, { position: "top-center" });
     }
 

@@ -85,9 +85,6 @@ export default function Navbar({user, person}) {
 
   const [activeIndex, setActiveIndex] = useState(null);
 
-  const myRole = user?.role || person?.user_metadata?.role
-  console.log(user?.role)
-
 
 
   return (
@@ -192,21 +189,13 @@ export default function Navbar({user, person}) {
           <CgMenu size={25} color={"#CA3011"} />
           {showMobileMenu && (
             <ul className="bg-white absolute z-20 outline outline-1 outline-[#E4E6E5] top-10 right-0 p-2 w-56">
-              <Link href="/" className="nn">
+              {menuData[`${role}`].map((menuItem, index) => (
+                <Link href={menuItem.link} className="nn">
                 <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic">
-                  Dashboard
+                  {menuItem.label}
                 </li>
               </Link>
-              <Link href="/add-site" className="">
-                <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic">
-                  Add Product
-                </li>
-              </Link>
-              <Link href="/logs">
-                <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic">
-                  Logs
-                </li>
-              </Link>
+              ))}
 
               <Link href="/profile">
                 <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic">

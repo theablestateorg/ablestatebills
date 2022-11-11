@@ -59,7 +59,7 @@ export default function Dashboard() {
                 {user && user.user_metadata.first_name + " " +user.user_metadata.last_name}
               </h3>
               <h3 className="border-b-2 pb-2 text-xs text-stone-500">
-                {user && user.email}
+                {cookie?.user && cookie?.user?.user.email}
               </h3>
               <div className="flex text-sm md:text-lg md:flex-col gap-5 mt-5 items-start">
                 <button onClick={() =>setShowInfo(0)} className={`${showInfo === 0 && "bg-gray-200"}  py-2 px-4 w-full`}>Account</button>

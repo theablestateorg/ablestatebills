@@ -41,15 +41,17 @@ function Account({ user }) {
         <div className="w-54 bg-white p-5 rounded shadow-md">
           <h1>My Balance</h1>
           <div className="bg-[#f7f7f7] p-3 rounded-md flex gap-5 justify-start">
-            <FaMoneyBillWave size={35} />
+            <FaMoneyBillWave size={35} color="#1d1f20" />
               <div>
-                <h2>Available Balance</h2>
-                <p>
-                  <span className="mr-1">ugx</span>
-                  34,500
-                </p>
+                <div className="mb-5">
+                  <h2 className="text-zinc-600 text-sm">Available Balance</h2>
+                  <p className="font-bold text-xl">
+                    <span className="mr-1 font-medium">ugx</span>
+                    <span className="text-3xl">34,500</span>
+                  </p>
+                </div>
                 <Link href="/">
-                  <span className="underline cursor-pointer">
+                  <span className="underline cursor-pointer text-[#ca3011]">
                   view transactions
                   </span>
                 
@@ -59,7 +61,7 @@ function Account({ user }) {
         </div>
       </div>
       <Formik
-              initialValues={{ old_password: "",new_password: "", confirm_password: "" }}
+              initialValues={{ amount: "" }}
             >
               {({
                 values,
@@ -74,7 +76,7 @@ function Account({ user }) {
                 return (
                   <Form
                     onSubmit={(event) => handleSubmit(event, values, resetForm)}
-                    className="my-5 flex-grow py-5 md:px-10"
+                    className=" flex-grow py-5 md:px-10"
                     name="signUpForm"
                   >
                     <div className="flex flex-col gap-5 my-5">

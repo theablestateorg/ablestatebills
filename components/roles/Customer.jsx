@@ -6,6 +6,7 @@ import moment from "moment";
 import { ToastContainer } from "react-toastify";
 import { IoWarning } from "react-icons/io5";
 import Footer from "../Footer";
+import { HiChevronDown } from 'react-icons/hi'
 
 export default function Customer({ websites, customers, person }) {
   const router = useRouter();
@@ -34,17 +35,27 @@ export default function Customer({ websites, customers, person }) {
                 setProductsContext(!productsContext);
               }}
             >
-              <MdAdd />
               Add New...
+              <HiChevronDown size={18} />
             </button>
             {productsContext && (
-              <ul className="absolute right-0 outline outline-1 outline-gray-200 px-3 py-2 bg-white rounded-md shadow-lg w-40">
-                <li className="px-3 py-1 mb-1 rounded-md hover:bg-[#eaeaea] cursor-pointer" onClick={() => {
-                  Router.push("/packages/Starter/175,000")
-                }}>Full Package</li>
-                <li className="px-3 py-1 mb-1 rounded-md hover:bg-[#eaeaea] cursor-pointer" onClick={() => {
-                  Router.push("/packages/domains")
-                }}>Domain only</li>
+              <ul className="absolute right-0 outline outline-1 outline-gray-200 px-3 py-2 bg-white rounded-md shadow-lg w-40 md:w-52">
+                <li
+                  className="px-3 py-1 mb-1 rounded-md hover:bg-[#eaeaea] cursor-pointer"
+                  onClick={() => {
+                    Router.push("/packages/Starter/175,000");
+                  }}
+                >
+                  Full Package
+                </li>
+                <li
+                  className="px-3 py-1 mb-1 rounded-md hover:bg-[#eaeaea] cursor-pointer"
+                  onClick={() => {
+                    Router.push("/packages/domains");
+                  }}
+                >
+                  Domain only
+                </li>
               </ul>
             )}
           </div>

@@ -122,6 +122,8 @@ export default function CustomerSite({ product }) {
     }
   };
 
+  const [loadingFrame, setLoadingFrame] = useState(true)
+
   const handleExtension = async () => {
     if (document.getElementById("extension").value !== "") {
       const { data, error } = await supabase
@@ -423,13 +425,18 @@ export default function CustomerSite({ product }) {
               )}
             </AnimatePresence>
             <div className="flex flex-col md:flex-row gap-5 outline outline-1 outline-[#e4e6e5] bg-white p-2 md:p-5 rounded-sm md:shadow-sm justify-center md:justify-start items-center md:items-start">
-              <iframe
+            {/* {loadingFrame ? 
+            <div className="w-80 h-80 outline outline-1 outline-[#e4e6e5] rounded-sm bg-[#f7f7f7] animate-pulse"></div>
+            : */}
+            <iframe
                 id="website_frame"
                 scrolling="no"
                 className="h-80 w-80 outline outline-1 outline-[#e4e6e5] rounded-sm bg-[#f7f7f7]"
                 src={`https://${product.website_link}`}
                 title={product.name}
-              ></iframe>
+              >kk</iframe>
+            {/* } */}
+              
               <div>
                 <div className="mb-3">
                   <p className="uppercase font-medium">DOMAIN</p>

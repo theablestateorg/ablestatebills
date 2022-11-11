@@ -1,23 +1,51 @@
 import Head from "next/head";
 import Router, { useRouter } from "next/router";
-import { MdAdd, MdSearch } from "react-icons/md";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import moment from "moment";
 import { ToastContainer } from "react-toastify";
 import { IoWarning } from "react-icons/io5";
 import Footer from "../Footer";
-import { HiChevronDown } from 'react-icons/hi'
+import { HiChevronDown } from "react-icons/hi";
+import { motion, AnimateSharedLayout } from "framer-motion";
 
 export default function Customer({ websites, customers, person }) {
+  const [showMenu, setShowMenu] = useState(false);
   const router = useRouter();
   const [deleteArray, setDeleteArray] = useState([]);
   const [popUp, setPopUp] = useState(false);
 
   const myWebsites = websites.filter(
-    (website) => website.contact_person === person.id
+    (website) => website.contact_person === JSON.parse(person.user).profile.id
   );
 
   const [productsContext, setProductsContext] = useState(false);
+
+  if (showMenu) {
+    window.onclick = (event) => {
+      console.log(showMenu);
+      if (!event.target.matches(".dialog")) {
+        setPopUp(false);
+        setShowMenu(false);
+      }
+    };
+  }
+
+  const [activeIndex, setActiveIndex] = useState(null);
+
+  console.log(activeIndex)
+
+  const addNewOptions = [
+    {
+      label: "Full Package",
+      link: "/packages/Starter/175,000",
+    },
+    {
+      label: "Domain only",
+      link: "/packages/domains",
+    },
+  ];
+  console.log(websites)
+
   return (
     <>
       <Head>
@@ -39,24 +67,39 @@ export default function Customer({ websites, customers, person }) {
               <HiChevronDown size={18} />
             </button>
             {productsContext && (
-              <ul className="absolute right-0 outline outline-1 outline-gray-200 px-3 py-2 bg-white rounded-md shadow-lg w-40 md:w-52">
-                <li
-                  className="px-3 py-1 mb-1 rounded-md hover:bg-[#eaeaea] cursor-pointer"
-                  onClick={() => {
-                    Router.push("/packages/Starter/175,000");
+              <AnimateSharedLayout>
+                <motion.ul
+                  onHoverEnd={() => setActiveIndex(null)}
+                  className="absolute right-0 outline outline-1 outline-gray-200 px-3 py-2 bg-white rounded-md shadow-lg w-40 md:w-52 dialog cursor-pointer"
+                  onClick={(event) => {
+                    setShowMenu(!showMenu);
+                    event.stopPropagation();
                   }}
                 >
-                  Full Package
-                </li>
-                <li
-                  className="px-3 py-1 mb-1 rounded-md hover:bg-[#eaeaea] cursor-pointer"
-                  onClick={() => {
-                    Router.push("/packages/domains");
-                  }}
-                >
-                  Domain only
-                </li>
-              </ul>
+                  {addNewOptions.map((item, index) => (
+                    <motion.li
+                      onHoverStart={() => setActiveIndex(index)}
+                      key={index}
+                      className="rounded-md cursor-pointer flex items-center"
+                      onClick={() => {
+                        Router.push(`${item.link}`);
+                      }}
+                    >
+                      <a href={item.link} className="relative px-3 py-2 inline-block cursor-pointer z-10 w-full h-full mb-1">
+                        <span>{item.label}</span>
+                        {activeIndex === index ? (
+                          <motion.div
+                            layoutId="cover"
+                            className="cover bg-[#eaeaea] absolute -z-10 w-full h-full inset-0 rounded cursor-pointer"
+                          >
+                            
+                          </motion.div>
+                        ) : null}
+                      </a>
+                    </motion.li>
+                  ))}
+                </motion.ul>
+              </AnimateSharedLayout>
             )}
           </div>
         </section>

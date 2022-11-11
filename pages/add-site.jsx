@@ -1,6 +1,5 @@
 import Head from "next/head";
 import { supabase } from "../utils/supabase";
-import { addSiteValidationSchema } from "../utils/validation";
 import { Formik, Form } from "formik";
 import { toast, ToastContainer } from "react-toastify";
 import { useState, useEffect } from "react";
@@ -12,8 +11,6 @@ import useMediaQuery from "../hooks/useMediaQuery";
 import axios from "axios";
 import Footer from "../components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
-import { dropIn } from "../utils/dropIn";
-import { useCookies } from "react-cookie"
 import { parseCookies } from "../utils/parseCookies";
 
 export default function AddSite() {
@@ -29,6 +26,10 @@ export default function AddSite() {
   const [countryCode, setCountryCode] = useState("+256");
   const [selected, setSelected] = useState(false);
   const [password, setPassword] = useState(null);
+  const [customerDetails, setCustomerDetails] = useState({
+    email: "",
+    telephone_number: "",
+  });
 
   useEffect(() => {
     getCustomers();
@@ -36,7 +37,10 @@ export default function AddSite() {
   }, [selected]);
 
   const getCustomers = async () => {
-    const { data } = await supabase.from("profiles").select("*");
+    const { data } = await supabase
+      .from("profiles")
+      .select("*")
+      .order("first_name", { ascending: true });
     // .eq("role", "customer")
     setCustomers(data);
   };
@@ -54,7 +58,8 @@ export default function AddSite() {
           ...values,
           added_by: user.first_name + " " + user.last_name,
           contact_id: customerId,
-          telephone_number: countryCode + values.telephone_number,
+          telephone_number: contactDetails.contact_number,
+          email: contactDetails.email,
         },
       ]);
 
@@ -80,6 +85,10 @@ export default function AddSite() {
           last_paid: "",
           expiry_date: "",
           status: "active",
+        });
+        setContactDetails({
+          email: "",
+          contact_number: "",
         });
       }
       if (error) {
@@ -166,13 +175,13 @@ export default function AddSite() {
             name: "",
             website_link: "",
             contact_person: "",
-            telephone_number: "",
-            email: "",
+            telephone_number: contactDetails.contact_number,
+            email: contactDetails.email,
             last_paid: "",
             expiry_date: "",
             status: "active",
           }}
-          validationSchema={addSiteValidationSchema}
+          // validationSchema={addSiteValidationSchema}
           onSubmit={(values, { resetForm }) => {
             handleSubmit(values, resetForm);
           }}
@@ -286,16 +295,16 @@ export default function AddSite() {
                         : ""}
                     </button>
                     <AnimatePresence>
-                    {customerModel && (
-                      <AddCustomerModal
-                        loading={loading}
-                        setCustomerModel={setCustomerModel}
-                        addNewCustomer={addNewCustomer}
-                        password={password}
-                        setPassword={setPassword}
-                        contactDetails={contactDetails}
-                      />
-                    )}
+                      {customerModel && (
+                        <AddCustomerModal
+                          loading={loading}
+                          setCustomerModel={setCustomerModel}
+                          addNewCustomer={addNewCustomer}
+                          password={password}
+                          setPassword={setPassword}
+                          contactDetails={contactDetails}
+                        />
+                      )}
                     </AnimatePresence>
                   </div>
                 </div>
@@ -315,8 +324,7 @@ export default function AddSite() {
                       className=" py-2 px-2 ml-16 bg-transparent flex-grow focus:outline-none"
                       onChange={handleChange("telephone_number")}
                       onBlur={handleBlur("telephone_number")}
-                      defaultValue={""}
-                      value={contactDetails.contact_number || values.contact_number }
+                      value={contactDetails.contact_number.substring(4, 13)}
                     />
                     <select
                       name=""
@@ -341,7 +349,7 @@ export default function AddSite() {
                       className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-full"
                       onChange={handleChange("email")}
                       onBlur={handleBlur("email")}
-                      value={contactDetails.email || values.email}
+                      value={contactDetails.email}
                     />
                     <div
                       className={`${
@@ -440,9 +448,9 @@ export default function AddSite() {
 }
 
 export const getServerSideProps = async ({ req, res }) => {
-  const person = parseCookies(req)
+  const person = parseCookies(req);
   if (res) {
-    if (!person.user) {
+    if (!person.user || JSON.parse(person?.user).profile.role === "customer") {
       return {
         redirect: {
           permanent: false,

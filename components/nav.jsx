@@ -188,12 +188,12 @@ export default function Navbar({ user }) {
                 </div>
                 <div className="px-2">
                   <Link href="/profile">
-                    <li className="w-full p-2 px-12 mb-1 hover:bg-[#ececec]">
+                    <li className="w-full p-2 px-12 mb-1 hover:bg-[#ececec] rounded">
                       Profile
                     </li>
                   </Link>
                   <li
-                    className="w-full p-2 px-12 hover:bg-[#ececec]"
+                    className="w-full p-2 px-12 hover:bg-[#ececec] rounded"
                     onClick={() => {
                       signOut();
                       Router.push("/login");
@@ -255,7 +255,7 @@ export default function Navbar({ user }) {
                 <p className="not-italic text-xs pl-2 text-gray-400 font-medium bg-gray-50 py-1">Go to</p>
               {menuData[`${role}`].map((menuItem, index) => (
                 <Link href={menuItem.link} className="nn" key={index}>
-                  <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic">
+                  <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic rounded">
                     {menuItem.label}
                   </li>
                 </Link>
@@ -263,11 +263,11 @@ export default function Navbar({ user }) {
               <p className="not-italic text-xs pl-2 text-gray-400 font-medium bg-gray-50 py-1">Settings</p>
 
               <Link href="/profile">
-                <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic">
+                <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic rounded">
                   Profile
                 </li>
               </Link>
-              <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic">
+              <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic rounded">
                 <button
                   onClick={() => {
                     signOut();

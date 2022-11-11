@@ -3,6 +3,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useState, useEffect } from "react";
 import AccountSettings from "../components/AccountSettings";
 import Password from "../components/Password";
+import Account from "../components/Account";
 import Footer from "../components/Footer";
 import { downloadFile } from "../utils/getImages";
 import { useAuth } from "../utils/auth";
@@ -11,7 +12,7 @@ import { useCookies } from "react-cookie"
 import { parseCookies } from "../utils/parseCookies";
 
 export default function Dashboard() {
-  const [showInfo, setShowInfo] = useState(1)
+  const [showInfo, setShowInfo] = useState(0)
   const [avatar, setAvatar] = useState("");
   const { signOut, user } = useAuth();
   const matches = useMediaQuery("(min-width: 800px)");
@@ -61,12 +62,14 @@ export default function Dashboard() {
                 {user && user.email}
               </h3>
               <div className="flex text-sm md:text-lg md:flex-col gap-5 mt-5 items-start">
-                <button onClick={() =>setShowInfo(1)} className={`${showInfo === 1 && "bg-gray-200"}  py-2 px-4 w-full`}>Account Settings</button>
+                <button onClick={() =>setShowInfo(0)} className={`${showInfo === 0 && "bg-gray-200"}  py-2 px-4 w-full`}>Account</button>
+                <button onClick={() =>setShowInfo(1)} className={`${showInfo === 1 && "bg-gray-200"}  py-2 px-4 w-full`}>Settings</button>
                 <button onClick={() =>setShowInfo(2)} className={`${showInfo === 2 && "bg-gray-200"}  py-2 px-4 w-full`}>Password</button>
               </div>
           {/* <hr /> */}
           </section>
-          {showInfo === 2 ? <Password user={user} /> : <AccountSettings user={user} avatar={avatar} />}
+          {showInfo === 2 ? <Password user={user} /> : 
+          showInfo === 1? <AccountSettings user={user} avatar={avatar} /> : <Account user={user} />}
           
         </div>
         <Footer />

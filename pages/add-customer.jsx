@@ -237,7 +237,7 @@ export default function AddClient() {
 export const getServerSideProps = async ({ req, res }) => {
   const person = parseCookies(req)
   if (res) {
-    if (!person.user) {
+    if (!person.user || JSON.parse(person?.user).profile.role === "customer") {
       return {
         redirect: {
           permanent: false,

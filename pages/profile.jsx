@@ -1,6 +1,4 @@
 import Head from "next/head";
-import Navbar from "../components/nav";
-import { supabase } from "../utils/supabase";
 import { ToastContainer, toast } from "react-toastify";
 import { useState, useEffect } from "react";
 import AccountSettings from "../components/AccountSettings";
@@ -14,14 +12,14 @@ import { parseCookies } from "../utils/parseCookies";
 
 export default function Dashboard() {
   const [showInfo, setShowInfo] = useState(1)
-  const [profiles, setProfiles] = useState([])
   const [avatar, setAvatar] = useState("");
   const { signOut, user } = useAuth();
   const matches = useMediaQuery("(min-width: 800px)");
+  const [cookie] = useCookies(["user"]);
 
   useEffect(() => {
     try {
-      downloadFile(user.avatar_url.substring(8), "avatars")
+      downloadFile(cookie?.user?.profile.avatar_url.substring(8), "avatars")
         .then((data) => setAvatar(data.avatar_url))
         .catch((error) => console.log(error));
     } catch (error) {

@@ -7,14 +7,11 @@ import { useEffect, useState, useRef } from "react";
 import moment from "moment";
 import { toast, ToastContainer } from "react-toastify";
 import { useAuth } from "../utils/auth";
-import { IoWarning } from "react-icons/io5";
 import { Footer } from "../components";
-import { avatarColors } from "../utils/avatarColors";
 import Avatar from "../components/Avatar";
-import { useCookies } from "react-cookie"
 import { parseCookies } from "../utils/parseCookies";
 
-export default function Customers({ websites, customers, managers }) {
+export default function Customers({ customers, managers }) {
   const router = useRouter();
   const [searchText, setSearchText] = useState("");
   const [status, setStatus] = useState("");
@@ -233,7 +230,7 @@ export const getServerSideProps = async ({ req, res }) => {
 
     const person = parseCookies(req)
     if (res) {
-      if (!person.user) {
+      if (!person.user || JSON.parse(person?.user).profile.role === "customer") {
         return {
           redirect: {
             permanent: false,
@@ -246,9 +243,8 @@ export const getServerSideProps = async ({ req, res }) => {
 
   return {
     props: {
-      websites,
       customers,
-      managers,
+      managers
     },
   };
 };

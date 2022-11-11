@@ -41,10 +41,6 @@ function Manager({ websites, customers}) {
             New Product
           </button>
         </section>
-        <button onClick={async() => {
-          const { user, error } = await supabase.auth.update({role: 'manager'})
-
-        }}>update</button>
 
         <div className="outline outline-1 outline-[#e5e7eb] mb-5 overflow-x-scroll select-none">
           <table className="bg-white w-full table-auto p-10 select-none">

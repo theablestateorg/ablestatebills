@@ -56,7 +56,7 @@ export default function Site({ profile }) {
 
     setPopUp(false);
 
-    Router.push("/");
+    Router.push("/customers");
 
     if (data) {
       toast.success(`Successfully deleted`, { position: "top-center" });
@@ -406,7 +406,7 @@ export const getServerSideProps = async ({ req, res, params }) => {
 
     const person = parseCookies(req)
     if (res) {
-      if (!person.user) {
+      if (!person.user || JSON.parse(person?.user).profile.role === "customer") {
         return {
           redirect: {
             permanent: false,

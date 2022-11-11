@@ -1,33 +1,21 @@
-import Head from "next/head";
-import { useRouter } from "next/router";
-import { MdAdd, MdSearch } from "react-icons/md";
-import { FaSort } from "react-icons/fa";
 import { supabase } from "../utils/supabase";
-import { useEffect, useState, useRef } from "react";
-import moment from "moment";
-import { toast, ToastContainer } from "react-toastify";
+import { useState } from "react";
+import { toast } from "react-toastify";
 import { useAuth } from "../utils/auth";
-import { IoWarning } from "react-icons/io5";
-import { Footer } from "../components";
-import Manager from "../components/roles/Manager"
-import Customer from '../components/roles/Customer'
+import Manager from "../components/roles/Manager";
+import Customer from "../components/roles/Customer";
 import Admin from "../components/roles/Admin";
-import { useCookies } from "react-cookie"
 import { parseCookies } from "../utils/parseCookies";
 
 export default function Home({ websites, customers, person }) {
-  const router = useRouter();
   const [searchText, setSearchText] = useState("");
   const [status, setStatus] = useState("");
   const [searchBy, setSearchBy] = useState("name");
-  const [recommend, setRecommend] = useState(null);
   const [sortNames, setSortNames] = useState(false);
   const [deleteArray, setDeleteArray] = useState([]);
   const [popUp, setPopUp] = useState(false);
   const [sortBy, setSortBy] = useState("");
-  const checkbox = useRef();
   const { user } = useAuth();
-
 
   websites = websites
     .filter((website) =>
@@ -46,7 +34,7 @@ export default function Home({ websites, customers, person }) {
     : websites.sort((a, b) => b[sortBy] > a[sortBy]);
 
   const deleteArrayIds = deleteArray.map((site) => site[0].toString());
-  const { role } = JSON.parse(person.user).profile
+  const { role } = JSON.parse(person.user).profile;
 
   const bulkDelete = async () => {
     const { data, error } = await supabase
@@ -70,32 +58,25 @@ export default function Home({ websites, customers, person }) {
     setPopUp(false);
   };
 
-  if(role === "customer"){
+  if (role === "customer") {
     return (
       <Customer websites={websites} customers={customers} person={person} />
-    )
-  }
-  else if(role === "manager"){
-    return (
-      <Manager websites={websites} customers={customers} />
-    )
-  }
-  else if(role === "admin"){
-    return (
-      <Admin websites={websites} customers={customers} />
-    )
-  }
-  else {
+    );
+  } else if (role === "manager") {
+    return <Manager websites={websites} customers={customers} />;
+  } else if (role === "admin") {
+    return <Admin websites={websites} customers={customers} />;
+  } else {
     return (
       <main className="pt-[70px] mx-3 md:mx-16 relative pb-6 min-h-screen">
         <h1>Loading...</h1>
       </main>
-    )
+    );
   }
 }
 
 export const getServerSideProps = async ({ req, res }) => {
-  const person = parseCookies(req)
+  const person = parseCookies(req);
   if (res) {
     if (!person.user) {
       return {
@@ -108,12 +89,10 @@ export const getServerSideProps = async ({ req, res }) => {
     }
   }
 
-
   const { data: websites } = await supabase
     .from("websites")
     .select("*")
     .order("created_at", { ascending: false });
-
 
   const { data: customers } = await supabase.from("profiles").select("*");
 
@@ -121,7 +100,7 @@ export const getServerSideProps = async ({ req, res }) => {
     props: {
       websites,
       customers,
-      person
+      person,
     },
   };
 };

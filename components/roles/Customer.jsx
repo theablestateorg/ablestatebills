@@ -1,29 +1,16 @@
 import Head from "next/head";
 import Router, { useRouter } from "next/router";
 import { MdAdd, MdSearch } from "react-icons/md";
-import { FaSort } from "react-icons/fa";
-import { supabase } from "../../utils/supabase";
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
 import moment from "moment";
-import { toast, ToastContainer } from "react-toastify";
-import { useAuth } from "../../utils/auth";
+import { ToastContainer } from "react-toastify";
 import { IoWarning } from "react-icons/io5";
 import Footer from "../Footer";
-import { motion, AnimatePresence} from 'framer-motion'
 
-function Customer({ websites, customers, person }) {
+export default function Customer({ websites, customers, person }) {
   const router = useRouter();
-  const [searchText, setSearchText] = useState("");
-  const [status, setStatus] = useState("");
-  const [searchBy, setSearchBy] = useState("name");
-  const [recommend, setRecommend] = useState(null);
-  const [sortNames, setSortNames] = useState(false);
   const [deleteArray, setDeleteArray] = useState([]);
   const [popUp, setPopUp] = useState(false);
-  const [sortBy, setSortBy] = useState("");
-  const checkbox = useRef();
-  const { user } = useAuth();
-  const deleteArrayIds = deleteArray.map((site) => site[0].toString());
 
   const myWebsites = websites.filter(
     (website) => website.contact_person === person.id
@@ -50,7 +37,6 @@ function Customer({ websites, customers, person }) {
               <MdAdd />
               Add New...
             </button>
-            <AnimatePresence></AnimatePresence>
             {productsContext && (
               <ul className="absolute right-0 outline outline-1 outline-gray-200 px-3 py-2 bg-white rounded-md shadow-lg w-40">
                 <li className="px-3 py-1 mb-1 rounded-md hover:bg-[#eaeaea] cursor-pointer" onClick={() => {
@@ -130,5 +116,3 @@ function Customer({ websites, customers, person }) {
     </>
   );
 }
-
-export default Customer;

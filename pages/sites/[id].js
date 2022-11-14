@@ -18,8 +18,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { dropIn } from "../../utils/dropIn";
 import { useCookies } from "react-cookie"
 import { parseCookies } from "../../utils/parseCookies";
+// import screenshot fo
+import useSWR from "swr";
+import axios from "axios";
 
 export default function Site({ product }) {
+
   const router = useRouter();
   const { id } = router.query;
   const [popUp, setPopUp] = useState(false);
@@ -34,7 +38,14 @@ export default function Site({ product }) {
   const [selected, setSelected] = useState(false);
   const [password, setPassword] = useState(null);
 
+  // const fetcher = async () => await axios.get("/api/screenshot").then((res) => res.data);
+
+  // const { data, error } = useSWR(fetcher);
+  //   console.log(data)
+  //   console.log(error)
+
   useEffect(() => {
+  
     getCustomers();
     getContact();
   }, [selected]);
@@ -67,11 +78,8 @@ export default function Site({ product }) {
     setNewCustomer(data);
   };
 
-  // console.log(newCustomer)
-
   const addNewCustomer = async (values) => {
     if (password) {
-      // console.log(password)
       const { email, first_name, last_name, role } = values;
       setLoading(true);
       const { user, session, error } = await supabase.auth.signUp(
@@ -149,7 +157,6 @@ export default function Site({ product }) {
     setLoading(true);
 
     const { name, website_link, contact_person, telephone_number } = values;
-    console.log(values);
 
     const { data, error } = await supabase
       .from("websites")
@@ -172,8 +179,6 @@ export default function Site({ product }) {
 
     setPopUpdate(false);
   };
-
-  console.log(product.website_link.replace(/^https?:\/\//, ''))
 
   return (
     <div>
@@ -574,6 +579,8 @@ export const getServerSideProps = async ({ req, res, params }) => {
     .select("*")
     .eq("id", params.id)
     .single();
+
+  
 
     const person = parseCookies(req)
     if (res) {

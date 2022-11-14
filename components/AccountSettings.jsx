@@ -9,7 +9,6 @@ import { BsFillCameraFill } from 'react-icons/bs'
 function AccountSettings({ user, avatar }) {
   const [loading, setLoading] = useState(false);
   const [img, setImg] = useState(null)
-  const matches = useMediaQuery("(min-width: 800px)");
 
   const handleSubmit = async (event, values) => {
     event.preventDefault()

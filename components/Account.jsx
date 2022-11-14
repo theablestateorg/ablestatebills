@@ -11,7 +11,6 @@ function Account({ user }) {
 
   const handleSubmit = async (event, values, resetForm) => {
     event.preventDefault()
-    console.log(values)
     const { new_password, confirm_password} = values
     if(new_password === confirm_password){
       const { user, error } = await supabase.auth.update({password: new_password})

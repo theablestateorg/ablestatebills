@@ -1,44 +1,37 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { MdAdd, MdSearch } from "react-icons/md";
+import { MdAdd } from "react-icons/md";
 import { FaSort } from "react-icons/fa";
 import { supabase } from "../utils/supabase";
-import { useEffect, useState, useRef } from "react";
-import moment from "moment";
+import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import { useAuth } from "../utils/auth";
 import { Footer } from "../components";
 import Avatar from "../components/Avatar";
 import { parseCookies } from "../utils/parseCookies";
 
-export default function Customers({ customers, managers }) {
+export default function Customers({ customers, managers, websites }) {
+  console.log(customers)
   const router = useRouter();
   const [searchText, setSearchText] = useState("");
-  const [status, setStatus] = useState("");
   const [searchBy, setSearchBy] = useState("name");
   const [sortNames, setSortNames] = useState(false);
-  const [popUp, setPopUp] = useState(false);
   const [sortBy, setSortBy] = useState("");
-  const checkbox = useRef();
-  const { user } = useAuth();
 
-  customers = customers.filter((customer) =>
+  customers = customers && customers.filter((customer) =>
     !customer?.[searchBy] || searchBy !== "contact_number"
-      ? 
-      searchBy === "name"
-      ?
-      `${customer?.["first_name"] + " " + customer?.["last_name"]}`.toLowerCase().indexOf(searchText.toLowerCase()) >
-        -1
-      :
-      customer?.[searchBy].toLowerCase().indexOf(searchText.toLowerCase()) >
-        -1
+      ? searchBy === "name"
+        ? `${customer?.["first_name"] + " " + customer?.["last_name"]}`
+            .toLowerCase()
+            .indexOf(searchText.toLowerCase()) > -1
+        : customer?.[searchBy].toLowerCase().indexOf(searchText.toLowerCase()) >
+          -1
       : customer?.[searchBy]
           .toString()
           .toLowerCase()
           .indexOf(searchText.toLowerCase()) > -1
   );
 
-  customers = sortNames
+  customers = customers && sortNames
     ? customers.sort((a, b) => a[sortBy] > b[sortBy])
     : customers.sort((a, b) => b[sortBy] > a[sortBy]);
 
@@ -67,20 +60,6 @@ export default function Customers({ customers, managers }) {
               <section className="flex justify-between items-center">
                 <h3 className="font-bold text-left">Customers</h3>
                 <div className="flex items-center gap-2">
-                  {/* <form onSubmit={(event) => {
-                  event.preventDefault()
-                  setPopUp(true)
-                }}>
-                    <select
-                        name=""
-                        id=""
-                        className="px-3 py-2 bg-[#f7f7f7] rounded-lg placeholder:text-[#bcbfc2] outline outline-1 outline-[#f4f3f7]" required
-                      >
-                        <option value="">Bulk Actions</option>
-                        <option value="telephone_number">Delete</option>
-                      </select>
-                      <input type="submit" value="apply" className="px-3 py-2 ml-2 bg-gray-700 text-white rounded-lg text-sm cursor-pointer" />
-                  </form> */}
                   <div className="flex justify-between items-center">
                     <div className="flex justify-between items-center relative focus-within:text-black ">
                       <div className="relative">
@@ -89,21 +68,32 @@ export default function Customers({ customers, managers }) {
                           placeholder="search"
                           className="px-3 py-2 bg-[#f7f7f7] rounded-lg placeholder:text-[#bcbfc2] w-full outline outline-1 outline-[#f4f3f7]"
                           onChange={(event) => {
-                            setSearchText(event.target.value)
+                            setSearchText(event.target.value);
                             if (event.target.value !== "") {
                               const rightWeb = customers.filter((customer) =>
-                                  customer.first_name
-                                    .toLowerCase()
-                                    .startsWith(event.target.value.toLowerCase())
-                                );
-                                document.getElementById("paragraph").innerHTML = rightWeb.length > 0 ? `${rightWeb[0]?.first_name} ${rightWeb[0]?.last_name}`.toLowerCase().replace(event.target.value, `<span class="text-black">${event.target.value}</span>`) : "";
+                                customer.first_name
+                                  .toLowerCase()
+                                  .startsWith(event.target.value.toLowerCase())
+                              );
+                              document.getElementById("paragraph").innerHTML =
+                                rightWeb.length > 0
+                                  ? `${rightWeb[0]?.first_name} ${rightWeb[0]?.last_name}`
+                                      .toLowerCase()
+                                      .replace(
+                                        event.target.value,
+                                        `<span class="text-black">${event.target.value}</span>`
+                                      )
+                                  : "";
                             } else {
-                              document.getElementById("paragraph").innerHTML = "";
+                              document.getElementById("paragraph").innerHTML =
+                                "";
                             }
                           }}
                         />
-                        <p id="paragraph" className="text-gray-400 absolute top-2 left-3 pointer-events-none">
-                          </p>
+                        <p
+                          id="paragraph"
+                          className="text-gray-400 absolute top-2 left-3 pointer-events-none"
+                        ></p>
                       </div>
                       <select
                         name=""
@@ -113,7 +103,6 @@ export default function Customers({ customers, managers }) {
                       >
                         <option value="name">Name</option>
                         <option value="contact_number">Telephone</option>
-                        {/* <option value="contact_number">Added By</option> */}
                       </select>
                     </div>
                   </div>
@@ -138,6 +127,12 @@ export default function Customers({ customers, managers }) {
                 </th>
                 <th className="py-4 text-left pl-3 font-light">
                   <div className="flex items-center">
+                    Products
+                    <span className="px-1">{websites?.length}</span>
+                  </div>
+                </th>
+                <th className="py-4 text-left pl-3 font-light">
+                  <div className="flex items-center">
                     Telephone
                     <i
                       className="cursor-pointer"
@@ -151,23 +146,12 @@ export default function Customers({ customers, managers }) {
                   </div>
                 </th>
                 <th className="py-4 text-left pl-3 font-light">
-                  <div className="flex items-center">
-                    Added By
-                    {/* <i
-                      className="cursor-pointer"
-                      onClick={() => {
-                        setSortNames(!sortNames);
-                        setSortBy("added_by");
-                      }}
-                    >
-                      <FaSort size={13} />
-                    </i> */}
-                  </div>
+                  <div className="flex items-center">Added By</div>
                 </th>
               </tr>
             </thead>
             <tbody>
-              {customers.map((customer, index) => (
+              {customers && customers.map((customer, index) => (
                 <tr
                   className={`border-b border-l-2 border-l-transparent hover:border-l-[#ca3011] cursor-pointer mb-10`}
                   key={index}
@@ -175,9 +159,6 @@ export default function Customers({ customers, managers }) {
                 >
                   <td className="py-2 text-left pl-3">
                     <span className="flex items-center gap-2">
-                      {/* <div className={`bg-[${avatarColors["S"]}] w-10 h-10 rounded-full text-white flex items-center justify-center`}>
-                      {customer.first_name[0].toUpperCase() + customer.last_name[0].toUpperCase()}
-                      </div> */}
                       <Avatar
                         first_name={customer.first_name}
                         last_name={customer.last_name}
@@ -187,7 +168,15 @@ export default function Customers({ customers, managers }) {
                       </h1>
                     </span>
                   </td>
-                  {/* <td className="py-2 text-left pl-3">{customers.filter((customer => customer.id === site.contact_person)).map((customer, index) => <p key={index}>{customer.first_name+ " " + customer.last_name}</p>)}</td> */}
+                  <td className="py-2 text-left  pl-3">
+                    <div className="w-full flex justify-center">
+                      {
+                        websites.filter(
+                          (website) => website.contact_person === customer.id
+                        ).length
+                      }
+                    </div>
+                  </td>
                   <td className="py-2 text-left pl-3">
                     {customer.contact_number}
                   </td>
@@ -228,23 +217,24 @@ export const getServerSideProps = async ({ req, res }) => {
     .select("*")
     .neq("role", "customer");
 
-    const person = parseCookies(req)
-    if (res) {
-      if (!person.user || JSON.parse(person?.user).profile.role === "customer") {
-        return {
-          redirect: {
-            permanent: false,
-            destination: "/login",
-          },
-          props: {},
-        };
-      }
+  const person = parseCookies(req);
+  if (res) {
+    if (!person.user || JSON.parse(person?.user).profile.role === "customer") {
+      return {
+        redirect: {
+          permanent: false,
+          destination: "/login",
+        },
+        props: {},
+      };
     }
+  }
 
   return {
     props: {
       customers,
-      managers
+      managers,
+      websites,
     },
   };
 };

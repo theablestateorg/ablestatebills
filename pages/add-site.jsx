@@ -26,10 +26,6 @@ export default function AddSite() {
   const [countryCode, setCountryCode] = useState("+256");
   const [selected, setSelected] = useState(false);
   const [password, setPassword] = useState(null);
-  const [customerDetails, setCustomerDetails] = useState({
-    email: "",
-    telephone_number: "",
-  });
 
   useEffect(() => {
     getCustomers();
@@ -150,8 +146,6 @@ export default function AddSite() {
           setLoading(false);
           toast.error(`${error?.message}`, { position: "top-center" });
         });
-      // if (data) {}
-      // if (error) {}
       setLoading(false);
     } else {
       setLoading(false);

@@ -173,6 +173,8 @@ export default function Site({ product }) {
     setPopUpdate(false);
   };
 
+  console.log(product.website_link.replace(/^https?:\/\//, ''))
+
   return (
     <div>
       <Head>
@@ -429,19 +431,19 @@ export default function Site({ product }) {
                 id="website_frame"
                 scrolling="no"
                 className="h-80 w-80 outline outline-1 outline-[#e4e6e5] rounded-sm bg-[#f7f7f7]"
-                src={`https://${product.website_link}`}
+                src={`https://${product.website_link.replace(/^https?:\/\//, '')}`}
                 title={product.name}
               ></iframe>
               <div>
                 <div className="mb-3">
                   <p className="uppercase font-medium">DOMAIN</p>
                   <a
-                    href={`https://${product.website_link}`}
+                    href={`https://${product.website_link.replace(/^https?:\/\//, '')}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 cursor-pointer underline font-bold text-sm text-gray-700"
                   >
-                    {product.website_link}
+                    https://{product.website_link.replace(/^https?:\/\//, '')}
                     <RiExternalLinkFill />
                   </a>
                 </div>

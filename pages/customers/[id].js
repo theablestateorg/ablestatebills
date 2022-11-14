@@ -10,12 +10,10 @@ import { Formik, Form } from "formik";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { useAuth } from "../../utils/auth";
 import { TbEdit } from "react-icons/tb";
-import AddCustomerModal from "../../components/AddCustomerModal";
-import { MdAdd } from "react-icons/md";
 import { motion, AnimatePresence } from "framer-motion";
 import { dropIn } from '../../utils/dropIn'
-import { useCookies } from "react-cookie"
 import { parseCookies } from "../../utils/parseCookies";
+import axios from "axios";
 
 export default function Site({ profile }) {
   const router = useRouter();
@@ -23,13 +21,8 @@ export default function Site({ profile }) {
   const [popUp, setPopUp] = useState(false);
   const [popUpdate, setPopUpdate] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [customers, setCustomers] = useState([]);
-  const [customerModel, setCustomerModel] = useState(false);
-  const [customerId, setCustomerId] = useState(null);
   const [contact, setContact] = useState({});
   const [countryCode, setCountryCode] = useState("+256");
-  const [selected, setSelected] = useState(false);
-  const [password, setPassword] = useState(null);
   const [addedBy, setAddedBy] = useState(null);
 
   useEffect(() => {
@@ -49,28 +42,20 @@ export default function Site({ profile }) {
   const { user } = useAuth();
 
   const handleDelete = async () => {
-    const { data, error } = await supabase
-      .from("profiles")
-      .delete()
-      .match({ id: id });
+    await axios.post("/api/delete-user", {
+      userId: profile.id,
+      actor: `${user.first_name} ${user.last_name}`,
+      username: profile.first_name
+    })
+    .then(res => {
+      toast.success(`Successfully deleted`, { position: "top-center" });
+    })
+    .catch((error) => {
+      toast.error(`${error?.message}`, { position: "top-center" });
+    })
 
     setPopUp(false);
-
     Router.push("/customers");
-
-    if (data) {
-      toast.success(`Successfully deleted`, { position: "top-center" });
-      await supabase.from("logs").insert([
-        {
-          name: `[Deleted] ${profile.first_name}`,
-          details: `deleted by ${user.first_name} ${user.last_name}`,
-          status: "success",
-        },
-      ]);
-    }
-    if (error) {
-      toast.error(`${error?.message}`, { position: "top-center" });
-    }
   };
 
   const handleUpdate = async (event, values) => {

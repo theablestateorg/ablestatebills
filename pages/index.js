@@ -6,6 +6,7 @@ import Manager from "../components/roles/Manager";
 import Customer from "../components/roles/Customer";
 import Admin from "../components/roles/Admin";
 import { parseCookies } from "../utils/parseCookies";
+import axios from "axios";
 
 export default function Home({ websites, customers, person }) {
   const [searchText, setSearchText] = useState("");
@@ -34,7 +35,7 @@ export default function Home({ websites, customers, person }) {
     : websites.sort((a, b) => b[sortBy] > a[sortBy]);
 
   const deleteArrayIds = deleteArray.map((site) => site[0].toString());
-  const { role } = JSON.parse(person.user).profile;
+  const { role } = JSON.parse(person.user)?.profile || "customer";
 
   const bulkDelete = async () => {
     const { data, error } = await supabase

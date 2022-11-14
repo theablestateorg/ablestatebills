@@ -1,36 +1,22 @@
 import Head from "next/head";
-import { supabase } from "../utils/supabase";
-import { addSiteValidationSchema } from "../utils/validation";
+import { addCustomerValidationSchema } from "../utils/validation";
 import { Formik, Form } from "formik";
 import { toast, ToastContainer } from "react-toastify";
 import { useState, useEffect } from "react";
 import { useAuth } from "../utils/auth";
 import { TbSend } from "react-icons/tb";
-import { MdAdd } from "react-icons/md";
-import AddCustomerModal from "../components/AddCustomerModal";
-import useMediaQuery from "../hooks/useMediaQuery";
 import PasswordGenerator from "../components/PasswordGenerator";
 import axios from "axios";
-import { useCookies } from "react-cookie"
 import { parseCookies } from "../utils/parseCookies";
 
 export default function AddClient() {
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
-  const matches = useMediaQuery("(min-width: 800px)");
-  const tablet = useMediaQuery("(max-width: 1000px)");
-
-  const [customers, setCustomers] = useState([]);
-  const [customerModel, setCustomerModel] = useState(false);
-  const [customerId, setCustomerId] = useState(null);
-  const [contact, setContact] = useState({});
   const [countryCode, setCountryCode] = useState("+256");
   const [selected, setSelected] = useState(false);
   const [password, setPassword] = useState(null);
 
   useEffect(() => {
-    // getCustomers();
-    // getContact(customerId);
   }, [selected]);
 
   const addNewCustomer = async (values, resetForm) => {
@@ -54,9 +40,7 @@ export default function AddClient() {
       toast.error(`No password`, { position: "top-center" });
     }
     setLoading(false);
-
     setPassword(null);
-
     resetForm({
       password: password,
       first_name: "",
@@ -90,6 +74,7 @@ export default function AddClient() {
           onSubmit={(values, { resetForm }) => {
             addNewCustomer(values, resetForm);
           }}
+          validationSchema={addCustomerValidationSchema}
         >
           {({
             values,

@@ -29,16 +29,6 @@ const handler = async (req, res) => {
       return res.status(400).json(response);
     }
 
-    // if ( !details || details.length < 1 ) {
-    //     const response = { "Status": "Failure", "Details": "Information not provided"}
-    //     return res.status(400).json(response)
-    // }
-
-    // if ( !added_by ) {
-    //     const response = { "Status": "Failure", "Details": "Manager not provided"}
-    //     return res.status(400).json(response)
-    // }
-
     const { data: user, error } = await supabase.auth.api.createUser({
       email: email,
       password: password,
@@ -46,8 +36,6 @@ const handler = async (req, res) => {
     });
 
     if (error) throw error;
-    // Call the supabase function that inserts the customers data into the profiles and members tables respectively.
-    // res.status(200).json(response)
     const { id } = user;
 
     const response = await supabase

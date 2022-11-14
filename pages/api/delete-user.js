@@ -1,26 +1,22 @@
-// require('dotenv').config();
 const { createClient } = require('@supabase/supabase-js');
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL_TOLL
-
-const supabaseKey = process.env.NEXT_SUPABASE_SERVICE_ROLE_KEY_TOLL
-
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY_TOLL;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseKey = process.env.NEXT_SUPABASE_SERVICE_ROLE_KEY
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 const supabase = createClient(supabaseUrl, supabaseKey)
 const supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
 
 const handler = async ( req, res ) => {
     try {
-        const { userId, actor_id, username, roles } = req.body
+        const { userId, actor, username } = req.body
+        console.log(req.body)
 
-        // console.log(`user id is ${userId}, actor_id is ${actor_id}, username is ${username}`)
         const response = await supabaseClient.from("profiles")
                   .delete()
                   .eq("id", userId)
 
         if (response?.error) {
-          console.log("reached error")
           throw error
         }
         else {
@@ -33,11 +29,11 @@ const handler = async ( req, res ) => {
           res.status(200).json(response)
         
           if(data){
-            const response = await supabaseClient.from("logs")
+            await supabaseClient.from("logs")
                   .insert({
-                    "description": `Deleted ${username} - ${roles}`,
-                    "actor": actor_id,
-                    "status": "Successful"
+                    "name": `[Deleted] ${username}`,
+                    details: `deleted by ${actor}`,
+                    status: "success",
                   })
                   .eq("id", id)
           }

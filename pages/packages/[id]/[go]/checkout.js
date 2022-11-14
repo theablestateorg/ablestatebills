@@ -19,8 +19,6 @@ function Checkout() {
   const handleSubmit = async (event, values, resetForm) => {
     event.preventDefault();
 
-    // { amount: go, phone: "", secret_code: "", reason: "" }
-
     const results = await axios.post("/api/make-payment", {
       "amount": values.amount,
       "phone": values.phone,

@@ -16,17 +16,18 @@ import { RiExternalLinkFill } from "react-icons/ri";
 import moment from "moment";
 import { motion, AnimatePresence } from "framer-motion";
 import { dropIn } from "../../utils/dropIn";
-import { useCookies } from "react-cookie"
 import { parseCookies } from "../../utils/parseCookies";
-// import screenshot fo
-import useSWR from "swr";
-import axios from "axios";
+import { CKAirtel, CKMtn } from "../../components/ck";
+import { UG } from "../../components/react-flags";
 
 export default function Site({ product }) {
+  const [paymentMethod, setPaymentMethod] = useState(null);
+  const [complete, setComplete] = useState(null);
 
   const router = useRouter();
   const { id } = router.query;
   const [popUp, setPopUp] = useState(false);
+  const [popRenew, setPopRenew] = useState(false);
   const [popUpdate, setPopUpdate] = useState(false);
   const [loading, setLoading] = useState(false);
   const [customers, setCustomers] = useState([]);
@@ -45,7 +46,6 @@ export default function Site({ product }) {
   //   console.log(error)
 
   useEffect(() => {
-  
     getCustomers();
     getContact();
   }, [selected]);
@@ -436,19 +436,25 @@ export default function Site({ product }) {
                 id="website_frame"
                 scrolling="no"
                 className="h-80 w-80 outline outline-1 outline-[#e4e6e5] rounded-sm bg-[#f7f7f7]"
-                src={`https://${product.website_link.replace(/^https?:\/\//, '')}`}
+                src={`https://${product.website_link.replace(
+                  /^https?:\/\//,
+                  ""
+                )}`}
                 title={product.name}
               ></iframe>
               <div>
                 <div className="mb-3">
                   <p className="uppercase font-medium">DOMAIN</p>
                   <a
-                    href={`https://${product.website_link.replace(/^https?:\/\//, '')}`}
+                    href={`https://${product.website_link.replace(
+                      /^https?:\/\//,
+                      ""
+                    )}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 cursor-pointer underline font-bold text-sm text-gray-700"
                   >
-                    https://{product.website_link.replace(/^https?:\/\//, '')}
+                    https://{product.website_link.replace(/^https?:\/\//, "")}
                     <RiExternalLinkFill />
                   </a>
                 </div>
@@ -483,6 +489,14 @@ export default function Site({ product }) {
                   <p className="font-bold text-sm text-gray-700">
                     {moment(new Date(product.expiry_date)).format("DD/MM/YYYY")}
                   </p>
+                </div>
+                <div className="mt-5">
+                  <button
+                    className="bg-[#1D1F20] text-white py-2 px-4 hover:bg-[#292C2D] flex items-center gap-2"
+                    onClick={() => setPopRenew(true)}
+                  >
+                    Renew Now
+                  </button>
                 </div>
               </div>
             </div>
@@ -561,10 +575,308 @@ export default function Site({ product }) {
             </motion.div>
           </motion.div>
         )}
+        {popUp && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setPopUp(false)}
+            className={`bg-black z-20 bg-opacity-40 w-screen min-h-screen fixed top-0 left-0 right-0 flex justify-center items-center`}
+          >
+            <motion.div
+              onClick={(e) => e.stopPropagation()}
+              variants={dropIn}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="relative bg-white dark:bg-dark-bg max-h-screen overflow-auto dark:text-secondary-text p-10  rounded-md m-2 sm:mb-5 shadow-md top-50 z-20"
+            >
+              <h1 className="text-center font-bold text-lg my-5">
+                Delete Website
+              </h1>
+              <p>
+                Are you sure you want to delete <b>{product.name}</b>?
+              </p>
+              <p className="bg-[#ffe9d9] p-2 border-l-2 text-[#bc4c2e] border-[#fa703f] flex flex-col text-sm my-1">
+                <span className="text-[#771505] font-bold flex items-center gap-1">
+                  <IoWarning /> Warning
+                </span>
+                By deleting this website, you won&apos;t be able to access it or
+                it&apos;s info
+              </p>
+              <div className="flex justify-between mt-5">
+                <button
+                  className="outline outline-1 outline-[#1D1F20] bg-[#1D1F20] text-white py-2 px-4 hover:bg-[#1D1F20] hover:text-white flex items-center gap-2"
+                  onClick={() => setPopUp(false)}
+                >
+                  No, Cancel
+                </button>
+                <button
+                  className="outline outline-1 outline-[#1D1F20] text-[#1D1F20] py-2 px-4 hover:bg-[#1D1F20] hover:text-white flex items-center gap-2"
+                  onClick={handleDelete}
+                >
+                  Yes, Delete
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+        {popRenew && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setPopRenew(false)}
+            className={`bg-black z-20 bg-opacity-40 w-screen min-h-screen fixed top-0 left-0 right-0 flex justify-center items-center`}
+          >
+            <motion.div
+              onClick={(e) => e.stopPropagation()}
+              variants={dropIn}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="relative bg-white dark:bg-dark-bg max-h-screen overflow-auto dark:text-secondary-text p-10  rounded-md m-2 sm:mb-5 shadow-md top-50 z-20 w-10/12"
+            >
+              <div className="flex justify-between my-5">
+                <h1 className="text-center font-bold text-lg">
+                  Renew {product.name}
+                </h1>
+                <h1 className="text-md cursor-pointer"
+                onClick={() => {
+                  setPopRenew(false)
+                }}
+                >
+                  Close
+                </h1>
+              </div>
+              <section className="mt-5">
+                <div className="flex gap-2">
+                  <h3>Choose a Payment Method</h3>
+                </div>
+                <div className="flex flex-wrap gap-5 mt-2 ml-10">
+                  <span
+                    className={`bg-[#FFCC00] p-2 w-[150px] flex justify-around items-center gap-2 cursor-pointer ${
+                      paymentMethod === "1" && "outline outline-1 outline-black"
+                    }`}
+                    onClick={() => setPaymentMethod("1")}
+                  >
+                    <CKMtn />
+                    <span className="font-bold">
+                      <p>MTN</p>
+                      <p>MoMo</p>
+                    </span>
+                  </span>
+                  <span
+                    className={`bg-[#FF0000] p-2 text-white w-[150px] flex justify-around cursor-pointer ${
+                      paymentMethod === "2" && "outline outline-1 outline-black"
+                    }`}
+                    onClick={() => setPaymentMethod("2")}
+                  >
+                    <CKAirtel />
+                    <span className="font-medium">
+                      <p>Airtel</p>
+                      <p>Money</p>
+                    </span>
+                  </span>
+                </div>
+              </section>
+              <section className="mt-2">
+            <div className="flex gap-2">
+              <h3>Get Secret Code</h3>
+            </div>
+
+            <div className="ml-10">
+              {paymentMethod === "1" && (
+                <>
+                  <p>MTN MoMo</p>
+                  <p>
+                    Enter your mtn phone number to receive a{" "}
+                    <span className="font-bold">*secret code*</span> then press
+                    next to continue
+                  </p>
+                  
+                  <div className="flex flex-col my-2">
+                    <label htmlFor="number">MTN phone Number</label>
+                    <div className="outline outline-1 flex pl-2 gap-2">
+                      <div className="flex gap-1 items-center">
+                        <UG />
+                        +256
+                      </div>
+                      <input
+                        type="text"
+                        name=""
+                        id="number"
+                        className="outline outline-1 px-2 py-1 bg-transparent flex-grow"
+                        placeholder="771234567"
+                        onChange={({target}) => setPhoneNumber(target.value)}
+                        value={""}
+                        required
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
+              {paymentMethod === "2" && (
+                <>
+                  <p>Airtel Money</p>
+                  <p>
+                    You will be required to inital the withdraw from you airtel
+                    money to get a{" "}
+                    <span className="font-bold">*secret code*</span> then press
+                    next to continue
+                  </p>
+                </>
+              )}
+              {paymentMethod != null && (
+                <div className="flex justify-end">
+                  <button className="text-white bg-[#121212] px-2 py-1"
+                  onClick={async () => {
+                    if(paymentMethod === "1"){
+                      const phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})$/;
+                      if(phoneNumber.match(phoneno)){
+                        console.log(`256${phoneNumber}`)
+                        const results = await axios.post("/api/send-token", {
+                          phone: `256${phoneNumber}`
+                      })
+                      .then(res => setComplete(true))
+                      .catch(error => console.log(error.message))
+                        setComplete(true)
+                      }
+                    }else {
+                      setComplete(true)
+                    }
+                    
+                    
+                  }}
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
+            </div>
+          </section>
+          <Formik
+          initialValues={{ amount: "", phone: "", secret_code: "" }}
+        >
+          {({
+            values,
+            errors,
+            touched,
+            isValid,
+            dirty,
+            handleChange,
+            handleBlur,
+            resetForm
+          }) => {
+            return (
+              <Form
+                onSubmit={(event) => handleSubmit(event, values, resetForm)}
+                className="mt-2"
+                name="loginForm"
+              >
+            <div className="flex gap-2">
+              <h3>Complete Payment</h3>
+            </div>
+
+            {paymentMethod != null && complete != null &&
+            <div className="ml-10">
+              <div className="flex flex-col my-2">
+                <label htmlFor="number">Amount</label>
+                <label htmlFor="number">{go}</label>
+              </div>
+              <div className="flex flex-col my-2">
+                <label htmlFor="phone">Phone Number</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  id="phone"
+                  className="outline outline-1 px-2 py-1 bg-transparent"
+                  placeholder="Enter phone Number"
+                  onChange={handleChange("phone")}
+                />
+              </div>
+              <div className="flex flex-col my-2">
+                <label htmlFor="secret_code">Secret Code</label>
+                <input
+                  type="text"
+                  name="secret_code"
+                  id="secret_code"
+                  className="outline outline-1 px-2 py-1 bg-transparent"
+                  placeholder="Enter secret code"
+                  onChange={handleChange("secret_code")}
+                />
+              </div>
+              <div className="flex justify-end">
+                <button type="submit" className="bg-[#121212] text-white p-1 px-2 mt-5">
+                  Make Payment
+                </button>
+              </div>
+            </div>
+            }
+              </Form>
+            )}}
+          </Formik>
+              <div className="flex justify-end mt-5 w-full">
+                <button
+                  className="outline outline-1 outline-[#1D1F20] text-[#1D1F20] py-2 px-4 hover:bg-[#1D1F20] hover:text-white flex items-center gap-2"
+                  onClick={handleDelete}
+                >
+                  Renew
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+        {popUp && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setPopUp(false)}
+            className={`bg-black z-20 bg-opacity-40 w-screen min-h-screen fixed top-0 left-0 right-0 flex justify-center items-center`}
+          >
+            <motion.div
+              onClick={(e) => e.stopPropagation()}
+              variants={dropIn}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="relative bg-white dark:bg-dark-bg max-h-screen overflow-auto dark:text-secondary-text p-10  rounded-md m-2 sm:mb-5 shadow-md top-50 z-20"
+            >
+              <h1 className="text-center font-bold text-lg my-5">
+                Delete Website
+              </h1>
+              <p>
+                Are you sure you want to delete <b>{product.name}</b>?
+              </p>
+              <p className="bg-[#ffe9d9] p-2 border-l-2 text-[#bc4c2e] border-[#fa703f] flex flex-col text-sm my-1">
+                <span className="text-[#771505] font-bold flex items-center gap-1">
+                  <IoWarning /> Warning
+                </span>
+                By deleting this website, you won&apos;t be able to access it or
+                it&apos;s info
+              </p>
+              <div className="flex justify-between mt-5">
+                <button
+                  className="outline outline-1 outline-[#1D1F20] bg-[#1D1F20] text-white py-2 px-4 hover:bg-[#1D1F20] hover:text-white flex items-center gap-2"
+                  onClick={() => setPopUp(false)}
+                >
+                  No, Cancel
+                </button>
+                <button
+                  className="outline outline-1 outline-[#1D1F20] text-[#1D1F20] py-2 px-4 hover:bg-[#1D1F20] hover:text-white flex items-center gap-2"
+                  onClick={handleDelete}
+                >
+                  Yes, Delete
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
         <footer className="text-center text-gray-500 absolute bottom-1 h-6 w-full">
           <p>
-            Copyright &#169; {new Date().getFullYear()} A service of Gagawala
-            Graphics Limited
+            Copyright &#169; {new Date().getFullYear()} A service of Ablestate
+            Creatives Limited
           </p>
         </footer>
       </main>
@@ -573,27 +885,24 @@ export default function Site({ product }) {
 }
 
 export const getServerSideProps = async ({ req, res, params }) => {
-
   const { data: product } = await supabase
     .from("websites")
     .select("*")
     .eq("id", params.id)
     .single();
 
-  
-
-    const person = parseCookies(req)
-    if (res) {
-      if (!person.user || JSON.parse(person?.user).profile.role === "customer") {
-        return {
-          redirect: {
-            permanent: false,
-            destination: "/login",
-          },
-          props: {},
-        };
-      }
+  const person = parseCookies(req);
+  if (res) {
+    if (!person.user || JSON.parse(person?.user).profile.role === "customer") {
+      return {
+        redirect: {
+          permanent: false,
+          destination: "/login",
+        },
+        props: {},
+      };
     }
+  }
 
   return {
     props: { product },

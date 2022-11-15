@@ -10,7 +10,7 @@ import { useAuth } from "../../utils/auth";
 import { IoWarning } from "react-icons/io5";
 import Footer from "../Footer";
 
-function Admin({ websites, customers}) {
+function Admin({ websites, customers }) {
   const router = useRouter();
   const [searchText, setSearchText] = useState("");
   const [status, setStatus] = useState("");
@@ -23,6 +23,22 @@ function Admin({ websites, customers}) {
   const checkbox = useRef();
   const { user } = useAuth();
   const deleteArrayIds = deleteArray.map((site) => site[0].toString());
+
+  websites = websites
+    .filter((website) =>
+      !website?.[searchBy] || searchBy !== "telephone_number"
+        ? website?.[searchBy].toLowerCase().indexOf(searchText.toLowerCase()) >
+          -1
+        : website?.[searchBy]
+            .toString()
+            .toLowerCase()
+            .indexOf(searchText.toLowerCase()) > -1
+    )
+    .filter((website) => !status || website.status === status);
+
+  websites = sortNames
+    ? websites.sort((a, b) => a[sortBy] > b[sortBy])
+    : websites.sort((a, b) => b[sortBy] > a[sortBy]);
   return (
     <>
       <Head>
@@ -99,7 +115,7 @@ function Admin({ websites, customers}) {
                           className="px-3 py-2 bg-[#f7f7f7] rounded-lg placeholder:text-[#bcbfc2] w-full outline outline-1 outline-[#f4f3f7]"
                           onChange={(event) => {
                             setSearchText(event.target.value);
-                            
+
                             if (event.target.value !== "") {
                               const rightWeb = websites.filter((web) =>
                                 web.name
@@ -110,16 +126,26 @@ function Admin({ websites, customers}) {
                                 rightWeb.length > 0 ? rightWeb[0] : null;
                               setRecommend(recommendation?.name.toLowerCase());
 
-                              document.getElementById("paragraph").innerHTML = rightWeb.length > 0 ? rightWeb[0]?.name.toLowerCase().replace(event.target.value, `<span class="text-black">${event.target.value}</span>`) : "";
-
+                              document.getElementById("paragraph").innerHTML =
+                                rightWeb.length > 0
+                                  ? rightWeb[0]?.name
+                                      .toLowerCase()
+                                      .replace(
+                                        event.target.value,
+                                        `<span class="text-black">${event.target.value}</span>`
+                                      )
+                                  : "";
                             } else {
                               setRecommend(null);
-                              document.getElementById("paragraph").innerHTML = "";
+                              document.getElementById("paragraph").innerHTML =
+                                "";
                             }
-                            
                           }}
                         />
-                        <p id="paragraph" className="text-gray-400 absolute top-2 left-3 pointer-events-none">
+                        <p
+                          id="paragraph"
+                          className="text-gray-400 absolute top-2 left-3 pointer-events-none"
+                        >
                           {/* {recommend
                             ? recommend.replace(searchText, () => {
                                 return "<span>dark<span>";
@@ -261,11 +287,25 @@ function Admin({ websites, customers}) {
                     />
                   </td>
                   <td className="py-2 text-left pl-3">
-                    <h1 className="font-medium">{site.name}</h1>
-                    <span className="font-extralight text-sm text-[#bcbfc2]">
-                      expiring on{" "}
-                      {moment(new Date(site.expiry_date)).format("DD-MM-YYYY")}
-                    </span>
+                    <div className="flex gap-2 items-center">
+                      <div className="w-[30px] h-[30px] overflow-hidden flex justify-center items-center rounded-full">
+                        <Image
+                          src={`https://www.google.com/s2/favicons?sz=64&domain_url=${site.website_link}`}
+                          alt="Picture of the author"
+                          width={25}
+                          height={25}
+                        />
+                      </div>
+                      <div>
+                        <h1 className="font-medium">{site.name}</h1>
+                        <span className="font-extralight text-sm text-[#bcbfc2]">
+                          expiring on{" "}
+                          {moment(new Date(site.expiry_date)).format(
+                            "DD-MM-YYYY"
+                          )}
+                        </span>
+                      </div>
+                    </div>
                   </td>
                   <td className="py-2 text-left pl-3">
                     {customers
@@ -342,4 +382,4 @@ function Admin({ websites, customers}) {
   );
 }
 
-export default Admin
+export default Admin;

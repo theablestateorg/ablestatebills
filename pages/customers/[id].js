@@ -15,6 +15,7 @@ import { dropIn } from "../../utils/dropIn";
 import { parseCookies } from "../../utils/parseCookies";
 import axios from "axios";
 import moment from "moment/moment";
+import Image from "next/image";
 
 export default function Site({ profile, manager, websites }) {
   const router = useRouter();
@@ -99,7 +100,7 @@ export default function Site({ profile, manager, websites }) {
                 Edit
               </button>
             </section>
-            
+
             <section className="my-5">
               <p>{profile.role}</p>
               <p>{profile.email}</p>
@@ -118,28 +119,41 @@ export default function Site({ profile, manager, websites }) {
             <h1>Products</h1>
 
             <div className="mb-5 py-5 pb-10 px-2 overflow-x-scroll select-none flex flex-wrap gap-2">
-          {websites &&
-            websites.map((website, index) => (
-              <div
-                className="outline outline-1 outline-[#e5e7eb] bg-white px-4 py-2 rounded-lg w-64 h-32 cursor-pointer shadow-md hover:shadow-lg flex flex-col justify-between"
-                onClick={() => router.push(`customers/sites/${website.id}`)}
-                key={index}
-              >
-                <div>
-                  <h1 className="font-medium">{website.name}</h1>
-                  <p className="font-light text-gray-400">
-                    {website.website_link}
-                  </p>
-                </div>
-                <div>
-                  <p className="font-medium text-sm">expiring</p>
-                  <p className="font-light text-gray-400 text-sm">
-                    {moment(new Date(website.expiry_date)).format("DD-MM-YYYY")}
-                  </p>
-                </div>
-              </div>
-            ))}
-        </div>
+              {websites &&
+                websites.map((website, index) => (
+                  <div
+                    className="outline outline-1 outline-[#e5e7eb] bg-white px-4 py-2 rounded-lg w-72 h-36 cursor-pointer shadow-md hover:shadow-lg flex flex-col justify-between"
+                    // onClick={() => router.push(`customers/sites/${website.id}`)}
+                    key={index}
+                  >
+                    <div className="flex gap-2 items-center">
+                      <div className="w-[25px] h-[25px] overflow-hidden flex justify-center items-center">
+                        <Image
+                          // loader={myLoader}
+                          src={`https://www.google.com/s2/favicons?sz=64&domain_url=${website.website_link}`}
+                          alt="Picture of the author"
+                          width={25}
+                          height={25}
+                        />
+                      </div>
+                      <div>
+                        <h1 className="font-medium text-sm">{website.name}</h1>
+                        <p className="font-light text-sm text-gray-400">
+                          {website.website_link}
+                        </p>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="font-medium text-sm">expiring</p>
+                      <p className="font-light text-gray-400 text-sm">
+                        {moment(new Date(website.expiry_date)).format(
+                          "DD-MM-YYYY"
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+            </div>
 
             {/*something here*/}
             <AnimatePresence>
@@ -366,7 +380,8 @@ export default function Site({ profile, manager, websites }) {
         </AnimatePresence>
         <footer className="text-center text-gray-500 absolute bottom-1 h-6 w-full text-sm">
           <p>
-            Copyright &#169; {new Date().getFullYear()} A service of Ablestate Creatives Limited
+            Copyright &#169; {new Date().getFullYear()} A service of Ablestate
+            Creatives Limited
           </p>
         </footer>
       </main>
@@ -390,7 +405,7 @@ export const getServerSideProps = async ({ req, res, params }) => {
   const { data: websites } = await supabase
     .from("websites")
     .select("*")
-    .eq("contact_person", params.id)
+    .eq("contact_person", params.id);
 
   const person = parseCookies(req);
   if (res) {

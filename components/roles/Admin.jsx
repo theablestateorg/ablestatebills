@@ -9,6 +9,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { useAuth } from "../../utils/auth";
 import { IoWarning } from "react-icons/io5";
 import Footer from "../Footer";
+import Image from "next/image";
 
 function Admin({ websites, customers }) {
   const router = useRouter();

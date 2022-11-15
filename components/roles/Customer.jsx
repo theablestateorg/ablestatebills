@@ -22,7 +22,6 @@ export default function Customer({ websites, customers, person }) {
 
   if (showMenu) {
     window.onclick = (event) => {
-      console.log(showMenu);
       if (!event.target.matches(".dialog")) {
         setPopUp(false);
         setShowMenu(false);
@@ -31,8 +30,6 @@ export default function Customer({ websites, customers, person }) {
   }
 
   const [activeIndex, setActiveIndex] = useState(null);
-
-  console.log(activeIndex)
 
   const addNewOptions = [
     {
@@ -44,7 +41,6 @@ export default function Customer({ websites, customers, person }) {
       link: "/packages/domains",
     },
   ];
-  console.log(websites)
 
   return (
     <>

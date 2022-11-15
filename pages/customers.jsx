@@ -10,7 +10,6 @@ import Avatar from "../components/Avatar";
 import { parseCookies } from "../utils/parseCookies";
 
 export default function Customers({ customers, managers, websites }) {
-  console.log(customers)
   const router = useRouter();
   const [searchText, setSearchText] = useState("");
   const [searchBy, setSearchBy] = useState("name");

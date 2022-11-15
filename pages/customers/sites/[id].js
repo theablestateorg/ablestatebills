@@ -65,11 +65,8 @@ export default function CustomerSite({ product }) {
     setNewCustomer(data);
   };
 
-  // console.log(newCustomer)
-
   const addNewCustomer = async (values) => {
     if (password) {
-      // console.log(password)
       const { email, first_name, last_name, role } = values;
       setLoading(true);
       const { user, session, error } = await supabase.auth.signUp(
@@ -149,7 +146,6 @@ export default function CustomerSite({ product }) {
     setLoading(true);
 
     const { name, website_link, contact_person, telephone_number } = values;
-    console.log(values);
 
     const { data, error } = await supabase
       .from("websites")
@@ -172,8 +168,6 @@ export default function CustomerSite({ product }) {
 
     setPopUpdate(false);
   };
-
-  console.log(product);
 
   return (
     <div>

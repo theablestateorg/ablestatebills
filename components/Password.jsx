@@ -9,7 +9,7 @@ function Password({ user }) {
 
   const handleSubmit = async (event, values, resetForm) => {
     event.preventDefault()
-    console.log(values)
+    setLoading(true)
     const { new_password, confirm_password} = values
     if(new_password === confirm_password){
       const { user, error } = await supabase.auth.update({password: new_password})
@@ -31,6 +31,7 @@ function Password({ user }) {
         position: "top-center",
       });
     }
+    setLoading(false)
   }
   return (
     <section className="my-5 flex-grow flex flex-col md:px-8">

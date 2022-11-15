@@ -23,9 +23,9 @@ export default function Dashboard({ account_balance }) {
     try {
       downloadFile(cookie?.user?.profile.avatar_url.substring(8), "avatars")
         .then((data) => setAvatar(data.avatar_url))
-        .catch((error) => console.log(error));
+        .catch((error) => {});
     } catch (error) {
-      console.log(error);
+      
     }
   }, [])
 

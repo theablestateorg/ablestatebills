@@ -9,10 +9,10 @@ import { toast } from "react-toastify";
 function Account({ account_balance }) {
   const [loading, setLoading] = useState(false);
   const [cookie] = useCookies(["user"]);
-  console.log(account_balance)
 
   const handleSubmit = async (event, values, resetForm) => {
     event.preventDefault();
+    setLoading(true)
     const { amount } = values;
 
     const { data, error } = await supabase
@@ -27,6 +27,7 @@ function Account({ account_balance }) {
     }
 
     resetForm({ amount: "" });
+    setLoading(false)
   };
 
   return (

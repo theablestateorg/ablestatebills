@@ -33,8 +33,8 @@ function AccountSettings({ user, avatar }) {
   }
 
   return (
-    <section className="my-5 flex-grow flex flex-col">
-      <h1 className="font-bold">Account Settings</h1>
+    <section className="my-5 flex-grow flex flex-col md:px-8">
+      <h1 className="font-bold text-lg border-b-2 p-2">Account Settings</h1>
       <Formik initialValues={{ first_name: "", last_name: "", email: "" }}>
         {({
           values,
@@ -49,7 +49,7 @@ function AccountSettings({ user, avatar }) {
           return (
             <Form
               onSubmit={(event) => handleSubmit(event, values)}
-              className="my-5 flex-grow py-5 md:px-10"
+              className="my-5 flex-grow py-5"
               name="signUpForm"
             >
               <div className="mb-5 w-36 h-36 rounded-lg overflow-hidden relative flex justify-center">

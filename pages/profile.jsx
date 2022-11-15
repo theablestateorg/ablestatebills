@@ -10,8 +10,9 @@ import { useAuth } from "../utils/auth";
 import useMediaQuery from "../hooks/useMediaQuery";
 import { useCookies } from "react-cookie"
 import { parseCookies } from "../utils/parseCookies";
+import { supabase } from "../utils/supabase";
 
-export default function Dashboard() {
+export default function Dashboard({ account_balance }) {
   const [showInfo, setShowInfo] = useState(0)
   const [avatar, setAvatar] = useState("");
   const { user } = useAuth();
@@ -69,7 +70,7 @@ export default function Dashboard() {
           </section>
           <section className="outline outline-1 outline-gray-200 shadow-md mb-5 rounded p-2 bg-white w-full">
             {showInfo === 2 ? <Password user={user} /> :
-            showInfo === 1? <AccountSettings user={user} avatar={avatar} /> : <Account user={user} />}
+            showInfo === 1? <AccountSettings user={user} avatar={avatar} /> : <Account user={user} account_balance={account_balance} />}
           </section>
           
         </div>
@@ -93,7 +94,13 @@ export const getServerSideProps = async ({ req, res }) => {
       }
     }
 
+    const { data: account_balance } = await supabase
+    .from("accounts")
+    .select("account_balance")
+    .eq("id", JSON.parse(person.user).user.id)
+    .single()
+
   return {
-    props: {},
+    props: { account_balance, person },
   };
 };

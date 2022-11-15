@@ -33,8 +33,8 @@ function Password({ user }) {
     }
   }
   return (
-    <section className="my-5 flex-grow flex flex-col">
-      <h1 className="font-bold">Password</h1>
+    <section className="my-5 flex-grow flex flex-col md:px-8">
+      <h1 className="font-bold text-lg border-b-2 p-2">Password</h1>
       <Formik
               initialValues={{ old_password: "",new_password: "", confirm_password: "" }}
             >
@@ -51,44 +51,9 @@ function Password({ user }) {
                 return (
                   <Form
                     onSubmit={(event) => handleSubmit(event, values, resetForm)}
-                    className="my-5 flex-grow py-5 md:px-10"
+                    className="my-5 flex-grow py-5"
                     name="signUpForm"
                   >
-
-                    {/* <div className="flex flex-col gap-5 md:my-5">
-                      <label htmlFor="old_password" className="">
-                        Old Password
-                      </label>
-                      <div className="w-full">
-                        <input
-                          type="password"
-                          name="old_password"
-                          className="outline outline-1 bg-transparent py-1 px-2 placeholder:text-[#bcbfc2] w-full md:w-10/12"
-                          placeholder="enter password"
-                          onChange={handleChange("old_password")}
-                          onBlur={handleBlur("old_password")}
-                        />
-                        <div
-                          className={`${
-                            errors?.password && touched?.password
-                              ? "block"
-                              : "hidden"
-                          }`}
-                        >
-                          <label
-                            className={`${
-                              errors?.password && touched?.password
-                                ? "text-red-500 text-xs"
-                                : "text-transparent text-xs"
-                            }`}
-                          >{`${
-                            errors?.password && touched?.password
-                              ? errors.password
-                              : "hide"
-                          }`}</label>
-                        </div>
-                      </div>
-                    </div> */}
                     <div className="flex flex-col gap-5 md:my-5">
                       <label htmlFor="new_password" className="">
                         New Password

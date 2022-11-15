@@ -46,7 +46,7 @@ function Account({ user }) {
                   <h2 className="text-zinc-600 text-sm">Available Balance</h2>
                   <p className="font-bold text-xl">
                     <span className="mr-1 font-medium">ugx</span>
-                    <span className="text-3xl">34,500</span>
+                    <span className="text-3xl">0</span>
                   </p>
                 </div>
                 <Link href="/">

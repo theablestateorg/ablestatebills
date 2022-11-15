@@ -169,7 +169,7 @@ export default function Navbar({ user }) {
                         " " +
                         user?.user_metadata.last_name}{" "}
                     </p>
-                    <p className="text-zinc-500 text-sm mb-1">{user?.email} </p>
+                    <p className="text-zinc-500 text-sm mb-1">{cookie?.user && cookie?.user?.user.email} </p>
                     <p className="uppercase text-zinc-400 font-medium text-sm">
                       Appearance (soon)
                     </p>
@@ -189,7 +189,7 @@ export default function Navbar({ user }) {
                 <div className="px-2">
                   <Link href="/profile">
                     <li className="w-full p-2 px-12 mb-1 hover:bg-[#ececec] rounded">
-                      Profile
+                      My Account
                     </li>
                   </Link>
                   <li
@@ -264,7 +264,7 @@ export default function Navbar({ user }) {
 
               <Link href="/profile">
                 <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic rounded">
-                  Profile
+                  My Account
                 </li>
               </Link>
               <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic rounded">

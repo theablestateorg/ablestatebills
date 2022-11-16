@@ -63,9 +63,6 @@ export default function Site({ profile, manager, websites }) {
       })
       .eq("id", id);
 
-    // if (data) {
-    //   toast.success(`Successfully updated`, { position: "top-center" });
-    // }
     if (error) {
       toast.error(`${error?.message}`, { position: "top-center" });
     }
@@ -350,8 +347,35 @@ export default function Site({ profile, manager, websites }) {
                   Delete Customer
                 </h1>
                 <p>
-                  Are you sure you want to delete <b>{profile.first_name}</b>?
+                  Are you sure you want to delete <b>{profile.first_name + " " + profile.last_name}</b>?
                 </p>
+                {websites && websites.length > 0 && <><h2 className="mt-2 text-sm font-medium">Products under {profile.first_name + " " + profile.last_name}</h2>
+                <div className="p-2 bg-neutral-100 flex flex-wrap gap-1">
+                {websites &&
+                websites.map((website, index) => (
+                  <div
+                    className="outline outline-1 outline-[#e5e7eb] bg-white px-4 py-2 rounded-md cursor-pointer flex flex-col justify-between"
+                    key={index}
+                  >
+                    <div className="flex gap-2 items-center">
+                      <div className="w-[25px] h-[25px] overflow-hidden flex justify-center items-center outline outline-1 rounded-full">
+                        <Image
+                          // loader={myLoader}
+                          src={`https://www.google.com/s2/favicons?sz=64&domain_url=${website.website_link}`}
+                          alt={`${website.name[0].toUpperCase()}`}
+                          className="flex justify-center items-center"
+                          width={25}
+                          height={25}
+                        />
+                      </div>
+                      <div>
+                        <h1 className="font-medium text-sm">{website.name}</h1>
+                      </div>
+                    </div>
+                    
+                  </div>
+                ))}
+                </div></>}
                 <p className="bg-[#ffe9d9] p-2 border-l-2 text-[#bc4c2e] border-[#fa703f] flex flex-col text-sm my-1">
                   <span className="text-[#771505] font-bold flex items-center gap-1">
                     <IoWarning /> Warning

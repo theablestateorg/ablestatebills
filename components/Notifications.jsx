@@ -27,7 +27,7 @@ function Notifications({ notify, notifications, setNotifications }) {
           {notifications.length}
         </span>
       )}
-      <IoMdNotificationsOutline size={25} />
+        <IoMdNotificationsOutline size={25} />
 
       <Transition
           show={notify && notifications.length > 0}

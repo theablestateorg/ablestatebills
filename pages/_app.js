@@ -2,12 +2,14 @@ import "../styles/globals.css";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "../utils/auth";
 import Layout from "../components/Layout";
+import CommandBar from "../components/CommandBar";
 import React from "react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import NProgress from "nprogress";
 import "../styles/Progress.css";
 import { CookiesProvider } from "react-cookie";
+
 
 function MyApp({ Component, pageProps, ...appProps }) {
   const isLayoutNeeded = [
@@ -42,11 +44,13 @@ function MyApp({ Component, pageProps, ...appProps }) {
 
   return (
     <AuthProvider>
+      <CommandBar>
       <CookiesProvider>
         <LayoutComponent>
           <Component {...pageProps} />
         </LayoutComponent>
       </CookiesProvider>
+      </CommandBar>
     </AuthProvider>
   );
 }

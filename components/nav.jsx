@@ -14,6 +14,8 @@ import { menuData } from "../utils/menuData";
 import { motion, AnimateSharedLayout } from "framer-motion";
 import { useCookies } from "react-cookie";
 import { parseCookies } from "../utils/parseCookies";
+import { BiSearchAlt2 } from "react-icons/bi"
+import { useKBar } from "kbar";
 
 export default function Navbar({ user }) {
   const [showMenu, setShowMenu] = useState(false);
@@ -23,6 +25,7 @@ export default function Navbar({ user }) {
   const [notifications, setNotifications] = useState([]);
   const router = useRouter();
   const { signOut, loading, setLoading } = useAuth();
+  const { query } = useKBar()
 
   const [cookie] = useCookies(["user"]);
   let role;
@@ -113,7 +116,13 @@ export default function Navbar({ user }) {
         </AnimateSharedLayout>
         <div className={navStyles.profileMenu}>
           <span
-            className="cursor-pointer relative"
+            className="cursor-pointer relative hover:bg-neutral-100 rounded p-2"
+            onClick={query.toggle}
+          >
+            <BiSearchAlt2 size={25} />
+          </span>
+          <span
+            className="cursor-pointer relative hover:bg-neutral-100 rounded p-2"
             onClick={() => setNotify(!notify)}
           >
             <Notifications

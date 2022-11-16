@@ -2,7 +2,6 @@ import { Form, Formik } from "formik";
 import { supabase } from "../utils/supabase";
 import { useState } from "react";
 import Link from "next/link";
-import { FaMoneyBillWave } from "react-icons/fa";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 import { currencyFormatter } from "../utils/currencyFormatter";
@@ -10,15 +9,16 @@ import Router from "next/router";
 import { MdOutlineAccountBalanceWallet } from "react-icons/md";
 import { GrTransaction } from "react-icons/gr";
 import { CKAirtel, CKMtn } from "../components/ck";
-import { UG } from "../components/react-flags/index"
+import { UG } from "../components/react-flags/index";
+import { AiOutlineArrowUp, AiOutlineArrowDown } from "react-icons/ai";
 
-function Account({ account_balance }) {
+function Account({ account_balance, transactions }) {
   const [loading, setLoading] = useState(false);
   const [cookie] = useCookies(["user"]);
 
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [complete, setComplete] = useState(null);
-  const [phoneNumber, setPhoneNumber] = useState("")
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   const handleSubmit = async (event, values, resetForm) => {
     event.preventDefault();
@@ -31,7 +31,21 @@ function Account({ account_balance }) {
       .eq("id", cookie.user?.user?.id);
 
     if (data) {
-      toast.success(`Deposit was successful`, { position: "top-center" });
+      const { data: transaction, error } = await supabase
+        .from("transactions")
+        .insert([
+          {
+            transaction_type: "deposit",
+            status: "successful",
+            amount: amount,
+            actor_id: cookie.user?.user?.id,
+            description: "",
+          },
+        ]);
+
+      if (transaction) {
+        toast.success(`Deposit was successful`, { position: "top-center" });
+      }
     } else if (error) {
       toast.error(`Failed: ${error.message}`, { position: "top-center" });
     }
@@ -45,9 +59,9 @@ function Account({ account_balance }) {
     <section className="my-5 flex-grow flex flex-col md:px-8">
       <h1 className="font-bold text-lg border-b-2 p-2">Account</h1>
       <div className="my-5 py-5">
-        <div className="w-54 bg-white p-5 rounded shadow outline outline-1 outline-gray-200 ">
+        <div className="w-54 bg-white p-5 rounded shadow outline outline-1 outline-gray-200">
           {/* <h1>My Balance</h1> */}
-          <div className="w-full flex justify-between gap-3">
+          <div className="w-full flex justify-between gap-3 flex-col lg:flex-row">
             <div className="bg-[#f7f7f7] p-3 rounded-md flex gap-5 justify-start outline outline-1 outline-gray-200 w-full items-center">
               <MdOutlineAccountBalanceWallet size={35} color="#1d1f20" />
               <div>
@@ -60,11 +74,6 @@ function Account({ account_balance }) {
                     </span>
                   </p>
                 </div>
-                {/* <Link href="/profile">
-                  <span className="underline cursor-pointer text-[#ca3011]">
-                    view transactions
-                  </span>
-                </Link> */}
               </div>
             </div>
             <div className="bg-[#f7f7f7] p-3 rounded-md flex gap-5 justify-start outline outline-1 outline-gray-200 items-center w-full">
@@ -72,12 +81,43 @@ function Account({ account_balance }) {
               <div>
                 <div className="mb-5">
                   <h2 className="text-zinc-600 text-sm">Last Transaction</h2>
-                  <p className="font-bold text-xl">
-                    <span className="mr-1 font-medium">ugx</span>
-                    <span className="text-3xl">
-                      {currencyFormatter(account_balance?.account_balance)}
-                    </span>
-                  </p>
+                  <div className="flex justify-between w-full gap-5">
+                    <p className="font-bold text-xl">
+                      <span className="mr-1 font-medium">ugx</span>
+                      <span className="text-3xl">
+                        {transactions
+                          ? currencyFormatter(transactions[0].amount)
+                          : "0"}
+                      </span>
+                    </p>
+                    {transactions ? (
+                      <p className="font-bold text-xl">
+                        {transactions[0].transaction_type === "deposit" ? (
+                          <span className="mr-1 font-medium bg-green-300 text-sm px-2 py-1 rounded flex items-center">
+                            <AiOutlineArrowUp />
+                            {Math.round(
+                              (transactions[0].amount /
+                                account_balance.account_balance) *
+                                10000
+                            ) /
+                              100 +
+                              "%"}
+                          </span>
+                        ) : (
+                          <span className="mr-1 font-medium bg-red-300 text-sm px-2 py-1 rounded flex items-center">
+                            <AiOutlineArrowDown />
+                            {Math.round(
+                              (transactions[0].amount /
+                                account_balance.account_balance) *
+                                10000
+                            ) /
+                              100 +
+                              "%"}
+                          </span>
+                        )}
+                      </p>
+                    ) : null}
+                  </div>
                 </div>
                 <Link href="/profile">
                   <span className="underline cursor-pointer text-[#ca3011]">
@@ -90,7 +130,7 @@ function Account({ account_balance }) {
         </div>
       </div>
 
-        <h3 className="font-bold text-lg mb-2">Make Deposit</h3>
+      <h3 className="font-bold text-lg mb-2">Make Deposit</h3>
       <section>
         <h3 className="font-bold">Choose a Payment Method</h3>
         <div className="flex flex-wrap gap-5 my-2">
@@ -121,74 +161,73 @@ function Account({ account_balance }) {
         </div>
         <h3 className="font-bold">Get Secret Code</h3>
         <div className="">
-              {paymentMethod === "1" && (
-                <>
-                  <p>MTN MoMo</p>
-                  <p>
-                    Enter your mtn phone number to receive a{" "}
-                    <span className="font-bold">*secret code*</span> then press
-                    next to continue
-                  </p>
-                  
-                  <div className="flex flex-col my-2">
-                    <label htmlFor="number">MTN phone Number</label>
-                    <div className="outline outline-1 flex pl-2 gap-2">
-                      <div className="flex gap-1 items-center">
-                        <UG />
-                        +256
-                      </div>
-                      <input
-                        type="text"
-                        name=""
-                        id="number"
-                        className="outline outline-1 px-2 py-1 bg-transparent flex-grow"
-                        placeholder="771234567"
-                        onChange={({target}) => setPhoneNumber(target.value)}
-                        value={phoneNumber}
-                        required
-                      />
-                    </div>
+          {paymentMethod === "1" && (
+            <>
+              <p>MTN MoMo</p>
+              <p>
+                Enter your mtn phone number to receive a{" "}
+                <span className="font-bold">*secret code*</span> then press next
+                to continue
+              </p>
+
+              <div className="flex flex-col my-2">
+                <label htmlFor="number">MTN phone Number</label>
+                <div className="outline outline-1 flex pl-2 gap-2">
+                  <div className="flex gap-1 items-center">
+                    <UG />
+                    +256
                   </div>
-                </>
-              )}
-              {paymentMethod === "2" && (
-                <>
-                  <p>Airtel Money</p>
-                  <p>
-                    You will be required to inital the withdraw from you airtel
-                    money to get a{" "}
-                    <span className="font-bold">*secret code*</span> then press
-                    next to continue
-                  </p>
-                </>
-              )}
-              {paymentMethod != null && (
-                <div className="flex justify-end">
-                  <button className="text-white bg-[#121212] px-2 py-1"
-                  onClick={async () => {
-                    if(paymentMethod === "1"){
-                      const phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})$/;
-                      if(phoneNumber.match(phoneno)){
-                        console.log(`256${phoneNumber}`)
-                        const results = await axios.post("/api/send-token", {
-                          phone: `256${phoneNumber}`
-                      })
-                      .then(res => setComplete(true))
-                      .catch(error => console.log(error.message))
-                        setComplete(true)
-                      }
-                    }else {
-                      setComplete(true)
-                    }
-                    
-                    
-                  }}
-                  >
-                    Next
-                  </button>
+                  <input
+                    type="text"
+                    name=""
+                    id="number"
+                    className="outline outline-1 px-2 py-1 bg-transparent flex-grow"
+                    placeholder="771234567"
+                    onChange={({ target }) => setPhoneNumber(target.value)}
+                    value={phoneNumber}
+                    required
+                  />
                 </div>
-              )}
+              </div>
+            </>
+          )}
+          {paymentMethod === "2" && (
+            <>
+              <p>Airtel Money</p>
+              <p>
+                You will be required to inital the withdraw from you airtel
+                money to get a <span className="font-bold">*secret code*</span>{" "}
+                then press next to continue
+              </p>
+            </>
+          )}
+          {paymentMethod != null && (
+            <div className="flex justify-end">
+              <button
+                className="text-white bg-[#121212] px-2 py-1"
+                onClick={async () => {
+                  if (paymentMethod === "1") {
+                    const phoneno =
+                      /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})$/;
+                    if (phoneNumber.match(phoneno)) {
+                      const results = await axios
+                        .post("/api/send-token", {
+                          phone: `256${phoneNumber}`,
+                        })
+                        .then((res) => setComplete(true))
+                        .catch((error) => console.log(error.message));
+                      setComplete(true);
+                    }
+                  } else {
+                    setComplete(true);
+                  }
+                }}
+              >
+                Next
+              </button>
             </div>
+          )}
+        </div>
       </section>
       <Formik initialValues={{ amount: "" }}>
         {({

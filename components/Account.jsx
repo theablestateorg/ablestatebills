@@ -204,7 +204,7 @@ function Account({ account_balance }) {
           return (
             <Form
               onSubmit={(event) => handleSubmit(event, values, resetForm)}
-              className=" flex-grow py-5"
+              className="flex-grow py-5"
               name="signUpForm"
             >
               <div className="flex flex-col gap-5 my-5">

@@ -25,6 +25,8 @@ function Manager({ websites, customers}) {
   const { user } = useAuth();
   const deleteArrayIds = deleteArray.map((site) => site[0].toString());
 
+  const img_url = "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://charleskasra.com&size=64"
+
   websites = websites
     .filter((website) =>
       !website?.[searchBy] || searchBy !== "telephone_number"
@@ -283,9 +285,10 @@ function Manager({ websites, customers}) {
                     <div className="w-[30px] h-[30px] overflow-hidden flex justify-center items-center rounded-full">
                           <Image
                             src={`https://www.google.com/s2/favicons?sz=64&domain_url=${site.website_link}`}
-                            alt="Picture of the author"
+                            alt={`${site.name[0].toUpperCase()}`}
                             width={25}
                             height={25}
+                            // placeholder="empty"
                           />
                         </div>
                       <div>

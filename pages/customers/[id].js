@@ -131,7 +131,7 @@ export default function Site({ profile, manager, websites }) {
                         <Image
                           // loader={myLoader}
                           src={`https://www.google.com/s2/favicons?sz=64&domain_url=${website.website_link}`}
-                          alt="Picture of the author"
+                          alt={`${website.name[0].toUpperCase()}`}
                           width={25}
                           height={25}
                         />

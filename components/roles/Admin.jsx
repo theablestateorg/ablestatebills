@@ -292,7 +292,7 @@ function Admin({ websites, customers }) {
                       <div className="w-[30px] h-[30px] overflow-hidden flex justify-center items-center rounded-full">
                         <Image
                           src={`https://www.google.com/s2/favicons?sz=64&domain_url=${site.website_link}`}
-                          alt="Picture of the author"
+                          alt={`${site.name[0].toUpperCase()}`}
                           width={25}
                           height={25}
                         />

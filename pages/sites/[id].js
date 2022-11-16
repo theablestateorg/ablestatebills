@@ -20,7 +20,7 @@ import { parseCookies } from "../../utils/parseCookies";
 import { CKAirtel, CKMtn } from "../../components/ck";
 import { UG } from "../../components/react-flags";
 
-export default function Site({ product }) {
+export default function Site({ product, contactPerson }) {
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [complete, setComplete] = useState(null);
 
@@ -38,31 +38,6 @@ export default function Site({ product }) {
   const [countryCode, setCountryCode] = useState("+256");
   const [selected, setSelected] = useState(false);
   const [password, setPassword] = useState(null);
-
-  // const fetcher = async () => await axios.get("/api/screenshot").then((res) => res.data);
-
-  // const { data, error } = useSWR(fetcher);
-  //   console.log(data)
-  //   console.log(error)
-
-  useEffect(() => {
-    getCustomers();
-    getContact();
-  }, [selected]);
-
-  const getCustomers = async () => {
-    const { data } = await supabase.from("profiles").select("*");
-    setCustomers(data);
-  };
-
-  const getContact = async () => {
-    const { data } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", product.contact_person)
-      .single();
-    setContact(data);
-  };
 
   const getNewCustomer = async (id, setFieldValue) => {
     const { data } = await supabase
@@ -202,7 +177,6 @@ export default function Site({ product }) {
               </button>
             </section>
 
-            {/*something here*/}
             <AnimatePresence>
               {popUpdate && (
                 <motion.div
@@ -462,7 +436,7 @@ export default function Site({ product }) {
                 <div className="mb-3">
                   <p className="uppercase font-medium">CONTACT PERSON</p>
                   <p className="font-bold text-sm text-gray-700">
-                    {contact?.first_name + " " + contact?.last_name},{" "}
+                    {contactPerson?.first_name + " " + contactPerson?.last_name},{" "}
                     {product.telephone_number}
                   </p>
                 </div>
@@ -734,7 +708,6 @@ export default function Site({ product }) {
                     if(paymentMethod === "1"){
                       const phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})$/;
                       if(phoneNumber.match(phoneno)){
-                        console.log(`256${phoneNumber}`)
                         const results = await axios.post("/api/send-token", {
                           phone: `256${phoneNumber}`
                       })
@@ -891,6 +864,12 @@ export const getServerSideProps = async ({ req, res, params }) => {
     .eq("id", params.id)
     .single();
 
+    const { data: contactPerson } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", product.contact_person)
+    .single();
+
   const person = parseCookies(req);
   if (res) {
     if (!person.user || JSON.parse(person?.user).profile.role === "customer") {
@@ -905,6 +884,6 @@ export const getServerSideProps = async ({ req, res, params }) => {
   }
 
   return {
-    props: { product },
+    props: { product, contactPerson },
   };
 };

@@ -161,7 +161,6 @@ function Checkout() {
                     if(paymentMethod === "1"){
                       const phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})$/;
                       if(phoneNumber.match(phoneno)){
-                        console.log(`256${phoneNumber}`)
                         const results = await axios.post("/api/send-token", {
                           phone: `256${phoneNumber}`
                       })

@@ -34,7 +34,6 @@ function Domains() {
     setLoading(true)
     setRun(true);
     event.preventDefault();
-    // console.log(searched);
     await axios
       .post("/api/check-domain", {
         domainName: `${searched}${domainExt}`,

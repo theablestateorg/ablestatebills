@@ -3,7 +3,6 @@ import { ToastContainer, toast } from "react-toastify";
 import { useState, useEffect } from "react";
 import AccountSettings from "../components/AccountSettings";
 import Password from "../components/Password";
-import Accounts from "../components/Accounts";
 import Footer from "../components/Footer";
 import { downloadFile } from "../utils/getImages";
 import { useAuth } from "../utils/auth";
@@ -13,8 +12,9 @@ import { parseCookies } from "../utils/parseCookies";
 import { supabase } from "../utils/supabase";
 import Image from "next/image";
 import AccountLayout from "../components/AccountLayout";
+import Accounts from "../components/Accounts";
 
-export default function Dashboard({ account_balance, transactions }) {
+export default function Account({ account_balance, transactions }) {
   const [showInfo, setShowInfo] = useState(0);
   const [avatar, setAvatar] = useState("");
   const { user } = useAuth();
@@ -31,7 +31,11 @@ export default function Dashboard({ account_balance, transactions }) {
 
   return (
     <AccountLayout>
-        <AccountSettings user={user} avatar={avatar} />
+      <Accounts
+        user={user}
+        account_balance={account_balance}
+        transactions={transactions}
+      />
     </AccountLayout>
   );
 }
@@ -49,7 +53,7 @@ export const getServerSideProps = async ({ req, res }) => {
       };
     }
   }
-
+  
   const { data: account_balance } = await supabase
     .from("accounts")
     .select("account_balance")

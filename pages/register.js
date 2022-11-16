@@ -36,7 +36,6 @@ export default function Home() {
         toast.error(`${error?.message}`, {position: "top-center"})
       }
     }catch(error){
-      // console.log(error)
     }
 
     setLoading(false)

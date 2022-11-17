@@ -13,10 +13,17 @@ import { useRouter } from "next/router";
 import Router from "next/router";
 import React from "react";
 import { MdOutlineHome } from 'react-icons/md'
+import { parseCookies } from "../utils/parseCookies";
+import { useCookies } from "react-cookie";
 
-export default function CommandBar(props) {
+export default function CommandBar({children}) {
   const router = useRouter();
-  const actions = [
+
+  const [cookie] = useCookies(["user"]);
+
+  console.log(cookie?.user?.profile.role)
+
+  const managerActions = [
     {
       id: "home",
       name: "Home",
@@ -39,9 +46,36 @@ export default function CommandBar(props) {
       keywords: "go-tickets",
       perform: () => router.push("/tickets"),
     },
+    {
+      id: "profile",
+      name: "Profile",
+      shortcut: ["P"],
+      keywords: "go-profile",
+      perform: () => router.push("/profile"),
+      icon: <MdOutlineHome size={25} />
+    }
+  ];
+
+  const actions = [
+    {
+      id: "home",
+      name: "Home",
+      shortcut: ["H"],
+      keywords: "go-home",
+      perform: () => router.push("/"),
+      icon: <MdOutlineHome size={25} />
+    },
+    {
+      id: "profile",
+      name: "Profile",
+      shortcut: ["P"],
+      keywords: "go-profile",
+      perform: () => router.push("/profile"),
+      icon: <MdOutlineHome size={25} />
+    }
   ];
   return (
-    <KBarProvider actions={actions}>
+    <KBarProvider actions={["manager", "admin"].includes(cookie?.user?.profile.role) ? managerActions : actions}>
       <KBarPortal>
         <KBarPositioner className="bg-black bg-opacity-50 z-10 p-10 fixed w-full h-full">
           <KBarAnimator className="outline outline-1 outline-gray-300 rounded bg-white px-2 w-11/12 md:w-8/12">
@@ -54,7 +88,7 @@ export default function CommandBar(props) {
           </KBarAnimator>
         </KBarPositioner>
       </KBarPortal>
-      {props.children}
+      {children}
     </KBarProvider>
   );
 }

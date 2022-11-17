@@ -10,31 +10,41 @@ import {
   KBarResults,
 } from "kbar";
 import { useRouter } from "next/router";
+import Router from "next/router";
 import React from "react";
+import { MdOutlineHome } from 'react-icons/md'
 
 export default function CommandBar(props) {
   const router = useRouter();
   const actions = [
     {
+      id: "home",
+      name: "Home",
+      shortcut: ["H"],
+      keywords: "go-home",
+      perform: () => router.push("/"),
+      icon: <MdOutlineHome size={25} />
+    },
+    {
       id: "customers",
-      name: "customers",
+      name: "Customers",
       shortcut: ["C"],
-      keywords: "writing words",
-      perform: () => (window.location.pathname = "customers"),
+      keywords: "go-customers",
+      perform: () => router.push("/customers"),
     },
     {
       id: "tickets",
-      name: "tickets",
+      name: "Tickets",
       shortcut: ["T"],
-      keywords: "writing words",
-      perform: () => (window.location.pathname = "tickets"),
+      keywords: "go-tickets",
+      perform: () => router.push("/tickets"),
     },
   ];
   return (
     <KBarProvider actions={actions}>
       <KBarPortal>
-        <KBarPositioner className="outline bg-black bg-opacity-50 z-10 p-10 flex justify-center items-center fixed w-full h-full">
-          <KBarAnimator className="outline outline-1 outline-gray-300 rounded w-full bg-white">
+        <KBarPositioner className="bg-black bg-opacity-50 z-10 p-10 fixed w-full h-full">
+          <KBarAnimator className="outline outline-1 outline-gray-300 rounded bg-white px-2 w-11/12 md:w-8/12">
             {/* <KBarSearch /> */}
             <input
               placeholder="Type a command or search…"
@@ -62,7 +72,7 @@ function RenderResults() {
           <div
             className={`bg-transparent ${
               active && "bg-neutral-100"
-            } flex justify-between px-3 py-2`}
+            } flex justify-between px-3 py-2 cursor-pointer`}
           >
             <div className={``}>{item.name}</div>
             {item.shortcut?.length ? (

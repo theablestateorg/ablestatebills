@@ -196,7 +196,7 @@ export default function Navbar({ user }) {
                   </div>
                 </div>
                 <div className="px-2">
-                  <Link href="/profile">
+                  <Link href="/account">
                     <li className="w-full p-2 px-12 mb-1 hover:bg-[#ececec] rounded">
                       My Account
                     </li>

@@ -11,7 +11,7 @@ import { IoWarning } from "react-icons/io5";
 import Footer from "../Footer";
 import Image from "next/image";
 
-function Manager({ websites, customers}) {
+function Manager({ websites, customers }) {
   const router = useRouter();
   const [searchText, setSearchText] = useState("");
   const [status, setStatus] = useState("");
@@ -25,7 +25,8 @@ function Manager({ websites, customers}) {
   const { user } = useAuth();
   const deleteArrayIds = deleteArray.map((site) => site[0].toString());
 
-  const img_url = "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://charleskasra.com&size=64"
+  const img_url =
+    "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://charleskasra.com&size=64";
 
   websites = websites
     .filter((website) =>
@@ -42,7 +43,7 @@ function Manager({ websites, customers}) {
   websites = sortNames
     ? websites.sort((a, b) => a[sortBy] > b[sortBy])
     : websites.sort((a, b) => b[sortBy] > a[sortBy]);
-    
+
   return (
     <>
       <Head>
@@ -119,7 +120,7 @@ function Manager({ websites, customers}) {
                           className="px-3 py-2 bg-[#f7f7f7] rounded-lg placeholder:text-[#bcbfc2] w-full outline outline-1 outline-[#f4f3f7]"
                           onChange={(event) => {
                             setSearchText(event.target.value);
-                            
+
                             if (event.target.value !== "") {
                               const rightWeb = websites.filter((web) =>
                                 web.name
@@ -130,16 +131,26 @@ function Manager({ websites, customers}) {
                                 rightWeb.length > 0 ? rightWeb[0] : null;
                               setRecommend(recommendation?.name.toLowerCase());
 
-                              document.getElementById("paragraph").innerHTML = rightWeb.length > 0 ? rightWeb[0]?.name.toLowerCase().replace(event.target.value, `<span class="text-black">${event.target.value}</span>`) : "";
-
+                              document.getElementById("paragraph").innerHTML =
+                                rightWeb.length > 0
+                                  ? rightWeb[0]?.name
+                                      .toLowerCase()
+                                      .replace(
+                                        event.target.value,
+                                        `<span class="text-black">${event.target.value}</span>`
+                                      )
+                                  : "";
                             } else {
                               setRecommend(null);
-                              document.getElementById("paragraph").innerHTML = "";
+                              document.getElementById("paragraph").innerHTML =
+                                "";
                             }
-                            
                           }}
                         />
-                        <p id="paragraph" className="text-gray-400 absolute top-2 left-3 pointer-events-none">
+                        <p
+                          id="paragraph"
+                          className="text-gray-400 absolute top-2 left-3 pointer-events-none"
+                        >
                           {/* {recommend
                             ? recommend.replace(searchText, () => {
                                 return "<span>dark<span>";
@@ -281,24 +292,26 @@ function Manager({ websites, customers}) {
                     />
                   </td>
                   <td className="py-2 text-left pl-3">
-                  <div className="flex gap-2 items-center">
-                    <div className="w-[30px] h-[30px] overflow-hidden flex justify-center items-center rounded-full">
-                          <Image
-                            src={`https://www.google.com/s2/favicons?sz=64&domain_url=${site.website_link}`}
-                            alt={`${site.name[0].toUpperCase()}`}
-                            width={25}
-                            height={25}
-                            // placeholder="empty"
-                          />
-                        </div>
+                    <div className="flex gap-2 items-center">
+                      <div className="w-[30px] h-[30px] overflow-hidden flex justify-center items-center rounded-full">
+                        <Image
+                          src={`https://www.google.com/s2/favicons?sz=64&domain_url=${site.website_link}`}
+                          alt={`${site.name[0].toUpperCase()}`}
+                          width={25}
+                          height={25}
+                          // placeholder="empty"
+                        />
+                      </div>
                       <div>
                         <h1 className="font-medium">{site.name}</h1>
                         <span className="font-extralight text-sm text-[#bcbfc2]">
                           expiring on{" "}
-                          {moment(new Date(site.expiry_date)).format("DD-MM-YYYY")}
+                          {moment(new Date(site.expiry_date)).format(
+                            "DD-MM-YYYY"
+                          )}
                         </span>
                       </div>
-                  </div>
+                    </div>
                   </td>
                   <td className="py-2 text-left pl-3">
                     {customers
@@ -375,4 +388,4 @@ function Manager({ websites, customers}) {
   );
 }
 
-export default Manager
+export default Manager;

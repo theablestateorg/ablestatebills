@@ -52,7 +52,7 @@ function Accounts({ account_balance, transactions }) {
 
     resetForm({ amount: "" });
     setLoading(false);
-    Router.push("/profile");
+    Router.push("/account");
   };
 
   return (

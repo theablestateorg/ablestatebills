@@ -18,10 +18,7 @@ import { useCookies } from "react-cookie";
 
 export default function CommandBar({children}) {
   const router = useRouter();
-
   const [cookie] = useCookies(["user"]);
-
-  console.log(cookie?.user?.profile.role)
 
   const managerActions = [
     {

@@ -16,6 +16,8 @@ function Accounts({ account_balance, transactions }) {
   const [loading, setLoading] = useState(false);
   const [cookie] = useCookies(["user"]);
 
+  console.log(transactions)
+
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [complete, setComplete] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -86,12 +88,12 @@ function Accounts({ account_balance, transactions }) {
                       <p className="font-bold text-xl">
                         <span className="mr-1 font-medium">ugx</span>
                         <span className="text-3xl">
-                          {transactions
+                          {transactions && transactions.length > 0
                             ? currencyFormatter(transactions[0].amount)
                             : "0"}
                         </span>
                       </p>
-                      {transactions ? (
+                      {transactions && transactions.length > 0 ? (
                         <p className="font-bold text-xl">
                           {transactions[0].transaction_type === "deposit" ? (
                             <span className="mr-1 font-medium bg-green-300 text-sm px-2 py-1 rounded flex items-center">

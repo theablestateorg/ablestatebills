@@ -56,7 +56,6 @@ export default function AddClient() {
       <Head>
         <title>Add Customer - Shine Afrika</title>
       </Head>
-      <ToastContainer />
       <main className="pt-[70px] mx-5 md:mx-20 relative pb-6 min-h-screen">
         <section className="flex justify-between items-center">
           <h1 className="font-bold text-2xl my-5">Add Customer</h1>

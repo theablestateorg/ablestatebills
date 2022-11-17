@@ -63,6 +63,26 @@ const handler = async (req, res) => {
       };
       res.status(200).json(response);
     }
+
+    console.log("it reached here")
+
+    if(user){
+      const {data: account, error} = await supabase
+      .from("accounts")
+      .insert({
+        id: id, account_balance: "0"
+      })
+      .eq("id", id);
+    if (response?.error) {
+      throw error;
+    } else {
+      const response = {
+        Status: "Success",
+        Details: "Memeber successfully created",
+      };
+      res.status(200).json(response);
+    }
+    }
   } catch (error) {
     const response = { Status: "Failure", Details: error };
     return res.status(400).json(response);

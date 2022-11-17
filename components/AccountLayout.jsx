@@ -18,8 +18,6 @@ export default function AccountLayout({ children }) {
   const [cookie] = useCookies(["user"]);
   const router = useRouter()
 
-  console.log(router.pathname)
-
   useEffect(() => {
     try {
       downloadFile(cookie?.user?.profile.avatar_url.substring(8), "avatars")

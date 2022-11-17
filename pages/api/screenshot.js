@@ -14,7 +14,6 @@ export default function handler(req, res) {
       // return res.send({"name": screenshot})
     })()
   } catch(error){
-    console.log("error is ",error.message)
     res.send({"error": error})
   }
   res.send({"result": "end"})

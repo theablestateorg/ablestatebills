@@ -10,7 +10,6 @@ const supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
 const handler = async (req, res) => {
   try {
     const { userId, actor, username } = req.body;
-    console.log(req.body);
 
     const response = await supabaseClient
       .from("profiles")

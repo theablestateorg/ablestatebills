@@ -64,8 +64,6 @@ const handler = async (req, res) => {
       res.status(200).json(response);
     }
 
-    console.log("it reached here")
-
     if(user){
       const {data: account, error} = await supabase
       .from("accounts")

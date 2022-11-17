@@ -10,8 +10,6 @@ import { Formik, Form } from "formik";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { useAuth } from "../../utils/auth";
 import { TbEdit } from "react-icons/tb";
-import AddCustomerModal from "../../components/AddCustomerModal";
-import { MdAdd } from "react-icons/md";
 import { RiExternalLinkFill } from "react-icons/ri";
 import moment from "moment";
 import { motion, AnimatePresence } from "framer-motion";
@@ -19,8 +17,9 @@ import { dropIn } from "../../utils/dropIn";
 import { parseCookies } from "../../utils/parseCookies";
 import { CKAirtel, CKMtn } from "../../components/ck";
 import { UG } from "../../components/react-flags";
+import Image from "next/image";
 
-export default function Site({ product, contactPerson }) {
+export default function Site({ product, contactPerson, customers }) {
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [complete, setComplete] = useState(null);
 
@@ -30,7 +29,6 @@ export default function Site({ product, contactPerson }) {
   const [popRenew, setPopRenew] = useState(false);
   const [popUpdate, setPopUpdate] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [customers, setCustomers] = useState([]);
   const [customerModel, setCustomerModel] = useState(false);
   const [customerId, setCustomerId] = useState(null);
   const [newCustomer, setNewCustomer] = useState(null);
@@ -51,33 +49,6 @@ export default function Site({ product, contactPerson }) {
       setFieldValue("telephone_number", data.contact_number.slice(4, 13));
     }
     setNewCustomer(data);
-  };
-
-  const addNewCustomer = async (values) => {
-    if (password) {
-      const { email, first_name, last_name, role } = values;
-      setLoading(true);
-      const { user, session, error } = await supabase.auth.signUp(
-        { email, password },
-        {
-          data: {
-            first_name,
-            last_name,
-            role,
-          },
-        }
-      );
-      if (user) {
-        setCustomerModel(false);
-        setSelected(!selected);
-      }
-      if (error) {
-        toast.error(`${error?.message}`, { position: "top-center" });
-      }
-    } else {
-      toast.error(`No password`, { position: "top-center" });
-    }
-    setLoading(false);
   };
 
   const { user } = useAuth();
@@ -257,7 +228,7 @@ export default function Site({ product, contactPerson }) {
                                 <select
                                   name=""
                                   id="contact_person"
-                                  className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
+                                  className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
                                   onChange={(e) => {
                                     setFieldValue(
                                       "contact_person",
@@ -273,34 +244,20 @@ export default function Site({ product, contactPerson }) {
                                   onBlur={handleBlur("contact_person")}
                                   value={values.contact_person}
                                 >
-                                  {/* <input type="text" name="" id="" /> */}
                                   <option value="">Select Customer</option>
                                   {customers &&
                                     customers.map((customer, index) => (
-                                      <option value={customer.id} key={index}>
+                                      <option
+                                        value={customer.id}
+                                        key={index}
+                                        className="outline bg-pink-200"
+                                      >
                                         {customer.first_name +
                                           " " +
                                           customer.last_name}
                                       </option>
                                     ))}
                                 </select>
-                                <button
-                                  type="button"
-                                  className="bg-[#1D1F20] text-white py-2 px-4  hover:bg-transparent hover:text-black outline outline-1 outline-black flex items-center gap-2 "
-                                  onClick={() => setCustomerModel(true)}
-                                >
-                                  <MdAdd />
-                                  Add Customer
-                                </button>
-                                {customerModel && (
-                                  <AddCustomerModal
-                                    loading={loading}
-                                    setCustomerModel={setCustomerModel}
-                                    addNewCustomer={addNewCustomer}
-                                    password={password}
-                                    setPassword={setPassword}
-                                  />
-                                )}
                               </div>
                             </div>
                             <div className="flex flex-col gap-1 my-2">
@@ -436,8 +393,8 @@ export default function Site({ product, contactPerson }) {
                 <div className="mb-3">
                   <p className="uppercase font-medium">CONTACT PERSON</p>
                   <p className="font-bold text-sm text-gray-700">
-                    {contactPerson?.first_name + " " + contactPerson?.last_name},{" "}
-                    {product.telephone_number}
+                    {contactPerson?.first_name + " " + contactPerson?.last_name}
+                    , {product.telephone_number}
                   </p>
                 </div>
 
@@ -615,10 +572,11 @@ export default function Site({ product, contactPerson }) {
                 <h1 className="text-center font-bold text-lg">
                   Renew {product.name}
                 </h1>
-                <h1 className="text-md cursor-pointer"
-                onClick={() => {
-                  setPopRenew(false)
-                }}
+                <h1
+                  className="text-md cursor-pointer"
+                  onClick={() => {
+                    setPopRenew(false);
+                  }}
                 >
                   Close
                 </h1>
@@ -655,140 +613,149 @@ export default function Site({ product, contactPerson }) {
                 </div>
               </section>
               <section className="mt-2">
-            <div className="flex gap-2">
-              <h3>Get Secret Code</h3>
-            </div>
-
-            <div className="ml-10">
-              {paymentMethod === "1" && (
-                <>
-                  <p>MTN MoMo</p>
-                  <p>
-                    Enter your mtn phone number to receive a{" "}
-                    <span className="font-bold">*secret code*</span> then press
-                    next to continue
-                  </p>
-                  
-                  <div className="flex flex-col my-2">
-                    <label htmlFor="number">MTN phone Number</label>
-                    <div className="outline outline-1 flex pl-2 gap-2">
-                      <div className="flex gap-1 items-center">
-                        <UG />
-                        +256
-                      </div>
-                      <input
-                        type="text"
-                        name=""
-                        id="number"
-                        className="outline outline-1 px-2 py-1 bg-transparent flex-grow"
-                        placeholder="771234567"
-                        onChange={({target}) => setPhoneNumber(target.value)}
-                        value={""}
-                        required
-                      />
-                    </div>
-                  </div>
-                </>
-              )}
-              {paymentMethod === "2" && (
-                <>
-                  <p>Airtel Money</p>
-                  <p>
-                    You will be required to inital the withdraw from you airtel
-                    money to get a{" "}
-                    <span className="font-bold">*secret code*</span> then press
-                    next to continue
-                  </p>
-                </>
-              )}
-              {paymentMethod != null && (
-                <div className="flex justify-end">
-                  <button className="text-white bg-[#121212] px-2 py-1"
-                  onClick={async () => {
-                    if(paymentMethod === "1"){
-                      const phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})$/;
-                      if(phoneNumber.match(phoneno)){
-                        const results = await axios.post("/api/send-token", {
-                          phone: `256${phoneNumber}`
-                      })
-                      .then(res => setComplete(true))
-                      .catch(error => console.log(error.message))
-                        setComplete(true)
-                      }
-                    }else {
-                      setComplete(true)
-                    }
-                    
-                    
-                  }}
-                  >
-                    Next
-                  </button>
+                <div className="flex gap-2">
+                  <h3>Get Secret Code</h3>
                 </div>
-              )}
-            </div>
-          </section>
-          <Formik
-          initialValues={{ amount: "", phone: "", secret_code: "" }}
-        >
-          {({
-            values,
-            errors,
-            touched,
-            isValid,
-            dirty,
-            handleChange,
-            handleBlur,
-            resetForm
-          }) => {
-            return (
-              <Form
-                onSubmit={(event) => handleSubmit(event, values, resetForm)}
-                className="mt-2"
-                name="loginForm"
-              >
-            <div className="flex gap-2">
-              <h3>Complete Payment</h3>
-            </div>
 
-            {paymentMethod != null && complete != null &&
-            <div className="ml-10">
-              <div className="flex flex-col my-2">
-                <label htmlFor="number">Amount</label>
-                <label htmlFor="number">{go}</label>
-              </div>
-              <div className="flex flex-col my-2">
-                <label htmlFor="phone">Phone Number</label>
-                <input
-                  type="tel"
-                  name="phone"
-                  id="phone"
-                  className="outline outline-1 px-2 py-1 bg-transparent"
-                  placeholder="Enter phone Number"
-                  onChange={handleChange("phone")}
-                />
-              </div>
-              <div className="flex flex-col my-2">
-                <label htmlFor="secret_code">Secret Code</label>
-                <input
-                  type="text"
-                  name="secret_code"
-                  id="secret_code"
-                  className="outline outline-1 px-2 py-1 bg-transparent"
-                  placeholder="Enter secret code"
-                  onChange={handleChange("secret_code")}
-                />
-              </div>
-              <div className="flex justify-end">
-                <button type="submit" className="bg-[#121212] text-white p-1 px-2 mt-5">
-                  Make Payment
-                </button>
-              </div>
-            </div>
-            }
-              </Form>
-            )}}
-          </Formik>
+                <div className="ml-10">
+                  {paymentMethod === "1" && (
+                    <>
+                      <p>MTN MoMo</p>
+                      <p>
+                        Enter your mtn phone number to receive a{" "}
+                        <span className="font-bold">*secret code*</span> then
+                        press next to continue
+                      </p>
+
+                      <div className="flex flex-col my-2">
+                        <label htmlFor="number">MTN phone Number</label>
+                        <div className="outline outline-1 flex pl-2 gap-2">
+                          <div className="flex gap-1 items-center">
+                            <UG />
+                            +256
+                          </div>
+                          <input
+                            type="text"
+                            name=""
+                            id="number"
+                            className="outline outline-1 px-2 py-1 bg-transparent flex-grow"
+                            placeholder="771234567"
+                            onChange={({ target }) =>
+                              setPhoneNumber(target.value)
+                            }
+                            value={""}
+                            required
+                          />
+                        </div>
+                      </div>
+                    </>
+                  )}
+                  {paymentMethod === "2" && (
+                    <>
+                      <p>Airtel Money</p>
+                      <p>
+                        You will be required to inital the withdraw from you
+                        airtel money to get a{" "}
+                        <span className="font-bold">*secret code*</span> then
+                        press next to continue
+                      </p>
+                    </>
+                  )}
+                  {paymentMethod != null && (
+                    <div className="flex justify-end">
+                      <button
+                        className="text-white bg-[#121212] px-2 py-1"
+                        onClick={async () => {
+                          if (paymentMethod === "1") {
+                            const phoneno =
+                              /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})$/;
+                            if (phoneNumber.match(phoneno)) {
+                              const results = await axios
+                                .post("/api/send-token", {
+                                  phone: `256${phoneNumber}`,
+                                })
+                                .then((res) => setComplete(true))
+                                .catch((error) => console.log(error.message));
+                              setComplete(true);
+                            }
+                          } else {
+                            setComplete(true);
+                          }
+                        }}
+                      >
+                        Next
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </section>
+              <Formik
+                initialValues={{ amount: "", phone: "", secret_code: "" }}
+              >
+                {({
+                  values,
+                  errors,
+                  touched,
+                  isValid,
+                  dirty,
+                  handleChange,
+                  handleBlur,
+                  resetForm,
+                }) => {
+                  return (
+                    <Form
+                      onSubmit={(event) =>
+                        handleSubmit(event, values, resetForm)
+                      }
+                      className="mt-2"
+                      name="loginForm"
+                    >
+                      <div className="flex gap-2">
+                        <h3>Complete Payment</h3>
+                      </div>
+
+                      {paymentMethod != null && complete != null && (
+                        <div className="ml-10">
+                          <div className="flex flex-col my-2">
+                            <label htmlFor="number">Amount</label>
+                            <label htmlFor="number">{go}</label>
+                          </div>
+                          <div className="flex flex-col my-2">
+                            <label htmlFor="phone">Phone Number</label>
+                            <input
+                              type="tel"
+                              name="phone"
+                              id="phone"
+                              className="outline outline-1 px-2 py-1 bg-transparent"
+                              placeholder="Enter phone Number"
+                              onChange={handleChange("phone")}
+                            />
+                          </div>
+                          <div className="flex flex-col my-2">
+                            <label htmlFor="secret_code">Secret Code</label>
+                            <input
+                              type="text"
+                              name="secret_code"
+                              id="secret_code"
+                              className="outline outline-1 px-2 py-1 bg-transparent"
+                              placeholder="Enter secret code"
+                              onChange={handleChange("secret_code")}
+                            />
+                          </div>
+                          <div className="flex justify-end">
+                            <button
+                              type="submit"
+                              className="bg-[#121212] text-white p-1 px-2 mt-5"
+                            >
+                              Make Payment
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </Form>
+                  );
+                }}
+              </Formik>
               <div className="flex justify-end mt-5 w-full">
                 <button
                   className="outline outline-1 outline-[#1D1F20] text-[#1D1F20] py-2 px-4 hover:bg-[#1D1F20] hover:text-white flex items-center gap-2"
@@ -864,11 +831,13 @@ export const getServerSideProps = async ({ req, res, params }) => {
     .eq("id", params.id)
     .single();
 
-    const { data: contactPerson } = await supabase
+  const { data: contactPerson } = await supabase
     .from("profiles")
     .select("*")
     .eq("id", product.contact_person)
     .single();
+
+  const { data: customers } = await supabase.from("profiles").select("*");
 
   const person = parseCookies(req);
   if (res) {
@@ -884,6 +853,6 @@ export const getServerSideProps = async ({ req, res, params }) => {
   }
 
   return {
-    props: { product, contactPerson },
+    props: { product, contactPerson, customers },
   };
 };

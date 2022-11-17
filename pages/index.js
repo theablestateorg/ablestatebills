@@ -1,12 +1,12 @@
 import { supabase } from "../utils/supabase";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useAuth } from "../utils/auth";
 import Manager from "../components/roles/Manager";
 import Customer from "../components/roles/Customer";
 import Admin from "../components/roles/Admin";
 import { parseCookies } from "../utils/parseCookies";
-import axios from "axios";
+import { useRouter } from "next/router";
 
 export default function Home({ websites, customers, person }) {
   const [searchText, setSearchText] = useState("");
@@ -17,6 +17,26 @@ export default function Home({ websites, customers, person }) {
   const [popUp, setPopUp] = useState(false);
   const [sortBy, setSortBy] = useState("");
   const { user } = useAuth();
+  const [welcome, setWelcome] = useState(true)
+
+  useEffect(() => {
+
+  }, [welcome])
+
+  const router = useRouter()
+
+  const checkAccess = async() => {
+    const { data, error } = await supabase
+      .from("profiles")
+      .update({ "accessed": true })
+      .eq("id", JSON.parse(person.user)?.user.id);
+    
+    if(data){
+      setWelcome(false)
+    }
+
+    router.push("/")
+  };
 
   websites = websites
     .filter((website) =>
@@ -61,7 +81,41 @@ export default function Home({ websites, customers, person }) {
 
   if (role === "customer") {
     return (
-      <Customer websites={websites} customers={customers} person={person} />
+      <>
+        {user?.accessed === false && welcome && (
+          <>
+            <div className="bg-black bg-opacity-40 w-screen h-screen fixed z-10 flex justify-center items-center">
+              <div className="bg-white rounded shadow w-11/12 lg:w-6/12">
+                <div className="border-b px-3 py-2 flex justify-between">
+                  <h1 className="font-medium">Getting Started</h1>
+                  {/* <IoClose /> */}
+                </div>
+                <div className="p-5">
+                  <h2 className="font-bold text-2xl">
+                    Welcome to Shineafrika 🎉
+                  </h2>
+                  <p className="mb-2 text-gray-500">
+                    Lets automate your online presence.
+                  </p>
+                  <p className="mb-5">
+                    Our services focus on both large and small businesses to
+                    make more sales through online presence
+                  </p>
+                  <div className="w-full flex justify-end">
+                    <button
+                      className="outline outline-1 outline-black bg-black text-white hover:text-black hover:bg-transparent px-3 py-1"
+                      onClick={checkAccess}
+                    >
+                      Continue
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+        <Customer websites={websites} customers={customers} person={person} />
+      </>
     );
   } else if (role === "manager") {
     return <Manager websites={websites} customers={customers} />;

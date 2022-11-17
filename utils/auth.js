@@ -13,6 +13,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(false)
   const router  = useRouter()
   const [cookie, setCookie, removeCookie] = useCookies(["user"])
+  const [welcome, setWelcome] = useState(true)
 
   useEffect(() => {
     const getUserProfile = async () => {
@@ -62,6 +63,8 @@ export const AuthProvider = ({ children }) => {
     user,
     loading,
     setLoading,
+    welcome,
+    setWelcome,
     signOut: () => {
       removeCookie("user")
       const {data, error } = supabase.auth.signOut()

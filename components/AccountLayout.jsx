@@ -1,6 +1,5 @@
 import Head from "next/head";
-import { ToastContainer, toast } from "react-toastify";
-import { useState, useEffect, Children } from "react";
+import { useState, useEffect } from "react";
 import Footer from "../components/Footer";
 import { downloadFile } from "../utils/getImages";
 import { useAuth } from "../utils/auth";
@@ -10,13 +9,16 @@ import { parseCookies } from "../utils/parseCookies";
 import { supabase } from "../utils/supabase";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function AccountLayout({ children }) {
-  const [showInfo, setShowInfo] = useState(0);
   const [avatar, setAvatar] = useState("");
   const { user } = useAuth();
   const matches = useMediaQuery("(min-width: 800px)");
   const [cookie] = useCookies(["user"]);
+  const router = useRouter()
+
+  console.log(router.pathname)
 
   useEffect(() => {
     try {
@@ -31,7 +33,6 @@ export default function AccountLayout({ children }) {
       <Head>
         <title>Account - Shine Afrika</title>
       </Head>
-      <ToastContainer />
 
       <main className="pt-[70px] mx-5 md:mx-20 relative pb-6 min-h-screen flex flex-col">
         <div className="mt-10 flex flex-col md:flex-row flex-grow">
@@ -69,17 +70,17 @@ export default function AccountLayout({ children }) {
             <ul className="flex text-sm md:text-lg md:flex-col md:h-[80vh] gap-2 mt-5 items-start w-full px-4">
               <li className="w-full">
                 <Link href="/account">
-                  <div className="w-full cursor-pointer px-2 py-1 hover:bg-neutral-100 rounded">Account</div>
+                  <div className={`w-full cursor-pointer px-2 py-1 hover:bg-neutral-100 rounded ${router.pathname === "/account" && "bg-neutral-200 hover:bg-neutral-200"}`}>Account</div>
                 </Link>
               </li>
               <li className="w-full">
                 <Link href="/profile">
-                  <div className="w-full cursor-pointer px-2 py-1 hover:bg-neutral-100 rounded">Profile</div>
+                  <div className={`w-full cursor-pointer px-2 py-1 hover:bg-neutral-100 rounded ${router.pathname === "/profile" && "bg-neutral-200 hover:bg-neutral-200"}`}>Profile</div>
                 </Link>
               </li>
               <li className="w-full">
                 <Link href="/settings">
-                  <div className="w-full cursor-pointer px-2 py-1 hover:bg-neutral-100 rounded">Settings</div>
+                  <div className={`w-full cursor-pointer px-2 py-1 hover:bg-neutral-100 rounded ${router.pathname === "/settings" && "bg-neutral-200 hover:bg-neutral-200"}`}>Settings</div>
                 </Link>
               </li>
             </ul>

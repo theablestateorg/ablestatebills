@@ -1,7 +1,7 @@
 import { useAuth } from "../utils/auth";
 import Help from "../components/Help";
 import Navbar from "./nav";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 
 function Layout({ children }) {
   const { user } = useAuth();
@@ -9,6 +9,7 @@ function Layout({ children }) {
   return (
     <>
       <Navbar user={user} />
+      <ToastContainer />
       {children}
       {user && <Help toast={toast} />}
     </>

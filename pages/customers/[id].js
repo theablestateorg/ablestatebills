@@ -414,17 +414,30 @@ export default function Site({ profile, manager, websites }) {
 }
 
 export const getServerSideProps = async ({ req, res, params }) => {
+  let manager
   const { data: profile } = await supabase
     .from("profiles")
     .select("*")
     .eq("id", params.id)
     .single();
+  
+    if(profile?.added_by){
+      const { data } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq('id', profile.added_by)
+      .single()
 
-  const { data: manager, error } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", profile.added_by)
-    .single();
+      manager = data
+    }else{
+      return {
+        redirect: {
+          permanent: false,
+          destination: "/customers",
+        },
+        props: {},
+      };
+    }
 
   const { data: websites } = await supabase
     .from("websites")

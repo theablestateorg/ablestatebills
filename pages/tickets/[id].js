@@ -107,6 +107,7 @@ export default Ticket;
 
 
 export const getServerSideProps = async ({ req, res, params }) => {
+  let customer
 
   const { data: ticket } = await supabase
     .from("tickets")
@@ -114,11 +115,23 @@ export const getServerSideProps = async ({ req, res, params }) => {
     .eq("id", params.id)
     .single();
 
-    const { data: customer } = await supabase
+    if(ticket?.customer_id){
+      const { data } = await supabase
       .from("profiles")
       .select("*")
       .eq('id', ticket.customer_id)
       .single()
+
+      customer = data
+    }else{
+      return {
+        redirect: {
+          permanent: false,
+          destination: "/tickets",
+        },
+        props: {},
+      };
+    }
 
       const person = parseCookies(req)
       if (res) {

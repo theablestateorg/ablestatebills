@@ -177,7 +177,7 @@ export default function Customers({ customers, managers, websites }) {
                     </div>
                   </td>
                   <td className="py-2 text-left pl-3">
-                    {customer.contact_number}
+                    {customer.contact_number === "+256null" ? "N/A" : customer.contact_number}
                   </td>
                   <td className="py-2 text-left pl-3">
                     {managers

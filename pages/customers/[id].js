@@ -101,7 +101,7 @@ export default function Site({ profile, manager, websites }) {
             <section className="my-5">
               <p>{profile.role}</p>
               <p>{profile.email}</p>
-              <p>{profile.contact_number}</p>
+              <p>{profile.contact_number === "+256null" ? "N/A" : profile.contact_number}</p>
               <br />
 
               {manager && (
@@ -439,13 +439,7 @@ export const getServerSideProps = async ({ req, res, params }) => {
 
     manager = data;
   } else {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/customers",
-      },
-      props: {},
-    };
+    manager = null;
   }
 
   const { data: websites } = await supabase

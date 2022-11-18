@@ -27,7 +27,8 @@ function Accounts({ account_balance, transactions }) {
     setLoading(true);
     const { amount } = values;
 
-    const { data, error } = await supabase
+    if(+amount >= 10000){
+      const { data, error } = await supabase
       .from("accounts")
       .update({ account_balance: +amount + +account_balance.account_balance })
       .eq("id", cookie.user?.user?.id);
@@ -51,10 +52,13 @@ function Accounts({ account_balance, transactions }) {
     } else if (error) {
       toast.error(`Failed: ${error.message}`, { position: "top-center" });
     }
+    Router.push("/account");
+    } else {
+      toast.error(`Please enter an amount more than 10,000`, { position: "top-center" });
+    }
 
     resetForm({ amount: "" });
     setLoading(false);
-    Router.push("/account");
   };
 
   return (

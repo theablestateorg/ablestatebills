@@ -16,26 +16,33 @@ export default function AddClient() {
   const [selected, setSelected] = useState(false);
   const [password, setPassword] = useState(null);
 
-  useEffect(() => {
-  }, [selected]);
+  useEffect(() => {}, [selected]);
 
   const addNewCustomer = async (values, resetForm) => {
     if (password) {
       const { email, first_name, last_name, role, contact_number } = values;
       setLoading(true);
-      await axios.post("/api/add-customer", {
-        email: email,
-        password: password,
-        added_by: user.id,
-        details: {
-          first_name: first_name,
-          last_name: last_name,
+      await axios
+        .post("/api/add-customer", {
           email: email,
-          contact_number: countryCode + contact_number,
-          role: role
-        },
-      }).then(res => toast.success(`Successfully added customer`, { position: "top-center" }))
-      .catch(error => toast.error(`Error adding customer`, { position: "top-center" }))
+          password: password,
+          added_by: user.id,
+          details: {
+            first_name: first_name,
+            last_name: last_name,
+            email: email,
+            contact_number: countryCode + contact_number,
+            role: role,
+          },
+        })
+        .then((res) =>
+          toast.success(`Successfully added customer`, {
+            position: "top-center",
+          })
+        )
+        .catch((error) =>
+          toast.error(`Error adding customer`, { position: "top-center" })
+        );
     } else {
       toast.error(`No password`, { position: "top-center" });
     }
@@ -87,71 +94,71 @@ export default function AddClient() {
           }) => {
             return (
               <Form className="my-5">
-                <div className="flex items-center gap-10 my-5">
-                  <label htmlFor="" className="text-xl w-4/12 md:w-2/12">
+                <div className="flex flex-col md:flex-row md:items-center md:gap-10 my-3 md:my-5">
+                  <label htmlFor="" className="text-md md:text-xl mb-1 w-4/12 md:w-2/12">
                     Email
                   </label>
-                  <div className="w-8/12 md:w-8/12">
+                  <div className="w-12/12 md:w-8/12">
                     <input
                       type="email"
                       name="email"
-                      className="py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-full"
-                      placeholder="Enter email"
+                      className="py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded-sm w-full"
+                      placeholder="Enter Email"
                       onChange={handleChange("email")}
                       onBlur={handleBlur("email")}
                       value={values.email}
                     />
                   </div>
                 </div>
-                <div className="flex items-center gap-10 my-5">
-                  <label htmlFor="" className="text-xl w-4/12 md:w-2/12">
+                <div className="flex flex-col md:flex-row md:items-center md:gap-10 my-5">
+                  <label htmlFor="" className="text-md md:text-xl mb-1 w-4/12 md:w-2/12">
                     First Name
                   </label>
-                  <div className="w-8/12 md:w-8/12">
+                  <div className="w-12/12 md:w-8/12">
                     <input
                       type="text"
                       name="text"
-                      className="py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-full"
-                      placeholder="Enter first name"
+                      className="py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded-sm w-full"
+                      placeholder="Enter First Name"
                       onChange={handleChange("first_name")}
                       onBlur={handleBlur("first_name")}
                       value={values.first_name}
                     />
                   </div>
                 </div>
-                <div className="flex items-center gap-10 my-5">
-                  <label htmlFor="" className="text-xl w-4/12 md:w-2/12">
+                <div className="flex flex-col md:flex-row md:items-center md:gap-10 my-5">
+                  <label htmlFor="" className="text-md md:text-xl mb-1 w-4/12 md:w-2/12">
                     Last Name
                   </label>
-                  <div className="w-8/12 md:w-8/12">
+                  <div className="w-12/12 md:w-8/12">
                     <input
                       type="text"
                       name="text"
-                      className="py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-full"
-                      placeholder="Enter last name"
+                      className="py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded-sm w-full"
+                      placeholder="Enter Last Name"
                       onChange={handleChange("last_name")}
                       onBlur={handleBlur("last_name")}
                       value={values.last_name}
                     />
                   </div>
                 </div>
-                <div className="flex items-center gap-10 my-5">
+                <div className="flex flex-col md:flex-row md:items-center md:gap-10 my-5">
                   <label
                     htmlFor="telephone_number"
-                    className="text-xl w-4/12 md:w-2/12"
+                    className="text-md md:text-xl mb-1 w-4/12 md:w-2/12"
                   >
                     Telephone
                   </label>
-                  <div className="w-8/12 md:w-8/12 relative outline outline-1 outline-[#121212] rounded flex">
+                  <div className="w-12/12 md:w-8/12 relative outline outline-1 outline-[#121212] rounded-sm flex">
                     <input
                       type="tel"
                       id="telephone_number"
                       name="telephone_number"
-                      placeholder="Telephone number"
+                      placeholder="Telephone Number"
                       className=" py-2 px-2 ml-16 bg-transparent flex-grow focus:outline-none"
                       onChange={handleChange("contact_number")}
                       onBlur={handleBlur("contact_number")}
-                      value={values.contact_number }
+                      value={values.contact_number}
                     />
                     <select
                       name=""
@@ -169,10 +176,11 @@ export default function AddClient() {
                   resize={true}
                 />
 
-                <div className="flex justify-end mt-10">
+                <div className="flex flex-col md:flex-row md:items-center md:gap-10 my-3 md:my-5">
+                  <div className="text-xl w-4/12 md:w-2/12"></div>
                   <button
                     type="submit"
-                    className="bg-[#1D1F20] text-white py-2 px-4 my-2 mt-4 hover:bg-transparent hover:text-black outline outline-1 outline-black flex items-center gap-2"
+                    className="bg-[#1D1F20] text-white py-2 px-4 my-2 mt-4 hover:bg-transparent hover:text-black outline outline-1 outline-black flex items-center gap-2 w-12/12 md:w-8/12 rounded-sm justify-center"
                   >
                     {loading && (
                       <svg
@@ -209,9 +217,10 @@ export default function AddClient() {
           }}
         </Formik>
         <footer className="text-center text-sm text-gray-500 absolute bottom-1 h-6 w-full">
-        <p>
-        Copyright &#169; {new Date().getFullYear()} A service of Ablestate Creatives Limited
-      </p>
+          <p>
+            Copyright &#169; {new Date().getFullYear()} A service of Ablestate
+            Creatives Limited
+          </p>
         </footer>
       </main>
     </>
@@ -219,7 +228,7 @@ export default function AddClient() {
 }
 
 export const getServerSideProps = async ({ req, res }) => {
-  const person = parseCookies(req)
+  const person = parseCookies(req);
   if (res) {
     if (!person.user || JSON.parse(person?.user).profile.role === "customer") {
       return {

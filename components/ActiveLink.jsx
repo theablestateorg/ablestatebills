@@ -24,7 +24,7 @@ function ActiveLink({ name, href, activeIndex, setActiveIndex, index }) {
         onClick={handleClick}
         className="relative px-2 py-1 inline-block cursor-pointer"
       >
-        {isActive ? <motion.span layoutId="cover" className="cover bg-[#eaeaea] absolute inset-0 -z-10 rounded-md" /> : null}
+        {isActive ? <motion.span layoutId="cover" className="cover bg-[#eaeaea] absolute inset-0 -z-10 rounded-sm" /> : null}
         <span>{name}</span>
       </a>
     </motion.li>

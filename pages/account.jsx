@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { useState, useEffect } from "react";
 import AccountSettings from "../components/AccountSettings";
 import Password from "../components/Password";

@@ -1,24 +1,14 @@
-import Head from "next/head";
-import { ToastContainer, toast } from "react-toastify";
 import { useState, useEffect } from "react";
 import AccountSettings from "../components/AccountSettings";
-import Password from "../components/Password";
-import Accounts from "../components/Accounts";
-import Footer from "../components/Footer";
 import { downloadFile } from "../utils/getImages";
 import { useAuth } from "../utils/auth";
-import useMediaQuery from "../hooks/useMediaQuery";
 import { useCookies } from "react-cookie";
 import { parseCookies } from "../utils/parseCookies";
-import { supabase } from "../utils/supabase";
-import Image from "next/image";
 import AccountLayout from "../components/AccountLayout";
 
-export default function Dashboard({ account_balance, transactions }) {
-  const [showInfo, setShowInfo] = useState(0);
+export default function Profile() {
   const [avatar, setAvatar] = useState("");
   const { user } = useAuth();
-  const matches = useMediaQuery("(min-width: 800px)");
   const [cookie] = useCookies(["user"]);
 
   useEffect(() => {
@@ -31,7 +21,7 @@ export default function Dashboard({ account_balance, transactions }) {
 
   return (
     <AccountLayout>
-        <AccountSettings user={user} avatar={avatar} />
+      <AccountSettings user={user} avatar={avatar} />
     </AccountLayout>
   );
 }
@@ -50,19 +40,7 @@ export const getServerSideProps = async ({ req, res }) => {
     }
   }
 
-  const { data: account_balance } = await supabase
-    .from("accounts")
-    .select("account_balance")
-    .eq("id", JSON.parse(person.user).user.id)
-    .single();
-
-  const { data: transactions } = await supabase
-    .from("transactions")
-    .select("*")
-    .eq("actor_id", JSON.parse(person.user).user.id)
-    .order("created_at", { ascending: false });
-
   return {
-    props: { account_balance, transactions },
+    props: {},
   };
 };

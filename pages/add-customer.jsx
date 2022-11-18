@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { addCustomerValidationSchema } from "../utils/validation";
 import { Formik, Form } from "formik";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { useState, useEffect } from "react";
 import { useAuth } from "../utils/auth";
 import { TbSend } from "react-icons/tb";

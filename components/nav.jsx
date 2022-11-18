@@ -116,7 +116,7 @@ export default function Navbar({ user }) {
         </AnimateSharedLayout>
         <div className={navStyles.profileMenu}>
           <span
-            className="cursor-pointer relative hover:bg-neutral-100 rounded p-2"
+            className="cursor-pointer relative hover:bg-neutral-100 rounded-sm p-2"
             onClick={query.toggle}
           >
             <BiSearchAlt2 size={25} />

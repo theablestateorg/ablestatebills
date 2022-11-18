@@ -3,7 +3,6 @@ import TicketCard from "../components/TicketCard";
 import { supabase } from "../utils/supabase";
 import { Fragment } from "react";
 import { AiOutlineFileDone } from 'react-icons/ai'
-import { useCookies } from "react-cookie"
 import { parseCookies } from "../utils/parseCookies";
 
 function Tickets({ tickets, customers }) {

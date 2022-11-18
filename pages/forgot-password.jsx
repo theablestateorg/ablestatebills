@@ -2,7 +2,6 @@ import Head from "next/head";
 import { supabase } from "../utils/supabase";
 import { resetPasswordSchema } from "../utils/validation";
 import { Formik, Form } from "formik";
-import { toast, ToastContainer } from 'react-toastify'
 import Router from 'next/router'
 import { useState } from "react";
 import 'react-toastify/dist/ReactToastify.css';
@@ -43,7 +42,6 @@ export default function Home() {
       <Head>
         <title>Password Reset - Shine Afrika</title>
       </Head>
-      <ToastContainer />
       <main className="w-screen h-screen flex justify-center items-center relative pb-6 min-h-screen">
         <Formik
           initialValues={{ email: "" }}

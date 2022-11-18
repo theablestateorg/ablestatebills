@@ -4,7 +4,6 @@ import { MdAdd } from "react-icons/md";
 import { FaSort } from "react-icons/fa";
 import { supabase } from "../utils/supabase";
 import { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
 import { Footer } from "../components";
 import Avatar from "../components/Avatar";
 import { parseCookies } from "../utils/parseCookies";
@@ -39,7 +38,6 @@ export default function Customers({ customers, managers, websites }) {
       <Head>
         <title>Customers - Shine Afrika</title>
       </Head>
-      <ToastContainer />
 
       <main className="pt-[70px] mx-3 md:mx-16 relative pb-6 min-h-screen">
         <section className="flex justify-between items-center my-10">

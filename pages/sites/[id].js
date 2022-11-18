@@ -18,8 +18,9 @@ import { parseCookies } from "../../utils/parseCookies";
 import { CKAirtel, CKMtn } from "../../components/ck";
 import { UG } from "../../components/react-flags";
 import Image from "next/image";
+import { currencyFormatter } from "../../utils/currencyFormatter";
 
-export default function Site({ product, contactPerson, customers }) {
+export default function Site({ product, contactPerson, customers, account_balance }) {
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [complete, setComplete] = useState(null);
 
@@ -52,6 +53,11 @@ export default function Site({ product, contactPerson, customers }) {
   };
 
   const { user } = useAuth();
+
+  const handleRenew = (event, values, resetForm) => {
+    event.preventDefault()
+    console.log(values)
+  }
 
   const handleDelete = async () => {
     const { data, error } = await supabase
@@ -648,11 +654,15 @@ export default function Site({ product, contactPerson, customers }) {
                           return (
                             <Form
                               onSubmit={(event) =>
-                                handleSubmit(event, values, resetForm)
+                                handleRenew(event, values, resetForm)
                               }
                               className="mt-5"
                               name="loginForm"
                             >
+                              <div className="flex gap-4">
+                                <label htmlFor="">Current Balance:</label>
+                                <label htmlFor="" className="font-bold"><span className="text-sm">UGX</span>{" "}{currencyFormatter(account_balance.account_balance)}</label>
+                              </div>
                               <div className="">
                                 <div className="flex flex-col my-2">
                                   <label htmlFor="amount">Enter amount</label>
@@ -773,7 +783,7 @@ export default function Site({ product, contactPerson, customers }) {
                       className="mt-2"
                       name="loginForm"
                     >
-                      {["1", "0"].includes(paymentMethod) && (
+                      {["1", "2"].includes(paymentMethod) && (
                         <div className="flex gap-2">
                           <h3>Complete Payment</h3>
                         </div>
@@ -917,7 +927,13 @@ export const getServerSideProps = async ({ req, res, params }) => {
     }
   }
 
+  const { data: account_balance } = await supabase
+    .from("accounts")
+    .select("account_balance")
+    .eq("id", JSON.parse(person.user).user.id)
+    .single();
+
   return {
-    props: { product, contactPerson, customers },
+    props: { product, contactPerson, customers, account_balance },
   };
 };

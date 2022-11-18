@@ -587,6 +587,18 @@ export default function Site({ product, contactPerson, customers }) {
                 </div>
                 <div className="flex flex-wrap gap-5 mt-2 ml-10">
                   <span
+                    className={`bg-[#ca3011] p-2 w-[150px] flex justify-around items-center gap-2 cursor-pointer ${
+                      paymentMethod === "0" && "outline outline-1 outline-black"
+                    }`}
+                    onClick={() => setPaymentMethod("0")}
+                  >
+                    {/* <CKMtn /> */}
+                    <span className="font-bold text-white">
+                      <p>ShineAfrika</p>
+                      <p>Wallet</p>
+                    </span>
+                  </span>
+                  <span
                     className={`bg-[#FFCC00] p-2 w-[150px] flex justify-around items-center gap-2 cursor-pointer ${
                       paymentMethod === "1" && "outline outline-1 outline-black"
                     }`}
@@ -613,11 +625,62 @@ export default function Site({ product, contactPerson, customers }) {
                 </div>
               </section>
               <section className="mt-2">
-                <div className="flex gap-2">
-                  <h3>Get Secret Code</h3>
-                </div>
+                {["1", "2"].includes(paymentMethod) && (
+                  <div className="flex gap-2">
+                    <h3>Get Secret Code</h3>
+                  </div>
+                )}
 
                 <div className="ml-10">
+                  {paymentMethod === "0" && (
+                    <>
+                      <Formik initialValues={{ amount: "" }}>
+                        {({
+                          values,
+                          errors,
+                          touched,
+                          isValid,
+                          dirty,
+                          handleChange,
+                          handleBlur,
+                          resetForm,
+                        }) => {
+                          return (
+                            <Form
+                              onSubmit={(event) =>
+                                handleSubmit(event, values, resetForm)
+                              }
+                              className="mt-5"
+                              name="loginForm"
+                            >
+                              <div className="">
+                                <div className="flex flex-col my-2">
+                                  <label htmlFor="amount">Enter amount</label>
+                                  <input
+                                    type="text"
+                                    name="amount"
+                                    id="amount"
+                                    className="outline outline-1 px-2 py-1 bg-transparent rounded-sm"
+                                    placeholder="Enter Amount"
+                                    onChange={handleChange("amount")}
+                                    value={values.amount}
+                                  />
+                                </div>
+                                <div className="">
+                                  <button
+                                    type="submit"
+                                    className="text-white bg-[#121212] px-2 py-1 rounded-sm outline outline-1 outline-black hover:bg-transparent hover:text-black mt-4 w-full"
+                                  >
+                                    Make Payment
+                                  </button>
+                                </div>
+                              </div>
+                            </Form>
+                          );
+                        }}
+                      </Formik>
+                    </>
+                  )}
                   {paymentMethod === "1" && (
                     <>
                       <p>MTN MoMo</p>
@@ -661,7 +724,7 @@ export default function Site({ product, contactPerson, customers }) {
                       </p>
                     </>
                   )}
-                  {paymentMethod != null && (
+                  {paymentMethod != null && paymentMethod != "0" && (
                     <div className="flex justify-end">
                       <button
                         className="text-white bg-[#121212] px-2 py-1"
@@ -710,9 +773,11 @@ export default function Site({ product, contactPerson, customers }) {
                       className="mt-2"
                       name="loginForm"
                     >
-                      <div className="flex gap-2">
-                        <h3>Complete Payment</h3>
-                      </div>
+                      {["1", "0"].includes(paymentMethod) && (
+                        <div className="flex gap-2">
+                          <h3>Complete Payment</h3>
+                        </div>
+                      )}
 
                       {paymentMethod != null && complete != null && (
                         <div className="ml-10">
@@ -756,14 +821,14 @@ export default function Site({ product, contactPerson, customers }) {
                   );
                 }}
               </Formik>
-              <div className="flex justify-end mt-5 w-full">
+              {/* <div className="flex justify-end mt-5 w-full">
                 <button
                   className="outline outline-1 outline-[#1D1F20] text-[#1D1F20] py-2 px-4 hover:bg-[#1D1F20] hover:text-white flex items-center gap-2"
                   onClick={handleDelete}
                 >
                   Renew
                 </button>
-              </div>
+              </div> */}
             </motion.div>
           </motion.div>
         )}

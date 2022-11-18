@@ -95,13 +95,14 @@ export default function AddClient() {
             return (
               <Form className="my-5">
                 <div className="flex flex-col md:flex-row md:items-center md:gap-10 my-3 md:my-5">
-                  <label htmlFor="" className="text-md md:text-xl mb-1 w-4/12 md:w-2/12">
+                  <label htmlFor="email" className="text-md md:text-xl mb-1 w-4/12 md:w-2/12">
                     Email
                   </label>
                   <div className="w-12/12 md:w-8/12">
                     <input
                       type="email"
                       name="email"
+                      id="email"
                       className="py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded-sm w-full"
                       placeholder="Enter Email"
                       onChange={handleChange("email")}

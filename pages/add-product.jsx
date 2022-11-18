@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { supabase } from "../utils/supabase";
 import { Formik, Form } from "formik";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { useState, useEffect } from "react";
 import { useAuth } from "../utils/auth";
 import { TbSend } from "react-icons/tb";
@@ -159,10 +159,9 @@ export default function AddSite() {
       <Head>
         <title>Add Product - Shine Afrika</title>
       </Head>
-      <ToastContainer />
       <main className="pt-[70px] mx-5 md:mx-20 relative pb-6 min-h-screen">
         <section className="flex justify-between items-center">
-          <h1 className="font-bold text-2xl my-5">Add Site</h1>
+          <h1 className="font-bold text-2xl my-5">Add Product</h1>
         </section>
         <Formik
           initialValues={{
@@ -192,20 +191,20 @@ export default function AddSite() {
           }) => {
             return (
               <Form className="my-5">
-                <div className="flex items-center gap-10 my-5">
+                <div className="flex flex-col md:flex-row md:items-center md:gap-10 my-3 md:my-5">
                   <label
                     htmlFor="website_link"
-                    className="text-xl w-4/12 md:w-2/12"
+                    className="text-md md:text-xl mb-1 w-4/12 md:w-2/12"
                   >
                     Website
                   </label>
-                  <div className="w-8/12 md:w-8/12">
+                  <div className="w-12/12 md:w-8/12">
                     <input
                       type="text"
                       name="website_link"
-                      placeholder="Website"
+                      placeholder="Enter Website"
                       id="website_link"
-                      className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-full"
+                      className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded-sm w-full"
                       onChange={handleChange("website_link")}
                       onBlur={handleBlur("website_link")}
                       value={values.website_link}
@@ -231,33 +230,33 @@ export default function AddSite() {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-10 my-2">
-                  <label htmlFor="name" className="text-xl w-4/12 md:w-2/12">
-                    Add Site Name
+                <div className="flex flex-col md:flex-row md:items-center md:gap-10 my-3 md:my-5">
+                  <label htmlFor="name" className="text-md md:text-xl mb-1 w-4/12 md:w-2/12">
+                    Product Name
                   </label>
                   <input
                     type="text"
                     name="name"
                     id="name"
-                    placeholder="Name"
-                    className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
+                    placeholder="Enter Name"
+                    className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded-sm w-12/12 md:w-8/12"
                     onChange={handleChange("name")}
                     onBlur={handleBlur("name")}
                     value={values.name}
                   />
                 </div>
-                <div className="flex items-center gap-10 my-5">
+                <div className="flex flex-col md:flex-row md:items-center md:gap-10 my-3 md:my-5">
                   <label
                     htmlFor="contact_person"
-                    className="text-xl w-4/12 md:w-2/12"
+                    className="text-md md:text-xl mb-1 w-4/12 md:w-2/12"
                   >
                     Contact Person
                   </label>
-                  <div className="flex justify-between items-center gap-2 w-8/12">
+                  <div className="flex justify-between items-center gap-2 w-12/12 md:w-8/12">
                     <select
                       name=""
                       id="contact_person"
-                      className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-10/12 md:w-8/12"
+                      className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded-sm w-10/12 md:w-8/12"
                       onChange={(e) => {
                         setFieldValue("contact_person", e.target.value);
                         setCustomerId(e.target.value);
@@ -278,7 +277,7 @@ export default function AddSite() {
                     </select>
                     <button
                       type="button"
-                      className="bg-[#1D1F20] text-white py-2 px-4 hover:bg-transparent hover:text-black outline outline-1 outline-black flex items-center gap-2 "
+                      className="bg-[#1D1F20] text-white py-2 px-4 hover:bg-transparent hover:text-black outline outline-1 outline-black rounded-sm flex items-center gap-2 "
                       onClick={() => setCustomerModel(true)}
                     >
                       <MdAdd />
@@ -302,19 +301,19 @@ export default function AddSite() {
                     </AnimatePresence>
                   </div>
                 </div>
-                <div className="flex items-center gap-10 my-5">
+                <div className="flex flex-col md:flex-row md:items-center md:gap-10 my-3 md:my-5">
                   <label
                     htmlFor="telephone_number"
-                    className="text-xl w-4/12 md:w-2/12"
+                    className="text-md md:text-xl mb-1 w-4/12 md:w-2/12"
                   >
                     Telephone
                   </label>
-                  <div className="w-8/12 md:w-8/12 relative outline outline-1 outline-[#121212] rounded flex">
+                  <div className="w-12/12 md:w-8/12 relative outline outline-1 outline-[#121212] rounded-sm flex">
                     <input
                       type="tel"
                       id="telephone_number"
                       name="telephone_number"
-                      placeholder="Telephone number"
+                      placeholder="Telephone Number"
                       className=" py-2 px-2 ml-16 bg-transparent flex-grow focus:outline-none"
                       onChange={handleChange("telephone_number")}
                       onBlur={handleBlur("telephone_number")}
@@ -330,17 +329,17 @@ export default function AddSite() {
                     </select>
                   </div>
                 </div>
-                <div className="flex items-center gap-10 my-5">
-                  <label htmlFor="email" className="text-xl w-4/12 md:w-2/12">
+                <div className="flex flex-col md:flex-row md:items-center md:gap-10 my-3 md:my-5">
+                  <label htmlFor="email" className="text-md md:text-xl mb-1 w-4/12 md:w-2/12">
                     Email
                   </label>
-                  <div className="w-8/12 md:w-8/12">
+                  <div className="w-12/12 md:w-8/12">
                     <input
                       type="email"
                       name="email"
                       id="email"
-                      placeholder="Email"
-                      className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-full"
+                      placeholder="Enter Email"
+                      className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded-sm w-full"
                       onChange={handleChange("email")}
                       onBlur={handleBlur("email")}
                       value={contactDetails.email}
@@ -362,10 +361,10 @@ export default function AddSite() {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-10 my-5">
+                <div className="flex flex-col md:flex-row md:items-center md:gap-10 my-3 md:my-5">
                   <label
                     htmlFor="last_paid"
-                    className="text-xl w-4/12 md:w-2/12"
+                    className="text-md md:text-xl mb-1 w-4/12 md:w-2/12"
                   >
                     Upload Date
                   </label>
@@ -373,16 +372,16 @@ export default function AddSite() {
                     type="date"
                     id="last_paid"
                     name="date"
-                    className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
+                    className="py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded-sm w-12/12 md:w-8/12"
                     onChange={handleChange("last_paid")}
                     onBlur={handleBlur("last_paid")}
                     value={values.last_paid}
                   />
                 </div>
-                <div className="flex items-center gap-10 my-5">
+                <div className="flex flex-col md:flex-row md:items-center md:gap-10 my-3 md:my-5">
                   <label
                     htmlFor="expiry_date"
-                    className="text-xl w-4/12 md:w-2/12"
+                    className="text-md md:text-xl mb-1 w-4/12 md:w-2/12"
                   >
                     Expiry Date
                   </label>
@@ -390,16 +389,17 @@ export default function AddSite() {
                     type="date"
                     name="date"
                     id="expiry_date"
-                    className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded w-8/12 md:w-8/12"
+                    className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded-sm w-12/12 md:w-8/12"
                     onChange={handleChange("expiry_date")}
                     onBlur={handleBlur("expiry_date")}
                     value={values.expiry_date}
                   />
                 </div>
-                <div className="flex justify-end mt-10">
+                <div className="flex flex-col md:flex-row md:items-center md:gap-10 my-3 md:my-5">
+                <div className="text-xl w-4/12 md:w-2/12"></div>
                   <button
                     type="submit"
-                    className="bg-[#1D1F20] text-white py-2 px-4 my-2 mt-4 hover:bg-transparent hover:text-black outline outline-1 outline-black flex items-center gap-2"
+                    className="bg-[#1D1F20] text-white py-2 px-4 my-2 mt-4 hover:bg-transparent hover:text-black outline outline-1 outline-black flex items-center gap-2 w-12/12 md:w-8/12 rounded-sm justify-center"
                   >
                     {loading && (
                       <svg

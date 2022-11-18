@@ -56,7 +56,16 @@ export default function Site({ product, contactPerson, customers, account_balanc
 
   const handleRenew = (event, values, resetForm) => {
     event.preventDefault()
-    console.log(values)
+    const { amount } = values
+
+    if(+amount > +account_balance.account_balance){
+      console.log("somehe")
+      toast.error(`Insufficient Account balance`, { position: "top-center" });
+    } else {
+      resetForm({
+        amount: ""
+      })
+    }
   }
 
   const handleDelete = async () => {
@@ -137,8 +146,6 @@ export default function Site({ product, contactPerson, customers, account_balanc
       <Head>
         <title>{product ? product.name : "loading..."} - Shine Africa</title>
       </Head>
-
-      <ToastContainer />
 
       <main className="pt-[70px] mx-5 md:mx-20 relative pb-6 min-h-screen">
         {product && (

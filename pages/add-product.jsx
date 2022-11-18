@@ -74,12 +74,14 @@ export default function AddSite() {
 
         resetForm({
           name: "",
+          product_type: "",
           website_link: "",
           contact_person: "",
           telephone_number: "",
           email: "",
           last_paid: "",
           expiry_date: "",
+          admin_expiry_date: "",
           status: "active",
         });
         setContactDetails({
@@ -166,12 +168,14 @@ export default function AddSite() {
         <Formik
           initialValues={{
             name: "",
+            product_type: "",
             website_link: "",
             contact_person: "",
             telephone_number: contactDetails.contact_number,
             email: contactDetails.email,
             last_paid: "",
             expiry_date: "",
+            admin_expiry_date: "",
             status: "active",
           }}
           // validationSchema={addSiteValidationSchema}
@@ -231,7 +235,10 @@ export default function AddSite() {
                   </div>
                 </div>
                 <div className="flex flex-col md:flex-row md:items-center md:gap-10 my-3 md:my-5">
-                  <label htmlFor="name" className="text-md md:text-xl mb-1 w-4/12 md:w-2/12">
+                  <label
+                    htmlFor="name"
+                    className="text-md md:text-xl mb-1 w-4/12 md:w-2/12"
+                  >
                     Product Name
                   </label>
                   <input
@@ -244,6 +251,27 @@ export default function AddSite() {
                     onBlur={handleBlur("name")}
                     value={values.name}
                   />
+                </div>
+                <div className="flex flex-col md:flex-row md:items-center md:gap-10 my-3 md:my-5">
+                  <label
+                    htmlFor="name"
+                    className="text-md md:text-xl mb-1 w-4/12 md:w-2/12"
+                  >
+                    Product Type
+                  </label>
+                  <select
+                    name=""
+                    id=""
+                    className="py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded-sm w-12/12 md:w-8/12"
+                    onChange={handleChange("product_type")}
+                    onBlur={handleBlur("product_type")}
+                    value={values.product_type}
+                  >
+                    <option value="">Select Product Type</option>
+                    <option value="hosting">Hosting</option>
+                    <option value="domain">Domain</option>
+                    <option value="other">Other</option>
+                  </select>
                 </div>
                 <div className="flex flex-col md:flex-row md:items-center md:gap-10 my-3 md:my-5">
                   <label
@@ -330,7 +358,10 @@ export default function AddSite() {
                   </div>
                 </div>
                 <div className="flex flex-col md:flex-row md:items-center md:gap-10 my-3 md:my-5">
-                  <label htmlFor="email" className="text-md md:text-xl mb-1 w-4/12 md:w-2/12">
+                  <label
+                    htmlFor="email"
+                    className="text-md md:text-xl mb-1 w-4/12 md:w-2/12"
+                  >
                     Email
                   </label>
                   <div className="w-12/12 md:w-8/12">
@@ -396,7 +427,24 @@ export default function AddSite() {
                   />
                 </div>
                 <div className="flex flex-col md:flex-row md:items-center md:gap-10 my-3 md:my-5">
-                <div className="text-xl w-4/12 md:w-2/12"></div>
+                  <label
+                    htmlFor="admin_expiry_date"
+                    className="text-md md:text-xl mb-1 md:w-2/12"
+                  >
+                    Admin Expiry Date
+                  </label>
+                  <input
+                    type="date"
+                    name="admin_expiry_date"
+                    id="admin_expiry_date"
+                    className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded-sm w-12/12 md:w-8/12"
+                    onChange={handleChange("admin_expiry_date")}
+                    onBlur={handleBlur("admin_expiry_date")}
+                    value={values.admin_expiry_date}
+                  />
+                </div>
+                <div className="flex flex-col md:flex-row md:items-center md:gap-10 my-3 md:my-5">
+                  <div className="text-xl w-4/12 md:w-2/12"></div>
                   <button
                     type="submit"
                     className="bg-[#1D1F20] text-white py-2 px-4 my-2 mt-4 hover:bg-transparent hover:text-black outline outline-1 outline-black flex items-center gap-2 w-12/12 md:w-8/12 rounded-sm justify-center"

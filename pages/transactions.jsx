@@ -3,6 +3,7 @@ import AccountLayout from "../components/AccountLayout";
 import { parseCookies } from "../utils/parseCookies";
 import { supabase } from "../utils/supabase";
 import moment from "moment/moment";
+import { currencyFormatter } from "../utils/currencyFormatter";
 
 function transactions({ transactions }) {
   return (
@@ -17,7 +18,7 @@ function transactions({ transactions }) {
                   <div className="flex items-center">Created At</div>
                 </th>
                 <th className="py-2 text-left pl-3 font-light">
-                  <div className="flex items-center">Amount</div>
+                  <div className="flex items-center">Amount (UGX)</div>
                 </th>
                 <th className="py-2 text-left pl-3 font-light">
                   <div className="flex items-center">Type</div>
@@ -32,7 +33,7 @@ function transactions({ transactions }) {
                 transactions.map((transaction, index) => (
                   <tr className="border-b" key={index}>
                     <td className="py-2 text-left pl-3">{moment(new Date(transaction.created_at)).format("DD-MM-YYYY")}</td>
-                    <td className="py-2 text-left pl-3">{transaction.amount}</td>
+                    <td className="py-2 text-left pl-3">{currencyFormatter(transaction.amount)}</td>
                     <td className="py-2 text-left pl-3">{transaction.transaction_type}</td>
                     <td className="py-2 text-left pl-3">{transaction.status}</td>
                   </tr>

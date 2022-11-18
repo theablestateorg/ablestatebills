@@ -11,54 +11,101 @@ import { GrTransaction } from "react-icons/gr";
 import { CKAirtel, CKMtn } from "./ck";
 import { UG } from "./react-flags/index";
 import { AiOutlineArrowUp, AiOutlineArrowDown } from "react-icons/ai";
+import axios from "axios";
 
 function Accounts({ account_balance, transactions }) {
   const [loading, setLoading] = useState(false);
   const [cookie] = useCookies(["user"]);
 
-  console.log(transactions)
-
   const [paymentMethod, setPaymentMethod] = useState(null);
-  const [complete, setComplete] = useState(null);
+  const [complete, setComplete] = useState(true);
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [amount, setAmount] = useState("");
 
   const handleSubmit = async (event, values, resetForm) => {
     event.preventDefault();
     setLoading(true);
-    const { amount } = values;
+    const { secret_code } = values;
 
-    if(+amount >= 10000){
-      const { data, error } = await supabase
-      .from("accounts")
-      .update({ account_balance: +amount + +account_balance.account_balance })
-      .eq("id", cookie.user?.user?.id);
+    const results = await axios
+      .post("/api/make-payment", {
+        amount: amount,
+        phone: phoneNumber,
+        secret_code: secret_code,
+        mobile_money_company_id: paymentMethod,
+        reason: "ShineAfrika",
+        metadata: "Paying for hosting",
+      })
+      .then(async (res) => {
+        setComplete(true);
+        const { data, error } = await supabase
+          .from("accounts")
+          .update({
+            account_balance: +amount + +account_balance.account_balance,
+          })
+          .eq("id", cookie.user?.user?.id);
 
-    if (data) {
-      const { data: transaction, error } = await supabase
-        .from("transactions")
-        .insert([
-          {
-            transaction_type: "deposit",
-            status: "successful",
-            amount: amount,
-            actor_id: cookie.user?.user?.id,
-            description: "",
-          },
-        ]);
+        if (data) {
+          const { data: transaction, error } = await supabase
+            .from("transactions")
+            .insert([
+              {
+                transaction_type: "deposit",
+                status: "successful",
+                amount: amount,
+                actor_id: cookie.user?.user?.id,
+                description: "",
+              },
+            ]);
 
-      if (transaction) {
-        toast.success(`Deposit was successful`, { position: "top-center" });
-      }
-    } else if (error) {
-      toast.error(`Failed: ${error.message}`, { position: "top-center" });
-    }
-    Router.push("/account");
-    } else {
-      toast.error(`Please enter an amount more than 10,000`, { position: "top-center" });
-    }
+          if (transaction) {
+            toast.success(`${amount} deposited successfully`, {
+              position: "top-center",
+            });
+          }
+        } else if (error) {
+          toast.error(`Failed: ${error.message}`, { position: "top-center" });
+        }
+        Router.push("/account");
+      })
+      .catch((error) => {
+        toast.error(`Transaction failed: ${error.message}`, {
+          position: "top-center",
+        });
+      });
 
     resetForm({ amount: "" });
     setLoading(false);
+  };
+
+  const generateToken = async () => {
+    if (+amount >= 10000) {
+      if (paymentMethod === "1") {
+        const phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})$/;
+
+        if (phoneNumber.match(phoneno)) {
+          const results = await axios
+            .post("/api/send-token", {
+              phone: `256${phoneNumber}`,
+            })
+            .then((res) => setComplete(true))
+            .then(() => {
+              toast.success(`Secret Code will be sent to +256${phoneNumber}`, {
+                position: "top-center",
+              });
+            })
+            .catch((error) => {});
+        }
+
+        setComplete(true);
+      } else if (paymentMethod === "2") {
+        setComplete(true);
+      }
+    } else {
+      toast.error(`Please enter an amount more than 10,000`, {
+        position: "top-center",
+      });
+    }
   };
 
   return (
@@ -138,47 +185,79 @@ function Accounts({ account_balance, transactions }) {
         </div>
         <h3 className="font-bold text-lg mb-2">Make Deposit</h3>
         <div className="outline outline-1 outline-gray-200 rounded-sm p-3 ">
-          <section className="">
-            <h3 className="font-bold">Choose a Payment Method</h3>
+          <section>
+            <div className="flex flex-col gap-1">
+              <label htmlFor="amount" className="">
+                Enter Amount
+              </label>
+              <div className="w-full">
+                <input
+                  type="text"
+                  name="amount"
+                  className="outline outline-1 bg-transparent py-1 px-2 placeholder:text-[#bcbfc2] mb-3 w-full md:w-10/12 rounded-sm"
+                  placeholder="Enter Amount"
+                  onChange={(event) => setAmount(event.target.value)}
+                />
+              </div>
+            </div>
+            <h3 className="">Choose a Payment Method</h3>
             <div className="flex flex-wrap gap-5 my-2">
               <span
-                className={`bg-[#FFCC00] p-2 w-[150px] flex justify-around items-center gap-2 cursor-pointer ${
-                  paymentMethod === "1" && "outline outline-1 outline-black"
-                }`}
+                className={`bg-[#FFCC00] w-[150px] flex justify-around items-center gap-2 cursor-pointer rounded-sm ${
+                  paymentMethod === "1"
+                    ? "outline outline-1 outline-black"
+                    : "outline outline-1 outline-[#FFCC00]"
+                } relative`}
                 onClick={() => setPaymentMethod("1")}
               >
-                <CKMtn />
-                <span className="font-bold">
-                  <p>MTN</p>
-                  <p>MoMo</p>
-                </span>
+                <div className="absolute z-10 outline outline-1 outline-black w-3 h-3 rounded-full top-1 left-1 flex justify-center items-center">
+                  {paymentMethod === "1" && (
+                    <div className="w-2 h-2 outline outline-1 outline-black bg-black rounded-full"></div>
+                  )}
+                </div>
+                <div className="flex justify-around items-center cursor-pointer w-full">
+                  <CKMtn />
+                  <span className="font-bold text-sm">
+                    <p>MTN</p>
+                    <p>MoMo</p>
+                  </span>
+                </div>
               </span>
               <span
-                className={`bg-[#FF0000] p-2 text-white w-[150px] flex justify-around cursor-pointer ${
-                  paymentMethod === "2" && "outline outline-1 outline-black"
-                }`}
+                className={`bg-[#FF0000] text-white w-[150px] flex justify-around py-2 cursor-pointer rounded-sm ${
+                  paymentMethod === "2"
+                    ? "outline outline-1 outline-black"
+                    : "outline outline-1 outline-[#FF0000]"
+                } relative`}
                 onClick={() => setPaymentMethod("2")}
               >
-                <CKAirtel />
-                <span className="font-medium">
-                  <p>Airtel</p>
-                  <p>Money</p>
-                </span>
+                <div className="absolute z-10 outline outline-1 outline-black w-3 h-3 rounded-full top-1 left-1 flex justify-center items-center">
+                  {paymentMethod === "2" && (
+                    <div className="w-2 h-2 outline outline-1 outline-black bg-black rounded-full"></div>
+                  )}
+                </div>
+                <div className="flex justify-around items-center cursor-pointer w-full">
+                  <CKAirtel />
+                  <span className="font-medium text-sm">
+                    <p>Airtel</p>
+                    <p>Money</p>
+                  </span>
+                </div>
               </span>
             </div>
-            <h3 className="font-bold">Get Secret Code</h3>
+            <h3 className="mb-2 font-medium">Get Secret Code</h3>
             <div className="">
               {paymentMethod === "1" && (
                 <>
-                  <p>MTN MoMo</p>
-                  <p>
+                  <p className="text-gray-500 ml-2">MTN MoMo</p>
+                  <p className="text-gray-500 ml-2">
                     Enter your mtn phone number to receive a{" "}
                     <span className="font-bold">*secret code*</span> then press
                     next to continue
                   </p>
                   <div className="flex flex-col my-2">
                     <label htmlFor="number">MTN phone Number</label>
-                    <div className="outline outline-1 flex pl-2 gap-2">
+                    <div className="outline outline-1 flex pl-2 gap-2 rounded-sm">
                       <div className="flex gap-1 items-center">
                         <UG />
                         +256
@@ -187,7 +266,7 @@ function Accounts({ account_balance, transactions }) {
                         type="text"
                         name=""
                         id="number"
-                        className="outline outline-1 px-2 py-1 bg-transparent flex-grow"
+                        className="focus:outline-none border-l-[1px] border-black px-2 py-1 bg-transparent flex-grow"
                         placeholder="771234567"
                         onChange={({ target }) => setPhoneNumber(target.value)}
                         value={phoneNumber}
@@ -199,36 +278,40 @@ function Accounts({ account_balance, transactions }) {
               )}
               {paymentMethod === "2" && (
                 <>
-                  <p>Airtel Money</p>
-                  <p>
+                  <p className="text-gray-500 ml-2">Airtel Money</p>
+                  <p className="text-gray-500 ml-2">
                     You will be required to inital the withdraw from you airtel
                     money to get a{" "}
                     <span className="font-bold">*secret code*</span> then press
                     next to continue
                   </p>
+
+                  <div className="flex flex-col my-2">
+                    <label htmlFor="number">Airtel phone Number</label>
+                    <div className="outline outline-1 flex pl-2 gap-2 rounded-sm">
+                      <div className="flex gap-1 items-center">
+                        <UG />
+                        +256
+                      </div>
+                      <input
+                        type="text"
+                        name=""
+                        id="number"
+                        className="focus:outline-none border-l-[1px] border-black px-2 py-1 bg-transparent flex-grow"
+                        placeholder="751234567"
+                        onChange={({ target }) => setPhoneNumber(target.value)}
+                        value={phoneNumber}
+                        required
+                      />
+                    </div>
+                  </div>
                 </>
               )}
               {paymentMethod != null && (
                 <div className="flex justify-end">
                   <button
-                    className="text-white bg-[#121212] px-2 py-1"
-                    onClick={async () => {
-                      if (paymentMethod === "1") {
-                        const phoneno =
-                          /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})$/;
-                        if (phoneNumber.match(phoneno)) {
-                          const results = await axios
-                            .post("/api/send-token", {
-                              phone: `256${phoneNumber}`,
-                            })
-                            .then((res) => setComplete(true))
-                            .catch((error) => {});
-                          setComplete(true);
-                        }
-                      } else {
-                        setComplete(true);
-                      }
-                    }}
+                    className="text-white bg-[#121212] px-2 py-1 rounded-sm outline outline-1 outline-black hover:bg-transparent hover:text-black"
+                    onClick={generateToken}
                   >
                     Next
                   </button>
@@ -236,7 +319,7 @@ function Accounts({ account_balance, transactions }) {
               )}
             </div>
           </section>
-          <Formik initialValues={{ amount: "" }}>
+          <Formik initialValues={{ secret_code: "" }}>
             {({
               values,
               errors,
@@ -250,54 +333,35 @@ function Accounts({ account_balance, transactions }) {
               return (
                 <Form
                   onSubmit={(event) => handleSubmit(event, values, resetForm)}
-                  className="flex-grow py-5"
-                  name="signUpForm"
+                  className="mt-5"
+                  name="loginForm"
                 >
-                  <div className="flex flex-col gap-5 my-5">
-                    <label htmlFor="amount" className="">
-                      Enter Amount
-                    </label>
-                    <div className="w-full">
-                      <input
-                        type="text"
-                        name="amount"
-                        className="outline outline-1 bg-transparent py-1 px-2 placeholder:text-[#bcbfc2] w-full md:w-10/12"
-                        placeholder="Enter amount"
-                        onChange={handleChange("amount")}
-                        onBlur={handleBlur("amount")}
-                        value={values.amount}
-                      />
+                  {paymentMethod != null && complete && (
+                    <div className="">
+                      <div className="flex flex-col my-2">
+                        <label htmlFor="secret_code">
+                          Enter Secret Code to complete payment
+                        </label>
+                        <input
+                          type="text"
+                          name="secret_code"
+                          id="secret_code"
+                          className="outline outline-1 px-2 py-1 bg-transparent rounded-sm"
+                          placeholder="Enter secret code"
+                          onChange={handleChange("secret_code")}
+                          value={values.secret_code}
+                        />
+                      </div>
+                      <div className="">
+                        <button
+                          type="submit"
+                          className="text-white bg-[#121212] px-2 py-1 rounded-sm outline outline-1 outline-black hover:bg-transparent hover:text-black mt-4 w-full"
+                        >
+                          Make Payment
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                  <button
-                    type="submit"
-                    disabled={!(isValid && dirty)}
-                    className="bg-[#1D1F20] text-white py-2 px-4 my-2 mt-4 hover:bg-transparent hover:text-black outline outline-1 outline-black flex items-center gap-2"
-                  >
-                    {loading && (
-                      <svg
-                        className="w-5 h-5 mr-3 -ml-1 text-white animate-spin"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                    )}
-                    {loading ? "Loading" : "Deposit"}
-                  </button>
+                  )}
                 </Form>
               );
             }}

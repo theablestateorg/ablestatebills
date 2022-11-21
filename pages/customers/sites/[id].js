@@ -24,7 +24,7 @@ export default function CustomerSite({
   contactPerson,
   account_balance,
 }) {
-  const [paymentMethod, setPaymentMethod] = useState("0");
+  const [paymentMethod, setPaymentMethod] = useState(0);
   const [complete, setComplete] = useState(null);
 
   const router = useRouter();
@@ -35,6 +35,7 @@ export default function CustomerSite({
   const [loading, setLoading] = useState(false);
   const [newCustomer, setNewCustomer] = useState(null);
   const [countryCode, setCountryCode] = useState("+256");
+  const [renewPeriod, setRenewPeriod] = useState(1);
 
   const { user } = useAuth();
 
@@ -358,7 +359,7 @@ export default function CustomerSite({
                 <div className="flex flex-wrap gap-5 mt-2 ml-10">
                   <span
                     className={`bg-[#ca3011] p-2 w-[150px] flex justify-around items-center gap-2 cursor-pointer ${
-                      paymentMethod === "0" && "outline outline-1 outline-black"
+                      paymentMethod === 0 && "outline outline-1 outline-black"
                     }`}
                     onClick={() => setPaymentMethod("0")}
                   >
@@ -370,9 +371,9 @@ export default function CustomerSite({
                   </span>
                   <span
                     className={`bg-[#FFCC00] p-2 w-[150px] flex justify-around items-center gap-2 cursor-pointer ${
-                      paymentMethod === "1" && "outline outline-1 outline-black"
+                      paymentMethod === 1 && "outline outline-1 outline-black"
                     }`}
-                    onClick={() => setPaymentMethod("1")}
+                    onClick={() => setPaymentMethod(1)}
                   >
                     <CKMtn />
                     <span className="font-bold">
@@ -382,9 +383,9 @@ export default function CustomerSite({
                   </span>
                   <span
                     className={`bg-[#FF0000] p-2 text-white w-[150px] flex justify-around cursor-pointer ${
-                      paymentMethod === "2" && "outline outline-1 outline-black"
+                      paymentMethod === 2 && "outline outline-1 outline-black"
                     }`}
-                    onClick={() => setPaymentMethod("2")}
+                    onClick={() => setPaymentMethod(2)}
                   >
                     <CKAirtel />
                     <span className="font-medium">
@@ -402,7 +403,7 @@ export default function CustomerSite({
                 )}
 
                 <div className="ml-10">
-                  {paymentMethod === "0" && (
+                  {paymentMethod === 0 && (
                     <>
                       <Formik initialValues={{ amount: "" }}>
                         {({
@@ -434,6 +435,40 @@ export default function CustomerSite({
                               </div>
                               <div className="">
                                 <div className="flex flex-col my-2">
+                                  <label htmlFor="amount">
+                                    Extension Period (years)
+                                  </label>
+                                  <div className="flex items-center py-2">
+                                    <span
+                                      className="px-3 py-1 rounded-sm mr-2 bg-gray-200 outline outline-1 outline-gray-400 cursor-pointer"
+                                      onClick={() => {
+                                        if (renewPeriod > 1) {
+                                          setRenewPeriod((prev) => prev - 1);
+                                        }
+                                      }}
+                                    >
+                                      -
+                                    </span>
+                                    <input
+                                      type="text"
+                                      name="amount"
+                                      id="amount"
+                                      className="outline outline-1 px-2 py-1 bg-transparent rounded-sm"
+                                      value={renewPeriod}
+                                    />
+                                    <span
+                                      className="px-3 py-1 rounded-sm ml-2 bg-gray-200 outline outline-1 outline-gray-400 cursor-pointer"
+                                      onClick={() => {
+                                        if (renewPeriod < 5) {
+                                          setRenewPeriod((prev) => prev + 1);
+                                        }
+                                      }}
+                                    >
+                                      +
+                                    </span>
+                                  </div>
+                                </div>
+                                <div className="flex flex-col my-2">
                                   <label htmlFor="amount">Enter amount</label>
                                   <input
                                     type="text"
@@ -460,7 +495,7 @@ export default function CustomerSite({
                       </Formik>
                     </>
                   )}
-                  {paymentMethod === "1" && (
+                  {paymentMethod === 1 && (
                     <>
                       <p>MTN MoMo</p>
                       <p>
@@ -492,7 +527,7 @@ export default function CustomerSite({
                       </div>
                     </>
                   )}
-                  {paymentMethod === "2" && (
+                  {paymentMethod === 2 && (
                     <>
                       <p>Airtel Money</p>
                       <p>
@@ -508,7 +543,7 @@ export default function CustomerSite({
                       <button
                         className="text-white bg-[#121212] px-2 py-1"
                         onClick={async () => {
-                          if (paymentMethod === "1") {
+                          if (paymentMethod === 1) {
                             const phoneno =
                               /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})$/;
                             if (phoneNumber.match(phoneno)) {

@@ -1,10 +1,10 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { supabase } from "../../utils/supabase";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { MdDeleteOutline } from "react-icons/md";
 import { IoWarning } from "react-icons/io5";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import Router from "next/router";
 import { Formik, Form } from "formik";
 import { AiFillCloseCircle } from "react-icons/ai";
@@ -17,8 +17,8 @@ import { dropIn } from "../../utils/dropIn";
 import { parseCookies } from "../../utils/parseCookies";
 import { CKAirtel, CKMtn } from "../../components/ck";
 import { UG } from "../../components/react-flags";
-import Image from "next/image";
 import { currencyFormatter } from "../../utils/currencyFormatter";
+import UpdateModal from "../../components/managers/updateModal";
 
 export default function Site({ product, contactPerson, customers, account_balance }) {
   const [paymentMethod, setPaymentMethod] = useState(null);
@@ -33,10 +33,8 @@ export default function Site({ product, contactPerson, customers, account_balanc
   const [customerModel, setCustomerModel] = useState(false);
   const [customerId, setCustomerId] = useState(null);
   const [newCustomer, setNewCustomer] = useState(null);
-  const [contact, setContact] = useState({});
   const [countryCode, setCountryCode] = useState("+256");
   const [selected, setSelected] = useState(false);
-  const [password, setPassword] = useState(null);
 
   const getNewCustomer = async (id, setFieldValue) => {
     const { data } = await supabase
@@ -162,7 +160,9 @@ export default function Site({ product, contactPerson, customers, account_balanc
               </button>
             </section>
 
-            <AnimatePresence>
+            <UpdateModal product={product} newCustomer={newCustomer} customers={customers} handleUpdate={handleUpdate} popUpdate={popUpdate} setPopUpdate={setPopUpdate} loading={loading} />
+
+            {/* <AnimatePresence>
               {popUpdate && (
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -374,7 +374,7 @@ export default function Site({ product, contactPerson, customers, account_balanc
                   </motion.div>
                 </motion.div>
               )}
-            </AnimatePresence>
+            </AnimatePresence> */}
 
             <div className="flex flex-col md:flex-row gap-5 outline outline-1 outline-[#e4e6e5] bg-white p-2 md:p-5 rounded-sm md:shadow-sm justify-center md:justify-start items-center md:items-start">
               <iframe

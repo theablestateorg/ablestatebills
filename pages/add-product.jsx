@@ -12,6 +12,7 @@ import axios from "axios";
 import Footer from "../components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
 import { parseCookies } from "../utils/parseCookies";
+import { currencyFormatter } from "../utils/currencyFormatter";
 
 export default function AddSite() {
   const [loading, setLoading] = useState(false);
@@ -54,8 +55,6 @@ export default function AddSite() {
           ...values,
           added_by: user.first_name + " " + user.last_name,
           contact_id: customerId,
-          telephone_number: contactDetails.contact_number,
-          email: contactDetails.email,
         },
       ]);
 
@@ -75,6 +74,7 @@ export default function AddSite() {
         resetForm({
           name: "",
           product_type: "",
+          product_price: "",
           website_link: "",
           contact_person: "",
           telephone_number: "",
@@ -108,19 +108,6 @@ export default function AddSite() {
     email: "",
     contact_number: "",
   });
-  const getContactPersonDetails = async (contact_id) => {
-    if (contact_id) {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("email, contact_number")
-        .eq("id", contact_id)
-        .single();
-
-      if (data) {
-        setContactDetails(data);
-      }
-    }
-  };
 
   const addNewCustomer = async (values) => {
     if (password) {
@@ -169,10 +156,11 @@ export default function AddSite() {
           initialValues={{
             name: "",
             product_type: "",
+            product_price: "",
             website_link: "",
             contact_person: "",
-            telephone_number: contactDetails.contact_number,
-            email: contactDetails.email,
+            telephone_number: "",
+            email: "",
             last_paid: "",
             expiry_date: "",
             admin_expiry_date: "",
@@ -275,6 +263,24 @@ export default function AddSite() {
                 </div>
                 <div className="flex flex-col md:flex-row md:items-center md:gap-10 my-3 md:my-5">
                   <label
+                    htmlFor="product_price"
+                    className="text-md md:text-xl mb-1 w-4/12 md:w-2/12"
+                  >
+                    Product Price
+                  </label>
+                  <input
+                    type="text"
+                    name="product_price"
+                    id="product_price"
+                    placeholder="Enter Amount"
+                    className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded-sm w-12/12 md:w-8/12"
+                    onChange={handleChange("product_price")}
+                    onBlur={handleBlur("product_price")}
+                    value={values.product_price}
+                  />
+                </div>
+                <div className="flex flex-col md:flex-row md:items-center md:gap-10 my-3 md:my-5">
+                  <label
                     htmlFor="contact_person"
                     className="text-md md:text-xl mb-1 w-4/12 md:w-2/12"
                   >
@@ -285,10 +291,19 @@ export default function AddSite() {
                       name=""
                       id="contact_person"
                       className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded-sm w-10/12 md:w-8/12"
-                      onChange={(e) => {
+                      onChange={async (e) => {
                         setFieldValue("contact_person", e.target.value);
                         setCustomerId(e.target.value);
-                        getContactPersonDetails(e.target.value);
+                        const { data, error } = await supabase
+                          .from("profiles")
+                          .select("email, contact_number")
+                          .eq("id", e.target.value)
+                          .single();
+                        
+                        if(data){
+                          setFieldValue("telephone_number", data.contact_number)
+                          setFieldValue("email", data.email)
+                        } 
                         setSelected(!selected);
                       }}
                       onBlur={handleBlur("contact_person")}
@@ -345,7 +360,7 @@ export default function AddSite() {
                       className=" py-2 px-2 ml-16 bg-transparent flex-grow focus:outline-none"
                       onChange={handleChange("telephone_number")}
                       onBlur={handleBlur("telephone_number")}
-                      value={contactDetails.contact_number.substring(4, 13)}
+                      value={values.telephone_number ? values.telephone_number.substring(4, 13) : ""}
                     />
                     <select
                       name=""
@@ -373,7 +388,7 @@ export default function AddSite() {
                       className=" py-2 px-2 bg-transparent  outline outline-1 outline-[#121212] rounded-sm w-full"
                       onChange={handleChange("email")}
                       onBlur={handleBlur("email")}
-                      value={contactDetails.email}
+                      value={values.email ? values.email : ""}
                     />
                     <div
                       className={`${

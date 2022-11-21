@@ -51,6 +51,7 @@ function UpdateModal({
                 telephone_number:
                   product.telephone_number &&
                   product.telephone_number.slice(4, 13),
+                
               }}
             >
               {({

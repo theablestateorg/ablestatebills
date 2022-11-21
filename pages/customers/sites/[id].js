@@ -18,6 +18,7 @@ import { CKAirtel, CKMtn } from "../../../components/ck";
 import { UG } from "../../../components/react-flags";
 import { currencyFormatter } from "../../../utils/currencyFormatter";
 import UpdateModal from "../../../components/customers/updateModal";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 
 export default function CustomerSite({
   product,
@@ -46,22 +47,26 @@ export default function CustomerSite({
     if (+amount > +account_balance.account_balance) {
       toast.error(`Insufficient Account balance`, { position: "top-center" });
     } else {
-      if (document.getElementById("extension").value !== "") {
-        const { data, error } = await supabase
-          .from("websites")
-          .update({
-            last_paid: new Date(document.getElementById("extension").value),
-            expiry_date: new Date(document.getElementById("extension").value),
-            status: "active",
-          })
-          .match({ id: id });
+      const date = new Date(product.expiry_date);
+      const year = date.getFullYear();
+      const month = date.getMonth();
+      const day = date.getDate();
+      const extendedDate = new Date(year, month, day);
 
-        if (data) {
-          toast.success(`Successfully extended`, { position: "top-center" });
-        }
-        if (error) {
-          toast.error(`${error?.message}`, { position: "top-center" });
-        }
+      const { data, error } = await supabase
+        .from("websites")
+        .update({
+          last_paid: new Date().toLocaleDateString(),
+          expiry_date: extendedDate.toLocaleDateString(),
+          status: "active",
+        })
+        .match({ id: id });
+
+      if (data) {
+        toast.success(`Successfully Renewed`, { position: "top-center" });
+      }
+      if (error) {
+        toast.error(`${error?.message}`, { position: "top-center" });
       }
       resetForm({
         amount: "",
@@ -343,14 +348,14 @@ export default function CustomerSite({
                 <h1 className="text-center font-bold text-lg">
                   Renew {product.name}
                 </h1>
-                <h1
+                <span
                   className="text-md cursor-pointer"
                   onClick={() => {
                     setPopRenew(false);
                   }}
                 >
-                  Close
-                </h1>
+                  <AiOutlineCloseCircle size={22} />
+                </span>
               </div>
               <section className="mt-5">
                 <div className="flex gap-2">
@@ -361,7 +366,7 @@ export default function CustomerSite({
                     className={`bg-[#ca3011] p-2 w-[150px] flex justify-around items-center gap-2 cursor-pointer ${
                       paymentMethod === 0 && "outline outline-1 outline-black"
                     }`}
-                    onClick={() => setPaymentMethod("0")}
+                    onClick={() => setPaymentMethod(0)}
                   >
                     {/* <CKMtn /> */}
                     <span className="font-bold text-white">
@@ -396,7 +401,7 @@ export default function CustomerSite({
                 </div>
               </section>
               <section className="mt-2">
-                {["1", "2"].includes(paymentMethod) && (
+                {[1, 2].includes(paymentMethod) && (
                   <div className="flex gap-2">
                     <h3>Get Secret Code</h3>
                   </div>
@@ -405,7 +410,7 @@ export default function CustomerSite({
                 <div className="ml-10">
                   {paymentMethod === 0 && (
                     <>
-                      <Formik initialValues={{ amount: "" }}>
+                      <Formik initialValues={{ amount: product.product_price }}>
                         {({
                           values,
                           errors,
@@ -469,7 +474,7 @@ export default function CustomerSite({
                                   </div>
                                 </div>
                                 <div className="flex flex-col my-2">
-                                  <label htmlFor="amount">Enter amount</label>
+                                  <label htmlFor="amount">Amount To Pay</label>
                                   <input
                                     type="text"
                                     name="amount"
@@ -477,7 +482,9 @@ export default function CustomerSite({
                                     className="outline outline-1 px-2 py-1 bg-transparent rounded-sm"
                                     placeholder="Enter Amount"
                                     onChange={handleChange("amount")}
-                                    value={values.amount}
+                                    value={currencyFormatter(
+                                      values.amount * renewPeriod
+                                    )}
                                   />
                                 </div>
                                 <div className="">
@@ -538,7 +545,7 @@ export default function CustomerSite({
                       </p>
                     </>
                   )}
-                  {paymentMethod != null && paymentMethod != "0" && (
+                  {paymentMethod != null && paymentMethod != 0 && (
                     <div className="flex justify-end">
                       <button
                         className="text-white bg-[#121212] px-2 py-1"

@@ -106,17 +106,17 @@ function UpdateModal({
                       </select>
                     </div>
                     <div className="flex flex-col gap-1 my-2">
-                      <label htmlFor="name" className="">
+                      <label htmlFor="product_price" className="">
                         Product Price
                       </label>
                       <input
                         type="text"
-                        name="name"
-                        id="name"
-                        placeholder="name"
+                        name="product_price"
+                        id="product_price"
+                        placeholder="Enter Price"
                         className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
-                        onChange={handleChange("name")}
-                        onBlur={handleBlur("name")}
+                        onChange={handleChange("product_price")}
+                        onBlur={handleBlur("product_price")}
                         value={values.product_price}
                       />
                     </div>

@@ -7,7 +7,6 @@ import { IoWarning } from "react-icons/io5";
 import { toast } from "react-toastify";
 import Router from "next/router";
 import { Formik, Form } from "formik";
-import { AiFillCloseCircle } from "react-icons/ai";
 import { useAuth } from "../../utils/auth";
 import { TbEdit } from "react-icons/tb";
 import { RiExternalLinkFill } from "react-icons/ri";
@@ -19,9 +18,15 @@ import { CKAirtel, CKMtn } from "../../components/ck";
 import { UG } from "../../components/react-flags";
 import { currencyFormatter } from "../../utils/currencyFormatter";
 import UpdateModal from "../../components/managers/updateModal";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 
-export default function Site({ product, contactPerson, customers, account_balance }) {
-  const [paymentMethod, setPaymentMethod] = useState(null);
+export default function Site({
+  product,
+  contactPerson,
+  customers,
+  account_balance,
+}) {
+  const [paymentMethod, setPaymentMethod] = useState(0);
   const [complete, setComplete] = useState(null);
 
   const router = useRouter();
@@ -35,6 +40,7 @@ export default function Site({ product, contactPerson, customers, account_balanc
   const [newCustomer, setNewCustomer] = useState(null);
   const [countryCode, setCountryCode] = useState("+256");
   const [selected, setSelected] = useState(false);
+  const [renewPeriod, setRenewPeriod] = useState(1);
 
   const getNewCustomer = async (id, setFieldValue) => {
     const { data } = await supabase
@@ -52,20 +58,73 @@ export default function Site({ product, contactPerson, customers, account_balanc
 
   const { user } = useAuth();
 
-  const handleRenew = (event, values, resetForm) => {
-    event.preventDefault()
-    const { amount } = values
+  const handleRenew = async (event, values, resetForm) => {
+    event.preventDefault();
+    const { amount } = values;
 
-    if(+amount > +account_balance.account_balance){
+    if (+amount > +account_balance.account_balance) {
       toast.error(`Insufficient Account balance`, { position: "top-center" });
     } else {
+      const date = new Date(product.expiry_date);
+      const year = date.getFullYear();
+      const month = date.getMonth();
+      const day = date.getDate();
+      const extendedDate = new Date(year, month, day);
 
-      
+      const { data, error } = await supabase
+        .from("websites")
+        .update({
+          last_paid:
+            new Date().getFullYear() +
+            "-" +
+            new Date().getMonth() +
+            "-" +
+            new Date().getDate(),
+          expiry_date:
+            extendedDate.getFullYear() +
+            1 +
+            "-" +
+            extendedDate.getMonth() +
+            "-" +
+            extendedDate.getDate(),
+          status: "active",
+        })
+        .match({ id: id });
+
+      if (data) {
+        toast.success(`Successfully Renewed`, { position: "top-center" });
+
+        const { data, error } = await supabase
+          .from("accounts")
+          .update({
+            account_balance: +account_balance.account_balance - +amount,
+          })
+          .eq("id", user.id);
+
+        if (data) {
+          const { data: transaction, error } = await supabase
+            .from("transactions")
+            .insert([
+              {
+                transaction_type: "payment",
+                status: "successful",
+                amount: amount,
+                actor_id: user.id,
+                description: "",
+              },
+            ]);
+        }
+      }
+      if (error) {
+        toast.error(`${error?.message}`, { position: "top-center" });
+      }
+
       resetForm({
-        amount: ""
-      })
+        amount: "",
+      });
     }
-  }
+    setPopRenew(false);
+  };
 
   const handleDelete = async () => {
     const { data, error } = await supabase
@@ -116,7 +175,14 @@ export default function Site({ product, contactPerson, customers, account_balanc
     event.preventDefault();
     setLoading(true);
 
-    const { name, website_link, contact_person, telephone_number } = values;
+    const {
+      name,
+      website_link,
+      contact_person,
+      telephone_number,
+      product_price,
+      product_type,
+    } = values;
 
     const { data, error } = await supabase
       .from("websites")
@@ -124,6 +190,8 @@ export default function Site({ product, contactPerson, customers, account_balanc
         name: name,
         website_link: website_link,
         contact_person: contact_person,
+        product_price: product_price,
+        product_type: product_type,
         telephone_number: countryCode + telephone_number,
       })
       .match({ id: id });
@@ -160,221 +228,15 @@ export default function Site({ product, contactPerson, customers, account_balanc
               </button>
             </section>
 
-            <UpdateModal product={product} newCustomer={newCustomer} customers={customers} handleUpdate={handleUpdate} popUpdate={popUpdate} setPopUpdate={setPopUpdate} loading={loading} />
-
-            {/* <AnimatePresence>
-              {popUpdate && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  onClick={() => setPopUpdate(false)}
-                  className={`bg-black z-20 bg-opacity-40 w-screen min-h-screen fixed top-0 left-0 right-0 flex justify-center`}
-                >
-                  <motion.div
-                    onClick={(e) => e.stopPropagation()}
-                    variants={dropIn}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    className="relative bg-white dark:bg-dark-bg max-h-screen overflow-auto dark:text-secondary-text p-10 w-10/12 md:8/12  rounded-md m-5 sm:mb-5 shadow-md top-50 z-20"
-                  >
-                    <div className="flex items-center justify-between">
-                      <h1 className="text-center font-bold text-lg my-5">
-                        Update Website
-                      </h1>
-                      <AiFillCloseCircle
-                        size={25}
-                        className="cursor-pointer"
-                        onClick={() => {
-                          setPopUpdate(false);
-                          setNewCustomer(null);
-                        }}
-                      />
-                    </div>
-
-                    <Formik
-                      initialValues={{
-                        name: product.name,
-                        website_link: product.website_link,
-                        contact_person: product.contact_person,
-                        telephone_number:
-                          product.telephone_number &&
-                          product.telephone_number.slice(4, 13),
-                      }}
-                    >
-                      {({
-                        values,
-                        errors,
-                        touched,
-                        isValid,
-                        dirty,
-                        handleChange,
-                        handleBlur,
-                        resetForm,
-                        setFieldValue,
-                      }) => {
-                        return (
-                          <Form
-                            className="my-5"
-                            onSubmit={(event) => handleUpdate(event, values)}
-                          >
-                            <div className="flex flex-col gap-1 my-2">
-                              <label htmlFor="name" className="">
-                                Product Name
-                              </label>
-                              <input
-                                type="text"
-                                name="name"
-                                id="name"
-                                placeholder="name"
-                                className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
-                                onChange={handleChange("name")}
-                                onBlur={handleBlur("name")}
-                                value={values.name}
-                              />
-                            </div>
-                            <div className="flex flex-col gap-1 my-2">
-                              <label htmlFor="contact_person">
-                                Contact Person
-                              </label>
-                              <div className="flex justify-between items-center gap-2 w-full">
-                                <select
-                                  name=""
-                                  id="contact_person"
-                                  className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
-                                  onChange={(e) => {
-                                    setFieldValue(
-                                      "contact_person",
-                                      e.target.value
-                                    );
-                                    setCustomerId(e.target.value);
-                                    getNewCustomer(
-                                      e.target.value,
-                                      setFieldValue
-                                    );
-                                    setSelected(!selected);
-                                  }}
-                                  onBlur={handleBlur("contact_person")}
-                                  value={values.contact_person}
-                                >
-                                  <option value="">Select Customer</option>
-                                  {customers &&
-                                    customers.map((customer, index) => (
-                                      <option
-                                        value={customer.id}
-                                        key={index}
-                                        className="outline bg-pink-200"
-                                      >
-                                        {customer.first_name +
-                                          " " +
-                                          customer.last_name}
-                                      </option>
-                                    ))}
-                                </select>
-                              </div>
-                            </div>
-                            <div className="flex flex-col gap-1 my-2">
-                              <label htmlFor="telephone_number">
-                                Telephone
-                              </label>
-                              <div className="relative outline outline-1 outline-[#c1c7d6] rounded flex">
-                                <input
-                                  type="tel"
-                                  id="telephone_number"
-                                  name="telephone_number"
-                                  placeholder="Telephone number"
-                                  className=" py-2 px-2 ml-16 bg-transparent flex-grow focus:outline-none"
-                                  onChange={handleChange("telephone_number")}
-                                  onBlur={handleBlur("telephone_number")}
-                                  value={
-                                    newCustomer?.contact_number
-                                      ? newCustomer?.contact_number.slice(4, 13)
-                                      : product?.telephone_number.slice(4, 13)
-                                  }
-                                />
-                                <select
-                                  name=""
-                                  id=""
-                                  className="bg-transparent absolute left-0 h-full w-16 border-r-2"
-                                  onChange={(e) =>
-                                    setCountryCode(e.target.value)
-                                  }
-                                >
-                                  <option value="+256">+256</option>
-                                </select>
-                              </div>
-                            </div>
-                            <div className="flex flex-col gap-1 my-2">
-                              <label htmlFor="email">Email</label>
-                              <input
-                                type="email"
-                                name="email"
-                                id="email"
-                                placeholder="Email"
-                                className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
-                                onChange={handleChange("email")}
-                                onBlur={handleBlur("email")}
-                                value={
-                                  newCustomer
-                                    ? newCustomer?.email
-                                    : product.email
-                                }
-                              />
-                            </div>
-
-                            <div className="flex flex-col gap-1 my-2">
-                              <label htmlFor="website_link">Website</label>
-                              <input
-                                type="text"
-                                name="website_link"
-                                placeholder="website"
-                                className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
-                                onChange={handleChange("website_link")}
-                                onBlur={handleBlur("website_link")}
-                                defaultValue={product.website_link}
-                              />
-                            </div>
-
-                            <div className="flex justify-end mt-5">
-                              <button
-                                type="submit"
-                                className="outline outline-1 outline-[#1D1F20] bg-[#1D1F20] text-white py-2 px-4 hover:bg-[#1D1F20] hover:text-white flex items-center gap-2"
-                              >
-                                {loading && (
-                                  <svg
-                                    className="w-5 h-5 mr-3 -ml-1 text-white animate-spin"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                  >
-                                    <circle
-                                      className="opacity-25"
-                                      cx="12"
-                                      cy="12"
-                                      r="10"
-                                      stroke="currentColor"
-                                      strokeWidth="4"
-                                    ></circle>
-                                    <path
-                                      className="opacity-75"
-                                      fill="currentColor"
-                                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                    ></path>
-                                  </svg>
-                                )}
-                                {!loading && <TbEdit />}
-                                {loading ? "Loading" : "Update"}
-                              </button>
-                            </div>
-                          </Form>
-                        );
-                      }}
-                    </Formik>
-                  </motion.div>
-                </motion.div>
-              )}
-            </AnimatePresence> */}
+            <UpdateModal
+              product={product}
+              newCustomer={newCustomer}
+              customers={customers}
+              handleUpdate={handleUpdate}
+              popUpdate={popUpdate}
+              setPopUpdate={setPopUpdate}
+              loading={loading}
+            />
 
             <div className="flex flex-col md:flex-row gap-5 outline outline-1 outline-[#e4e6e5] bg-white p-2 md:p-5 rounded-sm md:shadow-sm justify-center md:justify-start items-center md:items-start">
               <iframe
@@ -586,14 +448,14 @@ export default function Site({ product, contactPerson, customers, account_balanc
                 <h1 className="text-center font-bold text-lg">
                   Renew {product.name}
                 </h1>
-                <h1
+                <span
                   className="text-md cursor-pointer"
                   onClick={() => {
                     setPopRenew(false);
                   }}
                 >
-                  Close
-                </h1>
+                  <AiOutlineCloseCircle size={22} />
+                </span>
               </div>
               <section className="mt-5">
                 <div className="flex gap-2">
@@ -602,9 +464,9 @@ export default function Site({ product, contactPerson, customers, account_balanc
                 <div className="flex flex-wrap gap-5 mt-2 ml-10">
                   <span
                     className={`bg-[#ca3011] p-2 w-[150px] flex justify-around items-center gap-2 cursor-pointer ${
-                      paymentMethod === "0" && "outline outline-1 outline-black"
+                      paymentMethod === 0 && "outline outline-1 outline-black"
                     }`}
-                    onClick={() => setPaymentMethod("0")}
+                    onClick={() => setPaymentMethod(0)}
                   >
                     {/* <CKMtn /> */}
                     <span className="font-bold text-white">
@@ -614,9 +476,9 @@ export default function Site({ product, contactPerson, customers, account_balanc
                   </span>
                   <span
                     className={`bg-[#FFCC00] p-2 w-[150px] flex justify-around items-center gap-2 cursor-pointer ${
-                      paymentMethod === "1" && "outline outline-1 outline-black"
+                      paymentMethod === 1 && "outline outline-1 outline-black"
                     }`}
-                    onClick={() => setPaymentMethod("1")}
+                    onClick={() => setPaymentMethod(1)}
                   >
                     <CKMtn />
                     <span className="font-bold">
@@ -626,9 +488,9 @@ export default function Site({ product, contactPerson, customers, account_balanc
                   </span>
                   <span
                     className={`bg-[#FF0000] p-2 text-white w-[150px] flex justify-around cursor-pointer ${
-                      paymentMethod === "2" && "outline outline-1 outline-black"
+                      paymentMethod === 2 && "outline outline-1 outline-black"
                     }`}
-                    onClick={() => setPaymentMethod("2")}
+                    onClick={() => setPaymentMethod(2)}
                   >
                     <CKAirtel />
                     <span className="font-medium">
@@ -639,16 +501,16 @@ export default function Site({ product, contactPerson, customers, account_balanc
                 </div>
               </section>
               <section className="mt-2">
-                {["1", "2"].includes(paymentMethod) && (
+                {[1, 2].includes(paymentMethod) && (
                   <div className="flex gap-2">
                     <h3>Get Secret Code</h3>
                   </div>
                 )}
 
                 <div className="ml-10">
-                  {paymentMethod === "0" && (
+                  {paymentMethod === 0 && (
                     <>
-                      <Formik initialValues={{ amount: "" }}>
+                      <Formik initialValues={{ amount: product.product_price }}>
                         {({
                           values,
                           errors,
@@ -669,11 +531,50 @@ export default function Site({ product, contactPerson, customers, account_balanc
                             >
                               <div className="flex gap-4">
                                 <label htmlFor="">Current Balance:</label>
-                                <label htmlFor="" className="font-bold"><span className="text-sm">UGX</span>{" "}{currencyFormatter(account_balance.account_balance)}</label>
+                                <label htmlFor="" className="font-bold">
+                                  <span className="text-sm">UGX</span>{" "}
+                                  {currencyFormatter(
+                                    account_balance.account_balance
+                                  )}
+                                </label>
                               </div>
-                              <div className="">
+                              <div className="select-none">
                                 <div className="flex flex-col my-2">
-                                  <label htmlFor="amount">Enter amount</label>
+                                  <label htmlFor="">
+                                    Extension Period (years)
+                                  </label>
+                                  <div className="flex items-center py-2">
+                                    <span
+                                      className="px-3 py-1 rounded-sm mr-2 bg-gray-200 outline outline-1 outline-gray-400 cursor-pointer"
+                                      onClick={() => {
+                                        if (renewPeriod > 1) {
+                                          setRenewPeriod((prev) => prev - 1);
+                                        }
+                                      }}
+                                    >
+                                      -
+                                    </span>
+                                    <input
+                                      type="text"
+                                      name="renewPeriod"
+                                      id="renewPeriod"
+                                      className="outline outline-1 px-2 py-1 bg-transparent rounded-sm"
+                                      value={renewPeriod}
+                                    />
+                                    <span
+                                      className="px-3 py-1 rounded-sm ml-2 bg-gray-200 outline outline-1 outline-gray-400 cursor-pointer"
+                                      onClick={() => {
+                                        if (renewPeriod < 5) {
+                                          setRenewPeriod((prev) => prev + 1);
+                                        }
+                                      }}
+                                    >
+                                      +
+                                    </span>
+                                  </div>
+                                </div>
+                                <div className="flex flex-col my-2">
+                                  <label htmlFor="amount">Amount To Pay</label>
                                   <input
                                     type="text"
                                     name="amount"
@@ -681,7 +582,9 @@ export default function Site({ product, contactPerson, customers, account_balanc
                                     className="outline outline-1 px-2 py-1 bg-transparent rounded-sm"
                                     placeholder="Enter Amount"
                                     onChange={handleChange("amount")}
-                                    value={values.amount}
+                                    value={currencyFormatter(
+                                      values.amount * renewPeriod
+                                    )}
                                   />
                                 </div>
                                 <div className="">
@@ -699,7 +602,7 @@ export default function Site({ product, contactPerson, customers, account_balanc
                       </Formik>
                     </>
                   )}
-                  {paymentMethod === "1" && (
+                  {paymentMethod === 1 && (
                     <>
                       <p>MTN MoMo</p>
                       <p>
@@ -731,7 +634,7 @@ export default function Site({ product, contactPerson, customers, account_balanc
                       </div>
                     </>
                   )}
-                  {paymentMethod === "2" && (
+                  {paymentMethod === 2 && (
                     <>
                       <p>Airtel Money</p>
                       <p>
@@ -742,12 +645,12 @@ export default function Site({ product, contactPerson, customers, account_balanc
                       </p>
                     </>
                   )}
-                  {paymentMethod != null && paymentMethod != "0" && (
+                  {paymentMethod != null && paymentMethod != 0 && (
                     <div className="flex justify-end">
                       <button
                         className="text-white bg-[#121212] px-2 py-1"
                         onClick={async () => {
-                          if (paymentMethod === "1") {
+                          if (paymentMethod === 1) {
                             const phoneno =
                               /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})$/;
                             if (phoneNumber.match(phoneno)) {

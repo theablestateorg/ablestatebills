@@ -251,7 +251,7 @@ export default function Site({
                 )}`}
                 title={product.name}
               ></iframe>
-              <div>
+              <div className="w-full">
                 <div className="mb-3">
                   <p className="uppercase font-medium">DOMAIN</p>
                   <a
@@ -301,7 +301,7 @@ export default function Site({
                 </div>
                 <div className="mt-5">
                   <button
-                    className="bg-[#1D1F20] text-white py-2 px-4 hover:bg-[#292C2D] flex items-center gap-2"
+                    className="bg-[#1D1F20] text-white py-2 px-4 hover:bg-[#292C2D] flex items-center gap-2 rounded-sm"
                     onClick={() => setPopRenew(true)}
                   >
                     Renew Now
@@ -707,17 +707,6 @@ export default function Site({
                             <label htmlFor="number">Amount</label>
                             <label htmlFor="number" className="text-lg font-bold"><span className="font-medium">ugx{" "}</span>{product.product_price}</label>
                           </div>
-                          {/* <div className="flex flex-col my-2">
-                            <label htmlFor="phone">Phone Number</label>
-                            <input
-                              type="tel"
-                              name="phone"
-                              id="phone"
-                              className="outline outline-1 px-2 py-1 bg-transparent"
-                              placeholder="Enter phone Number"
-                              onChange={handleChange("phone")}
-                            />
-                          </div> */}
                           <div className="flex flex-col my-2">
                             <label htmlFor="secret_code">Secret Code</label>
                             <input

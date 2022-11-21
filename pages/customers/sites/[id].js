@@ -37,6 +37,7 @@ export default function CustomerSite({
   const [newCustomer, setNewCustomer] = useState(null);
   const [countryCode, setCountryCode] = useState("+256");
   const [renewPeriod, setRenewPeriod] = useState(1);
+  const [phoneNumber, setPhoneNumber] = useState(null);
 
   const { user } = useAuth();
 
@@ -216,7 +217,7 @@ export default function CustomerSite({
                 </div>
                 <div className="mt-5">
                   <button
-                    className="bg-[#1D1F20] text-white py-2 px-4 hover:bg-[#292C2D] flex items-center gap-2"
+                    className="bg-[#1D1F20] text-white py-2 px-4 hover:bg-[#292C2D] flex items-center gap-2 rounded-sm"
                     onClick={() => setPopRenew(true)}
                   >
                     Renew Now
@@ -225,9 +226,9 @@ export default function CustomerSite({
               </div>
             </div>
 
-            <div className="flex gap-5 items-center mt-1 mb-5">
+            <div className="flex gap-5 items-center mt-5 mb-5">
               <button
-                className="outline outline-1 outline-[#1D1F20] text-[#1D1F20] py-2 px-4 hover:bg-[#1D1F20] hover:text-white flex items-center gap-2"
+                className="outline outline-1 outline-[#1D1F20] text-[#1D1F20] py-2 px-4 hover:bg-[#1D1F20] hover:text-white flex items-center gap-2 rounded-sm"
                 onClick={() => setPopUp(true)}
               >
                 <MdDeleteOutline size={20} /> Delete Website
@@ -553,7 +554,10 @@ export default function CustomerSite({
                           if (paymentMethod === 1) {
                             const phoneno =
                               /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})$/;
-                            if (phoneNumber.match(phoneno)) {
+                            if (
+                              phoneNumber !== null &&
+                              phoneNumber.match(phoneno)
+                            ) {
                               const results = await axios
                                 .post("/api/send-token", {
                                   phone: `256${phoneNumber}`,

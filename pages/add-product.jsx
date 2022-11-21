@@ -282,7 +282,7 @@ export default function AddSite() {
                 <div className="flex flex-col md:flex-row md:items-center md:gap-10 my-3 md:my-5">
                   <label
                     htmlFor="contact_person"
-                    className="text-md md:text-xl mb-1 w-4/12 md:w-2/12"
+                    className="text-md md:text-xl mb-1"
                   >
                     Contact Person
                   </label>

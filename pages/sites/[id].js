@@ -59,9 +59,10 @@ export default function Site({ product, contactPerson, customers, account_balanc
     const { amount } = values
 
     if(+amount > +account_balance.account_balance){
-      console.log("somehe")
       toast.error(`Insufficient Account balance`, { position: "top-center" });
     } else {
+
+      
       resetForm({
         amount: ""
       })

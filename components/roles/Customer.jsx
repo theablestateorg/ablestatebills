@@ -105,7 +105,7 @@ export default function Customer({ websites, customers, person }) {
             myWebsites.map((website, index) => (
               <div
                 className="outline outline-1 outline-[#e5e7eb] bg-white px-4 py-2 rounded-lg w-64 h-32 cursor-pointer shadow-md hover:shadow-lg flex flex-col justify-between"
-                onClick={() => router.push(`customers/sites/${website.id}`)}
+                onClick={() => router.push(`/customers/sites/${website.id}`)}
                 key={index}
               >
                 <div>

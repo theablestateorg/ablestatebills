@@ -4,33 +4,44 @@ import { supabase } from "../utils/supabase";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import useMediaQuery from "../hooks/useMediaQuery";
-import { BsFillCameraFill } from 'react-icons/bs'
+import { BsFillCameraFill } from "react-icons/bs";
 
 function AccountSettings({ user, avatar }) {
   const [loading, setLoading] = useState(false);
-  const [img, setImg] = useState(null)
+  const [img, setImg] = useState(null);
 
   const handleSubmit = async (event, values) => {
-    event.preventDefault()
-    const { data } = await supabase.storage
-      .from('avatars')
-      .upload(`public/${img.name}`, img, {
-        cacheControl: '3600',
-        upsert: false,
-      })
-        
-    const { error } = await supabase
-        .from('profiles')
-        .update({ avatar_url: data.Key })
-        .match({ id: user.id })
-      
-    if(data){
-      toast.success(`Profile Updated successfully`, {position: "top-center"})
-    }
-      
+    event.preventDefault();
 
-      
-  }
+    const { first_name, last_name, email } = values;
+    if (img) {
+      const { data } = await supabase.storage
+        .from("avatars")
+        .upload(`public/${img.name}`, img, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      const { error } = await supabase
+        .from("profiles")
+        .update({ avatar_url: data.Key })
+        .match({ id: user.id });
+
+      if (data) {
+        toast.success(`Profile Updated successfully`, {
+          position: "top-center",
+        });
+      }
+    } else {
+      const { error } = await supabase
+        .from("profiles")
+        .update({ first_name, last_name })
+        .match({ id: user.id });
+      toast.success(`Profile Updated successfully`, {
+        position: "top-center",
+      });
+    }
+  };
 
   return (
     <section className="my-5 flex-grow flex flex-col md:px-8">
@@ -53,7 +64,9 @@ function AccountSettings({ user, avatar }) {
               name="signUpForm"
             >
               <div className="mb-5 w-36 h-36 rounded-lg overflow-hidden relative flex justify-center">
-                <div className={`w-36 h-36 overflow-hidden dialog cursor-pointer mb-5`}>
+                <div
+                  className={`w-36 h-36 overflow-hidden dialog cursor-pointer mb-5`}
+                >
                   {avatar ? (
                     <img src={avatar} alt="profile" />
                   ) : (
@@ -63,17 +76,32 @@ function AccountSettings({ user, avatar }) {
                     </span>
                   )}
                 </div>
-                <label htmlFor="profile-upload" className="absolute bottom-1 bg-white bg-opacity-50 p-1 text-sm text-white rounded-full z-10 cursor-pointer">
+                <label
+                  htmlFor="profile-upload"
+                  className="absolute bottom-1 bg-white bg-opacity-50 p-1 text-sm text-white rounded-full z-10 cursor-pointer"
+                >
                   <span className="flex gap-1 justify-center items-center">
                     <BsFillCameraFill /> Change photo
                   </span>
-                  <input className="hidden" id="profile-upload" type="file" onChange={(event) => setImg(event.target.files[0])} />
+                  <input
+                    className="hidden"
+                    id="profile-upload"
+                    type="file"
+                    onChange={(event) => setImg(event.target.files[0])}
+                  />
                 </label>
-                <label htmlFor="" className="absolute bottom-1 bg-white bg-opacity-10 p-1 text-sm text-white rounded-full blur-sm">
+                <label
+                  htmlFor=""
+                  className="absolute bottom-1 bg-white bg-opacity-10 p-1 text-sm text-white rounded-full blur-sm"
+                >
                   <span className="flex gap-1 justify-center items-center">
                     <BsFillCameraFill /> Change photo
                   </span>
-                  <input className="hidden" type="file" onChange={(event) => setImg(event.target.files[0])} />
+                  <input
+                    className="hidden"
+                    type="file"
+                    onChange={(event) => setImg(event.target.files[0])}
+                  />
                 </label>
               </div>
               <div className="flex flex-col md:flex-row justify-between md:items-center gap-5">

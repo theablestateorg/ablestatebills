@@ -1,10 +1,9 @@
 import { Form, Formik } from "formik";
-import { MdEdit, MdOutlineMail } from "react-icons/md";
 import { supabase } from "../utils/supabase";
 import { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
-function Password({ user }) {
+function Password() {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (event, values, resetForm) => {
@@ -27,7 +26,7 @@ function Password({ user }) {
       resetForm({ old_password: "", new_password: "", confirm_password: ""})
     } else {
       resetForm({ old_password: "", new_password: "", confirm_password: ""})
-      toast.error(`Password is inconsistent`, {
+      toast.error(`Password does not match`, {
         position: "top-center",
       });
     }
@@ -55,7 +54,7 @@ function Password({ user }) {
                     className="my-5 flex-grow py-5"
                     name="signUpForm"
                   >
-                    <div className="flex flex-col gap-5 md:my-5">
+                    <div className="flex flex-col gap-2 px-2 md:px-0 md:my-5">
                       <label htmlFor="new_password" className="">
                         New Password
                       </label>
@@ -63,7 +62,7 @@ function Password({ user }) {
                         <input
                           type="password"
                           name="new_password"
-                          className="outline outline-1 bg-transparent py-1 px-2 placeholder:text-[#bcbfc2] w-full md:w-10/12"
+                          className="outline outline-1 bg-transparent py-1 placeholder:text-[#bcbfc2] px-2 rounded-sm w-full md:w-10/12"
                           placeholder="enter password"
                           onChange={handleChange("new_password")}
                           onBlur={handleBlur("new_password")}
@@ -89,7 +88,7 @@ function Password({ user }) {
                         </div>
                       </div>
                     </div>
-                    <div className="flex flex-col gap-5 my-5">
+                    <div className="flex flex-col gap-2 px-2 md:px-0 my-5">
                       <label htmlFor="confirm_password" className="">
                         Confirm Password
                       </label>
@@ -97,7 +96,7 @@ function Password({ user }) {
                         <input
                           type="password"
                           name="confirm_password"
-                          className="outline outline-1 bg-transparent py-1 px-2 placeholder:text-[#bcbfc2] w-full md:w-10/12"
+                          className="outline outline-1 bg-transparent py-1 px-2 placeholder:text-[#bcbfc2] rounded-sm w-full md:w-10/12"
                           placeholder="enter password"
                           onChange={handleChange("confirm_password")}
                           onBlur={handleBlur("confirm_password")}
@@ -126,7 +125,7 @@ function Password({ user }) {
                     <button
                       type="submit"
                       disabled={!(isValid && dirty)}
-                      className="bg-[#1D1F20] text-white py-2 px-4 my-2 mt-4 hover:bg-transparent hover:text-black outline outline-1 outline-black flex items-center gap-2"
+                      className="bg-[#1D1F20] text-white py-2 px-4 my-2 mt-4 hover:bg-transparent hover:text-black outline outline-1 outline-black flex items-center gap-2 mx-2 md:mx-0 rounded-sm"
                     >
                       {loading && (
                         <svg

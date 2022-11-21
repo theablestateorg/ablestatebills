@@ -26,10 +26,14 @@ export default function Home({}) {
         password,
       });
       if (user) {
-        const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", user.id)
+          .single();
         setSession(session);
         resetForm({ email: "", password: "" });
-        setCookie("user", JSON.stringify({user: user, profile:profile}), {
+        setCookie("user", JSON.stringify({ user: user, profile: profile }), {
           path: "/",
           maxAge: 3600, // Expires after 1hr
           sameSite: true,
@@ -52,7 +56,7 @@ export default function Home({}) {
         <title>Welcome to Shine Afrika</title>
       </Head>
       <ToastContainer />
-      <main className="w-screen h-screen flex justify-center items-center relative pb-6 min-h-screen">
+      <main className="w-screen h-screen flex justify-center items-center relative md:pb-6 min-h-screen">
         <Formik
           initialValues={{ email: "", password: "" }}
           validationSchema={validationSchema}
@@ -70,18 +74,18 @@ export default function Home({}) {
             return (
               <Form
                 onSubmit={(event) => handleSubmit(event, values, resetForm)}
-                className="bg-white mx-5 sm:mx-0 p-6 md:p-10 shadow"
+                className="bg-white mx-0 md:mx-5 p-6 md:p-10 shadow"
                 name="loginForm"
               >
                 <h1 className="text-3xl font-bold text-center">Login</h1>
-                <div className="flex flex-col gap-2  my-2">
+                <div className="flex flex-col gap-2 my-2">
                   <label htmlFor="email">Email</label>
                   <div className="w-full">
                     <input
                       type="email"
                       name="email"
                       id="email"
-                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full"
+                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full rounded-sm"
                       placeholder="Enter email"
                       onChange={handleChange("email")}
                       onBlur={handleBlur("email")}
@@ -104,14 +108,14 @@ export default function Home({}) {
                     </div>
                   </div>
                 </div>
-                <div className="flex flex-col gap-2  my-2">
+                <div className="flex flex-col gap-2 my-2">
                   <label htmlFor="password">Password</label>
                   <div className="w-full">
                     <input
                       type="password"
                       name="password"
                       id="password"
-                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full"
+                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full rounded-sm"
                       placeholder="Enter password"
                       onChange={handleChange("password")}
                       onBlur={handleBlur("password")}
@@ -141,7 +145,7 @@ export default function Home({}) {
                 <button
                   type="submit"
                   disabled={!(isValid && dirty)}
-                  className="bg-[#1D1F20] text-white py-1 px-3 my-2 mt-4 hover:bg-[#292C2D] flex items-center cursor-pointer"
+                  className="bg-[#1D1F20] text-white py-1 px-3 my-2 mt-4 hover:bg-[#292C2D] flex items-center cursor-pointer w-full justify-center rounded-sm"
                 >
                   {loading && (
                     <svg

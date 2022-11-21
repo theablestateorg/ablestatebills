@@ -19,6 +19,7 @@ import { UG } from "../../components/react-flags";
 import { currencyFormatter } from "../../utils/currencyFormatter";
 import UpdateModal from "../../components/managers/updateModal";
 import { AiOutlineCloseCircle } from "react-icons/ai";
+import axios from "axios";
 
 export default function Site({
   product,
@@ -41,6 +42,7 @@ export default function Site({
   const [countryCode, setCountryCode] = useState("+256");
   const [selected, setSelected] = useState(false);
   const [renewPeriod, setRenewPeriod] = useState(1);
+  const [phoneNumber, setPhoneNumber] = useState(null)
 
   const getNewCustomer = async (id, setFieldValue) => {
     const { data } = await supabase
@@ -627,7 +629,6 @@ export default function Site({
                             onChange={({ target }) =>
                               setPhoneNumber(target.value)
                             }
-                            value={""}
                             required
                           />
                         </div>
@@ -700,13 +701,13 @@ export default function Site({
                         </div>
                       )}
 
-                      {paymentMethod != null && complete != null && (
+                      {paymentMethod != null && paymentMethod !== 0 && complete != null && (
                         <div className="ml-10">
                           <div className="flex flex-col my-2">
                             <label htmlFor="number">Amount</label>
-                            <label htmlFor="number">{go}</label>
+                            <label htmlFor="number" className="text-lg font-bold"><span className="font-medium">ugx{" "}</span>{product.product_price}</label>
                           </div>
-                          <div className="flex flex-col my-2">
+                          {/* <div className="flex flex-col my-2">
                             <label htmlFor="phone">Phone Number</label>
                             <input
                               type="tel"
@@ -716,14 +717,14 @@ export default function Site({
                               placeholder="Enter phone Number"
                               onChange={handleChange("phone")}
                             />
-                          </div>
+                          </div> */}
                           <div className="flex flex-col my-2">
                             <label htmlFor="secret_code">Secret Code</label>
                             <input
                               type="text"
                               name="secret_code"
                               id="secret_code"
-                              className="outline outline-1 px-2 py-1 bg-transparent"
+                              className="outline outline-1 px-2 py-1 bg-transparent rounded-sm"
                               placeholder="Enter secret code"
                               onChange={handleChange("secret_code")}
                             />
@@ -742,14 +743,6 @@ export default function Site({
                   );
                 }}
               </Formik>
-              {/* <div className="flex justify-end mt-5 w-full">
-                <button
-                  className="outline outline-1 outline-[#1D1F20] text-[#1D1F20] py-2 px-4 hover:bg-[#1D1F20] hover:text-white flex items-center gap-2"
-                  onClick={handleDelete}
-                >
-                  Renew
-                </button>
-              </div> */}
             </motion.div>
           </motion.div>
         )}
@@ -799,7 +792,7 @@ export default function Site({
             </motion.div>
           </motion.div>
         )}
-        <footer className="text-center text-gray-500 absolute bottom-1 h-6 w-full">
+        <footer className="text-center text-gray-500 absolute bottom-1 h-6 w-full text-sm">
           <p>
             Copyright &#169; {new Date().getFullYear()} A service of Ablestate
             Creatives Limited

@@ -699,7 +699,7 @@ export default function CustomerSite({
             </motion.div>
           </motion.div>
         )}
-        <footer className="text-center text-gray-500 absolute bottom-1 h-6 w-full">
+        <footer className="text-center text-gray-500 absolute bottom-1 h-6 w-full text-sm">
           <p>
             Copyright &#169; {new Date().getFullYear()} A service of Ablestate
             Creatives Limited

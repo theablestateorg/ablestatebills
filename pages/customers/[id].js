@@ -119,7 +119,7 @@ export default function Site({ profile, manager, websites }) {
               {websites &&
                 websites.map((website, index) => (
                   <div
-                    className="outline outline-1 outline-[#e5e7eb] bg-white px-4 py-2 rounded-lg w-72 h-36 cursor-pointer shadow-md hover:shadow-lg flex flex-col justify-between"
+                    className="outline outline-1 outline-[#e5e7eb] bg-white px-4 py-2 rounded-md w-72 h-36 cursor-pointer shadow-md hover:shadow-lg flex flex-col justify-between"
                     // onClick={() => router.push(`customers/sites/${website.id}`)}
                     key={index}
                   >
@@ -164,19 +164,18 @@ export default function Site({ profile, manager, websites }) {
                     initial="hidden"
                     animate="visible"
                     exit="exit"
-                    className="relative bg-white dark:bg-dark-bg max-h-screen overflow-auto dark:text-secondary-text p-10 w-10/12 md:8/12  rounded-md m-5 sm:mb-5 shadow-md top-50 z-20"
+                    className="relative bg-white dark:bg-dark-bg max-h-screen overflow-auto md:p-10 w-11/12 md:8/12  rounded-sm m-5 sm:mb-5 shadow-md top-50 z-20"
                   >
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between border-b-[1px] px-4">
                       <h1 className="text-center font-bold text-lg my-5">
                         Edit {profile.last_name}&apos;s information
                       </h1>
                       <AiFillCloseCircle
-                        size={25}
+                        size={22}
                         className="cursor-pointer"
                         onClick={() => setPopUpdate(false)}
                       />
                     </div>
-                    <hr />
 
                     <Formik
                       initialValues={{
@@ -190,18 +189,13 @@ export default function Site({ profile, manager, websites }) {
                     >
                       {({
                         values,
-                        errors,
-                        touched,
-                        isValid,
-                        dirty,
                         handleChange,
                         handleBlur,
                         resetForm,
-                        setFieldValue,
                       }) => {
                         return (
                           <Form
-                            className="my-5"
+                            className="my-5 px-4"
                             onSubmit={(event) => handleUpdate(event, values)}
                           >
                             <div className="flex flex-col gap-1 my-2">
@@ -213,7 +207,7 @@ export default function Site({ profile, manager, websites }) {
                                 name="last_name"
                                 id="last_name"
                                 placeholder="Enter Last Name"
-                                className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
+                                className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded-sm w-full"
                                 onChange={handleChange("last_name")}
                                 onBlur={handleBlur("last_name")}
                                 value={values.last_name}
@@ -228,7 +222,7 @@ export default function Site({ profile, manager, websites }) {
                                 name="first_name"
                                 id="first_name"
                                 placeholder="first_name"
-                                className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
+                                className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded-sm w-full"
                                 onChange={handleChange("first_name")}
                                 onBlur={handleBlur("first_name")}
                                 value={values.first_name}
@@ -238,7 +232,7 @@ export default function Site({ profile, manager, websites }) {
                               <label htmlFor="contact_number" className="">
                                 Telephone Number
                               </label>
-                              <div className="relative outline outline-1 outline-[#c1c7d6] rounded flex">
+                              <div className="relative outline outline-1 outline-[#c1c7d6] rounded-sm flex">
                                 <input
                                   type="tel"
                                   id="telephone_number"
@@ -270,7 +264,7 @@ export default function Site({ profile, manager, websites }) {
                                 name="email"
                                 id="email"
                                 placeholder="email"
-                                className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
+                                className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded-sm w-full"
                                 onChange={handleChange("email")}
                                 onBlur={handleBlur("email")}
                                 value={values.email}
@@ -280,7 +274,7 @@ export default function Site({ profile, manager, websites }) {
                             <div className="flex justify-end mt-5">
                               <button
                                 type="submit"
-                                className="outline outline-1 outline-[#1D1F20] bg-[#1D1F20] text-white py-2 px-4 hover:bg-[#1D1F20] hover:text-white flex items-center gap-2"
+                                className="outline outline-1 outline-[#1D1F20] bg-[#1D1F20] text-white py-2 px-4 hover:bg-[#1D1F20] hover:text-white flex items-center rounded-sm w-full justify-center gap-2"
                               >
                                 {loading && (
                                   <svg
@@ -317,9 +311,9 @@ export default function Site({ profile, manager, websites }) {
               )}
             </AnimatePresence>
 
-            <div className="flex gap-5 items-center my-1">
+            <div className="flex gap-5 items-center my-5">
               <button
-                className="outline outline-1 outline-[#1D1F20] text-[#1D1F20] py-2 px-4 hover:bg-[#1D1F20] hover:text-white flex items-center gap-2"
+                className="outline outline-1 outline-[#1D1F20] text-[#1D1F20] py-2 px-4 hover:bg-[#1D1F20] hover:text-white flex items-center gap-2 rounded-sm"
                 onClick={() => setPopUp(true)}
               >
                 <MdDeleteOutline size={20} /> Delete Customer
@@ -341,7 +335,7 @@ export default function Site({ profile, manager, websites }) {
                 initial="hidden"
                 animate="visible"
                 exit="exit"
-                className="relative bg-white dark:bg-dark-bg max-h-screen overflow-auto dark:text-secondary-text p-10  rounded-md m-2 sm:mb-5 shadow-md top-50 z-20"
+                className="relative bg-white dark:bg-dark-bg max-h-screen overflow-auto dark:text-secondary-text py-2 px-4 md:p-10  rounded-sm m-2 sm:mb-5 shadow-md top-50 z-20"
               >
                 <h1 className="text-center font-bold text-lg my-5">
                   Delete Customer
@@ -394,13 +388,13 @@ export default function Site({ profile, manager, websites }) {
                 </p>
                 <div className="flex justify-between mt-5">
                   <button
-                    className="outline outline-1 outline-[#1D1F20] bg-[#1D1F20] text-white py-2 px-4 hover:bg-[#1D1F20] hover:text-white flex items-center gap-2"
+                    className="outline outline-1 outline-[#1D1F20] bg-[#1D1F20] text-white py-2 px-4 hover:bg-[#1D1F20] hover:text-white flex items-center gap-2 rounded-sm"
                     onClick={() => setPopUp(false)}
                   >
                     No, Cancel
                   </button>
                   <button
-                    className="outline outline-1 outline-[#1D1F20] text-[#1D1F20] py-2 px-4 hover:bg-[#1D1F20] hover:text-white flex items-center gap-2"
+                    className="outline outline-1 outline-[#1D1F20] text-[#1D1F20] py-2 px-4 hover:bg-[#1D1F20] hover:text-white flex items-center gap-2 rounded-sm"
                     onClick={handleDelete}
                   >
                     Yes, Delete

@@ -1,19 +1,14 @@
 import Head from "next/head";
-import Navbar from "../../components/nav";
-import { ToastContainer } from "react-toastify";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { supabase } from "../../utils/supabase";
 import { useAuth } from "../../utils/auth";
-import { useCookies } from "react-cookie"
 import { parseCookies } from "../../utils/parseCookies";
 
 function Ticket({ ticket, customer }) {
   const router = useRouter();
   const { id } = router.query;
-  // const [ticket, setTicket] = useState({});
   const { user } = useAuth()
-  // const [customer, setCustomer] = useState({})
   const [values, setValues] = useState({
     response: ''
   })
@@ -32,16 +27,16 @@ function Ticket({ ticket, customer }) {
     setReload(!reload)
   }
 
+  console.log(id)
+
   return (
     <div>
       <Head>
-        <title>Ticket - Shine Africa</title>
+        <title>{id ? `TK${id}` : "Ticket"}- Shine Africa</title>
       </Head>
 
-      <ToastContainer />
-
       <main className="pt-[70px] mx-5 md:mx-20 relative pb-6 min-h-screen">
-        <div className="w-ful my-10 p-10">
+        <div className="w-ful my-10 md:p-10">
           <div className="flex justify-between mb-5">
             <h1 className="font-bold">#TK{ticket && ticket.id}</h1>
             <div>
@@ -51,14 +46,14 @@ function Ticket({ ticket, customer }) {
               </span>
             </div>
           </div>
-          <div className="w-full bg-white p-10 pb-16 rounded-lg">
+          <div className="w-full bg-white p-4 md:p-10 pb-16 rounded-sm">
             <div className="flex flex-col gap-5">
               <div className="flex">
                 <div className="w-12 h-12 flex justify-center items-center rounded-full bg-[#CA3011] text-white font-bold">
                 {customer && customer.first_name && customer.first_name[0].toUpperCase() + customer.last_name[0].toUpperCase() }
                 </div>
                 <div>
-                  <p className="bg-gray-200 px-2 py-3 rounded-lg m-2">
+                  <p className="bg-neutral-100 px-2 py-3 rounded-md m-2">
                     {ticket && ticket.message}
                   </p>
                   <p className="font-bold">
@@ -68,11 +63,9 @@ function Ticket({ ticket, customer }) {
               </div>
               <div className="flex flex-col items-end">
               {ticket && ticket.response && <>
-                <p className="bg-gray-100 px-2 py-3 rounded-lg m-2">
+                <p className="bg-neutral-200 px-2 py-3 rounded-lg m-2">
                   {ticket.response}
                 </p>
-                {/* <p className="font-bold">
-                  {customer && customer.first_name && customer.first_name + " " + customer.last_name}</p> */}
               </>}
                 
               </div>
@@ -91,7 +84,7 @@ function Ticket({ ticket, customer }) {
                 <input
                   type="submit"
                   value="Send"
-                  className="bg-black mt-5 text-white p-2 cursor-pointer"
+                  className="bg-black mt-5 text-white p-2 cursor-pointer rounded-sm"
                   onClick={() => handleResponse()}
                 />
               </div>

@@ -6,20 +6,14 @@ import { MdDeleteOutline } from "react-icons/md";
 import { IoWarning } from "react-icons/io5";
 import { toast } from "react-toastify";
 import Router from "next/router";
-import { Formik, Form } from "formik";
 import { useAuth } from "../../utils/auth";
 import { TbEdit } from "react-icons/tb";
 import { RiExternalLinkFill } from "react-icons/ri";
 import moment from "moment";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { dropIn } from "../../utils/dropIn";
 import { parseCookies } from "../../utils/parseCookies";
-import { CKAirtel, CKMtn } from "../../components/ck";
-import { UG } from "../../components/react-flags";
-import { currencyFormatter } from "../../utils/currencyFormatter";
 import UpdateModal from "../../components/managers/updateModal";
-import { AiOutlineCloseCircle } from "react-icons/ai";
-import axios from "axios";
 import RenewModal from "../../components/managers/renewModal";
 
 export default function Site({
@@ -37,27 +31,9 @@ export default function Site({
   const [popRenew, setPopRenew] = useState(false);
   const [popUpdate, setPopUpdate] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [customerModel, setCustomerModel] = useState(false);
-  const [customerId, setCustomerId] = useState(null);
   const [newCustomer, setNewCustomer] = useState(null);
   const [countryCode, setCountryCode] = useState("+256");
-  const [selected, setSelected] = useState(false);
   const [renewPeriod, setRenewPeriod] = useState(1);
-  const [phoneNumber, setPhoneNumber] = useState(null);
-
-  const getNewCustomer = async (id, setFieldValue) => {
-    const { data } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", id)
-      .single();
-    // setContact(data);
-    if (data.contact_number) {
-      // values.telephone_number = "+256985"
-      setFieldValue("telephone_number", data.contact_number.slice(4, 13));
-    }
-    setNewCustomer(data);
-  };
 
   const { user } = useAuth();
 

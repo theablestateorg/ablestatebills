@@ -9,6 +9,16 @@ export const menuData = {
       link: "",
     }
   ],
+  support: [
+    {
+      label: "Tickets",
+      link: "/tickets",
+    },
+    {
+      label: "Overview",
+      link: "/overview",
+    },
+  ],
   manager: [
     {
       label: "Dashboard",

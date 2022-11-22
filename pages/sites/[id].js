@@ -93,6 +93,7 @@ export default function Site({
               },
             ]);
         }
+        // send email and sms to managers
       }
       if (error) {
         toast.error(`${error?.message}`, { position: "top-center" });

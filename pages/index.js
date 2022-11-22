@@ -7,6 +7,7 @@ import Customer from "../components/roles/Customer";
 import Admin from "../components/roles/Admin";
 import { parseCookies } from "../utils/parseCookies";
 import { useRouter } from "next/router";
+import Tickets from "./tickets";
 
 export default function Home({ websites, customers, person }) {
   const [searchText, setSearchText] = useState("");
@@ -142,7 +143,17 @@ export const getServerSideProps = async ({ req, res }) => {
         props: {},
       };
     }
+    if(person && JSON.parse(person.user).profile.role === "support"){
+      return {
+        redirect: {
+          permanent: false,
+          destination: "/tickets",
+        },
+        props: {},
+      };
+    }
   }
+  
 
   const { data: websites } = await supabase
     .from("websites")

@@ -12,12 +12,12 @@ function Tickets({ tickets, customers }) {
         <title>Tickets - Shine Afrika</title>
       </Head>
       <main className="pt-[70px] mx-3 md:mx-16 relative pb-6 min-h-screen flex flex-col">
-        {tickets.length > 0 && tickets.map((ticket, index) => (
+        {tickets && tickets.length > 0 && tickets.map((ticket, index) => (
           <Fragment key={index}>
             <TicketCard ticket={ticket} customer={customers.filter(customer => customer.id === ticket.customer_id).map(customer => customer.first_name + " " + customer.last_name)[0]} />
           </Fragment>
         ))}
-        {tickets.length === 0 &&
+        {tickets && tickets.length === 0 &&
           <div className="flex-grow flex gap-5 flex-col justify-center items-center text-lg font-bold text-gray-400">
             <AiOutlineFileDone size={50} />
             There are no new Tickets.

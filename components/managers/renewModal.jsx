@@ -54,7 +54,7 @@ function RenewModal({
           </div>
           <div className="flex flex-wrap gap-5 mt-2 md:ml-10 px-2">
             <span
-              className={`bg-[#ca3011] px-2 w-[120px] md:w-[150px] flex justify-around items-center py-1 gap-2 cursor-pointer rounded-sm ${
+              className={`bg-[#ca3011] px-2 w-[120px] md:w-[150px] flex justify-around items-center py-1 md:py-2 gap-2 cursor-pointer rounded-sm ${
                 paymentMethod === 0 && "outline outline-2 outline-black"
               }`}
               onClick={() => setPaymentMethod(0)}
@@ -66,7 +66,7 @@ function RenewModal({
               </span>
             </span>
             <span
-              className={`bg-[#FFCC00] px-2 w-[120px] md:w-[150px] py-1 flex justify-around items-center gap-2 cursor-pointer rounded-sm ${
+              className={`bg-[#FFCC00] px-2 w-[120px] md:w-[150px] py-1 md:py-2 flex justify-around items-center gap-2 cursor-pointer rounded-sm ${
                 paymentMethod === 1 && "outline outline-2 outline-black"
               }`}
               onClick={() => setPaymentMethod(1)}
@@ -78,7 +78,7 @@ function RenewModal({
               </span>
             </span>
             <span
-              className={`bg-[#FF0000] p-2 text-white w-[120px] md:w-[150px] py-1 flex justify-around cursor-pointer rounded-sm ${
+              className={`bg-[#FF0000] p-2 text-white w-[120px] md:w-[150px] py-1 md:py-2 flex justify-around cursor-pointer rounded-sm ${
                 paymentMethod === 2 && "outline outline-2 outline-black"
               }`}
               onClick={() => setPaymentMethod(2)}

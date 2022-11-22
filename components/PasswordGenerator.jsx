@@ -49,7 +49,7 @@ function PasswordGenerator({ password, setPassword, resize=false}) {
           <AiOutlineCopy />
           </button>
       </div>
-      <button type='button' className='bg-[#CA3011] text-white py-1 px-5 rounded-sm' onClick={handleGeneratePassword}>Generate</button>
+      <button type='button' className='bg-[#CA3011] hover:bg-[#d33314] text-white py-1 px-5 rounded-sm outline outline-1 outline-[#CA3011]' onClick={handleGeneratePassword}>Generate</button>
       </div>
     </div>
   );

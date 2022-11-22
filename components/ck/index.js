@@ -1,7 +1,7 @@
 export function CKAirtel() {
   return (
     <svg
-      width="37"
+      width="30"
       height="39"
       viewBox="0 0 37 39"
       fill="none"
@@ -21,7 +21,7 @@ export function CKAirtel() {
 export function CKMtn() {
   return (
     <svg
-      width="90"
+      width="60"
       height="37"
       viewBox="0 0 90 37"
       fill="none"

@@ -29,9 +29,9 @@ function UpdateModal({
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="relative bg-white dark:bg-dark-bg max-h-screen overflow-auto dark:text-secondary-text p-10 w-10/12 md:8/12  rounded-md m-5 sm:mb-5 shadow-md top-50 z-20"
+            className="relative bg-white dark:bg-dark-bg max-h-screen overflow-auto dark:text-secondary-text py-2 md:p-10 w-10/12 md:8/12  rounded-sm m-5 sm:mb-5 shadow-md top-50 z-20"
           >
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between border-b-[1px] px-4">
               <h1 className="text-center font-bold text-lg my-5">
                 Update Website
               </h1>
@@ -69,7 +69,7 @@ function UpdateModal({
               }) => {
                 return (
                   <Form
-                    className="my-5"
+                    className="my-5 px-4"
                     onSubmit={(event) => handleUpdate(event, values)}
                   >
                     <div className="flex flex-col gap-1 my-2">
@@ -81,7 +81,7 @@ function UpdateModal({
                         name="name"
                         id="name"
                         placeholder="name"
-                        className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
+                        className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded-sm w-full"
                         onChange={handleChange("name")}
                         onBlur={handleBlur("name")}
                         value={values.name}
@@ -114,7 +114,7 @@ function UpdateModal({
                         name="product_price"
                         id="product_price"
                         placeholder="Enter Price"
-                        className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
+                        className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded-sm w-full"
                         onChange={handleChange("product_price")}
                         onBlur={handleBlur("product_price")}
                         value={values.product_price}
@@ -126,7 +126,7 @@ function UpdateModal({
                         <select
                           name=""
                           id="contact_person"
-                          className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
+                          className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded-sm w-full"
                           onChange={(e) => {
                             setFieldValue("contact_person", e.target.value);
                             setCustomerId(e.target.value);
@@ -152,7 +152,7 @@ function UpdateModal({
                     </div>
                     <div className="flex flex-col gap-1 my-2">
                       <label htmlFor="telephone_number">Telephone</label>
-                      <div className="relative outline outline-1 outline-[#c1c7d6] rounded flex">
+                      <div className="relative outline outline-1 outline-[#c1c7d6] rounded-sm flex">
                         <input
                           type="tel"
                           id="telephone_number"
@@ -197,7 +197,7 @@ function UpdateModal({
                         type="text"
                         name="website_link"
                         placeholder="website"
-                        className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded w-full"
+                        className="py-2 px-2 bg-transparent  outline outline-1 outline-[#c1c7d6] rounded-sm w-full"
                         onChange={handleChange("website_link")}
                         onBlur={handleBlur("website_link")}
                         defaultValue={product.website_link}
@@ -207,7 +207,7 @@ function UpdateModal({
                     <div className="flex justify-end mt-5">
                       <button
                         type="submit"
-                        className="outline outline-1 outline-[#1D1F20] bg-[#1D1F20] text-white py-2 px-4 hover:bg-[#1D1F20] hover:text-white flex items-center gap-2"
+                        className="outline outline-1 outline-[#1D1F20] bg-[#1D1F20] text-white py-2 px-4 hover:bg-[#1D1F20] hover:text-white flex items-center gap-2 w-full justify-center rounded-sm"
                       >
                         {loading && (
                           <svg

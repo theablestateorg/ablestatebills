@@ -1,24 +1,14 @@
-import Head from "next/head";
-import { toast } from "react-toastify";
-import { useState, useEffect } from "react";
-import AccountSettings from "../components/AccountSettings";
-import Password from "../components/Password";
-import Footer from "../components/Footer";
+import {  useEffect } from "react";
 import { downloadFile } from "../utils/getImages";
 import { useAuth } from "../utils/auth";
-import useMediaQuery from "../hooks/useMediaQuery";
 import { useCookies } from "react-cookie";
 import { parseCookies } from "../utils/parseCookies";
 import { supabase } from "../utils/supabase";
-import Image from "next/image";
 import AccountLayout from "../components/AccountLayout";
 import Accounts from "../components/Accounts";
 
 export default function Account({ account_balance, transactions }) {
-  const [showInfo, setShowInfo] = useState(0);
-  const [avatar, setAvatar] = useState("");
   const { user } = useAuth();
-  const matches = useMediaQuery("(min-width: 800px)");
   const [cookie] = useCookies(["user"]);
 
   useEffect(() => {

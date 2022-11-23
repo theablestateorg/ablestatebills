@@ -14,6 +14,7 @@ const client = africastalking({
 
 export default function handler(req, res) {
   // SENDING EMAIL
+  console.log(req.body)
 
   req.body?.day &&
     req.body?.day.forEach((website, index) => {

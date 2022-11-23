@@ -14,7 +14,7 @@ import { menuData } from "../utils/menuData";
 import { motion, AnimateSharedLayout } from "framer-motion";
 import { useCookies } from "react-cookie";
 import { parseCookies } from "../utils/parseCookies";
-import { BiSearchAlt2 } from "react-icons/bi"
+import { BiSearchAlt2 } from "react-icons/bi";
 import { useKBar } from "kbar";
 
 export default function Navbar({ user }) {
@@ -25,7 +25,7 @@ export default function Navbar({ user }) {
   const [notifications, setNotifications] = useState([]);
   const router = useRouter();
   const { signOut, loading, setLoading } = useAuth();
-  const { query } = useKBar()
+  const { query } = useKBar();
 
   const [cookie] = useCookies(["user"]);
   let role;
@@ -34,6 +34,17 @@ export default function Navbar({ user }) {
   } else {
     role = "customer";
   }
+
+  const seenNotification = async () => {
+    // const list = notifications.filter((note) => note !== user.id);
+    // const { data, error } = await supabase
+    //   .from("notifications")
+    //   .update({ notifiers: list })
+    //   .contains("notifiers", ["8020293c-c73a-45e1-a782-bfd003ee684e","d7eb6c01-80ea-47d7-a400-f4d6cc6eb548","78a25aad-06bb-4cfd-867d-5f77891f09c8","38b59734-eeeb-4590-a1d7-4d42baa90074"]);
+    // // console.log(list);
+    // console.log("error ", error);
+    // console.log("data ", data);
+  };
 
   useEffect(() => {
     try {
@@ -123,7 +134,10 @@ export default function Navbar({ user }) {
           </span>
           <span
             className="cursor-pointer relative hover:bg-neutral-100 rounded p-2"
-            onClick={() => setNotify(!notify)}
+            onClick={() => {
+              seenNotification();
+              setNotify(!notify);
+            }}
           >
             <Notifications
               notify={notify}
@@ -178,7 +192,9 @@ export default function Navbar({ user }) {
                         " " +
                         user?.user_metadata.last_name}{" "}
                     </p>
-                    <p className="text-zinc-500 text-sm mb-1">{cookie?.user && cookie?.user?.user.email} </p>
+                    <p className="text-zinc-500 text-sm mb-1">
+                      {cookie?.user && cookie?.user?.user.email}{" "}
+                    </p>
                     <p className="uppercase text-zinc-400 font-medium text-sm">
                       Appearance (soon)
                     </p>
@@ -228,40 +244,44 @@ export default function Navbar({ user }) {
           {showMobileMenu && (
             <ul className="bg-white absolute z-20 outline outline-1 outline-[#E4E6E5] top-10 -right-4 p-2 w-56">
               <div className="flex flex-col items-center gap-1 mb-1 border-b-[1px] px-2 not-italic">
-                  <div className="w-10 h-10 rounded-full overflow-hidden">
-                    {avatar ? (
-                      <img src={avatar} alt="profile" />
-                    ) : (
-                      <span className="text-white font-bold flex items-center justify-center bg-[#CA3011] w-10 h-10">
-                        {user?.user_metadata.first_name[0].toUpperCase()}
-                        {user?.user_metadata.last_name[0].toUpperCase()}
-                      </span>
-                    )}
-                  </div>
-                  <div onClick={(e) => e.stopPropagation()}>
-                    <p className="font-medium text-center">
-                      {user?.user_metadata.first_name +
-                        " " +
-                        user?.user_metadata.last_name}{" "}
-                    </p>
-                    <p className="text-zinc-500 text-sm mb-1 text-center">{user?.email} </p>
-                    <p className="uppercase text-zinc-400 font-medium text-sm not-italic">
-                      Appearance (soon)
-                    </p>
-                    <select
-                      name=""
-                      id=""
-                      className="bg-transparent outline outline-1 px-2 py-1 mb-1 text-zinc-400 rounded text-sm"
-                    >
-                      <option value="light">light</option>
-                      <option value="dark">dark</option>
-                      <option value="system_preferences">
-                        System Preferences
-                      </option>
-                    </select>
-                  </div>
+                <div className="w-10 h-10 rounded-full overflow-hidden">
+                  {avatar ? (
+                    <img src={avatar} alt="profile" />
+                  ) : (
+                    <span className="text-white font-bold flex items-center justify-center bg-[#CA3011] w-10 h-10">
+                      {user?.user_metadata.first_name[0].toUpperCase()}
+                      {user?.user_metadata.last_name[0].toUpperCase()}
+                    </span>
+                  )}
                 </div>
-                <p className="not-italic text-xs pl-2 text-gray-400 font-medium bg-gray-50 py-1">Go to</p>
+                <div onClick={(e) => e.stopPropagation()}>
+                  <p className="font-medium text-center">
+                    {user?.user_metadata.first_name +
+                      " " +
+                      user?.user_metadata.last_name}{" "}
+                  </p>
+                  <p className="text-zinc-500 text-sm mb-1 text-center">
+                    {user?.email}{" "}
+                  </p>
+                  <p className="uppercase text-zinc-400 font-medium text-sm not-italic">
+                    Appearance (soon)
+                  </p>
+                  <select
+                    name=""
+                    id=""
+                    className="bg-transparent outline outline-1 px-2 py-1 mb-1 text-zinc-400 rounded text-sm"
+                  >
+                    <option value="light">light</option>
+                    <option value="dark">dark</option>
+                    <option value="system_preferences">
+                      System Preferences
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <p className="not-italic text-xs pl-2 text-gray-400 font-medium bg-gray-50 py-1">
+                Go to
+              </p>
               {menuData[`${role}`].map((menuItem, index) => (
                 <Link href={menuItem.link} className="nn" key={index}>
                   <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic rounded">
@@ -269,7 +289,9 @@ export default function Navbar({ user }) {
                   </li>
                 </Link>
               ))}
-              <p className="not-italic text-xs pl-2 text-gray-400 font-medium bg-gray-50 py-1">Settings</p>
+              <p className="not-italic text-xs pl-2 text-gray-400 font-medium bg-gray-50 py-1">
+                Settings
+              </p>
 
               <Link href="/profile">
                 <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic rounded">

@@ -215,6 +215,7 @@ export default function handler(req, res) {
           .then((response) => res.status(200).json(response))
           .catch((error) => res.status(503).json(error));
       });
+    res.send({ message: null });
   } catch (error) {
     console.log(error);
     res.send({ error: error.message });

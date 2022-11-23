@@ -15,12 +15,14 @@ import { dropIn } from "../../../utils/dropIn";
 import { parseCookies } from "../../../utils/parseCookies";
 import UpdateModal from "../../../components/customers/updateModal";
 import RenewModal from "../../../components/managers/renewModal";
+import axios from "axios";
 
 export default function CustomerSite({
   product,
   contactPerson,
   account_balance,
-  managers
+  managers,
+  notifiers
 }) {
   const [paymentMethod, setPaymentMethod] = useState(0);
   const [complete, setComplete] = useState(null);
@@ -64,7 +66,7 @@ export default function CustomerSite({
             extendedDate.getFullYear() +
             1 +
             "-" +
-            extendedDate.getMonth() +
+            `${extendedDate.getMonth() + 1}` +
             "-" +
             extendedDate.getDate(),
           status: "active",
@@ -72,7 +74,7 @@ export default function CustomerSite({
         .match({ id: id });
 
       if (data) {
-        toast.success(`Successfully Renewed`, { position: "top-center" });
+        toast.success("Successfully Renewed", { position: "top-center" });
 
         const { data, error } = await supabase
           .from("accounts")
@@ -93,17 +95,27 @@ export default function CustomerSite({
                 description: "",
               },
             ]);
-          
-            const { data } = await supabase.from("notifications").insert([
-              {
-                notification: `made a payment`,
-                description: `${user.user_metadata.first_name} ${user.user_metadata.last_name} paid ${amount} for ${product.name}`,
-                actor: `${user.first_name}`,
-                actor_id: user.id,
-                ticket_id: null,
-                notifiers: managers
-              },
-            ]);
+
+          const results = await axios
+            .post("/api/payment-notification", {
+              actor: `${user.first_name}`,
+              amount: `${amount}`,
+              product: `${product.name}`,
+              notifiers: notifiers,
+            })
+            .then(() => console.log("something happend"))
+            .catch((error) => console.log(error));
+
+          const { data } = await supabase.from("notifications").insert([
+            {
+              notification: `made a payment`,
+              description: `${user.user_metadata.first_name} ${user.user_metadata.last_name} paid ${amount} for ${product.name}`,
+              actor: `${user.first_name}`,
+              actor_id: user.id,
+              ticket_id: null,
+              notifiers: managers,
+            },
+          ]);
         }
       }
       if (error) {
@@ -116,40 +128,6 @@ export default function CustomerSite({
     }
     setPopRenew(false);
   };
-
-  // const handleRenew = async (event, values, resetForm) => {
-  //   event.preventDefault();
-  //   const { amount } = values;
-
-  //   if (+amount > +account_balance.account_balance) {
-  //     toast.error(`Insufficient Account balance`, { position: "top-center" });
-  //   } else {
-  //     const date = new Date(product.expiry_date);
-  //     const year = date.getFullYear();
-  //     const month = date.getMonth();
-  //     const day = date.getDate();
-  //     const extendedDate = new Date(year, month, day);
-
-  //     const { data, error } = await supabase
-  //       .from("websites")
-  //       .update({
-  //         last_paid: new Date().toLocaleDateString(),
-  //         expiry_date: extendedDate.toLocaleDateString(),
-  //         status: "active",
-  //       })
-  //       .match({ id: id });
-
-  //     if (data) {
-  //       toast.success(`Successfully Renewed`, { position: "top-center" });
-  //     }
-  //     if (error) {
-  //       toast.error(`${error?.message}`, { position: "top-center" });
-  //     }
-  //     resetForm({
-  //       amount: "",
-  //     });
-  //   }
-  // };
 
   const handleDelete = async () => {
     const { data, error } = await supabase
@@ -405,20 +383,20 @@ export default function CustomerSite({
             </motion.div>
           </motion.div>
         )}
-        {popRenew &&
+        {popRenew && (
           <RenewModal
-          product={product}
-          paymentMethod={paymentMethod}
-          setPaymentMethod={setPaymentMethod}
-          account_balance={account_balance.account_balance}
-          renewPeriod={renewPeriod}
-          setPopRenew={setPopRenew}
-          setRenewPeriod={setRenewPeriod}
-          complete={complete}
-          setComplete={setComplete}
-          handleRenew={handleRenew}
-        />
-        }
+            product={product}
+            paymentMethod={paymentMethod}
+            setPaymentMethod={setPaymentMethod}
+            account_balance={account_balance.account_balance}
+            renewPeriod={renewPeriod}
+            setPopRenew={setPopRenew}
+            setRenewPeriod={setRenewPeriod}
+            complete={complete}
+            setComplete={setComplete}
+            handleRenew={handleRenew}
+          />
+        )}
         {popUp && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -510,12 +488,12 @@ export const getServerSideProps = async ({ req, res, params }) => {
 
   const { data: notifiers } = await supabase
     .from("profiles")
-    .select("id")
-    .in('role', ['manager', 'admin'])
-  
-  const managers = notifiers.map((manager) => manager.id)
+    .select("id, email, contact_number")
+    .in("role", ["manager", "admin"]);
+
+  const managers = notifiers.map((manager) => manager.id);
 
   return {
-    props: { product, contactPerson, account_balance, managers },
+    props: { product, contactPerson, account_balance, managers, notifiers },
   };
 };

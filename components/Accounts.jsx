@@ -12,13 +12,15 @@ import { CKAirtel, CKMtn } from "./ck";
 import { UG } from "./react-flags/index";
 import { AiOutlineArrowUp, AiOutlineArrowDown } from "react-icons/ai";
 import axios from "axios";
+import TransferModal from "./TransferModal";
 
 function Accounts({ account_balance, transactions }) {
   const [loading, setLoading] = useState(false);
   const [cookie] = useCookies(["user"]);
+  const [tranferPop, setTransferPop] = useState(false);
 
   const [paymentMethod, setPaymentMethod] = useState(null);
-  const [complete, setComplete] = useState(true);
+  const [complete, setComplete] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [amount, setAmount] = useState("");
 
@@ -27,59 +29,76 @@ function Accounts({ account_balance, transactions }) {
     setLoading(true);
     const { secret_code } = values;
 
-    const results = await axios
-      .post("/api/make-payment", {
-        amount: amount,
-        phone: phoneNumber,
-        secret_code: secret_code,
-        mobile_money_company_id: paymentMethod,
-        reason: "ShineAfrika",
-        metadata: "Paying for hosting",
-      })
-      .then(async (res) => {
-        setComplete(true);
-        const { data, error } = await supabase
-          .from("accounts")
-          .update({
-            account_balance: +amount + +account_balance.account_balance,
-          })
-          .eq("id", cookie.user?.user?.id);
-
-        if (data) {
-          const { data: transaction, error } = await supabase
-            .from("transactions")
-            .insert([
-              {
-                transaction_type: "deposit",
-                status: "successful",
-                amount: amount,
-                actor_id: cookie.user?.user?.id,
-                description: "",
-              },
-            ]);
-
-          if (transaction) {
-            toast.success(`${amount} deposited successfully`, {
-              position: "top-center",
-            });
-          }
-        } else if (error) {
-          toast.error(`Failed: ${error.message}`, { position: "top-center" });
-        }
-        Router.push("/account");
-      })
-      .catch((error) => {
-        toast.error(`Transaction failed: ${error.message}`, {
-          position: "top-center",
-        });
+    if (!amount) {
+      toast.error(`Amount is required`, {
+        position: "top-center",
       });
+    } else if (+amount < 10000) {
+      toast.error(`Deposits should be more than 10,000`, {
+        position: "top-center",
+      });
+    } else if (+amount >= 10000) {
+      // const results = await axios
+      //   .post("/api/make-payment", {
+      //     amount: amount,
+      //     phone: phoneNumber,
+      //     secret_code: secret_code,
+      //     mobile_money_company_id: paymentMethod,
+      //     reason: "ShineAfrika",
+      //     metadata: "Paying for hosting",
+      //   })
+      //   .then(async (res) => {
+      // setComplete(true);
+      const { data, error } = await supabase
+        .from("accounts")
+        .update({
+          account_balance: +amount + +account_balance.account_balance,
+        })
+        .eq("id", cookie.user?.user?.id);
 
-    resetForm({ amount: "" });
+      if (data) {
+        const { data: transaction, error } = await supabase
+          .from("transactions")
+          .insert([
+            {
+              transaction_type: "deposit",
+              status: "successful",
+              amount: amount,
+              actor_id: cookie.user?.user?.id,
+              description: "",
+            },
+          ]);
+
+        if (transaction) {
+          toast.success(`${amount} deposited successfully`, {
+            position: "top-center",
+          });
+        }
+      } else if (error) {
+        toast.error(`Failed: ${error.message}`, { position: "top-center" });
+      }
+      Router.push("/account");
+      // })
+      // .catch((error) => {
+      //   toast.error(`Transaction failed: ${error.message}`, {
+      //     position: "top-center",
+      //   });
+      // });
+
+      setAmount("");
+      setPhoneNumber("");
+    }
+
+    resetForm({ secret_code: "" });
     setLoading(false);
   };
 
   const generateToken = async () => {
-    if (+amount >= 10000) {
+    if (!amount) {
+      toast.error(`Amount is required`, {
+        position: "top-center",
+      });
+    } else if (+amount >= 10000) {
       if (paymentMethod === "1") {
         const phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})$/;
 
@@ -98,9 +117,10 @@ function Accounts({ account_balance, transactions }) {
         }
 
         setComplete(true);
-      } else if (paymentMethod === "2") {
-        setComplete(true);
       }
+      // else if (paymentMethod === 2) {
+      //   setComplete(true);
+      // }
     } else {
       toast.error(`Please enter an amount more than 10,000`, {
         position: "top-center",
@@ -110,6 +130,12 @@ function Accounts({ account_balance, transactions }) {
 
   return (
     <section className="my-5 flex-grow flex flex-col md:px-8">
+      {tranferPop && (
+        <TransferModal
+          setTransferPop={setTransferPop}
+          account_balance={account_balance.account_balance}
+        />
+      )}
       <h1 className="font-bold text-lg border-b-2 p-2">Account</h1>
       <div className="px-1 rounded-sm">
         <div className="my-5 py-5">
@@ -128,6 +154,12 @@ function Accounts({ account_balance, transactions }) {
                       </span>
                     </p>
                   </div>
+                  <span
+                    className="underline cursor-pointer text-[#ca3011]"
+                    onClick={() => setTransferPop(true)}
+                  >
+                    transfer
+                  </span>
                 </div>
               </div>
               <div className="bg-[#f7f7f7] p-3 rounded-md flex gap-5 justify-start outline outline-1 outline-gray-200 items-center w-full">
@@ -204,14 +236,14 @@ function Accounts({ account_balance, transactions }) {
             <div className="flex flex-wrap gap-5 my-2">
               <span
                 className={`bg-[#FFCC00] w-[150px] flex justify-around items-center gap-2 cursor-pointer rounded-sm ${
-                  paymentMethod === "1"
+                  paymentMethod === 1
                     ? "outline outline-1 outline-black"
                     : "outline outline-1 outline-[#FFCC00]"
                 } relative`}
-                onClick={() => setPaymentMethod("1")}
+                onClick={() => setPaymentMethod(1)}
               >
                 <div className="absolute z-10 outline outline-1 outline-black w-3 h-3 rounded-full top-1 left-1 flex justify-center items-center">
-                  {paymentMethod === "1" && (
+                  {paymentMethod === 1 && (
                     <div className="w-2 h-2 outline outline-1 outline-black bg-black rounded-full"></div>
                   )}
                 </div>
@@ -225,14 +257,14 @@ function Accounts({ account_balance, transactions }) {
               </span>
               <span
                 className={`bg-[#FF0000] text-white w-[150px] flex justify-around py-2 cursor-pointer rounded-sm ${
-                  paymentMethod === "2"
+                  paymentMethod === 2
                     ? "outline outline-1 outline-black"
                     : "outline outline-1 outline-[#FF0000]"
                 } relative`}
-                onClick={() => setPaymentMethod("2")}
+                onClick={() => setPaymentMethod(2)}
               >
                 <div className="absolute z-10 outline outline-1 outline-black w-3 h-3 rounded-full top-1 left-1 flex justify-center items-center">
-                  {paymentMethod === "2" && (
+                  {paymentMethod === 2 && (
                     <div className="w-2 h-2 outline outline-1 outline-black bg-black rounded-full"></div>
                   )}
                 </div>
@@ -245,9 +277,11 @@ function Accounts({ account_balance, transactions }) {
                 </div>
               </span>
             </div>
-            <h3 className="mb-2 font-medium">Get Secret Code</h3>
+            {paymentMethod && (
+              <h3 className="mb-2 font-medium">Get Secret Code</h3>
+            )}
             <div className="">
-              {paymentMethod === "1" && (
+              {paymentMethod === 1 && (
                 <>
                   <p className="text-gray-500 ml-2">MTN MoMo</p>
                   <p className="text-gray-500 ml-2">
@@ -276,14 +310,13 @@ function Accounts({ account_balance, transactions }) {
                   </div>
                 </>
               )}
-              {paymentMethod === "2" && (
+              {paymentMethod === 2 && (
                 <>
                   <p className="text-gray-500 ml-2">Airtel Money</p>
                   <p className="text-gray-500 ml-2">
                     You will be required to inital the withdraw from you airtel
                     money to get a{" "}
-                    <span className="font-bold">*secret code*</span> then press
-                    next to continue
+                    <span className="font-bold">*secret code*</span> to continue
                   </p>
 
                   <div className="flex flex-col my-2">
@@ -295,7 +328,7 @@ function Accounts({ account_balance, transactions }) {
                       </div>
                       <input
                         type="text"
-                        name=""
+                        name="number"
                         id="number"
                         className="focus:outline-none border-l-[1px] border-black px-2 py-1 bg-transparent flex-grow"
                         placeholder="751234567"
@@ -307,7 +340,7 @@ function Accounts({ account_balance, transactions }) {
                   </div>
                 </>
               )}
-              {paymentMethod != null && (
+              {paymentMethod === 1 && (
                 <div className="flex justify-end">
                   <button
                     className="text-white bg-[#121212] px-2 py-1 rounded-sm outline outline-1 outline-black hover:bg-transparent hover:text-black"
@@ -336,31 +369,106 @@ function Accounts({ account_balance, transactions }) {
                   className="mt-5"
                   name="loginForm"
                 >
-                  {paymentMethod != null && complete && (
-                    <div className="">
-                      <div className="flex flex-col my-2">
-                        <label htmlFor="secret_code">
-                          Enter Secret Code to complete payment
-                        </label>
-                        <input
-                          type="text"
-                          name="secret_code"
-                          id="secret_code"
-                          className="outline outline-1 px-2 py-1 bg-transparent rounded-sm"
-                          placeholder="Enter secret code"
-                          onChange={handleChange("secret_code")}
-                          value={values.secret_code}
-                        />
-                      </div>
+                  {paymentMethod != null ? (
+                    paymentMethod === 1 ? (
+                      complete && (
+                        <div className="">
+                          <div className="flex flex-col my-2">
+                            <label htmlFor="secret_code">
+                              Enter Secret Code to complete payment
+                            </label>
+                            <input
+                              type="text"
+                              name="secret_code"
+                              id="secret_code"
+                              className="outline outline-1 px-2 py-1 bg-transparent rounded-sm"
+                              placeholder="Enter secret code"
+                              onChange={handleChange("secret_code")}
+                              value={values.secret_code}
+                            />
+                          </div>
+                          <div className="">
+                            <button
+                              type="submit"
+                              className="text-white bg-[#121212] px-2 py-1 rounded-sm outline outline-1 outline-black hover:bg-transparent hover:text-black mt-4 w-full flex items-center justify-center"
+                            >
+                              {loading && (
+                                <svg
+                                  className="w-5 h-5 mr-3 -ml-1 text-white animate-spin"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <circle
+                                    className="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    strokeWidth="4"
+                                  ></circle>
+                                  <path
+                                    className="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                  ></path>
+                                </svg>
+                              )}
+                              {loading ? "Loading..." : "Make Payment"}
+                            </button>
+                          </div>
+                        </div>
+                      )
+                    ) : (
                       <div className="">
-                        <button
-                          type="submit"
-                          className="text-white bg-[#121212] px-2 py-1 rounded-sm outline outline-1 outline-black hover:bg-transparent hover:text-black mt-4 w-full"
-                        >
-                          Make Payment
-                        </button>
+                        <div className="flex flex-col my-2">
+                          <label htmlFor="secret_code">
+                            Enter Secret Code to complete payment
+                          </label>
+                          <input
+                            type="text"
+                            name="secret_code"
+                            id="secret_code"
+                            className="outline outline-1 px-2 py-1 bg-transparent rounded-sm"
+                            placeholder="Enter secret code"
+                            onChange={handleChange("secret_code")}
+                            value={values.secret_code}
+                          />
+                        </div>
+                        <div className="">
+                          <button
+                            type="submit"
+                            className="text-white bg-[#121212] px-2 py-1 rounded-sm outline outline-1 outline-black hover:bg-transparent hover:text-black mt-4 w-full flex items-center justify-center"
+                          >
+                            {loading && (
+                              <svg
+                                className="w-5 h-5 mr-3 -ml-1 text-white animate-spin"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                              >
+                                <circle
+                                  className="opacity-25"
+                                  cx="12"
+                                  cy="12"
+                                  r="10"
+                                  stroke="currentColor"
+                                  strokeWidth="4"
+                                ></circle>
+                                <path
+                                  className="opacity-75"
+                                  fill="currentColor"
+                                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                ></path>
+                              </svg>
+                            )}
+                            {loading ? "Loading..." : "Make Payment"}
+                          </button>
+                        </div>
                       </div>
-                    </div>
+                    )
+                  ) : (
+                    ""
                   )}
                 </Form>
               );

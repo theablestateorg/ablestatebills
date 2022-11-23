@@ -272,7 +272,6 @@ function RenewModal({
               <Form
                 onSubmit={(event) => handleSubmit(event, values, resetForm)}
                 className="mt-2"
-                name="loginForm"
               >
                 {["1", "2"].includes(paymentMethod) && (
                   <div className="flex gap-2">

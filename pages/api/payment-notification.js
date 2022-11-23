@@ -48,9 +48,9 @@ export default function handler(req, res) {
         to: manager.contact_number,
         message: `${req.body.actor} has made payment of ${req.body.amount} for ${req.body.product}`,
       })
-        .then((response) => res.status(200).json(response))
-        .catch((error) => res.status(503).json(error));
+        .then()
+        .catch();
     });
 
-  // res.status(200).send({ name: "Charles Kasasira" });
+  res.status(200).send({ name: "Charles Kasasira" });
 }

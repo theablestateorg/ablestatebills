@@ -94,7 +94,7 @@ function RenewModal({
         <section className="mt-2">
           {[1, 2].includes(paymentMethod) && (
             <div className="flex gap-2">
-              <h3>Get Secret Code</h3>
+              <h3 className="px-4">Get Secret Code</h3>
             </div>
           )}
 

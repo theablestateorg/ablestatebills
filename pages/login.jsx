@@ -17,9 +17,15 @@ export default function Home({}) {
   const { setSession } = useAuth();
   const [cookie, setCookie] = useCookies(["user"]);
 
-  const handleSubmit = async (event, { email, password }, resetForm) => {
+  const handleSubmit = async (
+    event,
+    { email, password, remember },
+    resetForm
+  ) => {
     event.preventDefault();
     setLoading(true);
+    const age = remember ? 30 * 24 * 3600 : 3600;
+
     try {
       const { user, session, error } = await supabase.auth.signIn({
         email: email,
@@ -35,7 +41,7 @@ export default function Home({}) {
         resetForm({ email: "", password: "" });
         setCookie("user", JSON.stringify({ user: user, profile: profile }), {
           path: "/",
-          maxAge: 3600, // Expires after 1hr
+          maxAge: age,
           sameSite: true,
         });
         Router.push("/");
@@ -58,7 +64,7 @@ export default function Home({}) {
       <ToastContainer />
       <main className="w-screen h-screen flex justify-center items-center relative md:pb-6 min-h-screen">
         <Formik
-          initialValues={{ email: "", password: "" }}
+          initialValues={{ email: "", password: "", remember: false }}
           validationSchema={validationSchema}
         >
           {({
@@ -86,7 +92,7 @@ export default function Home({}) {
                       name="email"
                       id="email"
                       className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full rounded-sm"
-                      placeholder="Enter email"
+                      placeholder="Enter Email"
                       onChange={handleChange("email")}
                       onBlur={handleBlur("email")}
                       value={values.email}
@@ -116,7 +122,7 @@ export default function Home({}) {
                       name="password"
                       id="password"
                       className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full rounded-sm"
-                      placeholder="Enter password"
+                      placeholder="Enter Password"
                       onChange={handleChange("password")}
                       onBlur={handleBlur("password")}
                       value={values.password}
@@ -141,6 +147,29 @@ export default function Home({}) {
                       }`}</label>
                     </div>
                   </div>
+                </div>
+                <div className="flex text-xs gap-2 justify-between mt-4">
+                  <div className="flex gap-1">
+                    <input
+                      type="checkbox"
+                      name="remember"
+                      id="remember"
+                      className="accent-black"
+                      onChange={handleChange("remember")}
+                      value={values.remember}
+                      checked={values.remember}
+                    />
+                    <label for="remember" className="cursor-pointer">
+                      Remember me
+                    </label>
+                  </div>
+                  <p className="">
+                    <Link href="/forgot-password">
+                      <span className="underline cursor-pointer font-bold">
+                        Forgot Password?
+                      </span>
+                    </Link>
+                  </p>
                 </div>
                 <button
                   type="submit"
@@ -171,16 +200,11 @@ export default function Home({}) {
                   )}
                   {loading ? "Loading" : "Login"}
                 </button>
-                <p className="cursor-point">
+                <p className="">
                   Don&apos;t have an account?{" "}
                   <Link href="/register">
-                    <span className="underline cursor-pointer">Sign Up</span>
-                  </Link>
-                </p>
-                <p className="cursor-point">
-                  <Link href="/forgot-password">
-                    <span className="underline cursor-pointer">
-                      Forgot Password?
+                    <span className="underline cursor-pointer font-medium">
+                      Sign Up
                     </span>
                   </Link>
                 </p>

@@ -2,44 +2,55 @@ import Head from "next/head";
 import { supabase } from "../utils/supabase";
 import { registerValidationSchema } from "../utils/validation";
 import { Formik, Form } from "formik";
-import { toast, ToastContainer } from 'react-toastify'
+import { toast, ToastContainer } from "react-toastify";
 import { useState } from "react";
 import Router from "next/router";
 import Link from "next/link";
 import { Footer } from "../components";
 
 export default function Home() {
+  const [loading, setLoading] = useState(false);
 
-  const [ loading, setLoading ] = useState(false)
-
-  const handleSubmit = async (event, {email, password, first_name, last_name, role, contact_number}, resetForm) => {
+  const handleSubmit = async (
+    event,
+    { email, password, first_name, last_name, role, contact_number },
+    resetForm
+  ) => {
     event.preventDefault();
-    try{
-      setLoading(true)
-      const {user, session, error} = await supabase.auth.signUp({ email, password },
+    try {
+      setLoading(true);
+      const { user, session, error } = await supabase.auth.signUp(
+        { email, password },
         {
-          data: { 
-            first_name, 
+          data: {
+            first_name,
             last_name,
-            role, 
-            contact_number: ""
-          }
+            role,
+            contact_number: "",
+          },
         }
-        )
-      if(user){
-        toast.success(`A confirmation mail has been sent`, {position: "top-center"})
+      );
+      if (user) {
+        toast.success(`A confirmation mail has been sent`, {
+          position: "top-center",
+        });
         setTimeout(() => {
-          Router.push('/login')
-        }, 1000)
+          Router.push("/login");
+        }, 1000);
       }
-      if(error){
-        toast.error(`${error?.message}`, {position: "top-center"})
+      if (error) {
+        toast.error(`${error?.message}`, { position: "top-center" });
       }
-    }catch(error){
-    }
+    } catch (error) {}
 
-    setLoading(false)
-    resetForm({ password: "", first_name: "", last_name: "", role: "customer", email: ""  })
+    setLoading(false);
+    resetForm({
+      password: "",
+      first_name: "",
+      last_name: "",
+      role: "customer",
+      email: "",
+    });
   };
 
   return (
@@ -50,7 +61,14 @@ export default function Home() {
       <ToastContainer />
       <div className="w-screen h-screen flex justify-center items-center relative pb-6 min-h-screen">
         <Formik
-          initialValues={{ password: "", first_name: "", last_name: "", role: "customer", email: "", contact_number: ""  }}
+          initialValues={{
+            password: "",
+            first_name: "",
+            last_name: "",
+            role: "customer",
+            email: "",
+            contact_number: "",
+          }}
           validationSchema={registerValidationSchema}
         >
           {({
@@ -61,7 +79,7 @@ export default function Home() {
             dirty,
             handleChange,
             handleBlur,
-            resetForm
+            resetForm,
           }) => {
             return (
               <Form
@@ -69,7 +87,9 @@ export default function Home() {
                 className="bg-white p-10 shadow"
                 name="signUpForm"
               >
-                <h1 className="text-3xl font-bold text-center">Register</h1>
+                <h1 className="text-3xl font-bold text-center">
+                  Create an account
+                </h1>
                 <div className="flex flex-col gap-2  my-2">
                   <label htmlFor="email">Email</label>
                   <div className="w-full">
@@ -77,17 +97,15 @@ export default function Home() {
                       type="email"
                       name="email"
                       id="email"
-                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full"
-                      placeholder="enter email"
+                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full rounded-sm"
+                      placeholder="Enter Email"
                       onChange={handleChange("email")}
                       onBlur={handleBlur("email")}
                       value={values.email}
                     />
                     <div
                       className={`${
-                        errors?.email && touched?.email
-                          ? "block"
-                          : "hidden"
+                        errors?.email && touched?.email ? "block" : "hidden"
                       }`}
                     >
                       <label
@@ -97,9 +115,7 @@ export default function Home() {
                             : "text-transparent text-xs"
                         }`}
                       >{`${
-                        errors?.email && touched?.email
-                          ? errors.email
-                          : "hide"
+                        errors?.email && touched?.email ? errors.email : "hide"
                       }`}</label>
                     </div>
                   </div>
@@ -111,8 +127,8 @@ export default function Home() {
                       type="text"
                       name="first_name"
                       id="first_name"
-                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full"
-                      placeholder="enter first name"
+                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full rounded-sm"
+                      placeholder="Enter First name"
                       onChange={handleChange("first_name")}
                       onBlur={handleBlur("first_name")}
                       value={values.first_name}
@@ -145,8 +161,8 @@ export default function Home() {
                       type="text"
                       name="last_name"
                       id="last_name"
-                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full"
-                      placeholder="enter last name"
+                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full rounded-sm"
+                      placeholder="Enter Last name"
                       onChange={handleChange("last_name")}
                       onBlur={handleBlur("last_name")}
                       value={values.last_name}
@@ -174,20 +190,17 @@ export default function Home() {
                 </div>
 
                 <div className="flex flex-col gap-2  my-2">
-                  <label
-                    htmlFor="telephone_number"
+                  <label htmlFor="telephone_number">Telephone</label>
+                  <div
+                    className="relative flex
+                  outline outline-1 placeholder:text-[#bcbfc2] w-full rounded-sm"
                   >
-                    Telephone
-                  </label>
-                  <div className="relative flex
-                  outline outline-1 placeholder:text-[#bcbfc2] w-full">
                     <input
                       type="tel"
                       id="telephone_number"
                       name="telephone_number"
                       placeholder="Telephone number"
-                      className=" py-2 px-2 ml-16 bg-transparent flex-grow focus:outline-none
-                      "
+                      className=" py-2 px-2 ml-16 bg-transparent flex-grow focus:outline-none"
                       onChange={handleChange("contact_number")}
                       onBlur={handleBlur("contact_number")}
                       value={values.contact_number}
@@ -202,7 +215,7 @@ export default function Home() {
                     </select>
                   </div>
                 </div>
-                
+
                 <div className="flex flex-col gap-2  my-2">
                   <label htmlFor="password">Password</label>
                   <div className="w-full">
@@ -210,8 +223,8 @@ export default function Home() {
                       type="password"
                       name="password"
                       id="password"
-                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full"
-                      placeholder="enter password"
+                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full rounded-sm"
+                      placeholder="Enter Password"
                       onChange={handleChange("password")}
                       onBlur={handleBlur("password")}
                       value={values.password}
@@ -237,19 +250,43 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-                <button type="submit" disabled={!(isValid && dirty)} className="bg-[#1D1F20] text-white py-1 px-3 my-2 mt-4 hover:bg-[#292C2D] flex items-center cursor-pointer">
-                {loading && <svg className="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none"
-                    viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                    </path>
-                </svg>}
+                <button
+                  type="submit"
+                  disabled={!(isValid && dirty)}
+                  className="bg-[#1D1F20] text-white py-1 px-3 my-2 mt-4 hover:bg-[#292C2D] flex items-center cursor-pointer w-full justify-center rounded-sm"
+                >
+                  {loading && (
+                    <svg
+                      className="w-5 h-5 mr-3 -ml-1 text-white animate-spin"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                  )}
                   {loading ? "Loading" : "Register"}
                 </button>
-                <p className="cursor-point">Already have an account? <Link href="/login">
-                <span className="underline cursor-pointer">Login</span>
-                  </Link></p>
+                <p className="cursor-point">
+                  Already have an account?{" "}
+                  <Link href="/login">
+                    <span className="underline cursor-pointer font-medium">
+                      Login
+                    </span>
+                  </Link>
+                </p>
               </Form>
             );
           }}

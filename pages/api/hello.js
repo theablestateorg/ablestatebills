@@ -13,7 +13,6 @@ const client = africastalking({
 });
 
 export default function handler(req, res) {
-  console.log(req.body)
   try {
     req.body?.day &&
       req.body?.day.forEach((website, index) => {
@@ -65,49 +64,49 @@ export default function handler(req, res) {
           .catch((error) => res.status(503).json(error));
       });
 
-
     req.body?.day4 &&
-      req.body?.day4.forEach((website, index) => {
-        zeptoClient
-          .sendMail({
-            bounce_address: "info@bounce.shineafrika.com",
-            from: {
-              address: "noreply@shineafrika.com",
-              name: "Shine Afrika",
-            },
-            to: [
-              {
-                email_address: {
-                  address: "charleskasasira01@gmail.com",
-                },
+      req.body.managers.forEach((manager, index) => {
+        req.body?.day4.forEach((website, index) => {
+          zeptoClient
+            .sendMail({
+              bounce_address: "info@bounce.shineafrika.com",
+              from: {
+                address: "noreply@shineafrika.com",
+                name: "Shine Afrika",
               },
-            ],
-            subject: `${website.name} will expire this week`,
-            textbody: "Kindly update your websites payment to keep it online",
-            htmlbody: `<html><body><h2>Hi Admin,</h2>
-          We are informing you that ${website.name} recieved a notification that <b>${website.website_link}</b> is expiring in less than a week but has not renewed it yet.
-            <br />
-            <br />
-            <footer>
-              <p>Best regards,</p>
-              <p><b>ShineAfrika Team</b></p>
-              <a href="https://shineafrika.com/">
-                www.shineafrika.com
-              </a>
-            </footer></body></html>`,
-            track_clicks: true,
-            track_opens: true,
-          })
-          .then()
-          .catch();
+              to: [
+                {
+                  email_address: {
+                    address: manager.email,
+                  },
+                },
+              ],
+              subject: `${website.name} will expire this week`,
+              textbody: "Kindly update your websites payment to keep it online",
+              htmlbody: `<html><body><h2>Hi ${manager.first_name},</h2>
+            We are informing you that ${website.name} recieved a notification that <b>${website.website_link}</b> is expiring in less than a week but has not renewed it yet.
+              <br />
+              <br />
+              <footer>
+                <p>Best regards,</p>
+                <p><b>ShineAfrika Team</b></p>
+                <a href="https://shineafrika.com/">
+                  www.shineafrika.com
+                </a>
+              </footer></body></html>`,
+              track_clicks: true,
+              track_opens: true,
+            })
+            .then()
+            .catch();
 
-        client.SMS.send({
-          // to: `+256${website.telephone_number}`,
-          to: website.telephone_number,
-          message: `${website.website_link} is expiring in less than a week but has not renewed it yet. `,
-        })
-          .then((response) => res.status(200).json(response))
-          .catch((error) => res.status(503).json(error));
+          client.SMS.send({
+            to: manager.contact_number,
+            message: `${website.website_link} is expiring in less than a week but has not be renewed yet. `,
+          })
+            .then((response) => res.status(200).json(response))
+            .catch((error) => res.status(503).json(error));
+        });
       });
 
     req.body?.week &&

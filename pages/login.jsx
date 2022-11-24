@@ -159,7 +159,7 @@ export default function Home({}) {
                       value={values.remember}
                       checked={values.remember}
                     />
-                    <label for="remember" className="cursor-pointer">
+                    <label htmlFor="remember" className="cursor-pointer">
                       Remember me
                     </label>
                   </div>

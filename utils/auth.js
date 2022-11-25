@@ -32,6 +32,7 @@ export const AuthProvider = ({ children }) => {
       }
     }
     getUserProfile()
+    getNotifications()
 
     const activeSession = supabase.auth.session();
     setSession(activeSession);
@@ -57,6 +58,24 @@ export const AuthProvider = ({ children }) => {
     })
   }, [])
 
+  const [notifications, setNotifications] = useState([]);
+  const getNotifications = async () => {
+    const { data, error } = await supabase
+      .from("notifications")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (data) {
+      const myNotifications = data.filter(
+        (note) => user && note.notifiers.includes(user.id)
+      );
+      setNotifications(myNotifications);
+      // console.log(myNotifications)
+    }
+    if (error) {
+    }
+  };
+
   const values = {
     session,
     setSession,
@@ -65,6 +84,8 @@ export const AuthProvider = ({ children }) => {
     setLoading,
     welcome,
     setWelcome,
+    notifications,
+    setNotifications,
     signOut: () => {
       removeCookie("user")
       const {data, error } = supabase.auth.signOut()

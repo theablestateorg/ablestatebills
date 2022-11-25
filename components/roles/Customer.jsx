@@ -29,6 +29,8 @@ export default function Customer({ websites, customers, person }) {
     };
   }
 
+  const { notifications } = useAuth();
+
   const [activeIndex, setActiveIndex] = useState(null);
 
   const addNewOptions = [
@@ -45,7 +47,12 @@ export default function Customer({ websites, customers, person }) {
   return (
     <>
       <Head>
-        <title>Dashboard - Shine Afrika</title>
+        <title>
+          {notifications &&
+            notifications.length > 0 &&
+            `(${notifications.length})`}{" "}
+          Dashboard - Shine Afrika
+        </title>
       </Head>
       <ToastContainer />
 
@@ -81,15 +88,16 @@ export default function Customer({ websites, customers, person }) {
                         Router.push(`${item.link}`);
                       }}
                     >
-                      <a href={item.link} className="relative px-3 py-2 inline-block cursor-pointer z-10 w-full h-full mb-1">
+                      <a
+                        href={item.link}
+                        className="relative px-3 py-2 inline-block cursor-pointer z-10 w-full h-full mb-1"
+                      >
                         <span>{item.label}</span>
                         {activeIndex === index ? (
                           <motion.div
                             layoutId="cover"
                             className="cover bg-[#eaeaea] absolute -z-10 w-full h-full inset-0 rounded cursor-pointer"
-                          >
-                            
-                          </motion.div>
+                          ></motion.div>
                         ) : null}
                       </a>
                     </motion.li>

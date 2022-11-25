@@ -5,7 +5,6 @@ import { FaSort } from "react-icons/fa";
 import { supabase } from "../../utils/supabase";
 import { useEffect, useState, useRef } from "react";
 import moment from "moment";
-import { toast, ToastContainer } from "react-toastify";
 import { useAuth } from "../../utils/auth";
 import { IoWarning } from "react-icons/io5";
 import Footer from "../Footer";
@@ -22,8 +21,10 @@ function Admin({ websites, customers }) {
   const [popUp, setPopUp] = useState(false);
   const [sortBy, setSortBy] = useState("");
   const checkbox = useRef();
-  const { user } = useAuth();
+  const { user, notifications } = useAuth();
   const deleteArrayIds = deleteArray.map((site) => site[0].toString());
+
+  console.log(notifications.length);
 
   websites = websites
     .filter((website) =>
@@ -43,9 +44,13 @@ function Admin({ websites, customers }) {
   return (
     <>
       <Head>
-        <title>Dashboard - Shine Afrika</title>
+        <title>
+          {notifications &&
+            notifications.length > 0 &&
+            `(${notifications.length})`}{" "}
+          Dashboard - Shine Afrika
+        </title>
       </Head>
-      <ToastContainer />
 
       <main className="pt-[70px] mx-3 md:mx-16 relative pb-6 min-h-screen">
         <section className="flex justify-between items-center my-10">

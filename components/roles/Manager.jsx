@@ -5,7 +5,6 @@ import { FaSort } from "react-icons/fa";
 import { supabase } from "../../utils/supabase";
 import { useEffect, useState, useRef } from "react";
 import moment from "moment";
-import { toast, ToastContainer } from "react-toastify";
 import { useAuth } from "../../utils/auth";
 import { IoWarning } from "react-icons/io5";
 import Footer from "../Footer";
@@ -22,11 +21,12 @@ function Manager({ websites, customers }) {
   const [popUp, setPopUp] = useState(false);
   const [sortBy, setSortBy] = useState("");
   const checkbox = useRef();
-  const { user } = useAuth();
   const deleteArrayIds = deleteArray.map((site) => site[0].toString());
 
   const img_url =
     "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://charleskasra.com&size=64";
+
+  const { user, notifications } = useAuth();
 
   websites = websites
     .filter((website) =>
@@ -47,9 +47,13 @@ function Manager({ websites, customers }) {
   return (
     <>
       <Head>
-        <title>Dashboard - Shine Afrika</title>
+        <title>
+          {notifications &&
+            notifications.length > 0 &&
+            `(${notifications.length})`}{" "}
+          Dashboard - Shine Afrika
+        </title>
       </Head>
-      <ToastContainer />
 
       <main className="pt-[70px] mx-3 md:mx-16 relative pb-6 min-h-screen">
         <section className="flex justify-between items-center my-10">

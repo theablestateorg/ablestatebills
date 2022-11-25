@@ -22,9 +22,9 @@ export default function Navbar({ user }) {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [notify, setNotify] = useState(false);
   const [avatar, setAvatar] = useState("");
-  const [notifications, setNotifications] = useState([]);
+  // const [notifications, setNotifications] = useState([]);
   const router = useRouter();
-  const { signOut, loading, setLoading } = useAuth();
+  const { signOut, loading, setLoading, notifications, setNotifications } = useAuth();
   const { query } = useKBar();
 
   const [cookie] = useCookies(["user"]);

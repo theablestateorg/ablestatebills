@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Footer } from "../components";
 import Avatar from "../components/Avatar";
 import { parseCookies } from "../utils/parseCookies";
+import { useAuth } from "../utils/auth";
 
 export default function Customers({ customers, managers, websites }) {
   const router = useRouter();
@@ -14,29 +15,39 @@ export default function Customers({ customers, managers, websites }) {
   const [searchBy, setSearchBy] = useState("name");
   const [sortNames, setSortNames] = useState(false);
   const [sortBy, setSortBy] = useState("");
+  const { notifications } = useAuth();
 
-  customers = customers && customers.filter((customer) =>
-    !customer?.[searchBy] || searchBy !== "contact_number"
-      ? searchBy === "name"
-        ? `${customer?.["first_name"] + " " + customer?.["last_name"]}`
+  customers =
+    customers &&
+    customers.filter((customer) =>
+      !customer?.[searchBy] || searchBy !== "contact_number"
+        ? searchBy === "name"
+          ? `${customer?.["first_name"] + " " + customer?.["last_name"]}`
+              .toLowerCase()
+              .indexOf(searchText.toLowerCase()) > -1
+          : customer?.[searchBy]
+              .toLowerCase()
+              .indexOf(searchText.toLowerCase()) > -1
+        : customer?.[searchBy]
+            .toString()
             .toLowerCase()
             .indexOf(searchText.toLowerCase()) > -1
-        : customer?.[searchBy].toLowerCase().indexOf(searchText.toLowerCase()) >
-          -1
-      : customer?.[searchBy]
-          .toString()
-          .toLowerCase()
-          .indexOf(searchText.toLowerCase()) > -1
-  );
+    );
 
-  customers = customers && sortNames
-    ? customers.sort((a, b) => a[sortBy] > b[sortBy])
-    : customers.sort((a, b) => b[sortBy] > a[sortBy]);
+  customers =
+    customers && sortNames
+      ? customers.sort((a, b) => a[sortBy] > b[sortBy])
+      : customers.sort((a, b) => b[sortBy] > a[sortBy]);
 
   return (
     <>
       <Head>
-        <title>Customers - Shine Afrika</title>
+        <title>
+        {notifications && notifications.length > 0
+            ? `(${notifications.length})`
+            : ""}{" "}
+          Customers - Shine Afrika
+        </title>
       </Head>
 
       <main className="pt-[70px] mx-3 md:mx-16 relative pb-6 min-h-screen">
@@ -148,46 +159,49 @@ export default function Customers({ customers, managers, websites }) {
               </tr>
             </thead>
             <tbody>
-              {customers && customers.map((customer, index) => (
-                <tr
-                  className={`border-b border-l-2 border-l-transparent hover:border-l-[#ca3011] cursor-pointer mb-10`}
-                  key={index}
-                  onClick={() => router.push(`/customers/${customer.id}`)}
-                >
-                  <td className="py-2 text-left pl-3">
-                    <span className="flex items-center gap-2">
-                      <Avatar
-                        first_name={customer.first_name}
-                        last_name={customer.last_name}
-                      />
-                      <h1 className="font-medium">
-                        {customer.first_name + " " + customer.last_name}
-                      </h1>
-                    </span>
-                  </td>
-                  <td className="py-2 text-left  pl-3">
-                    <div className="w-full flex justify-center">
-                      {
-                        websites.filter(
-                          (website) => website.contact_person === customer.id
-                        ).length
-                      }
-                    </div>
-                  </td>
-                  <td className="py-2 text-left pl-3">
-                    {customer.contact_number === "+256null" ? "N/A" : customer.contact_number}
-                  </td>
-                  <td className="py-2 text-left pl-3">
-                    {managers
-                      .filter((manager) => manager.id === customer.added_by)
-                      .map((manager, index) => (
-                        <p key={index}>
-                          {manager.first_name + " " + manager.last_name}
-                        </p>
-                      ))}
-                  </td>
-                </tr>
-              ))}
+              {customers &&
+                customers.map((customer, index) => (
+                  <tr
+                    className={`border-b border-l-2 border-l-transparent hover:border-l-[#ca3011] cursor-pointer mb-10`}
+                    key={index}
+                    onClick={() => router.push(`/customers/${customer.id}`)}
+                  >
+                    <td className="py-2 text-left pl-3">
+                      <span className="flex items-center gap-2">
+                        <Avatar
+                          first_name={customer.first_name}
+                          last_name={customer.last_name}
+                        />
+                        <h1 className="font-medium">
+                          {customer.first_name + " " + customer.last_name}
+                        </h1>
+                      </span>
+                    </td>
+                    <td className="py-2 text-left  pl-3">
+                      <div className="w-full flex justify-center">
+                        {
+                          websites.filter(
+                            (website) => website.contact_person === customer.id
+                          ).length
+                        }
+                      </div>
+                    </td>
+                    <td className="py-2 text-left pl-3">
+                      {customer.contact_number === "+256null"
+                        ? "N/A"
+                        : customer.contact_number}
+                    </td>
+                    <td className="py-2 text-left pl-3">
+                      {managers
+                        .filter((manager) => manager.id === customer.added_by)
+                        .map((manager, index) => (
+                          <p key={index}>
+                            {manager.first_name + " " + manager.last_name}
+                          </p>
+                        ))}
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

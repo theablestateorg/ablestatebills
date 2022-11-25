@@ -45,9 +45,9 @@ function Admin({ websites, customers }) {
     <>
       <Head>
         <title>
-          {notifications &&
-            notifications.length > 0 &&
-            `(${notifications.length})`}{" "}
+        {notifications && notifications.length > 0
+            ? `(${notifications.length})`
+            : ""}{" "}
           Dashboard - Shine Afrika
         </title>
       </Head>

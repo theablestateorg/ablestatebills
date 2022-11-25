@@ -27,8 +27,6 @@ function Ticket({ ticket, customer }) {
     setReload(!reload)
   }
 
-  console.log(id)
-
   return (
     <div>
       <Head>
@@ -48,11 +46,11 @@ function Ticket({ ticket, customer }) {
           </div>
           <div className="w-full bg-white p-4 md:p-10 pb-16 rounded-sm">
             <div className="flex flex-col gap-5">
-              <div className="flex">
+              <div className="flex gap-1">
                 <div className="w-12 h-12 flex justify-center items-center rounded-full bg-[#CA3011] text-white font-bold">
                 {customer && customer.first_name && customer.first_name[0].toUpperCase() + customer.last_name[0].toUpperCase() }
                 </div>
-                <div>
+                <div className="w-9/12">
                   <p className="bg-neutral-100 px-2 py-3 rounded-md m-2">
                     {ticket && ticket.message}
                   </p>
@@ -77,14 +75,14 @@ function Ticket({ ticket, customer }) {
                 placeholder="Write your response here"
                 id=""
                 value={values.response}
-                className="w-full px-5 py-2 outline-none border-b-2 border-b-transparent focus:border-b-gray-500"
+                className="w-full px-5 py-2 outline-none border-t-[1px] border-t-gray-200 focus:border-t-gray-500"
                 onChange={(event) => setValues({...values, response: event.target.value})}
               />
-              <div className="flex justify-end">
+              <div className="flex justify-end mt-2">
                 <input
                   type="submit"
                   value="Send"
-                  className="bg-black mt-5 text-white p-2 cursor-pointer rounded-sm"
+                  className="bg-black text-white p-2 cursor-pointer rounded-sm"
                   onClick={() => handleResponse()}
                 />
               </div>

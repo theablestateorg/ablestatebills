@@ -12,7 +12,7 @@ export default function handler(req, res) {
 
   sendpulse.init(API_USER_ID, API_SECRET, TOKEN_STORAGE, function () {
     // sendpulse.listAddressBooks(answerGetter);
-    sendpulse.listSenders(answerGetter);
+    // sendpulse.listSenders(answerGetter);
     // sendpulse.getBookInfo(answerGetter,	519743);
     // sendpulse.getEmailsFromBook(answerGetter,519743);
     // sendpulse.addEmails(answerGetter, 519743, [{email:'charleskasasira01@gmail.com',variables:{name: "Charles Kasasira"}}]);
@@ -37,7 +37,8 @@ export default function handler(req, res) {
         },
       ],
     };
-    // sendpulse.smtpSendMail(answerGetter,email);
+    sendpulse.listAddressBooks(answerGetter);
+    sendpulse.smtpSendMail(answerGetter, email);
     // sendpulse.getBalance(answerGetter,'USD');
     // sendpulse.smtpListIP(answerGetter);
     // sendpulse.listEmailTemplates(answerGetter);

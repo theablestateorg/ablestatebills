@@ -108,6 +108,7 @@ export default function AddClient() {
                       onChange={handleChange("email")}
                       onBlur={handleBlur("email")}
                       value={values.email}
+                      required
                     />
                   </div>
                 </div>
@@ -124,6 +125,7 @@ export default function AddClient() {
                       onChange={handleChange("first_name")}
                       onBlur={handleBlur("first_name")}
                       value={values.first_name}
+                      required
                     />
                   </div>
                 </div>
@@ -140,6 +142,7 @@ export default function AddClient() {
                       onChange={handleChange("last_name")}
                       onBlur={handleBlur("last_name")}
                       value={values.last_name}
+                      required
                     />
                   </div>
                 </div>
@@ -160,6 +163,7 @@ export default function AddClient() {
                       onChange={handleChange("contact_number")}
                       onBlur={handleBlur("contact_number")}
                       value={values.contact_number}
+                      required
                     />
                     <select
                       name=""

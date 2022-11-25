@@ -27,7 +27,7 @@ function Notifications({ notify, notifications }) {
           {notifications.length}
         </span>
       )}
-      <IoMdNotificationsOutline size={25} className={`${notify && "rotate-[25deg]"}`} />
+      <IoMdNotificationsOutline size={20} className={`${notify && "rotate-[25deg]"}`} />
 
       <Transition
         show={notify && notifications.length > 0}
@@ -53,11 +53,11 @@ function Notifications({ notify, notifications }) {
               </li>
             </ul>
           </div>
-          <div className="overflow-y-scroll flex-grow">
+          <div className="overflow-y-scroll flex-grow pt-2">
             {notifications.map((notification, index) => (
               <Fragment key={index}>
                 <div
-                  className="grid grid-cols-5 gap-2 my-2 px-2 hover:bg-gray-100"
+                  className="grid grid-cols-5 gap-2 px-2 py-1 hover:bg-neutral-100"
                   onClick={() =>
                     seenNotification(
                       notification.ticket_id,

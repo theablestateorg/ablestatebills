@@ -6,8 +6,8 @@ function TicketCard({ ticket, customer }) {
 
   return (
     <div
-      className={`bg-white px-10 py-3 rounded-md my-5 ${
-        customer ? "cursor-pointer" : "cursor-not-allowed"
+      className={`bg-white px-5 md:px-7 py-3 rounded-md my-2 md:my-3 ${
+        customer ? "cursor-pointer hover:shadow-lg" : "cursor-not-allowed"
       }`}
       onClick={() => {
         if (customer) {
@@ -19,7 +19,7 @@ function TicketCard({ ticket, customer }) {
         {customer ? (
           <h2 className="font-bold">{customer}</h2>
         ) : (
-          <h2 className="text-gray-400">Deleted Customer</h2>
+          <h2 className="text-red-400 font-medium">Deleted Customer</h2>
         )}
         <p className="text-gray-400 text-sm">
           {moment(
@@ -36,17 +36,17 @@ function TicketCard({ ticket, customer }) {
         <span
           className={`${
             ticket.agency == "high"
-              ? "bg-red-100 text-red-400"
+              ? "bg-red-200 text-red-500"
               : ticket.agency == "mid"
-              ? "bg-indigo-100 text-indigo-400"
-              : "bg-neutral-100 text-neutral-400"
-          }  px-2 py-1 rounded-2xl text-xs font-bold mb-1`}
+              ? "bg-indigo-200 text-indigo-500"
+              : "bg-neutral-200 text-neutral-500"
+          }  px-2 py-1 rounded-md text-xs font-bold mb-1`}
         >
           {ticket.agency}
         </span>
       )}
       <span className="text-sm ml-1">{ticket.category}</span>
-      <p className="bg-gray-100 px-2 py-3 rounded-lg m-2">{ticket.message}</p>
+      <p className="bg-gray-100 px-2 py-3 rounded-md my-2">{ticket.message}</p>
     </div>
   );
 }

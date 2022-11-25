@@ -200,6 +200,7 @@ export default function AddSite() {
                       onChange={handleChange("website_link")}
                       onBlur={handleBlur("website_link")}
                       value={values.website_link}
+                      required
                     />
                     <div
                       className={`${
@@ -238,6 +239,7 @@ export default function AddSite() {
                     onChange={handleChange("name")}
                     onBlur={handleBlur("name")}
                     value={values.name}
+                    required
                   />
                 </div>
                 <div className="flex flex-col md:flex-row md:items-center md:gap-10 my-3 md:my-5">
@@ -254,6 +256,7 @@ export default function AddSite() {
                     onChange={handleChange("product_type")}
                     onBlur={handleBlur("product_type")}
                     value={values.product_type}
+                    required
                   >
                     <option value="">Select Product Type</option>
                     <option value="hosting">Hosting</option>
@@ -277,6 +280,7 @@ export default function AddSite() {
                     onChange={handleChange("product_price")}
                     onBlur={handleBlur("product_price")}
                     value={values.product_price}
+                    required
                   />
                 </div>
                 <div className="flex flex-col md:flex-row md:items-center md:gap-10 my-3 md:my-5">

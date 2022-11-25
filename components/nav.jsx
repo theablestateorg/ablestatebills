@@ -35,17 +35,6 @@ export default function Navbar({ user }) {
     role = "customer";
   }
 
-  const seenNotification = async () => {
-    // const list = notifications.filter((note) => note !== user.id);
-    // const { data, error } = await supabase
-    //   .from("notifications")
-    //   .update({ notifiers: list })
-    //   .contains("notifiers", ["8020293c-c73a-45e1-a782-bfd003ee684e","d7eb6c01-80ea-47d7-a400-f4d6cc6eb548","78a25aad-06bb-4cfd-867d-5f77891f09c8","38b59734-eeeb-4590-a1d7-4d42baa90074"]);
-    // // console.log(list);
-    // console.log("error ", error);
-    // console.log("data ", data);
-  };
-
   useEffect(() => {
     try {
       downloadFile(cookie?.user?.profile.avatar_url.substring(8), "avatars")
@@ -81,6 +70,17 @@ export default function Navbar({ user }) {
     }
     if (error) {
     }
+  };
+
+  const seenAllNotifications = () => {
+    notifications.forEach(async (notification, index) => {
+      const list = notification.notifiers.filter((note) => note !== user.id);
+      const { data, error } = await supabase
+        .from("notifications")
+        .update({ notifiers: list })
+        .match({ id: notification.id });
+    });
+    getNotifications();
   };
 
   if (showMenu || showMobileMenu) {
@@ -127,16 +127,16 @@ export default function Navbar({ user }) {
         </AnimateSharedLayout>
         <div className={navStyles.profileMenu}>
           <span
-            className="cursor-pointer relative hover:bg-neutral-100 rounded-sm p-2"
+            className="cursor-pointer relative hover:bg-[#eaeaea] rounded-md p-2"
             onClick={query.toggle}
           >
-            <BiSearchAlt2 size={25} />
+            <BiSearchAlt2 size={20} />
           </span>
           <span
-            className="cursor-pointer relative hover:bg-neutral-100 rounded p-2"
+            className="cursor-pointer relative hover:bg-[#eaeaea] rounded-md p-2"
             onClick={() => {
-              seenNotification();
               setNotify(!notify);
+              seenAllNotifications();
             }}
           >
             <Notifications

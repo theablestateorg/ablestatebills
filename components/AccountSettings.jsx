@@ -1,9 +1,8 @@
 import { Form, Formik } from "formik";
-import { MdEdit, MdOutlineMail } from "react-icons/md";
+import { MdOutlineMail } from "react-icons/md";
 import { supabase } from "../utils/supabase";
 import { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import useMediaQuery from "../hooks/useMediaQuery";
+import { toast } from "react-toastify";
 import { BsFillCameraFill } from "react-icons/bs";
 
 function AccountSettings({ user, avatar }) {
@@ -104,6 +103,9 @@ function AccountSettings({ user, avatar }) {
                   />
                 </label>
               </div>
+              <div className="my-2">
+                <label htmlFor="">Role: {user && user.role}</label>
+              </div>
               <div className="flex flex-col md:flex-row justify-between md:items-center gap-5">
                 <div className="w-full md:w-6/12">
                   <input
@@ -167,7 +169,7 @@ function AccountSettings({ user, avatar }) {
               <button
                 type="submit"
                 // disabled={!(isValid && dirty)}
-                className="bg-[#1D1F20] text-white py-2 px-4 my-2 mt-4 hover:bg-transparent hover:text-black outline outline-1 outline-black flex items-center gap-2"
+                className="bg-[#1D1F20] text-white py-2 px-4 my-2 mt-4 hover:bg-transparent hover:text-black outline outline-1 outline-black flex items-center gap-2 rounded-sm"
               >
                 {loading && (
                   <svg

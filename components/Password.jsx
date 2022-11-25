@@ -2,9 +2,11 @@ import { Form, Formik } from "formik";
 import { supabase } from "../utils/supabase";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { useAuth } from "../utils/auth";
 
 function Password() {
   const [loading, setLoading] = useState(false);
+  const {user} = useAuth()
 
   const handleSubmit = async (event, values, resetForm) => {
     event.preventDefault()
@@ -35,6 +37,20 @@ function Password() {
   return (
     <section className="my-5 flex-grow flex flex-col md:px-8">
       <h1 className="font-bold text-lg border-b-2 p-2">Password</h1>
+
+      <div className="my-4">
+        <label htmlFor="">Send Emails using</label>
+        <div className="flex flex-col">
+          <div className="flex gap-1">
+            <input type="radio" name="sendPulse" id="sendPulse" className="cursor-pointer" />
+            <label htmlFor="sendPulse">Send Pulse</label>
+          </div>
+          <div className="flex gap-1">
+            <input type="radio" name="zoho" id="zoho" className="cursor-pointer" />
+            <label htmlFor="zoho">Zohomail</label>
+          </div>
+        </div>
+      </div>
       <Formik
               initialValues={{ old_password: "",new_password: "", confirm_password: "" }}
             >
@@ -51,7 +67,7 @@ function Password() {
                 return (
                   <Form
                     onSubmit={(event) => handleSubmit(event, values, resetForm)}
-                    className="my-5 flex-grow py-5"
+                    className="my-2 flex-grow pb-5"
                     name="signUpForm"
                   >
                     <div className="flex flex-col gap-2 px-2 md:px-0 md:my-5">
@@ -63,7 +79,7 @@ function Password() {
                           type="password"
                           name="new_password"
                           className="outline outline-1 bg-transparent py-1 placeholder:text-[#bcbfc2] px-2 rounded-sm w-full md:w-10/12"
-                          placeholder="enter password"
+                          placeholder="Enter password"
                           onChange={handleChange("new_password")}
                           onBlur={handleBlur("new_password")}
                         />
@@ -97,7 +113,7 @@ function Password() {
                           type="password"
                           name="confirm_password"
                           className="outline outline-1 bg-transparent py-1 px-2 placeholder:text-[#bcbfc2] rounded-sm w-full md:w-10/12"
-                          placeholder="enter password"
+                          placeholder="Enter password"
                           onChange={handleChange("confirm_password")}
                           onBlur={handleBlur("confirm_password")}
                         />

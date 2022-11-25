@@ -7,78 +7,49 @@ import Customer from "../components/roles/Customer";
 import Admin from "../components/roles/Admin";
 import { parseCookies } from "../utils/parseCookies";
 import { useRouter } from "next/router";
-import Tickets from "./tickets";
 
 export default function Home({ websites, customers, person }) {
-  const [searchText, setSearchText] = useState("");
-  const [status, setStatus] = useState("");
-  const [searchBy, setSearchBy] = useState("name");
-  const [sortNames, setSortNames] = useState(false);
-  const [deleteArray, setDeleteArray] = useState([]);
-  const [popUp, setPopUp] = useState(false);
-  const [sortBy, setSortBy] = useState("");
   const { user } = useAuth();
-  const [welcome, setWelcome] = useState(true)
-
-  useEffect(() => {
-
-  }, [welcome])
-
-  const router = useRouter()
-
-  const checkAccess = async() => {
-    const { data, error } = await supabase
-      .from("profiles")
-      .update({ "accessed": true })
-      .eq("id", JSON.parse(person.user)?.user.id);
-    
-    if(data){
-      setWelcome(false)
-    }
-
-    router.push("/")
-  };
-
-  websites = websites
-    .filter((website) =>
-      !website?.[searchBy] || searchBy !== "telephone_number"
-        ? website?.[searchBy].toLowerCase().indexOf(searchText.toLowerCase()) >
-          -1
-        : website?.[searchBy]
-            .toString()
-            .toLowerCase()
-            .indexOf(searchText.toLowerCase()) > -1
-    )
-    .filter((website) => !status || website.status === status);
-
-  websites = sortNames
-    ? websites.sort((a, b) => a[sortBy] > b[sortBy])
-    : websites.sort((a, b) => b[sortBy] > a[sortBy]);
-
-  const deleteArrayIds = deleteArray.map((site) => site[0].toString());
+  const [welcome, setWelcome] = useState(true);
   const { role } = JSON.parse(person.user)?.profile || "customer";
 
-  const bulkDelete = async () => {
-    const { data, error } = await supabase
-      .from("websites")
-      .delete()
-      .in("id", deleteArrayIds);
+  useEffect(() => {}, [welcome]);
+  const router = useRouter();
 
+  const checkAccess = async () => {
+    const { data, error } = await supabase
+      .from("profiles")
+      .update({ accessed: true })
+      .eq("id", JSON.parse(person.user)?.user.id);
     if (data) {
-      toast.success(`Successfully deleted`, { position: "top-center" });
-      await supabase.from("logs").insert([
-        {
-          name: `[Bulk Deleted] ${deleteArray.map((site) => site[1])}`,
-          details: `deleted by ${user.first_name} ${user.last_name}`,
-          status: "success",
-        },
-      ]);
+      setWelcome(false);
     }
-    if (error) {
-      toast.error(`${error?.message}`, { position: "top-center" });
-    }
-    setPopUp(false);
+    router.push("/");
   };
+
+  // const deleteArrayIds = deleteArray.map((site) => site[0].toString());
+
+  // const bulkDelete = async () => {
+  //   const { data, error } = await supabase
+  //     .from("websites")
+  //     .delete()
+  //     .in("id", deleteArrayIds);
+
+  //   if (data) {
+  //     toast.success(`Successfully deleted`, { position: "top-center" });
+  //     await supabase.from("logs").insert([
+  //       {
+  //         name: `[Bulk Deleted] ${deleteArray.map((site) => site[1])}`,
+  //         details: `deleted by ${user.first_name} ${user.last_name}`,
+  //         status: "success",
+  //       },
+  //     ]);
+  //   }
+  //   if (error) {
+  //     toast.error(`${error?.message}`, { position: "top-center" });
+  //   }
+  //   setPopUp(false);
+  // };
 
   if (role === "customer") {
     return (
@@ -143,7 +114,7 @@ export const getServerSideProps = async ({ req, res }) => {
         props: {},
       };
     }
-    if(person && JSON.parse(person.user).profile.role === "support"){
+    if (person && JSON.parse(person.user).profile.role === "support") {
       return {
         redirect: {
           permanent: false,
@@ -153,7 +124,6 @@ export const getServerSideProps = async ({ req, res }) => {
       };
     }
   }
-  
 
   const { data: websites } = await supabase
     .from("websites")

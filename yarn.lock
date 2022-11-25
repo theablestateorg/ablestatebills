@@ -2887,6 +2887,11 @@
   dependencies:
     "lru-cache" "^6.0.0"
 
+"sendpulse-api@^1.1.5":
+  "integrity" "sha512-0NdvSBcLNPEEnSVMFDSdni4M4sKk4HCaVKt/5RbrYsqJ8uckrn5H9YV0v/2R5GBDlu+9lpOFbVuBb83EwW49OQ=="
+  "resolved" "https://registry.npmjs.org/sendpulse-api/-/sendpulse-api-1.1.5.tgz"
+  "version" "1.1.5"
+
 "set-blocking@^2.0.0":
   "integrity" "sha512-KiKBS8AnWGEyLzofFfmvKwpdPzqiy16LvQfK3yv/fVH7Bj13/wl3JSR1J+rfgRE9q7xUJK4qvgS8raSOeLUehw=="
   "resolved" "https://registry.npmjs.org/set-blocking/-/set-blocking-2.0.0.tgz"

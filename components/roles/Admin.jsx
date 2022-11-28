@@ -9,6 +9,9 @@ import { useAuth } from "../../utils/auth";
 import { IoWarning } from "react-icons/io5";
 import Footer from "../Footer";
 import Image from "next/image";
+import { FiChevronDown } from "react-icons/fi";
+import { RiExternalLinkFill } from "react-icons/ri";
+import { currencyFormatter } from "../../utils/currencyFormatter";
 
 function Admin({ websites, customers }) {
   const router = useRouter();
@@ -23,8 +26,6 @@ function Admin({ websites, customers }) {
   const checkbox = useRef();
   const { user, notifications } = useAuth();
   const deleteArrayIds = deleteArray.map((site) => site[0].toString());
-
-  console.log(notifications.length);
 
   websites = websites
     .filter((website) =>
@@ -41,11 +42,16 @@ function Admin({ websites, customers }) {
   websites = sortNames
     ? websites.sort((a, b) => a[sortBy] > b[sortBy])
     : websites.sort((a, b) => b[sortBy] > a[sortBy]);
+
+  const [activeIndex, setActiveIndex] = useState(null);
+
+  console.log(activeIndex);
+
   return (
     <>
       <Head>
         <title>
-        {notifications && notifications.length > 0
+          {notifications && notifications.length > 0
             ? `(${notifications.length})`
             : ""}{" "}
           Dashboard - Shine Afrika
@@ -176,6 +182,7 @@ function Admin({ websites, customers }) {
             </caption>
             <thead>
               <tr className="border-b bg-[#f7f7f7] text-[#555b6d]">
+                <th></th>
                 <th className="py-4 text-center px-3 w-1">
                   <input
                     type="checkbox"
@@ -259,87 +266,143 @@ function Admin({ websites, customers }) {
             </thead>
             <tbody>
               {websites.map((site, index) => (
-                <tr
-                  className={`border-b border-l-2 border-l-transparent hover:border-l-[#ca3011] cursor-pointer mb-10 ${
-                    deleteArrayIds.includes(site.id.toString()) &&
-                    "bg-red-50 border-l-[#ca3011]"
-                  }`}
-                  key={index}
-                  onClick={() => router.push(`/sites/${site.id}`)}
-                >
-                  <td
-                    className="py-4 text-center px-3"
-                    onClick={(event) => event.stopPropagation()}
+                <>
+                  <tr
+                    className={`border-b border-l-2 border-l-transparent hover:border-l-[#ca3011] cursor-pointer mb-10 ${
+                      deleteArrayIds.includes(site.id.toString()) &&
+                      "bg-red-50 border-l-[#ca3011]"
+                    }`}
+                    key={index}
+                    onClick={() => router.push(`/sites/${site.id}`)}
                   >
-                    <input
-                      type="checkbox"
-                      name=""
-                      id=""
-                      className="checkboxes accent-[#ca3011]"
-                      onChange={(event) => {
+                    <td
+                      className="py-4 pl-2 text-center text-gray-500"
+                      onClick={(event) => {
                         event.stopPropagation();
-                        checkbox.current.checked = false;
-                        return event.target.checked
-                          ? setDeleteArray([
-                              ...deleteArray,
-                              [site.id, site.name],
-                            ])
-                          : setDeleteArray(
-                              deleteArray.filter(
-                                (element) => element[0] !== site.id
-                              )
-                            );
+                        activeIndex === index
+                          ? setActiveIndex(null)
+                          : setActiveIndex(index);
                       }}
-                    />
-                  </td>
-                  <td className="py-2 text-left pl-3">
-                    <div className="flex gap-2 items-center">
-                      <div className="w-[30px] h-[30px] overflow-hidden flex justify-center items-center rounded-full">
-                        <Image
-                          src={`https://www.google.com/s2/favicons?sz=64&domain_url=${site.website_link}`}
-                          alt={`${site.name[0].toUpperCase()}`}
-                          width={25}
-                          height={25}
-                        />
-                      </div>
-                      <div>
-                        <h1 className="font-medium">{site.name}</h1>
-                        <span className="font-extralight text-sm text-[#bcbfc2]">
-                          expiring on{" "}
-                          {moment(new Date(site.expiry_date)).format(
-                            "DD-MM-YYYY"
-                          )}
-                        </span>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="py-2 text-left pl-3">
-                    {customers
-                      .filter((customer) => customer.id === site.contact_person)
-                      .map((customer, index) => (
-                        <p key={index}>
-                          {customer.first_name + " " + customer.last_name}
-                        </p>
-                      ))}
-                  </td>
-                  <td className="py-2 text-left pl-3">
-                    {site.telephone_number}
-                  </td>
-                  <td className="py-2 text-left text-xs pl-3 font-light flex">
-                    <span className="outline outline-1 outline-[#e5e3e3] px-2 gap-1 py-1 rounded-lg flex items-center justify-between font-light">
-                      <span
-                        className={`w-2 h-2 rounded-full ${
-                          site.status.includes("active")
-                            ? "bg-green-500"
-                            : site.status.includes("warning")
-                            ? "bg-yellow-200"
-                            : "bg-red-600"
+                    >
+                      <FiChevronDown
+                        size={18}
+                        className={`${
+                          activeIndex === index ? "" : "-rotate-90"
                         }`}
-                      ></span>
-                      {site.status}
-                    </span>
-                  </td>
-                </tr>
+                      />
+                    </td>
+                    <td
+                      className="py-4 text-center px-3"
+                      onClick={(event) => event.stopPropagation()}
+                    >
+                      <input
+                        type="checkbox"
+                        name=""
+                        id=""
+                        className="checkboxes accent-[#ca3011]"
+                        onChange={(event) => {
+                          event.stopPropagation();
+                          checkbox.current.checked = false;
+                          return event.target.checked
+                            ? setDeleteArray([
+                                ...deleteArray,
+                                [site.id, site.name],
+                              ])
+                            : setDeleteArray(
+                                deleteArray.filter(
+                                  (element) => element[0] !== site.id
+                                )
+                              );
+                        }}
+                      />
+                    </td>
+                    <td className="py-2 text-left pl-3">
+                      <div className="flex gap-2 items-center">
+                        <div className="w-[30px] h-[30px] overflow-hidden flex justify-center items-center rounded-full">
+                          <Image
+                            src={`https://www.google.com/s2/favicons?sz=64&domain_url=${site.website_link}`}
+                            alt={`${site.name[0].toUpperCase()}`}
+                            width={25}
+                            height={25}
+                          />
+                        </div>
+                        <div>
+                          <h1 className="font-medium">{site.name}</h1>
+                          <span className="font-extralight text-sm text-[#bcbfc2]">
+                            expiring on{" "}
+                            {moment(new Date(site.expiry_date)).format(
+                              "DD-MM-YYYY"
+                            )}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="py-2 text-left pl-3">
+                      {customers
+                        .filter(
+                          (customer) => customer.id === site.contact_person
+                        )
+                        .map((customer, index) => (
+                          <p key={index}>
+                            {customer.first_name + " " + customer.last_name}
+                          </p>
+                        ))}
+                    </td>
+                    <td className="py-2 text-left pl-3">
+                      {site.telephone_number}
+                    </td>
+                    <td className="py-2 text-left text-xs pl-3 font-light flex">
+                      <span className="outline outline-1 outline-[#e5e3e3] px-2 gap-1 py-1 rounded-lg flex items-center justify-between font-light">
+                        <span
+                          className={`w-2 h-2 rounded-full ${
+                            site.status.includes("active")
+                              ? "bg-green-500"
+                              : site.status.includes("warning")
+                              ? "bg-yellow-200"
+                              : "bg-red-600"
+                          }`}
+                        ></span>
+                        {site.status}
+                      </span>
+                    </td>
+                  </tr>
+                  {activeIndex === index && (
+                    <tr className=" bg-zinc-50 border-b-[1px] border-b-gray-500 py-5">
+                      <td className="py-4 pl-2"></td>
+                      <td className="py-4 pl-2"></td>
+                      <td colSpan={5} className="py-4 pl-2">
+                        <div className="flex gap-2">
+                          <p>Website: </p>
+                          <a
+                            href={`https://${site.website_link.replace(
+                              /^https?:\/\//,
+                              ""
+                            )}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 cursor-pointer underline font-bold text-sm text-gray-700"
+                          >
+                            https://
+                            {site.website_link.replace(/^https?:\/\//, "")}
+                            <RiExternalLinkFill />
+                          </a>
+                        </div>
+                        <div className="flex gap-2">
+                          <p>Product Type: </p>
+                          <span className="font-medium">
+                            {site.product_type}
+                          </span>
+                        </div>
+                        <div className="flex gap-2">
+                          <p>Product Price: </p>
+                          <span className="font-medium">
+                            {currencyFormatter(site.product_price)}
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </>
               ))}
             </tbody>
           </table>

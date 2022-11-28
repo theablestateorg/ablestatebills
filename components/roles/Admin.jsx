@@ -62,7 +62,7 @@ function Admin({ websites, customers }) {
         <section className="flex justify-between items-center my-10">
           <h1 className="font-bold text-2xl"></h1>
           <button
-            className="bg-[#1D1F20] text-white py-2 px-4 my-2 mt-4 hover:bg-transparent hover:text-black outline outline-1 outline-black flex items-center gap-2 "
+            className="bg-[#1D1F20] text-white py-2 px-4 my-2 hover:bg-transparent hover:text-black outline outline-1 outline-black flex items-center gap-2 "
             onClick={() => router.push("/add-product")}
           >
             <MdAdd />

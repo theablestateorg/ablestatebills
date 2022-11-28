@@ -45,8 +45,6 @@ function Admin({ websites, customers }) {
 
   const [activeIndex, setActiveIndex] = useState(null);
 
-  console.log(activeIndex);
-
   return (
     <>
       <Head>

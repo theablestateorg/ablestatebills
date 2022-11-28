@@ -7,6 +7,7 @@ import { IoWarning } from "react-icons/io5";
 import Footer from "../Footer";
 import { HiChevronDown } from "react-icons/hi";
 import { motion, AnimateSharedLayout } from "framer-motion";
+import { useAuth } from "../../utils/auth";
 
 export default function Customer({ websites, customers, person }) {
   const [showMenu, setShowMenu] = useState(false);

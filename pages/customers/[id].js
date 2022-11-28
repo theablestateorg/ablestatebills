@@ -90,7 +90,7 @@ export default function Site({ profile, manager, websites }) {
                 {profile.first_name + " " + profile.last_name}
               </h1>
               <button
-                className="bg-[#1D1F20] text-white py-2 px-4 my-2 mt-4 hover:bg-[#292C2D] flex items-center gap-2"
+                className="bg-[#1D1F20] text-white py-2 px-4 my-5 hover:bg-[#292C2D] flex items-center gap-2"
                 onClick={() => setPopUpdate(true)}
               >
                 <TbEdit />
@@ -98,7 +98,7 @@ export default function Site({ profile, manager, websites }) {
               </button>
             </section>
 
-            <section className="my-5">
+            <section className="">
               <p>{profile.role}</p>
               <p>{profile.email}</p>
               <p>{profile.contact_number === "+256null" ? "N/A" : profile.contact_number}</p>

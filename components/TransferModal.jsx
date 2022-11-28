@@ -7,6 +7,7 @@ import { supabase } from "../utils/supabase";
 import { amountValidationSchema } from "../utils/validation";
 import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
+import Router from "next/router";
 
 function TransferModal({ setTransferPop, account_balance }) {
   const [customers, setCustomers] = useState([]);
@@ -21,6 +22,7 @@ function TransferModal({ setTransferPop, account_balance }) {
     const { data } = await supabase
       .from("profiles")
       .select("*")
+      .neq("id", cookie.user?.user?.id)
       .order("first_name", { ascending: true });
     setCustomers(data);
   };
@@ -28,11 +30,11 @@ function TransferModal({ setTransferPop, account_balance }) {
   const handleSubmit = async (event, values, resetForm) => {
     event.preventDefault();
     const { amount, transfer_to } = values;
-    if (amount < 1000) {
+    if (+amount < 10000) {
       toast.error(`Please enter an amount more than 10,000`, {
         position: "top-center",
       });
-    } else if (account_balance < amount) {
+    } else if (+account_balance < +amount) {
       toast.error(`insufficient balance`, {
         position: "top-center",
       });
@@ -64,6 +66,7 @@ function TransferModal({ setTransferPop, account_balance }) {
             position: "top-center",
           });
         }
+        Router.push("/account")
       }
     }
 
@@ -166,7 +169,7 @@ function TransferModal({ setTransferPop, account_balance }) {
                 <div className="flex justify-end">
                   <button
                     type="submit"
-                    className="bg-[#121212] text-white p-1 px-2 mt-5 rounded-sm"
+                    className="bg-[#121212] text-white p-1 px-2 mt-5 rounded-sm outline outline-1 outline-[#121212] hover:bg-transparent hover:text-[#121212]"
                   >
                     Transfer
                   </button>

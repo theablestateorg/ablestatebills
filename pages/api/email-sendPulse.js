@@ -6,6 +6,8 @@ const API_SECRET = process.env.SEND_PULSE_SECRET;
 const TOKEN_STORAGE = "/tmp/";
 
 export default function handler(req, res) {
+
+  console.log(req.body)
   var answerGetter = function (data) {
     res.send(data);
   };
@@ -22,7 +24,7 @@ export default function handler(req, res) {
       subject: "Seeing is believing",
       from: {
         name: "Ablestate",
-        email: "hello@theablestate.com",
+        email: "theablestate@gmail.com",
       },
       to: [
         {
@@ -33,11 +35,11 @@ export default function handler(req, res) {
       bcc: [
         {
           name: "Ablestate",
-          email: "theablestate@gmail.com",
+          email: "hello@theablestate.com",
         },
       ],
     };
-    sendpulse.listAddressBooks(answerGetter);
+    // sendpulse.listAddressBooks(answerGetter);
     sendpulse.smtpSendMail(answerGetter, email);
     // sendpulse.getBalance(answerGetter,'USD');
     // sendpulse.smtpListIP(answerGetter);

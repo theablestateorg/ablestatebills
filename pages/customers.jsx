@@ -8,6 +8,7 @@ import { Footer } from "../components";
 import Avatar from "../components/Avatar";
 import { parseCookies } from "../utils/parseCookies";
 import { useAuth } from "../utils/auth";
+import { FiChevronDown } from "react-icons/fi";
 
 export default function Customers({ customers, managers, websites }) {
   const router = useRouter();
@@ -39,11 +40,13 @@ export default function Customers({ customers, managers, websites }) {
       ? customers.sort((a, b) => a[sortBy] > b[sortBy])
       : customers.sort((a, b) => b[sortBy] > a[sortBy]);
 
+  const [activeIndex, setActiveIndex] = useState(null);
+
   return (
     <>
       <Head>
         <title>
-        {notifications && notifications.length > 0
+          {notifications && notifications.length > 0
             ? `(${notifications.length})`
             : ""}{" "}
           Customers - Shine Afrika
@@ -119,6 +122,7 @@ export default function Customers({ customers, managers, websites }) {
             </caption>
             <thead>
               <tr className="border-b bg-[#f7f7f7] text-[#555b6d]">
+                <th></th>
                 <th className="py-4 text-left pl-3 font-light">
                   <div className="flex items-center">
                     Name
@@ -161,46 +165,87 @@ export default function Customers({ customers, managers, websites }) {
             <tbody>
               {customers &&
                 customers.map((customer, index) => (
-                  <tr
-                    className={`border-b border-l-2 border-l-transparent hover:border-l-[#ca3011] cursor-pointer mb-10`}
-                    key={index}
-                    onClick={() => router.push(`/customers/${customer.id}`)}
-                  >
-                    <td className="py-2 text-left pl-3">
-                      <span className="flex items-center gap-2">
-                        <Avatar
-                          first_name={customer.first_name}
-                          last_name={customer.last_name}
+                  <>
+                    <tr
+                      className={`border-b border-l-2 border-l-transparent hover:border-l-[#ca3011] cursor-pointer mb-10`}
+                      key={index}
+                      onClick={() => router.push(`/customers/${customer.id}`)}
+                    >
+                      <td
+                        className="py-4 pl-2 text-center text-gray-500"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          activeIndex === index
+                            ? setActiveIndex(null)
+                            : setActiveIndex(index);
+                        }}
+                      >
+                        <FiChevronDown
+                          size={18}
+                          className={`${
+                            activeIndex === index ? "" : "-rotate-90"
+                          }`}
                         />
-                        <h1 className="font-medium">
-                          {customer.first_name + " " + customer.last_name}
-                        </h1>
-                      </span>
-                    </td>
-                    <td className="py-2 text-left  pl-3">
-                      <div className="w-full flex justify-center">
-                        {
-                          websites.filter(
-                            (website) => website.contact_person === customer.id
-                          ).length
-                        }
-                      </div>
-                    </td>
-                    <td className="py-2 text-left pl-3">
-                      {customer.contact_number === "+256null"
-                        ? "N/A"
-                        : customer.contact_number}
-                    </td>
-                    <td className="py-2 text-left pl-3">
-                      {managers
-                        .filter((manager) => manager.id === customer.added_by)
-                        .map((manager, index) => (
-                          <p key={index}>
-                            {manager.first_name + " " + manager.last_name}
-                          </p>
-                        ))}
-                    </td>
-                  </tr>
+                      </td>
+                      <td className="py-2 text-left pl-3">
+                        <span className="flex items-center gap-2">
+                          <Avatar
+                            first_name={customer.first_name}
+                            last_name={customer.last_name}
+                          />
+                          <h1 className="font-medium">
+                            {customer.first_name + " " + customer.last_name}
+                          </h1>
+                        </span>
+                      </td>
+                      <td className="py-2 text-left  pl-3">
+                        <div className="w-full flex justify-center">
+                          {
+                            websites.filter(
+                              (website) =>
+                                website.contact_person === customer.id
+                            ).length
+                          }
+                        </div>
+                      </td>
+                      <td className="py-2 text-left pl-3">
+                        {customer.contact_number === "+256null"
+                          ? "N/A"
+                          : customer.contact_number}
+                      </td>
+                      <td className="py-2 text-left pl-3">
+                        {managers
+                          .filter((manager) => manager.id === customer.added_by)
+                          .map((manager, index) => (
+                            <p key={index}>
+                              {manager.first_name + " " + manager.last_name}
+                            </p>
+                          ))}
+                      </td>
+                    </tr>
+                    {activeIndex === index && (
+                      <tr className=" bg-zinc-50 border-b-[1px] border-b-gray-500 py-5">
+                        <td className="py-4 pl-2"></td>
+                        <td colSpan={4} className="py-4 pl-2">
+                          <h3>{customer.email}</h3>
+                          <br />
+                          <h3 className="font-medium">Products owned</h3>
+                          {websites &&
+                            websites
+                              .filter(
+                                (website, index) =>
+                                  website.contact_person === customer.id
+                              )
+                              .map((product, index) => (
+                                <p key={index}>
+                                  <span className="text-sm">{index + 1}</span>:{" "}
+                                  {product.name}
+                                </p>
+                              ))}
+                        </td>
+                      </tr>
+                    )}
+                  </>
                 ))}
             </tbody>
           </table>

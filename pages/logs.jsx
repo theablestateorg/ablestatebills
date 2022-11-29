@@ -5,9 +5,13 @@ import { MdDeleteOutline } from "react-icons/md";
 import Footer from "../components/Footer";
 import { parseCookies } from "../utils/parseCookies";
 import { useAuth } from "../utils/auth";
+import { getPagination } from "../utils/getPagination";
+import { MdOutlineNavigateNext, MdOutlineNavigateBefore } from "react-icons/md";
+import { useRouter } from "next/router";
 
-export default function Home({ logs }) {
+export default function Home({ logs, page }) {
   const { notifications } = useAuth();
+  const router = useRouter()
   return (
     <>
       <Head>
@@ -63,6 +67,28 @@ export default function Home({ logs }) {
               ))}
             </tbody>
           </table>
+          {logs && logs.length > 0 && (
+            <div className="flex py-2 px-4 gap-4 mt-3">
+              <button
+                className="outline outline-1 rounded-sm flex gap-1 items-center px-3 py-1"
+                onClick={() => {
+                  if (page > 0) {
+                    router.push(`/logs?page=${page - 1}`);
+                  }
+                }}
+              >
+                <MdOutlineNavigateBefore />
+                Prev
+              </button>
+              <button
+                className="outline outline-1 rounded-sm flex gap-1 items-center px-3 py-1"
+                onClick={() => router.push(`/logs?page=${page + 1}`)}
+              >
+                Next
+                <MdOutlineNavigateNext />
+              </button>
+            </div>
+          )}
         </div>
         <Footer />
       </main>
@@ -70,11 +96,13 @@ export default function Home({ logs }) {
   );
 }
 
-export const getServerSideProps = async ({ req, res }) => {
+export const getServerSideProps = async ({ req, res, query: { page = 0 } }) => {
+  const { from, to } = getPagination(page, 10);
   const { data: logs } = await supabase
     .from("logs")
     .select("*")
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .range(from, to);
 
   const person = parseCookies(req);
   if (res) {
@@ -92,6 +120,7 @@ export const getServerSideProps = async ({ req, res }) => {
   return {
     props: {
       logs,
+      page: +page
     },
   };
 };

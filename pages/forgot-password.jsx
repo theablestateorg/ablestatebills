@@ -8,8 +8,9 @@ import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import Footer from "../components/Footer";
 import { parseCookies } from "../utils/parseCookies";
+import { toast } from "react-toastify";
 
-export default function Home() {
+export default function ForgotPassword() {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (event, { email }, resetForm) => {
@@ -76,7 +77,7 @@ export default function Home() {
                       type="email"
                       name="email"
                       id="email"
-                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full"
+                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full rounded-sm"
                       placeholder="enter email"
                       onChange={handleChange("email")}
                       onBlur={handleBlur("email")}
@@ -130,7 +131,7 @@ export default function Home() {
                   {loading ? "Loading" : "Submit"}
                 </button>
                 <p className="cursor-point">
-                  Remember?{" "}
+                  Remember password?{" "}
                   <Link href="/login">
                     <span className="underline cursor-pointer font-medium">
                       Login

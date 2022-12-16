@@ -18,9 +18,9 @@ export default function handler(req, res) {
       req.body?.day.forEach((website, index) => {
         zeptoClient
           .sendMail({
-            bounce_address: "info@bounce.shineafrika.com",
+            bounce_address: "info@bounce.theablestate.com",
             from: {
-              address: "noreply@shineafrika.com",
+              address: "noreply@theablestate.com",
               name: "Ablestate Cloud",
             },
             to: [
@@ -69,9 +69,9 @@ export default function handler(req, res) {
         req.body?.day4.forEach((website, index) => {
           zeptoClient
             .sendMail({
-              bounce_address: "info@bounce.shineafrika.com",
+              bounce_address: "info@bounce.theablestate.com",
               from: {
-                address: "noreply@shineafrika.com",
+                address: "noreply@theablestate.com",
                 name: "Ablestate Cloud",
               },
               to: [
@@ -113,9 +113,9 @@ export default function handler(req, res) {
       req.body?.week.forEach((website, index) => {
         zeptoClient
           .sendMail({
-            bounce_address: "info@bounce.shineafrika.com",
+            bounce_address: "info@bounce.theablestate.com",
             from: {
-              address: "noreply@shineafrika.com",
+              address: "noreply@theablestate.com",
               name: "Ablestate Cloud",
             },
             to: [
@@ -163,9 +163,9 @@ export default function handler(req, res) {
       req.body?.month.forEach((website, index) => {
         zeptoClient
           .sendMail({
-            bounce_address: "info@bounce.shineafrika.com",
+            bounce_address: "info@bounce.theablestate.com",
             from: {
-              address: "noreply@shineafrika.com",
+              address: "noreply@theablestate.com",
               name: "Ablestate Cloud",
             },
             to: [
@@ -213,9 +213,9 @@ export default function handler(req, res) {
       req.body?.two_months.forEach((website, index) => {
         zeptoClient
           .sendMail({
-            bounce_address: "info@bounce.shineafrika.com",
+            bounce_address: "info@bounce.theablestate.com",
             from: {
-              address: "noreply@shineafrika.com",
+              address: "noreply@theablestate.com",
               name: "Ablestate Cloud",
             },
             to: [
@@ -262,9 +262,9 @@ export default function handler(req, res) {
       req.body?.expired_3days.forEach((website, index) => {
         zeptoClient
           .sendMail({
-            bounce_address: "info@bounce.shineafrika.com",
+            bounce_address: "info@bounce.theablestate.com",
             from: {
-              address: "noreply@shineafrika.com",
+              address: "noreply@theablestate.com",
               name: "Ablestate Cloud",
             },
             to: [
@@ -310,9 +310,9 @@ export default function handler(req, res) {
       req.body?.expired_week_ago.forEach((website, index) => {
         zeptoClient
           .sendMail({
-            bounce_address: "info@bounce.shineafrika.com",
+            bounce_address: "info@bounce.theablestate.com",
             from: {
-              address: "noreply@shineafrika.com",
+              address: "noreply@theablestate.com",
               name: "Ablestate Cloud",
             },
             to: [

@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 export default function Home({ websites, customers, person }) {
   const { user } = useAuth();
   const [welcome, setWelcome] = useState(true);
-  const { role } = JSON.parse(person.user)?.profile || "customer";
+  const { role } = JSON.parse(person.user).user.user_metadata || "customer";
 
   useEffect(() => {}, [welcome]);
   const router = useRouter();
@@ -114,15 +114,15 @@ export const getServerSideProps = async ({ req, res }) => {
         props: {},
       };
     }
-    if (person && JSON.parse(person.user).profile.role === "support") {
-      return {
-        redirect: {
-          permanent: false,
-          destination: "/tickets",
-        },
-        props: {},
-      };
-    }
+    // if (person && JSON.parse(person.user).profile.role === "support") {
+    //   return {
+    //     redirect: {
+    //       permanent: false,
+    //       destination: "/tickets",
+    //     },
+    //     props: {},
+    //   };
+    // }
   }
 
   const { data: websites } = await supabase

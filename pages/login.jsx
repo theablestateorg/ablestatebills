@@ -38,8 +38,6 @@ export default function Home({}) {
           .match({ id: user.id })
           .single();
 
-        console.log("profile is: ", profile);
-
         setSession(session);
         resetForm({ email: "", password: "" });
         setCookie("user", JSON.stringify({ user: user, profile: profile }), {

@@ -72,7 +72,7 @@ export default function CommandBar({children}) {
     }
   ];
   return (
-    <KBarProvider actions={["manager", "admin"].includes(cookie?.user?.profile.role) ? managerActions : actions}>
+    <KBarProvider actions={["manager", "admin"].includes(cookie?.user?.user.user_metadata.role) ? managerActions : actions}>
       <KBarPortal>
         <KBarPositioner className="bg-black bg-opacity-50 z-10 p-10 fixed w-full h-full">
           <KBarAnimator className="outline outline-1 outline-gray-300 rounded bg-white px-2 w-11/12 md:w-8/12">

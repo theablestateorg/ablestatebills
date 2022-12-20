@@ -29,8 +29,8 @@ export default function Navbar({ user }) {
 
   const [cookie] = useCookies(["user"]);
   let role;
-  if (cookie?.user?.profile) {
-    role = cookie?.user?.profile.role;
+  if (cookie?.user?.user) {
+    role = cookie?.user?.user.user_metadata.role;
   } else {
     role = "customer";
   }

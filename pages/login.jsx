@@ -35,8 +35,11 @@ export default function Home({}) {
         const { data: profile } = await supabase
           .from("profiles")
           .select("*")
-          .eq("id", user.id)
+          .match({ id: user.id })
           .single();
+
+        console.log("profile is: ", profile);
+
         setSession(session);
         resetForm({ email: "", password: "" });
         setCookie("user", JSON.stringify({ user: user, profile: profile }), {

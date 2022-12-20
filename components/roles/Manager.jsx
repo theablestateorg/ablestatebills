@@ -25,6 +25,8 @@ function Manager({ websites, customers }) {
   const checkbox = useRef();
   const deleteArrayIds = deleteArray.map((site) => site[0].toString());
 
+  const [activeIndex, setActiveIndex] = useState(null)
+
   const img_url =
     "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://charleskasra.com&size=64";
 

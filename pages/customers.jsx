@@ -275,7 +275,7 @@ export const getServerSideProps = async ({ req, res }) => {
 
   const person = parseCookies(req);
   if (res) {
-    if (!person.user || JSON.parse(person?.user).profile.role === "customer") {
+    if (!person.user || JSON.parse(person?.user).user.user_metadata.role === "customer") {
       return {
         redirect: {
           permanent: false,

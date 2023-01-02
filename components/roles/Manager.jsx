@@ -24,7 +24,6 @@ function Manager({ websites, customers }) {
   const [sortBy, setSortBy] = useState("");
   const checkbox = useRef();
   const deleteArrayIds = deleteArray.map((site) => site[0].toString());
-
   const [activeIndex, setActiveIndex] = useState(null)
 
   const img_url =

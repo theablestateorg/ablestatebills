@@ -12,9 +12,6 @@ export default function Home({ websites, customers, person }) {
   const { user } = useAuth();
   const [welcome, setWelcome] = useState(true);
   const { role } = JSON.parse(person.user).user.user_metadata || "customer";
-
-  console.log("from cookies: ", JSON.parse(person.user).user.user_metadata);
-
   useEffect(() => {}, [welcome]);
   const router = useRouter();
 

@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import Footer from "../components/Footer";
 import { parseCookies } from "../utils/parseCookies";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function ForgotPassword() {
   const [loading, setLoading] = useState(false);
@@ -21,9 +21,12 @@ export default function ForgotPassword() {
       //   email
       // );
 
-      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: "https://bills.ablestate.co/update-password",
-      });
+      const { data, error } = await supabase.auth.api.resetPasswordForEmail(
+        email,
+        { redirectTo: "http://localhost:3000/update-password" }
+      );
+
+      console.log(data)
 
       if (data) {
         setLoading(false);
@@ -51,10 +54,11 @@ export default function ForgotPassword() {
       <Head>
         <title>Password Reset - Shine Afrika</title>
       </Head>
+      <ToastContainer />
       <main className="w-screen h-screen flex justify-center items-center relative pb-6 min-h-screen">
         <Formik
           initialValues={{ email: "" }}
-          resetPasswordSchema={resetPasswordSchema}
+          validationSchema={resetPasswordSchema}
         >
           {({
             values,

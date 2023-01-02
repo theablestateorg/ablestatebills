@@ -23,10 +23,10 @@ export default function ForgotPassword() {
 
       const { data, error } = await supabase.auth.api.resetPasswordForEmail(
         email,
-        { redirectTo: "http://localhost:3000/update-password" }
+        { redirectTo: "https://bills.ablestate.co/update-password" }
       );
 
-      console.log(data)
+      console.log(data);
 
       if (data) {
         setLoading(false);

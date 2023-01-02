@@ -73,38 +73,43 @@ export default function ForgotPassword() {
                 name="resetForm"
               >
                 <h1 className="text-3xl font-bold text-center">
-                  Forgot Password
+                  Update Password
                 </h1>
+
                 <div className="flex flex-col gap-2 my-2">
-                  <label htmlFor="email">Email</label>
+                  <label htmlFor="password">Password</label>
                   <div className="w-full">
                     <input
-                      type="email"
-                      name="email"
-                      id="email"
+                      type="password"
+                      name="password"
+                      id="password"
                       className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full rounded-sm"
-                      placeholder="enter email"
-                      onChange={handleChange("email")}
-                      onBlur={handleBlur("email")}
-                      value={values.email}
+                      placeholder="Enter Password"
+                      onChange={handleChange("password")}
+                      onBlur={handleBlur("password")}
+                      value={values.password}
                     />
                     <div
                       className={`${
-                        errors?.email && touched?.email ? "block" : "hidden"
+                        errors?.password && touched?.password
+                          ? "block"
+                          : "hidden"
                       }`}
                     >
                       <label
                         className={`${
-                          errors?.email && touched?.email
+                          errors?.password && touched?.password
                             ? "text-red-500 text-xs"
                             : "text-transparent text-xs"
                         }`}
                       >{`${
-                        errors?.email && touched?.email ? errors.email : "hide"
+                        errors?.password && touched?.password
+                          ? errors.password
+                          : "hide"
                       }`}</label>
                     </div>
-                  </div>
-                </div>
+                    </div>
+                    </div>
 
                 <button
                   type="submit"

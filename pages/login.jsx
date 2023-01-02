@@ -32,33 +32,11 @@ export default function Home({}) {
         password,
       });
       if (user) {
-        const { data: profile, error: prerror } = await supabase
+        const { data: profile } = await supabase
           .from("profiles")
           .select("*")
           .match({ id: user.id })
           .single();
-
-        console.log(profile);
-
-        console.log(user.id);
-        console.log("user is", user);
-
-        const { data: userFrom, error: errorFrom } = await supabase.rpc(
-          get_profile,
-          { userID: "19ff4470-9232-4395-91da-e0a7dbccddcb" }
-        );
-
-        console.log("userForm: ", userFrom);
-        console.log("userForm: ", errorFrom);
-
-        const { data: allprofiles, error: allerror } = await supabase
-          .from("profiles")
-          .select("*");
-
-        console.log("all profile is: ", allprofiles);
-        console.log("allerror is: ", allerror);
-        // console.log("profile is: ", profile);
-        console.log("error is: ", prerror);
 
         setSession(session);
         resetForm({ email: "", password: "" });

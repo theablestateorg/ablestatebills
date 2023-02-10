@@ -60,7 +60,7 @@ export default function Home({}) {
   return (
     <>
       <Head>
-        <title>Welcome to Shine Afrika</title>
+        <title>Welcome to Ablestate</title>
       </Head>
       <ToastContainer />
       <main className="w-screen h-screen flex justify-center items-center relative md:pb-6 min-h-screen">

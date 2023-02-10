@@ -102,11 +102,8 @@ export default function Navbar({ user }) {
             className="text-[#CA3011] font-Roboto text-3xl font-black cursor-pointer"
             onClick={() => router.push("/")}
           >
-            ShineAfrika
+            Ablestate Cloud
           </h1>
-          <span className="bg-[#CA3011] text-xs font-light text-white rounded px-1">
-            beta
-          </span>
         </div>
         <AnimateSharedLayout>
           <motion.ul

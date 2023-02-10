@@ -124,7 +124,7 @@ export default function Home({}) {
                         type={showPassword ? "text" : "password"}
                         name="password"
                         id="password"
-                        className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full rounded-sm appearance-none focus:border-0 focus:ring-0 focus:outline-black"
+                        className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full rounded-sm"
                         placeholder="Enter Password"
                         onChange={handleChange("password")}
                         onBlur={handleBlur("password")}

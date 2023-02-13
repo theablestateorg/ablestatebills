@@ -2,19 +2,15 @@ import { TbMessageCircle2 } from "react-icons/tb";
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../utils/auth";
 import { supabase } from "../utils/supabase";
-import {
-  MdOutlineClose,
-  MdOutlineArrowDownward,
-} from "react-icons/md";
-import { IoMdClose } from 'react-icons/io'
-import { Transition } from '@tailwindui/react'
+import { MdOutlineClose, MdOutlineArrowDownward } from "react-icons/md";
+import { IoMdClose } from "react-icons/io";
+import { Transition } from "@tailwindui/react";
 import Select from "./SelectBox";
-
 
 function Help({ toast }) {
   const { user, setLoading } = useAuth();
   const [chatBox, setChatBox] = useState(false);
-  const [faqs, setFaqs] = useState(true)
+  const [faqs, setFaqs] = useState(true);
   const [ticket, setTicket] = useState({
     agency: "",
     customer_id: user.id,
@@ -23,8 +19,8 @@ function Help({ toast }) {
   });
   const [myMessages, setMyMessages] = useState([]);
   const [reload, setReload] = useState(false);
-  const [status, setStatus] = useState("")
-  const [priority, setPriority] = useState("")
+  const [status, setStatus] = useState("");
+  const [priority, setPriority] = useState("");
 
   const msg = useRef();
   useEffect(() => {
@@ -48,7 +44,7 @@ function Help({ toast }) {
   };
 
   useEffect(() => {
-    getManagers()
+    getManagers();
     const mySubscription = supabase
       .from("tickets")
       .on("*", (payload) => {
@@ -61,26 +57,28 @@ function Help({ toast }) {
     return () => supabase.removeSubscription(mySubscription);
   }, []);
 
-  const [managers, setManagers] = useState([])
+  const [managers, setManagers] = useState([]);
   const getManagers = async () => {
     const { data } = await supabase
       .from("profiles")
       .select("id")
-      .in('role', ['manager', 'admin'])
+      .in("role", ["manager", "admin"]);
     setManagers(() => data.map((manager) => manager.id));
   };
 
   const handleSubmit = async () => {
-    if(status === "" || priority === ""){
-      toast.error(`Category and priority are required`, { position: "top-center" });
+    if (status === "" || priority === "") {
+      toast.error(`Category and priority are required`, {
+        position: "top-center",
+      });
       return;
     }
     const { data, error } = await supabase.from("tickets").insert([
       {
         ...ticket,
         category: status,
-        agency: priority
-      }
+        agency: priority,
+      },
     ]);
 
     if (data) {
@@ -90,7 +88,7 @@ function Help({ toast }) {
           description: `${data[0].message}`,
           actor: `${user.first_name}`,
           ticket_id: data[0].id,
-          notifiers: managers
+          notifiers: managers,
         },
       ]);
       if (error) {
@@ -98,7 +96,7 @@ function Help({ toast }) {
       }
       setReload(!reload);
       updateScroll();
-      setLoading(true)
+      setLoading(true);
     }
     if (error) {
       console.log(error);
@@ -109,8 +107,8 @@ function Help({ toast }) {
       message: "",
       category: "",
     });
-    setStatus("")
-    setPriority("")
+    setStatus("");
+    setPriority("");
   };
 
   function updateScroll() {
@@ -119,8 +117,8 @@ function Help({ toast }) {
     }
   }
   useEffect(() => {
-    updateScroll()
-  }, [msg.current])
+    updateScroll();
+  }, [msg.current]);
 
   const scrollToBottom = () => {
     if (!msg.current) return;
@@ -136,14 +134,14 @@ function Help({ toast }) {
     >
       <TbMessageCircle2 size={30} />
       <Transition
-          show={chatBox}
-          enter="transition ease-in-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="transition ease-in-out duration-150"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
+        show={chatBox}
+        enter="transition ease-in-out duration-300"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="transition ease-in-out duration-150"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+      >
         <div
           className="absolute  bottom-2 w-72 h-96 shadow-lg bg-white outline outline-2 outline-[#CA3011] rounded-t-md rounded-bl-md flex flex-col text-black items-center -right-0 md:right-12"
           onClick={(event) => {
@@ -158,23 +156,27 @@ function Help({ toast }) {
               <MdOutlineArrowDownward />
             </div>
           }
-          { ticket.message.length>0 && faqs &&
+          {ticket.message.length > 0 && faqs && (
             <div className="w-full  outline flex justify-center items-center">
               <p
                 className="bg-white m-2 absolute shadow-lg bottom-24 z-20 text-gray-600 outline outline-1 outline-red-400 p-3 rounded-lg text-sm"
                 onClick={() => scrollToBottom()}
               >
-                <i
-                  onClick={() => setFaqs(false)}
-                  className=""
-                  >
+                <i onClick={() => setFaqs(false)} className="">
                   <IoMdClose size={20} />
                 </i>
-                Hello, you can see the FAQS, to see if your questions was answered at
-                <a href="https://shineafrika.com/index.php/faqs/" className="text-blue-500" target="blank"> https://shineafrika.com/index.php/faqs/</a>
+                Hello, you can see the{" "}
+                <a
+                  href="https://cloud.ablestate.co/faqs/"
+                  className="text-blue-500 underline"
+                  target="blank"
+                >
+                  FAQS
+                </a>
+                , to see if your questions.
               </p>
             </div>
-          }
+          )}
           <p className="bg-gray-100 w-full text-sm font-bold py-2 flex justify-between px-2 items-center border-b-2 border-[#CA3011]">
             Send message
             <span onClick={() => setChatBox(false)}>
@@ -249,8 +251,7 @@ function Help({ toast }) {
             </div>
           </div>
         </div>
-        </Transition>
-      
+      </Transition>
     </div>
   );
 }

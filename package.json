@@ -25,6 +25,7 @@
     "react": "18.2.0",
     "react-cookie": "^4.1.1",
     "react-dom": "^18.2.0",
+    "react-google-recaptcha": "^2.1.0",
     "react-icons": "^4.4.0",
     "react-toastify": "^9.0.7",
     "sendpulse-api": "^1.1.5",

@@ -48,7 +48,7 @@ function CreateAccountFirst() {
   return (
     <div>
       <Head>
-        <title>Register - Shine Afrika</title>
+        <title>Register - Ablestate Cloud</title>
       </Head>
       <PackageNav />
       <ToastContainer />

@@ -146,7 +146,7 @@ export default function AddSite() {
   return (
     <>
       <Head>
-        <title>Add Product - Shine Afrika</title>
+        <title>Add Product - Ablestate Cloud</title>
       </Head>
       <main className="pt-[70px] mx-5 md:mx-20 relative pb-6 min-h-screen">
         <section className="flex justify-between items-center">

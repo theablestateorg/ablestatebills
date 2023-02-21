@@ -19,7 +19,7 @@ export default function Home({ logs, page }) {
           {notifications && notifications.length > 0
             ? `(${notifications.length})`
             : ""}{" "}
-          Logs - Shine Afrika
+          Logs - Ablestate Cloud
         </title>
       </Head>
       <main className="pt-[70px] relative pb-6 min-h-screen">

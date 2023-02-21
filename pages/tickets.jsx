@@ -21,7 +21,7 @@ function Tickets({ tickets, customers, page }) {
           {notifications && notifications.length > 0
             ? `(${notifications.length})`
             : ""}{" "}
-          Tickets - Shine Afrika
+          Tickets - Ablestate Cloud
         </title>
       </Head>
       <main className="pt-[70px] mx-3 md:mx-16 relative pb-6 min-h-screen flex flex-col">

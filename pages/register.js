@@ -84,7 +84,7 @@ export default function Home() {
             return (
               <Form
                 onSubmit={(event) => handleSubmit(event, values, resetForm)}
-                className="bg-white p-10 shadow"
+                className="md:bg-white p-10 md:shadow"
                 name="signUpForm"
               >
                 <h1 className="text-3xl font-bold text-center">
@@ -97,7 +97,7 @@ export default function Home() {
                       type="email"
                       name="email"
                       id="email"
-                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full rounded-sm"
+                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full rounded-sm bg-transparent"
                       placeholder="Enter Email"
                       onChange={handleChange("email")}
                       onBlur={handleBlur("email")}
@@ -127,7 +127,7 @@ export default function Home() {
                       type="text"
                       name="first_name"
                       id="first_name"
-                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full rounded-sm"
+                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full rounded-sm bg-transparent"
                       placeholder="Enter First name"
                       onChange={handleChange("first_name")}
                       onBlur={handleBlur("first_name")}
@@ -161,7 +161,7 @@ export default function Home() {
                       type="text"
                       name="last_name"
                       id="last_name"
-                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full rounded-sm"
+                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full rounded-sm bg-transparent"
                       placeholder="Enter Last name"
                       onChange={handleChange("last_name")}
                       onBlur={handleBlur("last_name")}
@@ -223,7 +223,7 @@ export default function Home() {
                       type="password"
                       name="password"
                       id="password"
-                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full rounded-sm"
+                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full rounded-sm bg-transparent"
                       placeholder="Enter Password"
                       onChange={handleChange("password")}
                       onBlur={handleBlur("password")}
@@ -253,7 +253,7 @@ export default function Home() {
                 <button
                   type="submit"
                   disabled={!(isValid && dirty)}
-                  className="bg-[#1D1F20] text-white py-1 px-3 my-2 mt-4 hover:bg-[#292C2D] flex items-center cursor-pointer w-full justify-center rounded-sm"
+                  className="bg-[#1D1F20] text-white py-1 px-3 my-2 mt-4 hover:bg-[#292C2D] flex items-center cursor-pointer w-full justify-center rounded-sm bg-transparent"
                 >
                   {loading && (
                     <svg

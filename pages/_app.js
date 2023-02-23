@@ -10,7 +10,6 @@ import NProgress from "nprogress";
 import "../styles/Progress.css";
 import { CookiesProvider } from "react-cookie";
 
-
 function MyApp({ Component, pageProps, ...appProps }) {
   const isLayoutNeeded = [
     "/login",
@@ -19,6 +18,8 @@ function MyApp({ Component, pageProps, ...appProps }) {
     "/packages/[id]/[go]",
     "/404",
     "/500",
+    "/forms/request-for-qoute",
+    "/update-password"
   ].includes(appProps.router.pathname);
 
   const LayoutComponent = isLayoutNeeded ? React.Fragment : Layout;
@@ -45,11 +46,11 @@ function MyApp({ Component, pageProps, ...appProps }) {
   return (
     <AuthProvider>
       <CommandBar>
-      <CookiesProvider>
-        <LayoutComponent>
-          <Component {...pageProps} />
-        </LayoutComponent>
-      </CookiesProvider>
+        <CookiesProvider>
+          <LayoutComponent>
+            <Component {...pageProps} />
+          </LayoutComponent>
+        </CookiesProvider>
       </CommandBar>
     </AuthProvider>
   );

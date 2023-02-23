@@ -73,7 +73,7 @@ export default function ForgotPassword() {
             return (
               <Form
                 onSubmit={(event) => handleSubmit(event, values, resetForm)}
-                className="bg-white mx-5 sm:mx-0 p-6 md:p-10 shadow"
+                className="md:bg-white mx-5 sm:mx-0 p-6 md:p-10 md:shadow"
                 name="resetForm"
               >
                 <h1 className="text-3xl font-bold text-center">
@@ -86,7 +86,7 @@ export default function ForgotPassword() {
                       type="email"
                       name="email"
                       id="email"
-                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full rounded-sm"
+                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full rounded-sm bg-transparent"
                       placeholder="enter email"
                       onChange={handleChange("email")}
                       onBlur={handleBlur("email")}

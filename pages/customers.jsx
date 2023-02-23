@@ -9,10 +9,12 @@ import Avatar from "../components/Avatar";
 import { parseCookies } from "../utils/parseCookies";
 import { useAuth } from "../utils/auth";
 import { FiChevronDown } from "react-icons/fi";
+import useMediaQuery from "../hooks/useMediaQuery";
 
 export default function Customers({ customers, managers, websites }) {
   const router = useRouter();
   const [searchText, setSearchText] = useState("");
+  const matches = useMediaQuery("(min-width: 800px)");
   const [searchBy, setSearchBy] = useState("name");
   const [sortNames, setSortNames] = useState(false);
   const [sortBy, setSortBy] = useState("");
@@ -70,59 +72,63 @@ export default function Customers({ customers, managers, websites }) {
             <caption className=" bg-white py-3 outline outline-1 outline-[#e5e7eb] px-3">
               <section className="flex justify-between items-center">
                 <h3 className="font-bold text-left">Customers</h3>
-                <div className="flex items-center gap-2">
-                  <div className="flex justify-between items-center">
-                    <div className="flex justify-between items-center relative focus-within:text-black ">
-                      <div className="relative">
-                        <input
-                          type="text"
-                          placeholder="search"
-                          className="px-3 py-2 bg-[#f7f7f7] rounded-lg placeholder:text-[#bcbfc2] w-full outline outline-1 outline-[#f4f3f7]"
-                          onChange={(event) => {
-                            setSearchText(event.target.value);
-                            if (event.target.value !== "") {
-                              const rightWeb = customers.filter((customer) =>
-                                customer.first_name
-                                  .toLowerCase()
-                                  .startsWith(event.target.value.toLowerCase())
-                              );
-                              document.getElementById("paragraph").innerHTML =
-                                rightWeb.length > 0
-                                  ? `${rightWeb[0]?.first_name} ${rightWeb[0]?.last_name}`
-                                      .toLowerCase()
-                                      .replace(
-                                        event.target.value,
-                                        `<span class="text-black">${event.target.value}</span>`
-                                      )
-                                  : "";
-                            } else {
-                              document.getElementById("paragraph").innerHTML =
-                                "";
-                            }
-                          }}
-                        />
-                        <p
-                          id="paragraph"
-                          className="text-gray-400 absolute top-2 left-3 pointer-events-none"
-                        ></p>
+                {matches && (
+                  <div className="flex items-center gap-2">
+                    <div className="flex justify-between items-center">
+                      <div className="flex justify-between items-center relative focus-within:text-black ">
+                        <div className="relative">
+                          <input
+                            type="text"
+                            placeholder="search"
+                            className="px-3 py-2 bg-[#f7f7f7] rounded-lg placeholder:text-[#bcbfc2] w-full outline outline-1 outline-[#f4f3f7]"
+                            onChange={(event) => {
+                              setSearchText(event.target.value);
+                              if (event.target.value !== "") {
+                                const rightWeb = customers.filter((customer) =>
+                                  customer.first_name
+                                    .toLowerCase()
+                                    .startsWith(
+                                      event.target.value.toLowerCase()
+                                    )
+                                );
+                                document.getElementById("paragraph").innerHTML =
+                                  rightWeb.length > 0
+                                    ? `${rightWeb[0]?.first_name} ${rightWeb[0]?.last_name}`
+                                        .toLowerCase()
+                                        .replace(
+                                          event.target.value,
+                                          `<span class="text-black">${event.target.value}</span>`
+                                        )
+                                    : "";
+                              } else {
+                                document.getElementById("paragraph").innerHTML =
+                                  "";
+                              }
+                            }}
+                          />
+                          <p
+                            id="paragraph"
+                            className="text-gray-400 absolute top-2 left-3 pointer-events-none"
+                          ></p>
+                        </div>
+                        <select
+                          name=""
+                          id=""
+                          className="absolute right-1 px-1 py-2 ml-2 bg-white rounded-lg outline outline-1 outline-[#ededed] text-sm"
+                          onChange={(event) => setSearchBy(event.target.value)}
+                        >
+                          <option value="name">Name</option>
+                          <option value="contact_number">Telephone</option>
+                        </select>
                       </div>
-                      <select
-                        name=""
-                        id=""
-                        className="absolute right-1 px-1 py-2 ml-2 bg-white rounded-lg outline outline-1 outline-[#ededed] text-sm"
-                        onChange={(event) => setSearchBy(event.target.value)}
-                      >
-                        <option value="name">Name</option>
-                        <option value="contact_number">Telephone</option>
-                      </select>
                     </div>
                   </div>
-                </div>
+                )}
               </section>
             </caption>
             <thead>
               <tr className="border-b bg-[#f7f7f7] text-[#555b6d]">
-                <th></th>
+                {matches && <th></th>}
                 <th className="py-4 text-left pl-3 font-light">
                   <div className="flex items-center">
                     Name
@@ -143,23 +149,27 @@ export default function Customers({ customers, managers, websites }) {
                     <span className="px-1">{websites?.length}</span>
                   </div>
                 </th>
-                <th className="py-4 text-left pl-3 font-light">
-                  <div className="flex items-center">
-                    Telephone
-                    <i
-                      className="cursor-pointer"
-                      onClick={() => {
-                        setSortNames(!sortNames);
-                        setSortBy("contact_number");
-                      }}
-                    >
-                      <FaSort size={13} />
-                    </i>
-                  </div>
-                </th>
-                <th className="py-4 text-left pl-3 font-light">
-                  <div className="flex items-center">Added By</div>
-                </th>
+                {matches && (
+                  <th className="py-4 text-left pl-3 font-light">
+                    <div className="flex items-center">
+                      Telephone
+                      <i
+                        className="cursor-pointer"
+                        onClick={() => {
+                          setSortNames(!sortNames);
+                          setSortBy("contact_number");
+                        }}
+                      >
+                        <FaSort size={13} />
+                      </i>
+                    </div>
+                  </th>
+                )}
+                {matches && (
+                  <th className="py-4 text-left pl-3 font-light">
+                    <div className="flex items-center">Added By</div>
+                  </th>
+                )}
               </tr>
             </thead>
             <tbody>
@@ -171,22 +181,24 @@ export default function Customers({ customers, managers, websites }) {
                       key={index}
                       onClick={() => router.push(`/customers/${customer.id}`)}
                     >
-                      <td
-                        className="py-4 pl-2 text-center text-gray-500"
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          activeIndex === index
-                            ? setActiveIndex(null)
-                            : setActiveIndex(index);
-                        }}
-                      >
-                        <FiChevronDown
-                          size={18}
-                          className={`${
-                            activeIndex === index ? "" : "-rotate-90"
-                          }`}
-                        />
-                      </td>
+                      {matches && (
+                        <td
+                          className="py-4 pl-2 text-center text-gray-500"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            activeIndex === index
+                              ? setActiveIndex(null)
+                              : setActiveIndex(index);
+                          }}
+                        >
+                          <FiChevronDown
+                            size={18}
+                            className={`${
+                              activeIndex === index ? "" : "-rotate-90"
+                            }`}
+                          />
+                        </td>
+                      )}
                       <td className="py-2 text-left pl-3">
                         <span className="flex items-center gap-2">
                           <Avatar
@@ -208,20 +220,26 @@ export default function Customers({ customers, managers, websites }) {
                           }
                         </div>
                       </td>
-                      <td className="py-2 text-left pl-3">
-                        {customer.contact_number === "+256null"
-                          ? "N/A"
-                          : customer.contact_number}
-                      </td>
-                      <td className="py-2 text-left pl-3">
-                        {managers
-                          .filter((manager) => manager.id === customer.added_by)
-                          .map((manager, index) => (
-                            <p key={index}>
-                              {manager.first_name + " " + manager.last_name}
-                            </p>
-                          ))}
-                      </td>
+                      {matches && (
+                        <td className="py-2 text-left pl-3">
+                          {customer.contact_number === "+256null"
+                            ? "N/A"
+                            : customer.contact_number}
+                        </td>
+                      )}
+                      {matches && (
+                        <td className="py-2 text-left pl-3">
+                          {managers
+                            .filter(
+                              (manager) => manager.id === customer.added_by
+                            )
+                            .map((manager, index) => (
+                              <p key={index}>
+                                {manager.first_name + " " + manager.last_name}
+                              </p>
+                            ))}
+                        </td>
+                      )}
                     </tr>
                     {activeIndex === index && (
                       <tr className=" bg-zinc-50 border-b-[1px] border-b-gray-500 py-5">

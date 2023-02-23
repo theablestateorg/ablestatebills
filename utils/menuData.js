@@ -7,12 +7,16 @@ export const menuData = {
     {
       label: "Overview",
       link: "",
-    }
+    },
   ],
   support: [
     {
       label: "Tickets",
       link: "/tickets",
+    },
+    {
+      label: "Forms",
+      link: "/forms",
     },
     {
       label: "Overview",
@@ -36,6 +40,10 @@ export const menuData = {
       label: "Logs",
       link: "/logs",
     },
+    {
+      label: "Forms",
+      link: "/forms",
+    },
   ],
   admin: [
     {
@@ -53,6 +61,10 @@ export const menuData = {
     {
       label: "Logs",
       link: "/logs",
+    },
+    {
+      label: "Forms",
+      link: "/forms",
     },
   ],
 };

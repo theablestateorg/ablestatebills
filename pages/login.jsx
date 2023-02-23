@@ -82,7 +82,7 @@ export default function Home({}) {
             return (
               <Form
                 onSubmit={(event) => handleSubmit(event, values, resetForm)}
-                className="bg-white mx-0 md:mx-5 p-6 md:p-10 shadow"
+                className="md:bg-white mx-0 md:mx-5 p-6 md:p-10 md:shadow"
                 name="loginForm"
               >
                 <h1 className="text-3xl font-bold text-center">Login</h1>
@@ -93,7 +93,7 @@ export default function Home({}) {
                       type="email"
                       name="email"
                       id="email"
-                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full rounded-sm appearance-none focus:border-0 focus:ring-0 focus:outline-black"
+                      className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full rounded-sm bg-transparent"
                       placeholder="Enter Email"
                       onChange={handleChange("email")}
                       onBlur={handleBlur("email")}
@@ -124,7 +124,7 @@ export default function Home({}) {
                         type={showPassword ? "text" : "password"}
                         name="password"
                         id="password"
-                        className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full rounded-sm"
+                        className="outline outline-1 py-1 px-2 placeholder:text-[#bcbfc2] w-full rounded-sm bg-transparent"
                         placeholder="Enter Password"
                         onChange={handleChange("password")}
                         onBlur={handleBlur("password")}

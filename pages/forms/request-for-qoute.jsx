@@ -5,19 +5,81 @@ import { ToastContainer, toast } from "react-toastify";
 import { rfqValidationSchema } from "../../utils/validation";
 import { BiErrorCircle } from "react-icons/bi";
 import ReCAPTCHA from "react-google-recaptcha";
-import { useRef } from "react";
+import { useRef, useEffect, useState, Fragment } from "react";
+import { supabase } from "../../utils/supabase";
+import { useAuth } from "../../utils/auth";
+import moment from "moment";
 
 function requestForQuote() {
   const captchaRef = useRef(null);
+  const [form, setForm] = useState(null);
+  const [desc, setDesc] = useState(null);
+  const [questions, setQuestions] = useState(null);
+  const { user } = useAuth();
+
+  useEffect(() => {
+    getForm();
+  }, []);
+
+  const getForm = async () => {
+    const { data, error } = await supabase
+      .from("forms")
+      .select()
+      .eq("id", "430c2f6d-5a55-433d-8ed1-f71e4ff7b71f")
+      .single();
+
+    if (data) {
+      const { data: ques, error: quErrors } = await supabase
+        .from("questions")
+        .select()
+        .order("sequence_no", { ascending: true })
+        .eq("set_id", data.id);
+
+      setQuestions(ques);
+    } else {
+      console.log("something lost");
+    }
+
+    const text = data.description;
+    const lines = text.split("\n");
+    setDesc(lines);
+    setForm(data);
+    // console.log(data);
+  };
+
+  // console.log(questions);
+
+  const handleSubmit = async (values) => {
+    // console.log("The values are from handleSubmit are: ", values);
+    const myAnswers = Object.values(values);
+    // console.log(myAnswers);
+
+    const { error } = await supabase.from("answers").insert(myAnswers);
+
+    if (error) {
+      toast.error("Failed to submit your form");
+    } else {
+      toast.success("Successfully submitted your form");
+    }
+  };
+
+  console.log(
+    "charleskasasira@gmail.com" +
+      moment(new Date().toISOString()).format("DD-MM-YYYY")
+  );
+
   return (
     <div className="w-screen">
       <Head>
-        <title>Request For Quote (RFQ) - Shine Africa</title>
+        <title>{form && form.title} - Ablestate Cloud</title>
       </Head>
       <ToastContainer />
       <Formik
         initialValues={{
-          name: "",
+          name: {
+            question_id: "",
+            answer: "",
+          },
           email: "",
           phone: "",
           purpose: "",
@@ -40,6 +102,7 @@ function requestForQuote() {
           dirty,
           handleChange,
           handleBlur,
+          setFieldValue,
           resetForm,
         }) => {
           return (
@@ -48,293 +111,66 @@ function requestForQuote() {
                 event.preventDefault();
                 const token = captchaRef.current.getValue();
                 captchaRef.current.reset();
-                console.log(values);
+                handleSubmit(values);
               }}
               className="w-screen flex flex-col gap-2 items-center pb-5 relative"
             >
               <div className="bg-white mt-5 rounded-md w-[90%] md:w-[60%] lg:w-[50%] p-8 border shadow-sm relative overflow-hidden">
                 <div className="bg-red-500 w-full h-3 absolute left-0 -top-1"></div>
                 <h1 className="text-2xl font-bold mb-5">
-                  Request For Quote (RFQ)
+                  {form && form.title}
                 </h1>
-                <p>
-                  Are you in need of a new website for your business or
-                  organization? Our Request for Quote (RFQ) form is the perfect
-                  starting point. The RFQ form is a simple and easy-to-use
-                  document that allows you to request a proposal and pricing
-                  from our website development team.
-                </p>
-                <br />
-                <p>
-                  The information you will provide will help us to understand
-                  the scope of the project and provide you with an accurate
-                  proposal and pricing.
-                </p>
-                <br />
-                <p>
-                  The RFQ form is an important tool for both you and our website
-                  development team, as it allows both parties to establish a
-                  clear understanding of the project requirements, timeline, and
-                  pricing before the project begins. So if you're in need of a
-                  new website, start by completing our RFQ form today!
-                </p>
+                {desc &&
+                  desc.map((para, index) => (
+                    <Fragment key={index}>
+                      <p>{para}</p>
+                      <br />
+                    </Fragment>
+                  ))}
               </div>
-              <div
-                className={`bg-white mt-5 rounded-md w-[90%] md:w-[60%] lg:w-[50%] p-8 border shadow-sm overflow-hidden ${
-                  errors.name && "border-red-500"
-                }`}
-              >
-                <h3 className="mb-2">
-                  Full Name <span className="text-red-500">*</span>
-                </h3>
-                <input
-                  type="text"
-                  placeholder="Your answer"
-                  name="name"
-                  onChange={handleChange("name")}
-                  onBlur={handleBlur("name")}
-                  value={values.name}
-                  id=""
-                  className="py-2 border-b-[1px] w-56 focus:border-red-400 focus:outline-none"
-                />
-                <ErrorMessage name="name">
-                  {(msg) => (
-                    <p className="text-xs text-red-500 flex gap-1 mt-2">
-                      <BiErrorCircle />
-                      {msg}
-                    </p>
-                  )}
-                </ErrorMessage>
-              </div>
-              <div
-                className={`bg-white mt-5 rounded-md w-[90%] md:w-[60%] lg:w-[50%] p-8 border shadow-sm overflow-hidden ${
-                  errors.email && "border-red-500"
-                }`}
-              >
-                <h3 className="mb-2">
-                  Email Address <span className="text-red-500">*</span>
-                </h3>
-                <input
-                  type="text"
-                  placeholder="Your answer"
-                  name="email"
-                  onChange={handleChange("email")}
-                  onBlur={handleBlur("email")}
-                  value={values.email}
-                  id=""
-                  className={`py-2 border-b-[1px] w-56 focus:border-red-400 focus:outline-none ${
-                    errors.email && "border-red-500"
-                  }`}
-                />
-                <ErrorMessage name="email">
-                  {(msg) => (
-                    <p className="text-xs text-red-500 flex gap-1 mt-2">
-                      <BiErrorCircle />
-                      {msg}
-                    </p>
-                  )}
-                </ErrorMessage>
-              </div>
-              <div className="bg-white mt-5 rounded-md w-[90%] md:w-[60%] lg:w-[50%] p-8 border shadow-sm overflow-hidden">
-                <h3 className="mb-2">
-                  Phone Number <span className="text-red-500">*</span>
-                </h3>
-                <input
-                  type="text"
-                  placeholder="Your answer"
-                  name="phone"
-                  onChange={handleChange("phone")}
-                  onBlur={handleBlur("phone")}
-                  value={values.phone}
-                  id=""
-                  className="py-2 border-b-[1px] w-56 focus:border-red-400 focus:outline-none"
-                />
-                <ErrorMessage name="phone">
-                  {(msg) => (
-                    <p className="text-xs text-red-500 flex gap-1 mt-2">
-                      <BiErrorCircle />
-                      {msg}
-                    </p>
-                  )}
-                </ErrorMessage>
-              </div>
-              <div className="bg-white mt-5 rounded-md w-[90%] md:w-[60%] lg:w-[50%] p-8 border shadow-sm overflow-hidden">
-                <h3 className="mb-2">
-                  What is the purpose of the website? Is it to provide
-                  information, sell products or services, or something else? To
-                  help better understand your project, please write as much as
-                  you can. <span className="text-red-500">*</span>
-                </h3>
-                <input
-                  type="text"
-                  placeholder="Your answer"
-                  name="purpose"
-                  onChange={handleChange("purpose")}
-                  onBlur={handleBlur("purpose")}
-                  value={values.purpose}
-                  id=""
-                  className="py-2 border-b-[1px] w-full focus:border-red-400 focus:outline-none"
-                />
-                <ErrorMessage name="purpose">
-                  {(msg) => (
-                    <p className="text-xs text-red-500 flex gap-1 mt-2">
-                      <BiErrorCircle />
-                      {msg}
-                    </p>
-                  )}
-                </ErrorMessage>
-              </div>
-              <div className="bg-white mt-5 rounded-md w-[90%] md:w-[60%] lg:w-[50%] p-8 border shadow-sm overflow-hidden">
-                <h3 className="mb-2">
-                  Who is the target audience for the website?
-                </h3>
-                <input
-                  type="text"
-                  placeholder="Your answer"
-                  name="audience"
-                  onChange={handleChange("audience")}
-                  onBlur={handleBlur("audience")}
-                  value={values.audience}
-                  id=""
-                  className="py-2 border-b-[1px] w-full focus:border-red-400 focus:outline-none"
-                />
-              </div>
-              <div className="bg-white mt-5 rounded-md w-[90%] md:w-[60%] lg:w-[50%] p-8 border shadow-sm overflow-hidden">
-                <h3 className="mb-2">
-                  Are there any specific design or branding requirements for the
-                  website? For example, do you have a logo, and brand guide yet?
-                </h3>
-                <input
-                  type="text"
-                  placeholder="Your answer"
-                  name="brandGuide"
-                  onChange={handleChange("brandGuide")}
-                  onBlur={handleBlur("brandGuide")}
-                  value={values.brandGuide}
-                  id=""
-                  className="py-2 border-b-[1px] w-full focus:border-red-400 focus:outline-none"
-                />
-              </div>
-              <div className="bg-white mt-5 rounded-md w-[90%] md:w-[60%] lg:w-[50%] p-8 border shadow-sm overflow-hidden">
-                <h3 className="mb-2">
-                  Are there any specific features or functionality that are
-                  required for the website?
-                </h3>
-                <input
-                  type="text"
-                  placeholder="Your answer"
-                  name="features"
-                  onChange={handleChange("features")}
-                  onBlur={handleBlur("features")}
-                  value={values.features}
-                  id=""
-                  className="py-2 border-b-[1px] w-full focus:border-red-400 focus:outline-none"
-                />
-              </div>
-              <div className="bg-white mt-5 rounded-md w-[90%] md:w-[60%] lg:w-[50%] p-8 border shadow-sm overflow-hidden">
-                <h3 className="mb-2">
-                  Are there any existing websites that the you like or dislike,
-                  and why?
-                </h3>
-                <input
-                  type="text"
-                  placeholder="Your answer"
-                  name="existingWebsites"
-                  onChange={handleChange("existingWebsites")}
-                  onBlur={handleBlur("existingWebsites")}
-                  value={values.existingWebsites}
-                  id=""
-                  className="py-2 border-b-[1px] w-full focus:border-red-400 focus:outline-none"
-                />
-              </div>
-              <div className="bg-white mt-5 rounded-md w-[90%] md:w-[60%] lg:w-[50%] p-8 border shadow-sm overflow-hidden">
-                <h3 className="mb-2">
-                  What is the timeline for the website project?{" "}
-                  <span className="text-red-500">*</span>
-                </h3>
-                <div
-                  role="group"
-                  aria-labelledby="my-radio-group"
-                  className="flex flex-col gap-1"
-                >
-                  <label>
-                    <Field type="radio" name="timeline" value="30 days" />
-                    30 days
-                  </label>
-                  <label>
-                    <Field type="radio" name="timeline" value="60 days" />
-                    60 days
-                  </label>
-                  <label>
-                    <Field type="radio" name="timeline" value="90 days" />
-                    90 days
-                  </label>
-                  <label>
-                    <Field type="radio" name="timeline" value="4 months" />4
-                    months
-                  </label>
-                  <label>
-                    <Field type="radio" name="timeline" value="6 months" />6
-                    months
-                  </label>
-                </div>
-                <ErrorMessage name="timeline">
-                  {(msg) => (
-                    <p className="text-xs text-red-500 flex gap-1 mt-2">
-                      <BiErrorCircle />
-                      {msg}
-                    </p>
-                  )}
-                </ErrorMessage>
-              </div>
-              <div className="bg-white mt-5 rounded-md w-[90%] md:w-[60%] lg:w-[50%] p-8 border shadow-sm overflow-hidden">
-                <h3 className="mb-2">
-                  Who will be responsible for creating and providing the website
-                  content? (Text, Photos, Videos etc)
-                </h3>
-                <input
-                  type="text"
-                  placeholder="Your answer"
-                  name="contentCreation"
-                  onChange={handleChange("contentCreation")}
-                  onBlur={handleBlur("contentCreation")}
-                  value={values.contentCreation}
-                  id=""
-                  className="py-2 border-b-[1px] w-full focus:border-red-400 focus:outline-none"
-                />
-              </div>
-              <div className="bg-white mt-5 rounded-md w-[90%] md:w-[60%] lg:w-[50%] p-8 border shadow-sm overflow-hidden">
-                <h3 className="mb-2">
-                  Will you need ongoing maintenance or support for the website
-                  after it is launched?
-                </h3>
-                <input
-                  type="text"
-                  placeholder="Your answer"
-                  name="maintenance"
-                  onChange={handleChange("maintenance")}
-                  onBlur={handleBlur("maintenance")}
-                  value={values.maintenance}
-                  id=""
-                  className="py-2 border-b-[1px] w-full focus:border-red-400 focus:outline-none"
-                />
-              </div>
-              <div className="bg-white mt-5 rounded-md w-[90%] md:w-[60%] lg:w-[50%] p-8 border shadow-sm overflow-hidden">
-                <h3 className="mb-2">
-                  If you have a target, what is the expected traffic volume for
-                  the website?
-                </h3>
-                <input
-                  type="text"
-                  placeholder="Your answer"
-                  name="target"
-                  onChange={handleChange("target")}
-                  onBlur={handleBlur("target")}
-                  value={values.target}
-                  id=""
-                  className="py-2 border-b-[1px] w-full focus:border-red-400 focus:outline-none"
-                />
-              </div>
+
+              {questions &&
+                questions.map((question, index) => (
+                  <div
+                    className={`bg-white mt-5 rounded-md w-[90%] md:w-[60%] lg:w-[50%] p-8 border shadow-sm overflow-hidden ${
+                      errors[`${question.field_name}`] &&
+                      touched[`${question.field_name}`] &&
+                      "border-red-500"
+                    }`}
+                    key={index}
+                  >
+                    <h3 className="mb-2">
+                      {question.question}{" "}
+                      {question.required && (
+                        <span className="text-red-500">*</span>
+                      )}
+                    </h3>
+                    <input
+                      type="text"
+                      placeholder="Your answer"
+                      name={question.field_name}
+                      // onChange={handleChange(question.field_name)}
+                      onChange={(event) => {
+                        setFieldValue(question.field_name, {
+                          question_id: question.id,
+                          answer: event.target.value,
+                          user_id: user ? user.id : null,
+                        });
+                      }}
+                      onBlur={handleBlur(question.field_name)}
+                      value={values[`${question.field_name}`].answer}
+                      id=""
+                      className="py-2 border-b-[1px] w-56 focus:border-red-400 focus:outline-none"
+                    />
+                    {errors[`${question.field_name}`] &&
+                      touched[`${question.field_name}`] && (
+                        <p className="text-xs text-red-500 flex gap-1 mt-2">
+                          {/* <BiErrorCircle /> */}
+                          {errors[`${question.field_name}`]?.answer}
+                        </p>
+                      )}
+                  </div>
+                ))}
               <div className="">
                 <ReCAPTCHA
                   sitekey={process.env.NEXT_PUBLIC_SITE_KEY}

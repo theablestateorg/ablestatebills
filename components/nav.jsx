@@ -28,7 +28,7 @@ export default function Navbar({ user }) {
     useAuth();
   const { query } = useKBar();
 
-  const [cookie] = useCookies(["user"]);
+  const [cookie, setCookie, removeCookie] = useCookies(["user"]);
   let role;
   if (cookie?.user?.user) {
     role = cookie?.user?.user.user_metadata.role;
@@ -218,6 +218,7 @@ export default function Navbar({ user }) {
                   <li
                     className="w-full p-2 px-12 hover:bg-[#ececec] rounded"
                     onClick={() => {
+                      removeCookie("user");
                       signOut();
                       Router.push("/login");
                     }}
@@ -299,6 +300,7 @@ export default function Navbar({ user }) {
               <li className="w-full py-2 pl-2 pr-12 hover:bg-[#f3f5f7] not-italic rounded">
                 <button
                   onClick={() => {
+                    removeCookie("user");
                     signOut();
                     Router.push("/login");
                   }}

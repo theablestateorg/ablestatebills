@@ -69,14 +69,24 @@ export const addCustomerValidationSchema = Yup.object({
 });
 
 export const rfqValidationSchema = Yup.object({
-  name: Yup.string().required("Name is required"),
-  email: Yup.string()
-    .required("Email is required")
-    .matches(
-      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-      "must follow example@example.com"
-    ),
-  phone: Yup.string().required("Phone Number is required"),
-  purpose: Yup.string().required("This is a required question"),
-  timeline: Yup.string().required("This is required"),
+  name: Yup.object().shape({
+    answer: Yup.string().required("Name is required"),
+  }),
+  email: Yup.object().shape({
+    answer: Yup.string()
+      .required("Email is required")
+      .matches(
+        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+        "must follow example@example.com"
+      ),
+  }),
+  phone: Yup.object().shape({
+    answer: Yup.string().required("Phone Number is required"),
+  }),
+  purpose: Yup.object().shape({
+    answer: Yup.string().required("This is a required question"),
+  }),
+  timeline: Yup.object().shape({
+    answer: Yup.string().required("This is required"),
+  }),
 });

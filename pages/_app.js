@@ -19,7 +19,8 @@ function MyApp({ Component, pageProps, ...appProps }) {
     "/404",
     "/500",
     "/forms/request-for-qoute",
-    "/update-password"
+    // "/forms/[id]",
+    "/update-password",
   ].includes(appProps.router.pathname);
 
   const LayoutComponent = isLayoutNeeded ? React.Fragment : Layout;

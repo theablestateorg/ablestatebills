@@ -29,9 +29,6 @@ function Manager({ websites, customers }) {
 
   const [activeIndex, setActiveIndex] = useState(null);
 
-  const img_url =
-    "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://charleskasra.com&size=64";
-
   const { user, notifications } = useAuth();
 
   websites = websites
@@ -166,11 +163,6 @@ function Manager({ websites, customers }) {
                             id="paragraph"
                             className="text-gray-400 absolute top-2 left-3 pointer-events-none"
                           >
-                            {/* {recommend
-                          ? recommend.replace(searchText, () => {
-                              return "<span>dark<span>";
-                            })
-                          : ""} */}
                           </p>
                         </div>
                         <select

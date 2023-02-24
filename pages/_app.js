@@ -19,7 +19,7 @@ function MyApp({ Component, pageProps, ...appProps }) {
     "/404",
     "/500",
     "/forms/request-for-qoute",
-    // "/forms/[id]",
+    "/forms/[id]",
     "/update-password",
   ].includes(appProps.router.pathname);
 

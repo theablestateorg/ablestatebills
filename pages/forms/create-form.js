@@ -1,10 +1,35 @@
 import { ToastContainer, toast } from "react-toastify";
 import Head from "next/head";
 import { Formik, Form, FieldArray, ErrorMessage, Field } from "formik";
+import { supabase } from "../../utils/supabase";
 
 function createForm() {
-  const handleSubmit = (values) => {
-    console.log(values);
+  const handleSubmit = async (values) => {
+    const { title, description, questions } = values;
+    const { data, error: err } = await supabase
+      .from("forms")
+      .insert({ title: title, description: description });
+
+    // console.log(values);
+    // const myAnswers = Object.values(values.questions);
+    // console.log("the myAnswers is: ", myAnswers);
+    // const obj = myAnswers.map((v) => ({ ...v, person_id: data[0].id }));
+    // console.log("the obj is: ", obj);
+
+    if (data) {
+      const myAnswers = Object.values(questions);
+      const obj = myAnswers.map((v, index) => ({
+        ...v,
+        set_id: data[0].id,
+        sequence_no: index,
+      }));
+      console.log(obj);
+      const { error } = await supabase.from("questions").insert(obj);
+
+      if (error) {
+        console.log(error);
+      }
+    }
   };
   return (
     <div className="w-screen pt-[70px]">
@@ -16,7 +41,7 @@ function createForm() {
       <Formik
         initialValues={{
           title: "",
-          descripton: "",
+          description: "",
           questions: [
             {
               question: "",
@@ -56,7 +81,7 @@ function createForm() {
                   <input
                     type="text"
                     placeholder="Enter title"
-                    className="outline outline-1 bg-transparent w-full px-3 py-2 rounded"
+                    className="bg-transparent w-full px-3 py-2 rounded"
                     name="title"
                     onChange={handleChange("title")}
                     onBlur={handleBlur("title")}
@@ -69,7 +94,7 @@ function createForm() {
                   <input
                     type="text"
                     placeholder="Enter description"
-                    className="outline outline-1 bg-transparent w-full px-3 py-2 rounded"
+                    className="bg-transparent w-full px-3 py-2 rounded"
                     name="description"
                     onChange={handleChange("description")}
                     onBlur={handleBlur("description")}
@@ -82,28 +107,65 @@ function createForm() {
                 name="questions"
                 render={(fieldArrayProp) => (
                   <>
-                    <div className="bg-white mt-5 rounded-md w-[90%] md:w-[60%] lg:w-[50%] p-8 border shadow-sm relative overflow-hidden">
-                      <input
-                        type="text"
-                        id="formTitle"
-                        placeholder="Untitled Question"
-                        className="w-full px-2 py-1 mb-3"
-                      />
-                      <input
-                        type="text"
-                        id="formTitle"
-                        placeholder="Your Answer"
-                        className="w-full px-2 py-1"
-                      />
-                    </div>
+                    {values.questions &&
+                      values.questions.length > 0 &&
+                      values.questions.map((question, index) => (
+                        <div className="bg-white mt-5 rounded-md w-[90%] md:w-[60%] lg:w-[50%] p-8 border shadow-sm relative overflow-hidden">
+                          <input
+                            type="text"
+                            name={`questions[${index}].question`}
+                            onChange={handleChange(
+                              `questions[${index}].question`
+                            )}
+                            id="formTitle"
+                            placeholder="Untitled Question"
+                            className="w-full px-2 py-1 mb-3"
+                          />
+                          <input
+                            type="text"
+                            onChange={handleChange(
+                              `questions[${index}].field_name`
+                            )}
+                            id="formTitle"
+                            placeholder="Unique question ID"
+                            className="w-full px-2 py-1 mb-3"
+                          />
+                          <div className="flex gap-1 items-center">
+                            <input
+                              type="checkbox"
+                              onChange={handleChange(
+                                `questions[${index}].required`
+                              )}
+                              id="required"
+                              placeholder="required"
+                              className="px-2 py-1"
+                            />
+                            <label htmlFor="required">Required</label>
+                          </div>
+
+                          <select
+                            onChange={handleChange(
+                              `questions[${index}].field_type`
+                            )}
+                            className="px-5 py-2 bg-transparent border-[1px] rounded-lg"
+                          >
+                            <option value="text">text</option>
+                            <option value="textarea">textarea</option>
+                            <option value="tel">tel</option>
+                            <option value="email">email</option>
+                          </select>
+                        </div>
+                      ))}
 
                     <div className=" text-white mt-4 flex gap-3">
                       <button
+                        type="button"
                         onClick={() => {
-                          console.log("hello world!");
                           fieldArrayProp.push({
-                            name: "",
-                            contact: "",
+                            question: "",
+                            field_type: "text",
+                            field_name: "",
+                            required: false,
                           });
                         }}
                         className="bg-gray-700 rounded px-3 py-2"
@@ -112,6 +174,7 @@ function createForm() {
                       </button>
 
                       <button
+                        type="button"
                         onClick={() => {
                           console.log("hello world!");
                           fieldArrayProp.pop();

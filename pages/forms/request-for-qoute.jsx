@@ -37,7 +37,7 @@ function requestForQuote() {
 
       setQuestions(ques);
     } else {
-      console.log("something lost");
+      // console.log("something lost");
     }
 
     const text = data.description;
@@ -51,23 +51,28 @@ function requestForQuote() {
 
   const handleSubmit = async (values) => {
     // console.log("The values are from handleSubmit are: ", values);
-    const myAnswers = Object.values(values);
+    const { data, error: err } = await supabase
+      .from("survey_activity")
+      .insert({ email: email, set_id: form.id });
+
+    if (data) {
+      const myAnswers = Object.values(values);
+      const obj = myAnswers.map((v) => ({ ...v, person_id: data[0].id }));
+      const { error } = await supabase.from("answers").insert(obj);
+
+      toast.success("Successfully submitted your form");
+
+      if (error) {
+        toast.error("Failed to submit your form");
+      }
+    }
+
+    // const myAnswers = Object.values(values);
     // console.log(myAnswers);
 
-    const { error } = await supabase.from("answers").insert(myAnswers);
+    // const { error } = await supabase.from("answers").insert(myAnswers);
 
-    if (error) {
-      toast.error("Failed to submit your form");
-    } else {
-      toast.success("Successfully submitted your form");
-    }
   };
-
-  console.log(
-    "charleskasasira@gmail.com" +
-      moment(new Date().toISOString()).format("DD-MM-YYYY")
-  );
-
   return (
     <div className="w-screen">
       <Head>
@@ -149,7 +154,6 @@ function requestForQuote() {
                       type="text"
                       placeholder="Your answer"
                       name={question.field_name}
-                      // onChange={handleChange(question.field_name)}
                       onChange={(event) => {
                         setFieldValue(question.field_name, {
                           question_id: question.id,

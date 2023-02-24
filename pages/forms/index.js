@@ -194,7 +194,7 @@ function index({ forms }) {
                     <tr
                       className={`border-b border-l-2 border-l-transparent hover:border-l-[#ca3011] cursor-pointer mb-10`}
                       key={index}
-                      onClick={() => router.push(`/forms/${form.id}`)}
+                      onClick={() => router.push(`/forms/v1/${form.id}`)}
                     >
                       {matches && (
                         <>

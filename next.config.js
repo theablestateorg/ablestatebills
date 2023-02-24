@@ -11,6 +11,9 @@ const nextConfig = {
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
+  devIndicators: {
+    autoPrerender: false,
+  },
 };
 
 module.exports = nextConfig;

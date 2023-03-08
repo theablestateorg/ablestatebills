@@ -14,6 +14,7 @@ const client = africastalking({
 
 export default function handler(req, res) {
   console.log(req.body);
+  console.log("show logs");
   try {
     req.body?.day &&
       req.body?.day.forEach((website, index) => {

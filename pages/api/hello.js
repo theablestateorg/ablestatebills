@@ -14,7 +14,7 @@ const client = africastalking({
 
 export default function handler(req, res) {
   console.log(req.body);
-  console.log("show logs");
+  console.log("show + logs");
   try {
     req.body?.day &&
       req.body?.day.forEach((website, index) => {
@@ -62,8 +62,8 @@ export default function handler(req, res) {
             website.website_link
           }) will expiry in a day. Please login in to https://bills.ablestate.co to make payment. If you require any further information, let us know.`,
         })
-          .then((response) => res.status(200).json(response))
-          .catch((error) => res.status(503).json(error));
+          // .then((response) => res.status(200).json(response))
+          // .catch((error) => res.status(503).json(error));
       });
 
     req.body?.day4 &&
@@ -106,8 +106,8 @@ export default function handler(req, res) {
             to: manager.contact_number,
             message: `${website.website_link} is expiring in less than a week but has not be renewed yet. `,
           })
-            .then((response) => res.status(200).json(response))
-            .catch((error) => res.status(503).json(error));
+            // .then((response) => res.status(200).json(response))
+            // .catch((error) => res.status(503).json(error));
         });
       });
 
@@ -157,8 +157,8 @@ export default function handler(req, res) {
             website.website_link
           }) will expiry in a week. Please login in to https://bills.ablestate.co to make payment. If you require any further information, let us know.`,
         })
-          .then((response) => res.status(200).json(response))
-          .catch((error) => res.status(503).json(error));
+          // .then((response) => res.status(200).json(response))
+          // .catch((error) => res.status(503).json(error));
       });
 
     req.body?.month &&
@@ -207,8 +207,8 @@ export default function handler(req, res) {
             website.website_link
           }) will expiry in a month. Please login in to https://bills.ablestate.co to make payment. If you require any further information, let us know.`,
         })
-          .then((response) => res.status(200).json(response))
-          .catch((error) => res.status(503).json(error));
+          // .then((response) => res.status(200).json(response))
+          // .catch((error) => res.status(503).json(error));
       });
 
     req.body?.two_months &&
@@ -256,8 +256,8 @@ export default function handler(req, res) {
             website.website_link
           }) will expiry in a 60 days. Please login in to https://bills.ablestate.co to make payment. If you require any further information, let us know.`,
         })
-          .then((response) => res.status(200).json(response))
-          .catch((error) => res.status(503).json(error));
+          // .then((response) => res.status(200).json(response))
+          // .catch((error) => res.status(503).json(error));
       });
 
     req.body?.expired_3days &&
@@ -304,8 +304,8 @@ export default function handler(req, res) {
             website.website_link
           }) will expired a 3 days. Please login in to https://bills.ablestate.co to make payment. If you require any further information, let us know.`,
         })
-          .then((response) => res.status(200).json(response))
-          .catch((error) => res.status(503).json(error));
+          // .then((response) => res.status(200).json(response))
+          // .catch((error) => res.status(503).json(error));
       });
 
     req.body?.expired_week_ago &&
@@ -352,8 +352,8 @@ export default function handler(req, res) {
             website.website_link
           }) will expired a 3 days. Please login in to https://bills.ablestate.co to make payment. If you require any further information, let us know.`,
         })
-          .then((response) => res.status(200).json(response))
-          .catch((error) => res.status(503).json(error));
+          // .then((response) => res.status(200).json(response))
+          // .catch((error) => res.status(503).json(error));
       });
 
     res.send({ message: null });

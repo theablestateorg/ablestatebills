@@ -13,6 +13,7 @@ const client = africastalking({
 });
 
 export default function handler(req, res) {
+  console.log(req.body);
   try {
     req.body?.day &&
       req.body?.day.forEach((website, index) => {

@@ -72,9 +72,7 @@ function requestForQuote() {
     // console.log(myAnswers);
 
     // const { error } = await supabase.from("answers").insert(myAnswers);
-
   };
-
   return (
     <div className="w-screen">
       <Head>

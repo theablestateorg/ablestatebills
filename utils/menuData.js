@@ -55,6 +55,10 @@ export const menuData = {
       link: "/customers",
     },
     {
+      label: "Managers",
+      link: "/managers",
+    },
+    {
       label: "Tickets",
       link: "/tickets",
     },

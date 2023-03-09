@@ -2,14 +2,14 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { MdAdd } from "react-icons/md";
 import { FaSort } from "react-icons/fa";
-import { supabase } from "../utils/supabase";
+import { supabase } from "../../utils/supabase";
 import { useState } from "react";
-import { Footer } from "../components";
-import Avatar from "../components/Avatar";
-import { parseCookies } from "../utils/parseCookies";
-import { useAuth } from "../utils/auth";
+import { Footer } from "../../components";
+import Avatar from "../../components/Avatar";
+import { parseCookies } from "../../utils/parseCookies";
+import { useAuth } from "../../utils/auth";
 import { FiChevronDown } from "react-icons/fi";
-import useMediaQuery from "../hooks/useMediaQuery";
+import useMediaQuery from "../../hooks/useMediaQuery";
 
 export default function Customers({ customers, managers, websites }) {
   const router = useRouter();

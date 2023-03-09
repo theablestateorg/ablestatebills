@@ -356,9 +356,9 @@ export default function handler(req, res) {
           // .catch((error) => res.status(503).json(error));
       });
 
-    res.send({ message: null });
+    // res.send({ message: null });
   } catch (error) {
     console.log(error);
-    res.send({ error: error.message });
+    // res.send({ error: error.message });
   }
 }

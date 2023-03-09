@@ -165,11 +165,6 @@ export default function Customers({ customers, managers, websites }) {
                     </div>
                   </th>
                 )}
-                {matches && (
-                  <th className="py-4 text-left pl-3 font-light">
-                    <div className="flex items-center">Added By</div>
-                  </th>
-                )}
               </tr>
             </thead>
             <tbody>
@@ -225,19 +220,6 @@ export default function Customers({ customers, managers, websites }) {
                           {customer.contact_number === "+256null"
                             ? "N/A"
                             : customer.contact_number}
-                        </td>
-                      )}
-                      {matches && (
-                        <td className="py-2 text-left pl-3">
-                          {managers
-                            .filter(
-                              (manager) => manager.id === customer.added_by
-                            )
-                            .map((manager, index) => (
-                              <p key={index}>
-                                {manager.first_name + " " + manager.last_name}
-                              </p>
-                            ))}
                         </td>
                       )}
                     </tr>

@@ -56,7 +56,6 @@ export default function handler(req, res) {
           .catch();
 
         client.SMS.send({
-          // to: `+256${website.telephone_number}`,
           to: website.telephone_number,
           message: `Your website ${website.name.toUpperCase()} (${
             website.website_link
@@ -102,12 +101,14 @@ export default function handler(req, res) {
             .then()
             .catch();
 
-          client.SMS.send({
-            to: manager.contact_number,
-            message: `${website.website_link} is expiring in less than a week but has not be renewed yet. `,
-          })
+          if(manager?.contact_number){
+            client.SMS.send({
+              to: manager.contact_number,
+              message: `${website.website_link} is expiring in less than a week but has not be renewed yet. `,
+            })
             // .then((response) => res.status(200).json(response))
             // .catch((error) => res.status(503).json(error));
+          }
         });
       });
 
@@ -151,7 +152,6 @@ export default function handler(req, res) {
           .catch();
 
         client.SMS.send({
-          // to: `+256${website.telephone_number}`,
           to: website.telephone_number,
           message: `Your website ${website.name.toUpperCase()} (${
             website.website_link

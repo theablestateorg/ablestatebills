@@ -357,8 +357,8 @@ export default function handler(req, res) {
 
     // res.send({ message: null });
   } catch (error) {
-    // console.log(error);
-    res.send({ error: error.message });
+    console.log(error);
+    // res.send({ error: error.message });
   } finally {
     res.send({ status: "complete" });
   }

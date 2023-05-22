@@ -44,12 +44,7 @@ const handler = async (req, res) => {
       },
     });
 
-    console.log("user: ", user);
-    console.log("error: ", error);
-
     if (error) throw error;
-    // Call the supabase function that inserts the customers data into the profiles table.
-    // res.status(200).json(response)
     const { id } = user;
 
     const response = await supabase

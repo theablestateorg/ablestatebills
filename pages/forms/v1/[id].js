@@ -1,23 +1,19 @@
 import Head from "next/head";
 import Footer from "../../../components/Footer";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import { ToastContainer, toast } from "react-toastify";
+import { Formik, Form } from "formik";
+import { ToastContainer } from "react-toastify";
 import { rfqValidationSchema } from "../../../utils/validation";
-import { BiErrorCircle } from "react-icons/bi";
-import ReCAPTCHA from "react-google-recaptcha";
-import { useRef, useEffect, useState, Fragment } from "react";
+import { useRef, useEffect, useState } from "react";
 import { supabase } from "../../../utils/supabase";
 import { useAuth } from "../../../utils/auth";
 import EditForm from "../../../components/roles/EditForm";
-import { MdEdit, MdOutlineClose, MdCheck } from "react-icons/md";
+import { MdOutlineClose, MdCheck } from "react-icons/md";
 import { useRouter } from "next/router";
 import { parseCookies } from "../../../utils/parseCookies";
 
 function formDetails() {
-  // {form, questions}
   const captchaRef = useRef(null);
   const [form, setForm] = useState(null);
-  const [desc, setDesc] = useState(null);
   const [questions, setQuestions] = useState(null);
   const { user } = useAuth();
   const [editMode, toggleEditMode] = useState(false);
@@ -51,33 +47,15 @@ function formDetails() {
         .eq("question_id", ques.id);
 
       setQuestions(ques);
-
-      //     const { data, error } = await supabase
-      // .from('Calorie')
-      // .select(`
-      //   calorieAmount,
-      //   profiles (userName)
-      // `);
     } else {
-      // console.log("something lost");
     }
-
-    // const text = data.description;
-    // const lines = text.split("\n");
-    // setDesc(lines);
     setForm(data);
-    // // console.log(data);
   };
-
-  // console.log(form);
-  // console.log(questions);
 
   const handleSubmit = async (values) => {
     const { data, error: err } = await supabase
       .from("survey_activity")
       .insert({ email: email, set_id: form.id });
-
-    console.log(values)
 
     if (data) {
       const myAnswers = Object.values(values);
@@ -89,9 +67,6 @@ function formDetails() {
       }
     }
   };
-
-  // console.log(form);
-  // console.log(email)
 
   return (
     <div className="w-screen pt-[70px]">
@@ -190,7 +165,6 @@ function formDetails() {
                             <MdOutlineClose
                               className="cursor-pointer"
                               onClick={() => {
-                                // console.log("yes")
                                 toggleEditMode(false);
                               }}
                             />
@@ -270,7 +244,6 @@ function formDetails() {
                         }`}
                         key={index}
                       >
-                        {console.log(question)}
                         <h3 className="mb-2">
                           {editMode ? (
                             <div className="border-b-[1px] flex justify-between items-center relative">
@@ -323,10 +296,8 @@ function formDetails() {
                               answer: event.target.value,
                               user_id: user ? user.id : null,
                             });
-                            console.log(question.field_name)
                           }}
                           onBlur={handleBlur(question.field_name)}
-                          // value={values[`${question.field_name}`].answer}
                           id=""
                           className="py-2 border-b-[1px] w-56 focus:border-red-400 focus:outline-none"
                         />

@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import Router, { useRouter } from "next/router";
 import PackageNav from "../../../../components/PackageNav";
-import { FaSearch } from "react-icons/fa";
-import Starter from "../../../../components/Starter";
 import HelpDeck from "../../../../components/HelpDeck";
-import { useAuth } from "../../../../utils/auth";
-import Link from "next/link";
 import { supabase } from "../../../../utils/supabase";
 import { Formik, Form } from "formik";
 import { validationSchema } from "../../../../utils/validation";
@@ -20,10 +16,7 @@ function LoginFirst() {
   const packages = ["starter", "scaler", "stablizer"].filter(
     (pack) => pack !== id?.toLowerCase()
   );
-
-  const [searched, setSearched] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [run, setRun] = useState(false);
 
   const handleSubmit = async (event, { email, password }, resetForm) => {
     event.preventDefault();

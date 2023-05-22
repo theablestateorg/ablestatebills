@@ -41,7 +41,6 @@ export default function AddClient() {
           })
         )
         .catch((error) => {
-          console.log(error);
           toast.error(`Error adding customer`, { position: "top-center" });
         });
     } else {

@@ -13,7 +13,6 @@ const client = africastalking({
 });
 
 export default function handler(req, res) {
-  console.log(req.body);
   try {
     req.body?.day &&
       req.body?.day.forEach((website, index) => {
@@ -60,10 +59,9 @@ export default function handler(req, res) {
             website.website_link
           }) will expiry in a day. Please login in to https://bills.ablestate.co to make payment. If you require any further information, let us know.`,
         })
-          .then((response) => console.log("trying: ", response))
-          .catch((error) => console.log("trying error: ", error));
+          .then((response) => {})
+          .catch((error) => {});
       });
-    // .then((response) => res.send({ message: response }));
 
     req.body?.day4 &&
       req.body.managers.forEach((manager, index) => {
@@ -106,8 +104,6 @@ export default function handler(req, res) {
               to: `+${website.telephone_number}`,
               message: `${website.website_link} is expiring in less than a week but has not be renewed yet. `,
             });
-            // .then((response) => res.status(200).json(response))
-            // .catch((error) => res.status(503).json(error));
           }
         });
       });
@@ -351,14 +347,8 @@ export default function handler(req, res) {
             website.website_link
           }) will expired a 3 days. Please login in to https://bills.ablestate.co to make payment. If you require any further information, let us know.`,
         });
-        // .then((response) => res.status(200).json(response))
-        // .catch((error) => res.status(503).json(error));
       });
-
-    // res.send({ message: null });
   } catch (error) {
-    console.log(error);
-    // res.send({ error: error.message });
   } finally {
     res.send({ status: "complete" });
   }

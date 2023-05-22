@@ -1,6 +1,6 @@
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import Head from "next/head";
-import { Formik, Form, FieldArray, ErrorMessage, Field } from "formik";
+import { Formik, Form, FieldArray } from "formik";
 import { supabase } from "../../utils/supabase";
 
 function createForm() {
@@ -10,12 +10,6 @@ function createForm() {
       .from("forms")
       .insert({ title: title, description: description });
 
-    // console.log(values);
-    // const myAnswers = Object.values(values.questions);
-    // console.log("the myAnswers is: ", myAnswers);
-    // const obj = myAnswers.map((v) => ({ ...v, person_id: data[0].id }));
-    // console.log("the obj is: ", obj);
-
     if (data) {
       const myAnswers = Object.values(questions);
       const obj = myAnswers.map((v, index) => ({
@@ -23,7 +17,6 @@ function createForm() {
         set_id: data[0].id,
         sequence_no: index,
       }));
-      console.log(obj);
       const { error } = await supabase.from("questions").insert(obj);
 
       if (error) {
@@ -48,23 +41,11 @@ function createForm() {
               field_type: "input",
               field_name: "",
               required: false,
-              // sequence_no: ""
             },
           ],
         }}
-        // validationSchema={rfqValidationSchema}
       >
-        {({
-          values,
-          errors,
-          touched,
-          isValid,
-          dirty,
-          handleChange,
-          handleBlur,
-          setFieldValue,
-          resetForm,
-        }) => {
+        {({ values, handleChange, handleBlur }) => {
           return (
             <Form
               onSubmit={(event) => {

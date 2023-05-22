@@ -13,7 +13,6 @@ function Tickets({ tickets, customers, page }) {
   const { notifications } = useAuth();
   const router = useRouter();
 
-  console.log(page);
   return (
     <>
       <Head>

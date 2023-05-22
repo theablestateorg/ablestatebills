@@ -36,8 +36,8 @@ export default function handler(req, res) {
             <footer>
               <p>Best regards,</p>
               <p><b>ShineAfrika Team</b></p>
-              <a href="https://shineafrika.com/">
-                www.shineafrika.com
+              <a href="https://ablestate.cloud/">
+                www.ablestate.cloud
               </a>
             </footer></body></html>`,
         track_clicks: true,
@@ -52,5 +52,5 @@ export default function handler(req, res) {
         .catch();
     });
 
-  res.status(200).send({ name: "Charles Kasasira" });
+  res.status(200).send({ name: "" });
 }

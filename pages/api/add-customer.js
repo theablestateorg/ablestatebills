@@ -8,8 +8,6 @@ const handler = async (req, res) => {
   try {
     const { email, password, details, added_by } = req.body;
 
-    console.log({ email, password, details, added_by });
-
     if (!email) {
       const response = { Status: "Failure", Details: "Email not provided" };
       return res.status(400).json(response);

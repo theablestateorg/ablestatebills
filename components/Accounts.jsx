@@ -133,7 +133,9 @@ function Accounts({ account_balance, transactions }) {
       {tranferPop && (
         <TransferModal
           setTransferPop={setTransferPop}
-          account_balance={account_balance.account_balance}
+          account_balance={
+            account_balance ? account_balance.account_balance : 0
+          }
         />
       )}
       <h1 className="font-bold text-lg border-b-2 p-2">Account</h1>
@@ -150,7 +152,9 @@ function Accounts({ account_balance, transactions }) {
                     <p className="font-bold text-xl">
                       <span className="mr-1 font-medium">ugx</span>
                       <span className="text-3xl">
-                        {currencyFormatter(account_balance?.account_balance)}
+                        {currencyFormatter(
+                          account_balance ? account_balance?.account_balance : 0
+                        )}
                       </span>
                     </p>
                   </div>

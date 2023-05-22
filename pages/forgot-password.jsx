@@ -17,16 +17,10 @@ export default function ForgotPassword() {
     event.preventDefault();
     setLoading(true);
     try {
-      // const { data, error } = await supabase.auth.api.resetPasswordForEmail(
-      //   email
-      // );
-
       const { data, error } = await supabase.auth.api.resetPasswordForEmail(
         email,
         { redirectTo: "https://bills.ablestate.co/update-password" }
       );
-
-      console.log(data);
 
       if (data) {
         setLoading(false);

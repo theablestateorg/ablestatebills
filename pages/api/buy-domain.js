@@ -6,9 +6,6 @@ const handler = async (req, res) => {
   try{
     const result = await axios.post(`https://api.internet.bs/Domain/Create?ApiKey=${INTERNETBS}&Password=${INTERNETACCESS}&Domain=${req.body.domain}&CloneContactsFromDomain=shineafrika.com`);
 
-
-    // console.log(result)
-
     res.json({"response": result.data});
   }
   catch (error){

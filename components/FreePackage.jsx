@@ -1,7 +1,6 @@
-import { BiCheckCircle } from "react-icons/bi";
 import Router, { useRouter } from "next/router";
 
-function Starter({ selected }) {
+function FreePackage({ selected }) {
   const router = useRouter();
 
   return (
@@ -11,15 +10,13 @@ function Starter({ selected }) {
       }`}
     >
       <header className=" py-3">
-        <h1 className="font-bold text-2xl text-center text-[#CA3011]">
-          Starter
-        </h1>
-        <p className="text-center text-gray-600">Take your business online</p>
+        <h1 className="font-bold text-2xl text-center text-[#CA3011]">Free</h1>
+        <p className="text-center text-gray-600">Create your home on the web</p>
 
         <h1 className="py-5 flex flex-col justify-center items-center">
           <div className="flex justify-center items-center">
             <span className="text-sm font-medium">UGX</span>
-            <span className="text-4xl font-bold mx-2">175,000</span>
+            <span className="text-4xl font-bold mx-2">0</span>
           </div>
           <h5 className="font-medium">Yearly</h5>
         </h1>
@@ -27,19 +24,22 @@ function Starter({ selected }) {
 
       <section className="px-8 flex flex-col items-center">
         <div className="border-b-[1px] border-gray-400 w-full py-2 mb-2">
-          <p>2GB Storage</p>
+          <p>200MB Storage</p>
         </div>
         <div className="border-b-[1px] border-gray-400 w-full py-2 mb-2">
-          <p>10GB bandwidith</p>
+          <p>1 GB bandwidith</p>
         </div>
         <div className="border-b-[1px] border-gray-400 w-full py-2 mb-2">
           <p>99.9% uptime</p>
         </div>
-        <div className="border-b-[1px] border-gray-400 w-full py-2 mb-2">
-          <p>Unlimited E-mails</p>
+        <div className="w-full py-2 mb-3">
+          <p>Free sub-domain name</p>
         </div>
         <div className="w-full py-2 mb-3">
-          <p>Free .com/.org domain</p>
+          <p> </p>
+        </div>
+        <div className="w-full py-2 mb-3">
+          <p> </p>
         </div>
         <div className="w-full py-2 mb-3">
           {selected ? (
@@ -48,9 +48,7 @@ function Starter({ selected }) {
             <button
               className="bg-[#CA3011] text-white py-2 px-5 font-bold rounded-full"
               onClick={() => {
-                Router.push(
-                  `/packages/starter/175000/?domain=${router.query.domain}`
-                );
+                Router.push(`/packages/free/0/?domain=${router.query.domain}`);
               }}
             >
               Order
@@ -62,4 +60,4 @@ function Starter({ selected }) {
   );
 }
 
-export default Starter;
+export default FreePackage;

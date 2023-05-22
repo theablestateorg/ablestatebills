@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Router, { useRouter } from "next/router";
 import PackageNav from "../../../../components/PackageNav";
-import { FaSearch } from "react-icons/fa";
 import HelpDeck from "../../../../components/HelpDeck";
 import { useAuth } from "../../../../utils/auth";
 import Head from "next/head";
@@ -13,8 +12,6 @@ function Cart() {
   const { user } = useAuth();
 
   const [cart, setCart] = useState([]);
-
-  const names = cart && cart.map((product) => product.name);
 
   return (
     <div>

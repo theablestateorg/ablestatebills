@@ -22,7 +22,7 @@ export default function CustomerSite({
   contactPerson,
   account_balance,
   managers,
-  notifiers
+  notifiers,
 }) {
   const [paymentMethod, setPaymentMethod] = useState(0);
   const [complete, setComplete] = useState(null);
@@ -103,8 +103,8 @@ export default function CustomerSite({
               product: `${product.name}`,
               notifiers: notifiers,
             })
-            .then(() => console.log("something happend"))
-            .catch((error) => console.log(error));
+            .then(() => {})
+            .catch((error) => {});
 
           const { data } = await supabase.from("notifications").insert([
             {

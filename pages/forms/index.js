@@ -7,8 +7,6 @@ import { FaSort } from "react-icons/fa";
 import { useRef } from "react";
 import { parseCookies } from "../../utils/parseCookies";
 import { supabase } from "../../utils/supabase";
-import { FiChevronDown } from "react-icons/fi";
-import { RiExternalLinkFill } from "react-icons/ri";
 import moment from "moment";
 
 function index({ forms }) {
@@ -16,8 +14,6 @@ function index({ forms }) {
   const { user, notifications } = useAuth();
   const matches = useMediaQuery("(min-width: 800px)");
   const checkbox = useRef();
-
-  console.log(forms);
 
   return (
     <>

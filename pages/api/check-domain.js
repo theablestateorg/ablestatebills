@@ -4,9 +4,6 @@ const handler = async (req, res) => {
   const { domainName } = req.body;
   const onlyName = domainName.split(".")[0]
 
-  // get for [.com, .org, .biz]
-  // Start 
-  // .com
   const domainWhoisCom = await whoiser(`${onlyName}.com`, { follow: 1 });
   const firstDomainWhoisCom = whoiser.firstResult(domainWhoisCom);
   const firstTextLineCom = (firstDomainWhoisCom.text[0] || "").toLowerCase();
@@ -124,7 +121,6 @@ const handler = async (req, res) => {
     });
   }
 
-  // console.log(domainAvailability)
   return res.status(200).json({ 
     domainName: domainName,
     availability: domainAvailability,

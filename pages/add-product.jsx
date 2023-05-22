@@ -12,7 +12,6 @@ import axios from "axios";
 import Footer from "../components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
 import { parseCookies } from "../utils/parseCookies";
-import { currencyFormatter } from "../utils/currencyFormatter";
 
 export default function AddSite() {
   const [loading, setLoading] = useState(false);

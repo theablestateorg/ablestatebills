@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import Router, { useRouter } from "next/router";
 import PackageNav from "../../../../components/PackageNav";
 import HelpDeck from "../../../../components/HelpDeck";
-import { useAuth } from "../../../../utils/auth";
-import Link from "next/link";
 import { registerValidationSchema } from "../../../../utils/validation";
 import { Formik, Form } from "formik";
 import { Footer } from "../../../../components";

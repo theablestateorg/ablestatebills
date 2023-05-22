@@ -37,20 +37,15 @@ function requestForQuote() {
 
       setQuestions(ques);
     } else {
-      // console.log("something lost");
     }
 
     const text = data.description;
     const lines = text.split("\n");
     setDesc(lines);
     setForm(data);
-    // console.log(data);
   };
 
-  // console.log(questions);
-
   const handleSubmit = async (values) => {
-    // console.log("The values are from handleSubmit are: ", values);
     const { data, error: err } = await supabase
       .from("survey_activity")
       .insert({ email: email, set_id: form.id });
@@ -66,11 +61,6 @@ function requestForQuote() {
         toast.error("Failed to submit your form");
       }
     }
-
-    // const myAnswers = Object.values(values);
-    // console.log(myAnswers);
-
-    // const { error } = await supabase.from("answers").insert(myAnswers);
   };
   return (
     <div className="w-screen">
@@ -102,9 +92,6 @@ function requestForQuote() {
           values,
           errors,
           touched,
-          isValid,
-          dirty,
-          handleChange,
           handleBlur,
           setFieldValue,
           resetForm,
@@ -168,7 +155,6 @@ function requestForQuote() {
                     {errors[`${question.field_name}`] &&
                       touched[`${question.field_name}`] && (
                         <p className="text-xs text-red-500 flex gap-1 mt-2">
-                          {/* <BiErrorCircle /> */}
                           {errors[`${question.field_name}`]?.answer}
                         </p>
                       )}

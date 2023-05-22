@@ -8,6 +8,7 @@ function ActiveLink({ name, href, activeIndex, setActiveIndex, index }) {
     e.preventDefault();
     router.push(href);
   };
+  
   const isActive = index === activeIndex;
 
   return (

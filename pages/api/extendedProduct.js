@@ -1,5 +1,4 @@
 const africastalking = require("africastalking");
-
 const { SendMailClient } = require("zeptomail");
 
 const url = "api.zeptomail.com/";
@@ -15,14 +14,6 @@ const client = africastalking({
 export default function handler(req, res) {
   const { email, product, product_owner, product_link, telephone_number } =
     req.body;
-  console.log({
-    email,
-    product,
-    product_owner,
-    product_link,
-    telephone_number,
-  });
-  // console.log(req.body.email)
   try {
     zeptoClient
       .sendMail({
@@ -68,7 +59,6 @@ export default function handler(req, res) {
 
     res.send({ message: null });
   } catch (error) {
-    console.log(error);
     res.send({ error: error.message });
   }
 }

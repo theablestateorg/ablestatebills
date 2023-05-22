@@ -13,8 +13,6 @@ function UpdateModal({
   loading,
   customers,
 }) {
-  console.log(JSON.stringify(product?.profiles));
-  console.log(customers);
   return (
     <AnimatePresence>
       {popUpdate && (
@@ -75,17 +73,7 @@ function UpdateModal({
                     className="my-5 px-4"
                     onSubmit={(event) => {
                       event.preventDefault();
-                      // setFieldValue(
-                      //   "contact_person",
-                      //   JSON.parse(values.contact_person)?.id
-                      // );
-
                       const { contact_person, ...others } = values;
-
-                      // console.log("values are:", {
-                      //   contact_person: JSON.parse(contact_person)?.id,
-                      //   ...others,
-                      // });
                       handleUpdate({
                         contact_person: JSON.parse(contact_person)?.id,
                         ...others,
@@ -164,8 +152,6 @@ function UpdateModal({
                               "email",
                               JSON.parse(e.target.value)?.email
                             );
-                            console.log("event is", JSON.parse(e.target.value));
-                            // setSelected(!selected);
                           }}
                           onBlur={handleBlur("contact_person")}
                           value={values.contact_person}

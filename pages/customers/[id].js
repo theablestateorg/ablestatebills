@@ -76,7 +76,7 @@ export default function Site({ profile, manager, websites }) {
     <div>
       <Head>
         <title>
-          {profile ? profile.first_name : "loading..."} - Shine Africa
+          {profile ? profile.first_name : "loading..."} - Ablestate Cloud
         </title>
       </Head>
 
@@ -86,7 +86,7 @@ export default function Site({ profile, manager, websites }) {
         {profile && (
           <>
             <section className="flex justify-between items-center">
-              <h1 className="font-bold text-2xl">
+              <h1 className="font-bold text-2xl capitalize">
                 {profile.first_name + " " + profile.last_name}
               </h1>
               <button
@@ -99,15 +99,19 @@ export default function Site({ profile, manager, websites }) {
             </section>
 
             <section className="">
-              <p>{profile.role}</p>
+              <p className="capitalize">{profile.role}</p>
               <p>{profile.email}</p>
-              <p>{profile.contact_number === "+256null" ? "N/A" : profile.contact_number}</p>
+              <p>
+                {profile.contact_number === "+256null"
+                  ? "N/A"
+                  : profile.contact_number}
+              </p>
               <br />
 
               {manager && (
                 <div className="flex gap-2">
                   <p className="">Added By:</p>
-                  <p className="">
+                  <p className="capitalize">
                     {manager.first_name + " " + manager.last_name}
                   </p>
                 </div>
@@ -126,7 +130,6 @@ export default function Site({ profile, manager, websites }) {
                     <div className="flex gap-2 items-center">
                       <div className="w-[25px] h-[25px] overflow-hidden flex justify-center items-center">
                         <Image
-                          // loader={myLoader}
                           src={`https://www.google.com/s2/favicons?sz=64&domain_url=${website.website_link}`}
                           alt={`${website.name[0].toUpperCase()}`}
                           width={25}
@@ -187,12 +190,7 @@ export default function Site({ profile, manager, websites }) {
                         email: profile.email,
                       }}
                     >
-                      {({
-                        values,
-                        handleChange,
-                        handleBlur,
-                        resetForm,
-                      }) => {
+                      {({ values, handleChange, handleBlur, resetForm }) => {
                         return (
                           <Form
                             className="my-5 px-4"
@@ -360,7 +358,6 @@ export default function Site({ profile, manager, websites }) {
                             <div className="flex gap-2 items-center">
                               <div className="w-[25px] h-[25px] overflow-hidden flex justify-center items-center outline outline-1 rounded-full">
                                 <Image
-                                  // loader={myLoader}
                                   src={`https://www.google.com/s2/favicons?sz=64&domain_url=${website.website_link}`}
                                   alt={`${website.name[0].toUpperCase()}`}
                                   className="flex justify-center items-center"
@@ -443,7 +440,10 @@ export const getServerSideProps = async ({ req, res, params }) => {
 
   const person = parseCookies(req);
   if (res) {
-    if (!person.user || JSON.parse(person?.user).user.user_metadata.role === "customer") {
+    if (
+      !person.user ||
+      JSON.parse(person?.user).user.user_metadata.role === "customer"
+    ) {
       return {
         redirect: {
           permanent: false,

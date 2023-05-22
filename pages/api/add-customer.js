@@ -35,16 +35,14 @@ const handler = async (req, res) => {
       email: email,
       password: password,
       email_confirm: true,
-      user_metadata: { 
-        first_name: details.first_name, 
-        last_name: details.last_name, 
-        role: 'customer', 
-    }
+      user_metadata: {
+        first_name: details.first_name,
+        last_name: details.last_name,
+        role: "customer",
+      },
     });
 
     if (error) throw error;
-    // Call the supabase function that inserts the customers data into the profiles table.
-    // res.status(200).json(response)
     const { id } = user;
 
     const response = await supabase
@@ -64,22 +62,23 @@ const handler = async (req, res) => {
       res.status(200).json(response);
     }
 
-    if(user){
-      const {data: account, error} = await supabase
-      .from("accounts")
-      .insert({
-        id: id, account_balance: "0"
-      })
-      .eq("id", id);
-    if (response?.error) {
-      throw error;
-    } else {
-      const response = {
-        Status: "Success",
-        Details: "Memeber successfully created",
-      };
-      res.status(200).json(response);
-    }
+    if (user) {
+      const { data: account, error } = await supabase
+        .from("accounts")
+        .insert({
+          id: id,
+          account_balance: "0",
+        })
+        .eq("id", id);
+      if (response?.error) {
+        throw error;
+      } else {
+        const response = {
+          Status: "Success",
+          Details: "Memeber successfully created",
+        };
+        res.status(200).json(response);
+      }
     }
   } catch (error) {
     const response = { Status: "Failure", Details: error };

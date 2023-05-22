@@ -76,7 +76,7 @@ export default function Site({ profile, manager, websites }) {
     <div>
       <Head>
         <title>
-          {profile ? profile.first_name : "loading..."} - Shine Africa
+          {profile ? profile.first_name : "loading..."} - Ablestate Cloud
         </title>
       </Head>
 
@@ -86,7 +86,7 @@ export default function Site({ profile, manager, websites }) {
         {profile && (
           <>
             <section className="flex justify-between items-center">
-              <h1 className="font-bold text-2xl">
+              <h1 className="font-bold text-2xl capitalize">
                 {profile.first_name + " " + profile.last_name}
               </h1>
               <button
@@ -99,7 +99,7 @@ export default function Site({ profile, manager, websites }) {
             </section>
 
             <section className="">
-              <p>{profile.role}</p>
+              <p className="capitalize">{profile.role}</p>
               <p>{profile.email}</p>
               <p>
                 {profile.contact_number === "+256null"

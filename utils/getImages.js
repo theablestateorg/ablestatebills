@@ -35,7 +35,6 @@ export const downloadFile = async (path, storage_bucket) => {
  export const uploadFile = async ( file, storage_bucket ) => {
   const timestamp = new Date().getTime().toString()
   const fileExtension = file?.name.split('.').pop()
-  console.log(file)
 
   try {
       const { error, data } = await supabase

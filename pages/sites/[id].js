@@ -42,7 +42,9 @@ export default function Site({
     event.preventDefault();
     const { amount } = values;
 
-    if (+amount > +account_balance.account_balance) {
+    if (!account_balance) {
+      console.log("no account");
+    } else if (+amount > +account_balance.account_balance) {
       toast.error(`Insufficient Account balance`, { position: "top-center" });
     } else {
       const date = new Date(product.expiry_date);
@@ -178,10 +180,6 @@ export default function Site({
       product_price,
       product_type,
     } = values;
-
-    console.log(values)
-
-    console.log("tel", telephone_number, "values: ", values);
 
     const { data, error } = await supabase
       .from("websites")
@@ -432,7 +430,9 @@ export default function Site({
             product={product}
             paymentMethod={paymentMethod}
             setPaymentMethod={setPaymentMethod}
-            account_balance={account_balance.account_balance}
+            account_balance={
+              account_balance ? account_balance.account_balance : 0
+            }
             renewPeriod={renewPeriod}
             setPopRenew={setPopRenew}
             setRenewPeriod={setRenewPeriod}

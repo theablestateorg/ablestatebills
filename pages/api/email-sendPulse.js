@@ -12,7 +12,6 @@ const API_SECRET = process.env.SEND_PULSE_SECRET;
 const TOKEN_STORAGE = "/tmp/";
 
 export default function handler(req, res) {
-  console.log(req.body);
   var answerGetter = function (data) {
     res.send(data);
   };
@@ -31,9 +30,9 @@ export default function handler(req, res) {
             <br />
             <footer>
               <p>Best regards,</p>
-              <p><b>ShineAfrika Team</b></p>
-              <a href="https://shineafrika.com/">
-                www.shineafrika.com
+              <p><b>Ablestate Bills Team</b></p>
+              <a href="https://ablestate.cloud/">
+                www.ablestate.cloud
               </a>
             </footer></body></html>`,
           text: "Kindly update your websites payment to keep it online",

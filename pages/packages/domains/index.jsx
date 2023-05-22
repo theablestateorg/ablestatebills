@@ -3,28 +3,22 @@ import React, { useState } from "react";
 import Router, { useRouter } from "next/router";
 import PackageNav from "../../../components/PackageNav";
 import { FaSearch } from "react-icons/fa";
-import Starter from "../../../components/Starter";
 import HelpDeck from "../../../components/HelpDeck";
 import axios from "axios";
 import moment from "moment/moment";
-import Packages from "../../../components/Packages";
 import Spinner from "../../../components/Spinner";
 import { MdPayment } from "react-icons/md";
 import { useAuth } from "../../../utils/auth";
-import { currencyFormatter } from "../../../utils/currencyFormatter";
 
 function Domains() {
   const router = useRouter();
-  // const { id, go } = router.query;
   const { user } = useAuth();
 
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(null);
-  const [domain, setDomain] = useState("");
   const [domainExt, setDomainExt] = useState(".com");
   const [availability, setAvailability] = useState(null);
   const [selectedBtn, setSelectedBtn] = useState(2);
-  const [extStatus, setExtStatus] = useState(null);
   const [run, setRun] = useState(false);
   const [alternative, setAlternative] = useState([]);
 
@@ -48,7 +42,6 @@ function Domains() {
   const [cart, setCart] = useState([]);
 
   const names = cart && cart.map((product) => product.name);
-  // let myText = loadingMessages[0]
   const [myText, setMyText] = useState(loadingMessages[0]);
 
   return (

@@ -22,7 +22,6 @@ export default function Navbar({ user }) {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [notify, setNotify] = useState(false);
   const [avatar, setAvatar] = useState("");
-  // const [notifications, setNotifications] = useState([]);
   const router = useRouter();
   const { signOut, loading, setLoading, notifications, setNotifications } =
     useAuth();
@@ -100,7 +99,7 @@ export default function Navbar({ user }) {
       <div className="flex gap-5 items-center justify-between w-[100%]">
         <div className="flex justify-center items-start gap-1">
           <h1
-            className="text-[#CA3011] font-Roboto text-3xl font-black cursor-pointer"
+            className="text-[#CA3011] font-Roboto text-2xl font-black cursor-pointer"
             onClick={() => router.push("/")}
           >
             Ablestate Cloud

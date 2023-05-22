@@ -41,18 +41,10 @@ function formDetails() {
 
       setQuestions(ques);
     } else {
-      // console.log("something lost");
     }
 
-    // const text = data.description;
-    // const lines = text.split("\n");
-    // setDesc(lines);
     setForm(data);
-    // // console.log(data);
   };
-
-  // console.log(form);
-  // console.log(questions);
 
   const handleSubmit = async (values) => {
     const { data, error: err } = await supabase
@@ -70,38 +62,7 @@ function formDetails() {
         toast.error("Failed to submit your form");
       }
     }
-
-    // console.log(values);
-    // const myAnswers = Object.values(values);
-    // console.log("the answers are: ", myAnswers);
-
-    // const { error } = await supabase.from("answers").insert(myAnswers);
-
-    // if (error) {
-    //   toast.error("Failed to submit your form");
-    // } else {
-    //   toast.success("Successfully submitted your form");
-    // }
-
-    // const { data, error: err } = await supabase
-    //   .from("survey_activity")
-    //   .insert({ email: email, set_id: form.id });
-
-    // console.log(values)
-
-    // if (data) {
-    //   const myAnswers = Object.values(values);
-    //   const obj = myAnswers.map((v) => ({ ...v, person_id: data[0].id }));
-    //   const { error } = await supabase.from("answers").insert(obj);
-
-    //   if (error) {
-    //     console.log(error);
-    //   }
-    // }
   };
-
-  // console.log(form);
-  // console.log(email)
 
   return (
     <div className="w-screen">

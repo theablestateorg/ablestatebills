@@ -25,30 +25,6 @@ export default function Home({ websites, customers, person }) {
     router.push("/");
   };
 
-  // const deleteArrayIds = deleteArray.map((site) => site[0].toString());
-
-  // const bulkDelete = async () => {
-  //   const { data, error } = await supabase
-  //     .from("websites")
-  //     .delete()
-  //     .in("id", deleteArrayIds);
-
-  //   if (data) {
-  //     toast.success(`Successfully deleted`, { position: "top-center" });
-  //     await supabase.from("logs").insert([
-  //       {
-  //         name: `[Bulk Deleted] ${deleteArray.map((site) => site[1])}`,
-  //         details: `deleted by ${user.first_name} ${user.last_name}`,
-  //         status: "success",
-  //       },
-  //     ]);
-  //   }
-  //   if (error) {
-  //     toast.error(`${error?.message}`, { position: "top-center" });
-  //   }
-  //   setPopUp(false);
-  // };
-
   if (role === "customer") {
     return (
       <>
@@ -112,15 +88,6 @@ export const getServerSideProps = async ({ req, res }) => {
         props: {},
       };
     }
-    // if (person && JSON.parse(person.user).profile.role === "support") {
-    //   return {
-    //     redirect: {
-    //       permanent: false,
-    //       destination: "/tickets",
-    //     },
-    //     props: {},
-    //   };
-    // }
   }
 
   const { data: websites } = await supabase

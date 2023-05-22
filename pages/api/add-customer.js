@@ -8,6 +8,8 @@ const handler = async (req, res) => {
   try {
     const { email, password, details, added_by } = req.body;
 
+    console.log({ email, password, details, added_by });
+
     if (!email) {
       const response = { Status: "Failure", Details: "Email not provided" };
       return res.status(400).json(response);
@@ -35,12 +37,15 @@ const handler = async (req, res) => {
       email: email,
       password: password,
       email_confirm: true,
-      user_metadata: { 
-        first_name: details.first_name, 
-        last_name: details.last_name, 
-        role: 'customer', 
-    }
+      user_metadata: {
+        first_name: details.first_name,
+        last_name: details.last_name,
+        role: "customer",
+      },
     });
+
+    console.log("user: ", user);
+    console.log("error: ", error);
 
     if (error) throw error;
     // Call the supabase function that inserts the customers data into the profiles table.
@@ -64,22 +69,23 @@ const handler = async (req, res) => {
       res.status(200).json(response);
     }
 
-    if(user){
-      const {data: account, error} = await supabase
-      .from("accounts")
-      .insert({
-        id: id, account_balance: "0"
-      })
-      .eq("id", id);
-    if (response?.error) {
-      throw error;
-    } else {
-      const response = {
-        Status: "Success",
-        Details: "Memeber successfully created",
-      };
-      res.status(200).json(response);
-    }
+    if (user) {
+      const { data: account, error } = await supabase
+        .from("accounts")
+        .insert({
+          id: id,
+          account_balance: "0",
+        })
+        .eq("id", id);
+      if (response?.error) {
+        throw error;
+      } else {
+        const response = {
+          Status: "Success",
+          Details: "Memeber successfully created",
+        };
+        res.status(200).json(response);
+      }
     }
   } catch (error) {
     const response = { Status: "Failure", Details: error };

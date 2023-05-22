@@ -40,9 +40,10 @@ export default function AddClient() {
             position: "top-center",
           })
         )
-        .catch((error) =>
-          toast.error(`Error adding customer`, { position: "top-center" })
-        );
+        .catch((error) => {
+          console.log(error);
+          toast.error(`Error adding customer`, { position: "top-center" });
+        });
     } else {
       toast.error(`No password`, { position: "top-center" });
     }

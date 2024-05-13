@@ -2,7 +2,7 @@ const africastalking = require("africastalking");
 const { SendMailClient } = require("zeptomail");
 
 const url = "api.zeptomail.com/";
-const token = process.env.ZOHO_TOKEN;
+const token = process.env.ZEPTOMAIL_TOKEN;
 
 let zeptoClient = new SendMailClient({ url, token });
 
@@ -15,10 +15,10 @@ export default function handler(req, res) {
   req.body.notifiers &&
     req.body.notifiers.forEach((manager, index) => {
       zeptoClient.sendMail({
-        bounce_address: "info@bounce.shineafrika.com",
+        bounce_address: "bounces@client.ablestate.cloud",
         from: {
-          address: "noreply@shineafrika.com",
-          name: "Shine Afrika",
+          address: "team@ablestate.cloud",
+          name: "Team Ablestate Cloud",
         },
         to: [
           {
